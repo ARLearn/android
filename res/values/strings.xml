@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ARLearn</string>
+
+    <string name="myGames">My Games</string>
+    <string name="library">Library</string>
+    <string name="scan">Scan</string>
+    <string name="nearMe">Near Me</string>
+
+    <string name="searchText">Search</string>
+    <string name="category">Category</string>
+    <string name="topGames">Top games</string>
+</resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:orientation="vertical"
+              android:background="@drawable/background"
+        >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+
+                  android:orientation="horizontal"
+                  >
+
+        <org.celstec.arlearn2.android.views.SquareLinearLayout
+                android:id="@+id/games"
+                android:orientation="vertical"
+                style="@style/ARLearn.MyGames"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+
+
+            <ImageView
+                    style="@style/ARLearn.HomePane.Icon"
+                    android:id="@+id/gamesIcon"
+                    android:src="@drawable/ic_mygames"
+                    android:contentDescription="my games section"
+                    />
+            <TextView
+                    style="@style/ARLearn.HomePane.Text"
+                    android:id="@+id/gameText"
+                    android:text="@string/myGames"
+                    />
+
+        </org.celstec.arlearn2.android.views.SquareLinearLayout>
+
+        <org.celstec.arlearn2.android.views.SquareLinearLayout
+                android:id="@+id/store"
+                android:orientation="vertical"
+                style="@style/ARLearn.Store"
+                >
+
+            <ImageView
+                    style="@style/ARLearn.HomePane.Icon"
+                    android:id="@+id/storeIcon"
+                    android:src="@drawable/ic_mygames"
+                    android:contentDescription="store section"/>
+
+            <TextView
+                    style="@style/ARLearn.HomePane.Text"
+                    android:text="@string/library"
+                    />
+
+        </org.celstec.arlearn2.android.views.SquareLinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+        <org.celstec.arlearn2.android.views.SquareLinearLayout
+                android:id="@+id/scan"
+                android:orientation="vertical"
+                style="@style/ARLearn.Scan">
+
+            <ImageView
+                    style="@style/ARLearn.HomePane.Icon"
+                    android:id="@+id/scanIcon"
+                    android:src="@drawable/icon_scan"
+                    android:contentDescription="scan section"/>
+
+            <TextView
+                    style="@style/ARLearn.HomePane.Text"
+                    android:text="@string/scan"
+                    android:layout_weight="1"
+                    />
+
+        </org.celstec.arlearn2.android.views.SquareLinearLayout>
+
+        <org.celstec.arlearn2.android.views.SquareLinearLayout
+                android:id="@+id/nearme"
+                android:orientation="vertical"
+                style="@style/ARLearn.NearBy">
+
+            <ImageView
+                    style="@style/ARLearn.HomePane.Icon"
+                    android:id="@+id/nearMeIcon"
+                    android:src="@drawable/icon_nearby"
+                    android:contentDescription="near me section"/>
+
+            <TextView
+                    style="@style/ARLearn.HomePane.Text"
+                    android:text="@string/nearMe"
+                    />
+
+
+        </org.celstec.arlearn2.android.views.SquareLinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
