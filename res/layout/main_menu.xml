@@ -49,7 +49,7 @@
             <ImageView
                     style="@style/ARLearn.HomePane.Icon"
                     android:id="@+id/storeIcon"
-                    android:src="@drawable/ic_mygames"
+                    android:src="@drawable/ic_store"
                     android:contentDescription="store section"/>
 
             <TextView
@@ -75,7 +75,7 @@
             <ImageView
                     style="@style/ARLearn.HomePane.Icon"
                     android:id="@+id/scanIcon"
-                    android:src="@drawable/icon_scan"
+                    android:src="@drawable/ic_qrscan"
                     android:contentDescription="scan section"/>
 
             <TextView
@@ -94,7 +94,7 @@
             <ImageView
                     style="@style/ARLearn.HomePane.Icon"
                     android:id="@+id/nearMeIcon"
-                    android:src="@drawable/icon_nearby"
+                    android:src="@drawable/ic_nearby"
                     android:contentDescription="near me section"/>
 
             <TextView

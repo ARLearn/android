@@ -52,7 +52,7 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.structure_sliding_pane);
-        getSupportActionBar().setIcon(R.drawable.arlearn_icon_48);
+        getSupportActionBar().setIcon(R.drawable.ic_ab_menu);
 
         // Action bar
         mActionBar = createActionBarHelper();

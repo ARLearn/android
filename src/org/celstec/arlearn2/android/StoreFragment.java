@@ -52,6 +52,12 @@ public class StoreFragment extends SherlockFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.store, container, false);

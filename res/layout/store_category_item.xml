@@ -12,7 +12,7 @@ android:layout_height="100dp"
 <ImageView
         style="@style/ARLearn.HomePane.Icon"
         android:id="@+id/storeIcon"
-        android:src="@drawable/icon_store"
+        android:src="@drawable/ic_store"
         android:contentDescription="store section"/>
 
 <TextView

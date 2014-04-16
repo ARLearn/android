@@ -10,7 +10,7 @@
 
     <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_alignParentLeft="true"
             android:id="@+id/gameText"
             android:text="Search"
@@ -19,18 +19,18 @@
             android:typeface="sans"
             android:paddingBottom="20dp"
 
-            />
+            android:layout_weight="1"/>
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:background="@drawable/searchbar_border"
             android:paddingLeft="15dp"
             android:paddingTop="5dp"
             android:paddingBottom="2dp"
-
-            >
+            android:paddingRight="4dip"
+            android:layout_weight="1">
 
         <EditText
                 android:layout_width="fill_parent"
@@ -46,6 +46,8 @@
                 android:layout_height="50dip"
                 android:id="@+id/searchButton"
                 android:src="@drawable/ic_sb_search"
+                android:background="@color/purple"
+
                 android:contentDescription="search"
                 />
     </LinearLayout>
