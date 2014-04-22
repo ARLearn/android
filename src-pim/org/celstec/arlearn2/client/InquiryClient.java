@@ -112,7 +112,7 @@ public class InquiryClient extends GenericClient{
         return null;
     }
 
-    public void createInquiry(InquiryLocalObject inquiry, AccountLocalObject account, int visibility, int membership) {
+    public void createInquiry(InquiryLocalObject inquiry, AccountLocalObject account, int visibility, int membership, boolean dataCollectionEnabled) {
         String provider = providerIdToElggName(account.getAccountType());
         try {
         String postBody = "method=inquiry.create" +
@@ -121,7 +121,7 @@ public class InquiryClient extends GenericClient{
                 "&interests=" + URLEncoder.encode("pim interests dummy value", "UTF8") +
                 "&membership=" + membership +
                 "&vis=" + visibility +
-                "&wespot_arlearn_enable=no" +
+                "&wespot_arlearn_enable=" + (dataCollectionEnabled==true?"yes":"no")+
                 "&group_multiple_admin_allow_enable=no" +
                 "&provider=" + provider +
                 "&user_uid=" + provider + "_" + account.getLocalId() +
