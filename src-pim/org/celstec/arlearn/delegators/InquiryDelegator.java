@@ -118,7 +118,7 @@ public class InquiryDelegator {
                 inquiry.setTitle(inqJsonObject.getString("title"));
                 inquiry.setDescription(inqJsonObject.getString("description"));
                 inquiry.setIsSynchronized(true);
-                long runId = InquiryClient.getInquiryClient(). getArlearnRunId(inquiry.getId());
+                long runId = InquiryClient.getInquiryClient().getArlearnRunId(inquiry.getId());
                 inquiry.setRunId(runId);
                 inquiry.setIcon(downloadImage(inqJsonObject.getString("icon")));
 
@@ -160,12 +160,12 @@ public class InquiryDelegator {
                 if (currentInq.getRunId() == 0) return;
                 INQ.runs.asyncRun(currentInq.getRunId()); //this is done synchronously
             }
-        RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(currentInq.getRunId());
-        if (run != null) {
-            if (run.getGameLocalObject() == null) {
-                INQ.games.asyncGame(run.getGameId());
-
-            }
+            RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(currentInq.getRunId());
+            if (run != null) {
+                currentInq.setRunLocalObject(run);
+                if (run.getGameLocalObject() == null) {
+                    INQ.games.asyncGame(run.getGameId());
+                }
             run.refresh();
             INQ.generalItems.syncGeneralItems(run.getGameId());
         }
