@@ -83,10 +83,56 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-
+                        android:padding="1dp"
                         android:background="@drawable/gradient_store_game_overview_gray_seperator"
                         android:orientation="horizontal"
-                >
+                        >
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                <ImageView
+                        android:id="@+id/star1"
+                        android:layout_width="20dip"
+                        android:layout_height="15dip"
+                        android:src="@drawable/ic_star_grey"
+                        android:contentDescription="star"
+                        />
+
+                <ImageView
+                        android:id="@+id/star2"
+                        android:layout_width="20dip"
+                        android:layout_height="15dip"
+                        android:src="@drawable/ic_star_grey"
+                        android:contentDescription="star"
+                        />
+                <ImageView
+                        android:id="@+id/star3"
+                        android:layout_width="20dip"
+                        android:layout_height="15dip"
+                        android:src="@drawable/ic_star_grey"
+                        android:contentDescription="star"
+                        />
+                <ImageView
+                        android:id="@+id/star4"
+                        android:layout_width="20dip"
+                        android:layout_height="15dip"
+                        android:src="@drawable/ic_star_grey"
+                        android:contentDescription="star"
+                        />
+                <ImageView
+                        android:id="@+id/star5"
+                        android:layout_width="20dip"
+                        android:layout_height="15dip"
+                        android:src="@drawable/ic_star_grey"
+                        android:contentDescription="star"
+                        />
+            </LinearLayout>
+
 
             <TextView
                     android:id="@+id/languageId"

@@ -1,9 +1,13 @@
 package org.celstec.arlearn2.android;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import daoBase.DaoConfiguration;
@@ -35,13 +39,19 @@ import org.celstec.dao.gen.GameLocalObjectDao;
  */
 public class GameFragment extends SherlockFragment {
 
-    private Game game;
-    private View gameView;
+    private long gameId;
+//    private View gameView;
+    private ImageView star1;
+    private ImageView star2;
+    private ImageView star3;
+    private ImageView star4;
+    private ImageView star5;
 
     public GameFragment(Game game) {
-        this.game = game;
+        this.gameId = game.getGameId();
         ARL.games.syncGame(game.getGameId());
         ARL.eventBus.register(this);
+
     }
 
     @Override
@@ -56,30 +66,103 @@ public class GameFragment extends SherlockFragment {
         setHasOptionsMenu(true);
     }
 
+    private void drawGameContent(View v) {
+        GameLocalObject localObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        if (localObject != null) {
+            ((TextView) v.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
+            ((TextView) v.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View gameView = inflater.inflate(R.layout.store_game_overview, container, false);
+        star1 = (ImageView) gameView.findViewById(R.id.star1);
+        star2 = (ImageView) gameView.findViewById(R.id.star2);
+        star3 = (ImageView) gameView.findViewById(R.id.star3);
+        star4 = (ImageView) gameView.findViewById(R.id.star4);
+        star5 = (ImageView) gameView.findViewById(R.id.star5);
 
-        gameView = inflater.inflate(R.layout.store_game_overview, container, false);
+        star1.setOnClickListener(new StarOneButton(1));
+        star2.setOnClickListener(new StarOneButton(2));
+        star3.setOnClickListener(new StarOneButton(3));
+        star4.setOnClickListener(new StarOneButton(4));
+        star5.setOnClickListener(new StarOneButton(5));
+        drawGameContent(gameView);
         return gameView;
     }
 
     public void onEventMainThread(GameEvent event) {
-        if (event.getGameId() == game.getGameId()) {
-            GameLocalObject localObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(event.getGameId());
-            ((TextView) gameView.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
+        if (event.getGameId() == gameId) {
+            gameId = event.getGameId();
+//            drawGameContent();
         }
     }
 
-    private void fillOutLayout() {
-        GameLocalObject localObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(game.getGameId());
-        ((TextView) gameView.findViewById(R.id.gameTitleId)).setText(game.getTitle());
-        if (localObject != null) {
-            ((TextView) gameView.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
-//            localObject.get
-            ((TextView) gameView.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
+
+
+    private class StarOneButton implements View.OnClickListener {
+
+        private int starId;
+
+        private StarOneButton(int starId) {
+            this.starId = starId;
         }
 
+        @Override
+        public void onClick(View view) {
+            Log.e("ARLearn", "Click Star");
+            for (int i =0 ; i<6; i++) {
+                if (i <=starId) {
+                    setStar(i);
+                } else {
+                    unsetStar(i);
+                }
+            }
+        }
 
+        public void setStar(int i) {
+            switch (i) {
+                case 1:
+                    star1.setImageResource(R.drawable.ic_star);
+                    break;
+                case 2:
+                    star2.setImageResource(R.drawable.ic_star);
+                    break;
+                case 3:
+                    star3.setImageResource(R.drawable.ic_star);
+                    break;
+                case 4:
+                    star4.setImageResource(R.drawable.ic_star);
+                    break;
+                case 5:
+                    star5.setImageResource(R.drawable.ic_star);
+                    break;
+            }
+
+        }
+
+        public void unsetStar(int i) {
+            switch (i) {
+                case 1:
+                    star1.setImageResource(R.drawable.ic_star_grey);
+                    break;
+                case 2:
+                    star2.setImageResource(R.drawable.ic_star_grey);
+                    break;
+                case 3:
+                    star3.setImageResource(R.drawable.ic_star_grey);
+                    break;
+                case 4:
+                    star4.setImageResource(R.drawable.ic_star_grey);
+                    break;
+                case 5:
+                    star5.setImageResource(R.drawable.ic_star_grey);
+                    break;
+            }
+
+        }
     }
+
 }

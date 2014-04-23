@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.RunDelegator;
+import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.InquiryLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObject;
 import org.celstec.events.InquiryEvent;
@@ -164,7 +165,8 @@ public class InquiryDelegator {
             if (run != null) {
                 currentInq.setRunLocalObject(run);
                 if (run.getGameLocalObject() == null) {
-                    INQ.games.asyncGame(run.getGameId());
+                    GameLocalObject gameLocalObject = INQ.games.asyncGame(run.getGameId());
+                    run.setGameLocalObject(gameLocalObject);
                 }
             run.refresh();
             INQ.generalItems.syncGeneralItems(run.getGameId());

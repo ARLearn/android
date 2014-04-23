@@ -56,8 +56,10 @@ public class SearchFragment  extends SherlockListFragment implements ListItemCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.store_search, container, false);
-        adapter = new SearchResultsLazyListAdapter(getActivity());
-        adapter.setOnListItemClickCallback(this);
+        if (adapter == null) {
+            adapter = new SearchResultsLazyListAdapter(getActivity());
+            adapter.setOnListItemClickCallback(this);
+        }
         ListView lv = (ListView) v.findViewById(android.R.id.list);
 
         View header = inflater.inflate(R.layout.store_search_bar, null);
@@ -80,14 +82,16 @@ public class SearchFragment  extends SherlockListFragment implements ListItemCli
 
     @Override
     public void onListItemClick(View v, int position, Game game) {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        Bundle args = new Bundle();
+        if (game != null) {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Bundle args = new Bundle();
 
-        GameFragment frag = new GameFragment(game);
-        frag.setArguments(args);
-        FragmentTransaction ft = fm.beginTransaction();
+            GameFragment frag = new GameFragment(game);
+            frag.setArguments(args);
+            FragmentTransaction ft = fm.beginTransaction();
 
-        ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+            ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+        }
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.CategoryEvent;
+import org.celstec.arlearn2.android.views.SquareLinearLayout;
 import org.celstec.dao.gen.CategoryLocalObject;
 
 import java.util.HashMap;
@@ -66,6 +67,7 @@ public class CategoryFragment extends SherlockFragment{
          tableLayout = (TableLayout) v.findViewById(R.id.categoryTableLayout);
 //        TableRow row = null;
         int i = 0;
+
         for (CategoryLocalObject categoryLocalObject: ARL.store.getCategories()){
             if (i %2 == 0) {
                 row = (TableRow) inflater.inflate(R.layout.store_category_row, tableLayout, false);
@@ -80,6 +82,12 @@ public class CategoryFragment extends SherlockFragment{
             i++;
         };
 
+        if (ARL.store.getCategories().size()%2 != 0 ) {
+            RelativeLayout item1 = (RelativeLayout) inflater.inflate(R.layout.store_category_item, row, false);
+            row.addView(item1);
+            ((TextView)item1.findViewById(R.id.categoryItemText)).setText("omit");
+            item1.setVisibility(View.INVISIBLE);
+        }
         return v;
     }
 

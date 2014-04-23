@@ -97,9 +97,24 @@ public class MainMenu extends SherlockFragment {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 Bundle args = new Bundle();
 
-                StoreFragment frag = new StoreFragment();
-                frag.setArguments(args);
-                fm.beginTransaction().replace(R.id.right_pane, frag).addToBackStack(null).commit();
+//                StoreFragment frag = new StoreFragment();
+//                frag.setArguments(args);
+//                fm.beginTransaction().replace(R.id.right_pane, frag).addToBackStack(null).commit();
+
+            StoreFragment frag = new StoreFragment();
+            frag.setArguments(args);
+            fm.beginTransaction()
+            .setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right,android.R.anim.slide_in_left,android.R.anim.slide_out_right)
+//                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left)
+                    .replace(R.id.right_pane, frag).addToBackStack(null).commit();
+
+
+
+
+//                fm.beginTransaction()
+//                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+//                    .replace(android.R.id.content, new MyFragment())
+//                    .commit();
         }
     }
 
