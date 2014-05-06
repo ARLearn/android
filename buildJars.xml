@@ -2,6 +2,8 @@
 
     <path id="classpath">
         <fileset dir="../arlearn/AndroidV3/libs" includes="**/*.jar" />
+        <fileset dir="../arlearn.beans/build/jar/" includes="**/*.jar" />
+        <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
         <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/extras/google/google_play_services/libproject/google-play-services_lib/libs" includes="**/*.jar" />
         <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/extras/android/support/v13" includes="**/*.jar" />
         <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/platforms/android-18/" includes="**/*.jar" />
@@ -9,6 +11,8 @@
 
     <path id="classpathwithBase">
         <fileset dir="../arlearn/AndroidV3/libs" includes="**/*.jar" />
+        <fileset dir="../arlearn.beans/build/jar/" includes="**/*.jar" />
+        <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
         <fileset dir="./build/jar" includes="**/*.jar" />
         <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/platforms/android-18/" includes="**/*.jar" />
     </path>
