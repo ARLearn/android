@@ -32,10 +32,10 @@ import java.util.HashMap;
  */
 public class GeneralItemDelegator extends AbstractDelegator{
 
-    private static GeneralItemDelegator instance;
+    protected static GeneralItemDelegator instance;
     private static HashMap<Long, Long> syncDates = new HashMap<Long, Long>();
 
-    private GeneralItemDelegator() {
+    protected GeneralItemDelegator() {
         ARL.eventBus.register(this);
     }
 
@@ -58,19 +58,15 @@ public class GeneralItemDelegator extends AbstractDelegator{
         }
     }
 
-    private class SyncGeneralItems {
-        private GameLocalObject game;
+    public void createGeneralItem(GeneralItem generalItem){
+        ARL.eventBus.post(new CreateGeneralItem(generalItem));
+    }
 
-        private SyncGeneralItems(GameLocalObject game) {
-            this.game = game;
-        }
-
-        public GameLocalObject getGame() {
-            return game;
-        }
-
-        public void setGame(GameLocalObject game) {
-            this.game = game;
+    private void onEventAsync(CreateGeneralItem sgi) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            GeneralItem item = GeneralItemClient.getGeneralItemClient().postGeneralItem(token, sgi.getGi());
+            System.out.println(item);
         }
     }
 
@@ -150,4 +146,36 @@ public class GeneralItemDelegator extends AbstractDelegator{
 
     private void GeneralItemLocalObject(GeneralItem giBean) {}
 
+
+    private class CreateGeneralItem {
+        GeneralItem gi;
+
+        private CreateGeneralItem(GeneralItem gi) {
+            this.gi = gi;
+        }
+
+        public GeneralItem getGi() {
+            return gi;
+        }
+
+        public void setGi(GeneralItem gi) {
+            this.gi = gi;
+        }
+    }
+
+    private class SyncGeneralItems {
+        private GameLocalObject game;
+
+        private SyncGeneralItems(GameLocalObject game) {
+            this.game = game;
+        }
+
+        public GameLocalObject getGame() {
+            return game;
+        }
+
+        public void setGame(GameLocalObject game) {
+            this.game = game;
+        }
+    }
 }

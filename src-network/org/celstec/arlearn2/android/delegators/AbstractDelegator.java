@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.android.delegators;
 
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
+import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 
 /**
  * ****************************************************************************
@@ -34,4 +35,6 @@ public abstract class AbstractDelegator {
         }
         return null;
     }
+
+
 }

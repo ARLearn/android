@@ -11,6 +11,9 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.FileDownloadStatus;
+import org.celstec.arlearn2.beans.generalItem.GeneralItem;
+import org.celstec.arlearn2.beans.generalItem.NarratorItem;
+import org.celstec.arlearn2.beans.generalItem.OpenQuestion;
 import org.celstec.arlearn2.client.GenericClient;
 import org.celstec.arlearn2.client.InquiryClient;
 import org.celstec.dao.gen.ActionLocalObject;
@@ -165,6 +168,8 @@ public class TestAdapters extends Activity {
 //        for (BadgeLocalObject badge: iObject.getBadges()) {
 //            Log.e("ARLearn", "badge"+badge.getTitle());
 //        }
+
+       INQ.dataCollection.createDataCollectionTask(5941304764661760l, "data colleciton", "description");
 
     }
     private class CreateInquiryObject {
