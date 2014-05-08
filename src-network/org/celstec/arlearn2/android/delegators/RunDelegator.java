@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.delegators;
 
+import android.util.Log;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.events.RunEvent;
@@ -61,7 +62,9 @@ public class RunDelegator extends AbstractDelegator{
     private void onEventAsync(SyncRunsEventParticipate sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
-                RunList rl =RunClient.getRunClient().getRunsParticipate(token, lastSyncDateParticipate);
+            Log.i(SYNC_TAG, "Syncing runs since : " + lastSyncDateParticipate);
+
+            RunList rl =RunClient.getRunClient().getRunsParticipate(token, lastSyncDateParticipate);
                 if (rl.getError() == null) {
                     process(rl);
                     lastSyncDateParticipate = rl.getServerTime();
@@ -77,6 +80,7 @@ public class RunDelegator extends AbstractDelegator{
     public void asyncRun(long runId) {
         String token = returnTokenIfOnline();
         if (token != null) {
+            Log.i(SYNC_TAG, "Sync run : " + runId);
             Run run =RunClient.getRunClient().getRun(runId, token);
             if (run.getError() == null) {
                 RunList rl = new RunList();

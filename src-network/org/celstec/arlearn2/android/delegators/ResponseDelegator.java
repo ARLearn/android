@@ -70,6 +70,7 @@ public class ResponseDelegator extends AbstractDelegator{
     private void onEventAsync(SyncResponses syncResponses) {
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         long serverTime = ARL.time.getServerTime();
+        Log.i(SYNC_TAG, "Syncing responses");
 
         QueryBuilder<ResponseLocalObject> qb = dao.queryBuilder().orderAsc(ResponseLocalObjectDao.Properties.TimeStamp);
         Query<ResponseLocalObject> notSyncedQuery = qb.where(ResponseLocalObjectDao.Properties.NextSynchronisationTime.lt(serverTime), ResponseLocalObjectDao.Properties.IsSynchronized.eq(false)).build();
@@ -77,7 +78,7 @@ public class ResponseDelegator extends AbstractDelegator{
         notSyncedQuery.setParameter(0, serverTime);
 
         for (ResponseLocalObject response : notSyncedQuery.list()) {
-            Log.e("ARLearn", "check " + (response.getNextSynchronisationTime() < serverTime));
+            Log.i(SYNC_TAG, "Uploading response: "+response.getUriAsString()    );
             synchronize(response);
         }
 

@@ -135,6 +135,7 @@ public class AccountDelegator extends AbstractDelegator{
         accountDao.setAccountType(aBean.getAccountType());
         accountDao.setLocalId(aBean.getLocalId());
         accountDao.setPicture(downloadImage(aBean.getPicture()));
+        accountDao.setEmail(aBean.getEmail());
         return accountDao;
     }
 
