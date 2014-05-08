@@ -36,8 +36,6 @@ public class INQ extends ARL {
         inquiry = InquiryDelegator.getInstance();
         badges = BadgesDelegator.getInstance();
         dataCollection = DataCollectionTaskDelegator.getInstance();
-        generalItems = dataCollection;
-
     }
 
 

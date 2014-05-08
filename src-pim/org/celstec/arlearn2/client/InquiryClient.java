@@ -2,6 +2,8 @@ package org.celstec.arlearn2.client;
 
 import android.util.Log;
 import org.apache.http.HttpResponse;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.delegators.ARL;
@@ -64,8 +66,13 @@ public class InquiryClient extends GenericClient{
         }
         String url = getUrlPrefix();
         url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&oauthId="+INQ.accounts.getLoggedInAccount().getLocalId()+
-                "&oauthProvider="+providerIdToElggName(INQ.accounts.getLoggedInAccount().getAccountType())+"&method=user.inquiries";
-        HttpResponse response = conn.executeGET(url, null, "application/json");
+                "&oauthProvider="+providerIdToElggName(INQ.accounts.getLoggedInAccount().getAccountType())+"&method=user.allinquiries";
+        BasicCookieStore cs  = new BasicCookieStore();
+        BasicClientCookie cookie = new BasicClientCookie("Elgg","d9hg8p8rjh40cd4o2ttm9uiri4");
+        cookie.setDomain("dev.inquiry.wespot.net");
+        cookie.setPath("/");
+        cs.addCookie(cookie);
+        HttpResponse response = conn.executeGET(url, null, "application/json", cs);
         try {
             return EntityUtils.toString(response.getEntity());
 

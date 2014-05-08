@@ -169,7 +169,7 @@ public class TestAdapters extends Activity {
 //            Log.e("ARLearn", "badge"+badge.getTitle());
 //        }
 
-       INQ.dataCollection.createDataCollectionTask(5941304764661760l, "data colleciton", "description");
+//       INQ.dataCollection.createDataCollectionTask(5941304764661760l, "data colleciton", "description");
 
     }
     private class CreateInquiryObject {

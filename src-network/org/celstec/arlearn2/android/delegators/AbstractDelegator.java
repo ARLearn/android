@@ -25,6 +25,8 @@ import org.celstec.arlearn2.beans.generalItem.GeneralItem;
  */
 public abstract class AbstractDelegator {
 
+    public static final String SYNC_TAG = "SYNCING";
+
     protected String returnTokenIfOnline() {
         PropertiesAdapter pa = PropertiesAdapter.getInstance();
         if (pa != null) {

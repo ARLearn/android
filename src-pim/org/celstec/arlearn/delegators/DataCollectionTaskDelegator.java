@@ -1,6 +1,7 @@
 package org.celstec.arlearn.delegators;
 
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.AbstractDelegator;
 import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
 import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.arlearn2.beans.generalItem.OpenQuestion;
@@ -25,8 +26,9 @@ import org.celstec.arlearn2.beans.generalItem.OpenQuestion;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class DataCollectionTaskDelegator  extends GeneralItemDelegator {
+public class DataCollectionTaskDelegator  extends AbstractDelegator { //extends GeneralItemDelegator {
 
+    protected static DataCollectionTaskDelegator instance;
 
     private DataCollectionTaskDelegator() {
     }

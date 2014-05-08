@@ -52,7 +52,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
 
     public void syncGeneralItems(GameLocalObject game) {
         if (game == null) {
-            Log.e("ARLearn", "trying to sync game that does not exist ");
+            Log.e(SYNC_TAG, "trying to sync game that does not exist ");
         } else {
             ARL.eventBus.post(new SyncGeneralItems(game));
         }
@@ -74,6 +74,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
         String token = returnTokenIfOnline();
         if (token != null) {
             long gameId = sgi.getGame().getId();
+            Log.i(SYNC_TAG, "Syncing general items for "+sgi.getGame().getTitle()+" "+getLastSyncDate(gameId));
             GeneralItemList list = GeneralItemClient.getGeneralItemClient().getGameGeneralItems(token, gameId, getLastSyncDate(gameId));
             if (list.getError()== null) {
                 process(list, sgi.getGame());

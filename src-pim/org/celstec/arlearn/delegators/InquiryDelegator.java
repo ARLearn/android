@@ -6,7 +6,9 @@ import de.greenrobot.dao.query.QueryBuilder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.RunDelegator;
 import org.celstec.dao.gen.GameLocalObject;
@@ -103,6 +105,7 @@ public class InquiryDelegator {
 
     private void downloadInquiries() {
         String inquiries = InquiryClient.getInquiryClient().userInquiries();
+
         if (inquiries == null) return;
         JSONObject json = null;
         try {

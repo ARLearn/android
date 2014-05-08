@@ -1,12 +1,14 @@
-<project name="buildjars" default="jar">
+<project name="buildjars" default="jar base">
 
     <path id="classpath">
         <fileset dir="../arlearn/AndroidV3/libs" includes="**/*.jar" />
         <fileset dir="../arlearn.beans/build/jar/" includes="**/*.jar" />
         <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
+        <!--<fileset dir="../arlearn.thirdparty/google-play-services_lib/libs" includes="**/*.jar" />-->
+
         <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/extras/google/google_play_services/libproject/google-play-services_lib/libs" includes="**/*.jar" />
-        <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/extras/android/support/v13" includes="**/*.jar" />
-        <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/platforms/android-18/" includes="**/*.jar" />
+        <fileset dir="${android_sdk}/extras/android/support/v13" includes="**/*.jar" />
+        <fileset dir="${android_sdk}/platforms/android-18/" includes="**/*.jar" />
     </path>
 
     <path id="classpathwithBase">
@@ -14,7 +16,7 @@
         <fileset dir="../arlearn.beans/build/jar/" includes="**/*.jar" />
         <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
         <fileset dir="./build/jar" includes="**/*.jar" />
-        <fileset dir="/Users/str/libraries/adt-bundle-mac/sdk/platforms/android-18/" includes="**/*.jar" />
+        <fileset dir="${android_sdk}/platforms/android-18/" includes="**/*.jar" />
     </path>
 
     <target name="clean base">
@@ -52,8 +54,6 @@
         <mkdir dir="build/base/jar" />
         <jar destfile="build/jar/ARLearn-Android-PIM.jar" basedir="build/pim/classes">
             <fileset dir="src-pim" includes="**/*.java"/>
-
-
         </jar>
     </target>
 </project>
