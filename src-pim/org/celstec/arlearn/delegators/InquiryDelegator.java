@@ -45,6 +45,8 @@ import java.io.InputStream;
  */
 public class InquiryDelegator {
 
+    public static final String SYNC_TAG = "SYNCING";
+
     private static InquiryDelegator instance;
     private InquiryLocalObject currentInquiry;
 
@@ -104,6 +106,8 @@ public class InquiryDelegator {
 
 
     private void downloadInquiries() {
+        Log.i(SYNC_TAG, "Syncing user inquires ");
+
         String inquiries = InquiryClient.getInquiryClient().userInquiries();
 
         if (inquiries == null) return;
@@ -159,6 +163,7 @@ public class InquiryDelegator {
     }
     private void onEventAsync(SyncDataCollectionTasks dcTask) {
         InquiryLocalObject currentInq = getCurrentInquiry();
+        Log.i(SYNC_TAG, "Syncing data collection tasks");
         if (currentInq != null) {
             if (currentInq.getRunLocalObject() == null) {
                 if (currentInq.getRunId() == 0) return;

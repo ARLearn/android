@@ -2,6 +2,7 @@ package org.celstec.arlearn2.android;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,17 +105,9 @@ public class MainMenu extends SherlockFragment {
             StoreFragment frag = new StoreFragment();
             frag.setArguments(args);
             fm.beginTransaction()
-            .setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right,android.R.anim.slide_in_left,android.R.anim.slide_out_right)
-//                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
                     .replace(R.id.right_pane, frag).addToBackStack(null).commit();
 
-
-
-
-//                fm.beginTransaction()
-//                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-//                    .replace(android.R.id.content, new MyFragment())
-//                    .commit();
         }
     }
 

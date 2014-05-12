@@ -104,16 +104,25 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                if (mSlidingLayout.isOpen()){
-                    mSlidingLayout.closePane();
-                }else{
-                    mSlidingLayout.openPane();
-                }
-                return true;
+//        if (getSupportFragmentManager().getBackStackEntryCount() <=1) {
+//            this.finish();
+//        }
+//        getSupportFragmentManager().getBackStackEntryAt(0).
+
+        if (mSlidingLayout != null) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    if (mSlidingLayout.isOpen()) {
+                        mSlidingLayout.closePane();
+                    } else {
+                        mSlidingLayout.openPane();
+                    }
+                    return true;
+            }
         }
-        return super.onOptionsItemSelected(item);
+        onBackPressed();
+        return true;
+//        return super.onOptionsItemSelected(item);
     }
 
     private ActionBarHelper createActionBarHelper() {

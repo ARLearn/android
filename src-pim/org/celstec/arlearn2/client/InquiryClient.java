@@ -83,6 +83,20 @@ public class InquiryClient extends GenericClient{
         return "error";
     }
 
+    public String questions(long inquiryId) {
+        String url = getUrlPrefix();
+        url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&inquiryId="+inquiryId+"&method=inquiry.questions";
+        HttpResponse response = conn.executeGET(url, null, "application/json");
+        try {
+            return EntityUtils.toString(response.getEntity());
+
+        } catch (Exception e) {
+            if (e instanceof ARLearnException) throw (ARLearnException) e;
+
+        }
+        return "error";
+    }
+
     public long getArlearnRunId(long inquiryId) {
         String url = getUrlPrefix();
         url+= "&api_key="+INQ.config.getProperty("elgg_api_key")+"&method=inquiry.arlearnrun&inquiryId="+inquiryId;
