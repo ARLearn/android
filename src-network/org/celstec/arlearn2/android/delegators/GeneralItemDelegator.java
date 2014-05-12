@@ -66,7 +66,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
         String token = returnTokenIfOnline();
         if (token != null) {
             GeneralItem item = GeneralItemClient.getGeneralItemClient().postGeneralItem(token, sgi.getGi());
-            System.out.println(item);
+            onEventAsync(new SyncGeneralItems(DaoConfiguration.getInstance().getGameLocalObjectDao().load(item.getGameId())));
         }
     }
 
