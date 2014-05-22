@@ -204,6 +204,7 @@ public class ARlearnDaoGenerator {
         response.addStringProperty("contentType");
 //        response.addStringProperty("fileName");
         response.addStringProperty("UriAsString");
+        response.addStringProperty("ThumbnailUriAsString");
         response.addStringProperty("value");
         response.addBooleanProperty("isSynchronized");
         response.addBooleanProperty("revoked");

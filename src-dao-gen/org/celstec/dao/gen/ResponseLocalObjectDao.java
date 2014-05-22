@@ -32,19 +32,20 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
         public final static Property Type = new Property(1, Integer.class, "type", false, "TYPE");
         public final static Property ContentType = new Property(2, String.class, "contentType", false, "CONTENT_TYPE");
         public final static Property UriAsString = new Property(3, String.class, "UriAsString", false, "URI_AS_STRING");
-        public final static Property Value = new Property(4, String.class, "value", false, "VALUE");
-        public final static Property IsSynchronized = new Property(5, Boolean.class, "isSynchronized", false, "IS_SYNCHRONIZED");
-        public final static Property Revoked = new Property(6, Boolean.class, "revoked", false, "REVOKED");
-        public final static Property NextSynchronisationTime = new Property(7, Long.class, "nextSynchronisationTime", false, "NEXT_SYNCHRONISATION_TIME");
-        public final static Property AmountOfSynchronisationAttempts = new Property(8, Integer.class, "amountOfSynchronisationAttempts", false, "AMOUNT_OF_SYNCHRONISATION_ATTEMPTS");
-        public final static Property TimeStamp = new Property(9, Long.class, "timeStamp", false, "TIME_STAMP");
-        public final static Property Width = new Property(10, Integer.class, "width", false, "WIDTH");
-        public final static Property Height = new Property(11, Integer.class, "height", false, "HEIGHT");
-        public final static Property Lat = new Property(12, Double.class, "lat", false, "LAT");
-        public final static Property Lng = new Property(13, Double.class, "lng", false, "LNG");
-        public final static Property RunId = new Property(14, long.class, "runId", false, "RUN_ID");
-        public final static Property GeneralItem = new Property(15, long.class, "generalItem", false, "GENERAL_ITEM");
-        public final static Property Account = new Property(16, Long.class, "account", false, "ACCOUNT");
+        public final static Property ThumbnailUriAsString = new Property(4, String.class, "ThumbnailUriAsString", false, "THUMBNAIL_URI_AS_STRING");
+        public final static Property Value = new Property(5, String.class, "value", false, "VALUE");
+        public final static Property IsSynchronized = new Property(6, Boolean.class, "isSynchronized", false, "IS_SYNCHRONIZED");
+        public final static Property Revoked = new Property(7, Boolean.class, "revoked", false, "REVOKED");
+        public final static Property NextSynchronisationTime = new Property(8, Long.class, "nextSynchronisationTime", false, "NEXT_SYNCHRONISATION_TIME");
+        public final static Property AmountOfSynchronisationAttempts = new Property(9, Integer.class, "amountOfSynchronisationAttempts", false, "AMOUNT_OF_SYNCHRONISATION_ATTEMPTS");
+        public final static Property TimeStamp = new Property(10, Long.class, "timeStamp", false, "TIME_STAMP");
+        public final static Property Width = new Property(11, Integer.class, "width", false, "WIDTH");
+        public final static Property Height = new Property(12, Integer.class, "height", false, "HEIGHT");
+        public final static Property Lat = new Property(13, Double.class, "lat", false, "LAT");
+        public final static Property Lng = new Property(14, Double.class, "lng", false, "LNG");
+        public final static Property RunId = new Property(15, long.class, "runId", false, "RUN_ID");
+        public final static Property GeneralItem = new Property(16, long.class, "generalItem", false, "GENERAL_ITEM");
+        public final static Property Account = new Property(17, Long.class, "account", false, "ACCOUNT");
     };
 
     private DaoSession daoSession;
@@ -69,19 +70,20 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
                 "'TYPE' INTEGER," + // 1: type
                 "'CONTENT_TYPE' TEXT," + // 2: contentType
                 "'URI_AS_STRING' TEXT," + // 3: UriAsString
-                "'VALUE' TEXT," + // 4: value
-                "'IS_SYNCHRONIZED' INTEGER," + // 5: isSynchronized
-                "'REVOKED' INTEGER," + // 6: revoked
-                "'NEXT_SYNCHRONISATION_TIME' INTEGER," + // 7: nextSynchronisationTime
-                "'AMOUNT_OF_SYNCHRONISATION_ATTEMPTS' INTEGER," + // 8: amountOfSynchronisationAttempts
-                "'TIME_STAMP' INTEGER," + // 9: timeStamp
-                "'WIDTH' INTEGER," + // 10: width
-                "'HEIGHT' INTEGER," + // 11: height
-                "'LAT' REAL," + // 12: lat
-                "'LNG' REAL," + // 13: lng
-                "'RUN_ID' INTEGER NOT NULL ," + // 14: runId
-                "'GENERAL_ITEM' INTEGER NOT NULL ," + // 15: generalItem
-                "'ACCOUNT' INTEGER);"); // 16: account
+                "'THUMBNAIL_URI_AS_STRING' TEXT," + // 4: ThumbnailUriAsString
+                "'VALUE' TEXT," + // 5: value
+                "'IS_SYNCHRONIZED' INTEGER," + // 6: isSynchronized
+                "'REVOKED' INTEGER," + // 7: revoked
+                "'NEXT_SYNCHRONISATION_TIME' INTEGER," + // 8: nextSynchronisationTime
+                "'AMOUNT_OF_SYNCHRONISATION_ATTEMPTS' INTEGER," + // 9: amountOfSynchronisationAttempts
+                "'TIME_STAMP' INTEGER," + // 10: timeStamp
+                "'WIDTH' INTEGER," + // 11: width
+                "'HEIGHT' INTEGER," + // 12: height
+                "'LAT' REAL," + // 13: lat
+                "'LNG' REAL," + // 14: lng
+                "'RUN_ID' INTEGER NOT NULL ," + // 15: runId
+                "'GENERAL_ITEM' INTEGER NOT NULL ," + // 16: generalItem
+                "'ACCOUNT' INTEGER);"); // 17: account
     }
 
     /** Drops the underlying database table. */
@@ -115,61 +117,66 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
             stmt.bindString(4, UriAsString);
         }
  
+        String ThumbnailUriAsString = entity.getThumbnailUriAsString();
+        if (ThumbnailUriAsString != null) {
+            stmt.bindString(5, ThumbnailUriAsString);
+        }
+ 
         String value = entity.getValue();
         if (value != null) {
-            stmt.bindString(5, value);
+            stmt.bindString(6, value);
         }
  
         Boolean isSynchronized = entity.getIsSynchronized();
         if (isSynchronized != null) {
-            stmt.bindLong(6, isSynchronized ? 1l: 0l);
+            stmt.bindLong(7, isSynchronized ? 1l: 0l);
         }
  
         Boolean revoked = entity.getRevoked();
         if (revoked != null) {
-            stmt.bindLong(7, revoked ? 1l: 0l);
+            stmt.bindLong(8, revoked ? 1l: 0l);
         }
  
         Long nextSynchronisationTime = entity.getNextSynchronisationTime();
         if (nextSynchronisationTime != null) {
-            stmt.bindLong(8, nextSynchronisationTime);
+            stmt.bindLong(9, nextSynchronisationTime);
         }
  
         Integer amountOfSynchronisationAttempts = entity.getAmountOfSynchronisationAttempts();
         if (amountOfSynchronisationAttempts != null) {
-            stmt.bindLong(9, amountOfSynchronisationAttempts);
+            stmt.bindLong(10, amountOfSynchronisationAttempts);
         }
  
         Long timeStamp = entity.getTimeStamp();
         if (timeStamp != null) {
-            stmt.bindLong(10, timeStamp);
+            stmt.bindLong(11, timeStamp);
         }
  
         Integer width = entity.getWidth();
         if (width != null) {
-            stmt.bindLong(11, width);
+            stmt.bindLong(12, width);
         }
  
         Integer height = entity.getHeight();
         if (height != null) {
-            stmt.bindLong(12, height);
+            stmt.bindLong(13, height);
         }
  
         Double lat = entity.getLat();
         if (lat != null) {
-            stmt.bindDouble(13, lat);
+            stmt.bindDouble(14, lat);
         }
  
         Double lng = entity.getLng();
         if (lng != null) {
-            stmt.bindDouble(14, lng);
+            stmt.bindDouble(15, lng);
         }
-        stmt.bindLong(15, entity.getRunId());
-        stmt.bindLong(16, entity.getGeneralItem());
+        stmt.bindLong(16, entity.getRunId());
+        stmt.bindLong(17, entity.getGeneralItem());
  
         Long account = entity.getAccount();
         if (account != null) {
-            stmt.bindLong(17, account);
+            stmt.bindLong(18, account);
         }
     }
 
@@ -193,19 +200,20 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
             cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // type
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // contentType
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // UriAsString
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // value
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isSynchronized
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // revoked
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // nextSynchronisationTime
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // amountOfSynchronisationAttempts
-            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // timeStamp
-            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // width
-            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11), // height
-            cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12), // lat
-            cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13), // lng
-            cursor.getLong(offset + 14), // runId
-            cursor.getLong(offset + 15), // generalItem
-            cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16) // account
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // ThumbnailUriAsString
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // value
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // isSynchronized
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // revoked
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // nextSynchronisationTime
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // amountOfSynchronisationAttempts
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // timeStamp
+            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11), // width
+            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // height
+            cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13), // lat
+            cursor.isNull(offset + 14) ? null : cursor.getDouble(offset + 14), // lng
+            cursor.getLong(offset + 15), // runId
+            cursor.getLong(offset + 16), // generalItem
+            cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17) // account
         );
         return entity;
     }
@@ -217,19 +225,20 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
         entity.setType(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
         entity.setContentType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUriAsString(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setValue(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setIsSynchronized(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setRevoked(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
-        entity.setNextSynchronisationTime(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setAmountOfSynchronisationAttempts(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
-        entity.setTimeStamp(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
-        entity.setWidth(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
-        entity.setHeight(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
-        entity.setLat(cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12));
-        entity.setLng(cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13));
-        entity.setRunId(cursor.getLong(offset + 14));
-        entity.setGeneralItem(cursor.getLong(offset + 15));
-        entity.setAccount(cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16));
+        entity.setThumbnailUriAsString(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setValue(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setIsSynchronized(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setRevoked(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setNextSynchronisationTime(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setAmountOfSynchronisationAttempts(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setTimeStamp(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setWidth(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
+        entity.setHeight(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
+        entity.setLat(cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13));
+        entity.setLng(cursor.isNull(offset + 14) ? null : cursor.getDouble(offset + 14));
+        entity.setRunId(cursor.getLong(offset + 15));
+        entity.setGeneralItem(cursor.getLong(offset + 16));
+        entity.setAccount(cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17));
      }
     
     /** @inheritdoc */

@@ -24,6 +24,7 @@ public class ResponseLocalObject {
     private Integer type;
     private String contentType;
     private String UriAsString;
+    private String ThumbnailUriAsString;
     private String value;
     private Boolean isSynchronized;
     private Boolean revoked;
@@ -61,11 +62,12 @@ public class ResponseLocalObject {
         this.id = id;
     }
 
-    public ResponseLocalObject(Long id, Integer type, String contentType, String UriAsString, String value, Boolean isSynchronized, Boolean revoked, Long nextSynchronisationTime, Integer amountOfSynchronisationAttempts, Long timeStamp, Integer width, Integer height, Double lat, Double lng, long runId, long generalItem, Long account) {
+    public ResponseLocalObject(Long id, Integer type, String contentType, String UriAsString, String ThumbnailUriAsString, String value, Boolean isSynchronized, Boolean revoked, Long nextSynchronisationTime, Integer amountOfSynchronisationAttempts, Long timeStamp, Integer width, Integer height, Double lat, Double lng, long runId, long generalItem, Long account) {
         this.id = id;
         this.type = type;
         this.contentType = contentType;
         this.UriAsString = UriAsString;
+        this.ThumbnailUriAsString = ThumbnailUriAsString;
         this.value = value;
         this.isSynchronized = isSynchronized;
         this.revoked = revoked;
@@ -117,6 +119,14 @@ public class ResponseLocalObject {
 
     public void setUriAsString(String UriAsString) {
         this.UriAsString = UriAsString;
+    }
+
+    public String getThumbnailUriAsString() {
+        return ThumbnailUriAsString;
+    }
+
+    public void setThumbnailUriAsString(String ThumbnailUriAsString) {
+        this.ThumbnailUriAsString = ThumbnailUriAsString;
     }
 
     public String getValue() {
@@ -317,7 +327,10 @@ public class ResponseLocalObject {
         try {
             JSONObject jsonObject = new JSONObject(bean.getResponseValue());
             if (jsonObject.has("contentType")) setContentType(jsonObject.getString("contentType"));
-            if (jsonObject.has("imageUrl")) setUriAsString(jsonObject.getString("imageUrl"));
+            if (jsonObject.has("imageUrl")) {
+                setUriAsString(jsonObject.getString("imageUrl")+"?thumbnail=600");
+                setThumbnailUriAsString(jsonObject.getString("imageUrl")+"?thumbnail=200&crop=true");
+            }
             if (jsonObject.has("audioUrl")) setUriAsString(jsonObject.getString("audioUrl"));
             if (jsonObject.has("videoUrl")) setUriAsString(jsonObject.getString("videoUrl"));
             if (jsonObject.has("width")) setWidth(jsonObject.getInt("width"));
@@ -365,12 +378,18 @@ public class ResponseLocalObject {
         return Uri.parse(getUriAsString());
     }
 
+    public Uri getThumbnailUri() {
+        return Uri.parse(getThumbnailUriAsString());
+    }
+
 
     public Response getBean() {
         Response bean = new Response();
         bean.setRunId(getRunId());
         bean.setGeneralItemId(getGeneralItem());
         bean.setTimestamp(getTimeStamp());
+        if (getLat()!= null) bean.setLat(getLat());
+        if (getLng()!= null) bean.setLng(getLng());
         switch (getType()) {
             case PICTURE_TYPE:
                 bean.setResponseValue(getPictureValue());

@@ -79,6 +79,7 @@ public class FileDownloader {
                 urlCopy = new URL(conn.getHeaderField("location"));
                 conn.disconnect();
                 download();
+                return;
             }
             conn.connect();
 

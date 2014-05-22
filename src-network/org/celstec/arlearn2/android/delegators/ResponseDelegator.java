@@ -167,10 +167,20 @@ public class ResponseDelegator extends AbstractDelegator{
             try {
                 FileDownloader fd = new FileDownloader(response.getUriAsString(), targetFile);
                 fd.download();
+                boolean insert = false;
                 if (fd.getTargetLocation().exists()) {
                     response.setUriAsString(newUri.toString());
-                    DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
                 }
+                if (response.getThumbnailUriAsString() != null && !"".equals(response.getThumbnailUriAsString())) {
+                    targetFile = urlToCacheFile(runId, response.getId(), "thumb_"+response.getThumbnailUri().getLastPathSegment());
+                    newUri = Uri.fromFile(targetFile);
+                    fd = new FileDownloader(response.getThumbnailUriAsString(), targetFile);
+                    fd.download();
+                    if (fd.getTargetLocation().exists()) {
+                        response.setThumbnailUriAsString(newUri.toString());
+                    }
+                }
+                if (insert) DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
             } catch (MalformedURLException e) {
                 Log.e("ARLearn", e.getMessage(), e);
             } catch (FileNotFoundException e) {
