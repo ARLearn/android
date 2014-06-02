@@ -170,6 +170,7 @@ public class ResponseDelegator extends AbstractDelegator{
                 boolean insert = false;
                 if (fd.getTargetLocation().exists()) {
                     response.setUriAsString(newUri.toString());
+                    insert = true;
                 }
                 if (response.getThumbnailUriAsString() != null && !"".equals(response.getThumbnailUriAsString())) {
                     targetFile = urlToCacheFile(runId, response.getId(), "thumb_"+response.getThumbnailUri().getLastPathSegment());
