@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn.download.FileDownloader;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.events.SearchResultList;
@@ -138,12 +139,14 @@ public final class GameDelegator extends AbstractDelegator{
     private GameLocalObject process(Game gBean) {
             GameLocalObject existingGame = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gBean.getGameId());
             GameLocalObject newGame = toDaoLocalObject(gBean);
+            newGame.setIcon(new FileDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+gBean.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
             if ( (existingGame == null || newGame.getLastModificationDate() > existingGame.getLastModificationDate())) {
                 DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(newGame);
                 ARL.eventBus.post(new SyncGameContributors(existingGame, newGame));
 //                DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(toDaoLocalObject(gBean));
                 return newGame;
             }
+
         return existingGame;
 
     }
@@ -154,6 +157,8 @@ public final class GameDelegator extends AbstractDelegator{
         gameDao.setTitle(gBean.getTitle());
         gameDao.setDeleted(gBean.getDeleted());
         gameDao.setDescription(gBean.getDescription());
+        gameDao.setLastModificationDate(gBean.getLastModificationDate());
+        gameDao.setLicenseCode(gBean.getLicenseCode());
         gameDao.setLastModificationDate(gBean.getLastModificationDate());
         return gameDao;
     }

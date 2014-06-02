@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.celstec.arlearn2.android.db.Constants;
+import org.celstec.arlearn2.android.events.MyAccount;
 import org.celstec.arlearn2.beans.account.Account;
 import org.celstec.arlearn2.client.AccountClient;
 import org.celstec.arlearn2.client.CollaborationClient;
@@ -77,6 +78,7 @@ public class AccountDelegator extends AbstractDelegator{
             Account account = AccountClient.getAccountClient().accountDetails(token);
             loggedInAccount = syncAccount(account);
             if (loggedInAccount!=null) {
+                ARL.eventBus.post(new MyAccount(loggedInAccount));
                 DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(loggedInAccount);
                 ARL.properties.setAccount(loggedInAccount.getId());
                 ARL.properties.setFullId(loggedInAccount.getFullId());
