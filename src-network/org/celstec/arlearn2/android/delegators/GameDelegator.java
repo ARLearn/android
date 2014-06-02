@@ -1,12 +1,8 @@
 package org.celstec.arlearn2.android.delegators;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
 import daoBase.DaoConfiguration;
-import org.celstec.arlearn.download.FileDownloader;
+import org.celstec.arlearn2.android.download.FileDownloader;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.events.SearchResultList;

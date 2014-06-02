@@ -1,4 +1,4 @@
-package org.celstec.arlearn.download;
+package org.celstec.arlearn2.android.download;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
