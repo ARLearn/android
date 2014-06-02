@@ -6,6 +6,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.celstec.arlearn.delegators.INQ;
+import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.beans.AuthResponse;
 import org.celstec.arlearn2.beans.Bean;
@@ -47,7 +48,6 @@ public class InquiryClient extends GenericClient{
     public final static int VIS_INQUIRY_MEMBERS_ONLY=0;
     public final static int VIS_LOGGED_IN_USERS=1;
     public final static int VIS_PUBLIC=2;
-//    public static String url = "http://dev.inquiry.wespot.net/services/api/rest/json/?";
 
     private InquiryClient() {
         super("");
@@ -60,19 +60,20 @@ public class InquiryClient extends GenericClient{
         return instance;
     }
 
-    public String userInquiries() {
+    public String userInquiries(String token) {
         if (INQ.accounts.getLoggedInAccount() == null) {
             return null;
         }
         String url = getUrlPrefix();
         url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&oauthId="+INQ.accounts.getLoggedInAccount().getLocalId()+
-                "&oauthProvider="+providerIdToElggName(INQ.accounts.getLoggedInAccount().getAccountType())+"&method=user.allinquiries";
-        BasicCookieStore cs  = new BasicCookieStore();
-        BasicClientCookie cookie = new BasicClientCookie("Elgg","d9hg8p8rjh40cd4o2ttm9uiri4");
-        cookie.setDomain("dev.inquiry.wespot.net");
-        cookie.setPath("/");
-        cs.addCookie(cookie);
-        HttpResponse response = conn.executeGET(url, null, "application/json", cs);
+                "&oauthProvider="+providerIdToElggName(INQ.accounts.getLoggedInAccount().getAccountType())+"&method=user.inquiries";
+//        BasicCookieStore cs  = new BasicCookieStore();
+//        BasicClientCookie cookie = new BasicClientCookie("Elgg","d9hg8p8rjh40cd4o2ttm9uiri4");
+//        cookie.setDomain("dev.inquiry.wespot.net");
+//        cookie.setPath("/");
+//        cs.addCookie(cookie);
+
+        HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
             return EntityUtils.toString(response.getEntity());
 

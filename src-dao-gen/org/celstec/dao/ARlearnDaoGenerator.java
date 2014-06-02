@@ -233,10 +233,12 @@ public class ARlearnDaoGenerator {
         Entity game = schema.addEntity("GameLocalObject");
         game.addIdProperty();
         game.addStringProperty("title").notNull();
+        game.addStringProperty("licenseCode");
         game.addStringProperty("description");
         game.addBooleanProperty("mapAvailable");
         game.addBooleanProperty("deleted");
         game.addLongProperty("lastModificationDate");
+        game.addByteArrayProperty("icon");
 
         return game;
     }

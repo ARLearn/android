@@ -1,5 +1,7 @@
 package org.celstec.arlearn2.android;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +18,9 @@ import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.GameLocalObjectDao;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * ****************************************************************************
@@ -40,7 +45,7 @@ import org.celstec.dao.gen.GameLocalObjectDao;
 public class GameFragment extends SherlockFragment {
 
     private long gameId;
-//    private View gameView;
+    private View gameView;
     private ImageView star1;
     private ImageView star2;
     private ImageView star3;
@@ -69,15 +74,29 @@ public class GameFragment extends SherlockFragment {
     private void drawGameContent(View v) {
         GameLocalObject localObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         if (localObject != null) {
+            byte[] data = localObject.getIcon();
+            if (localObject.getIcon() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                ((ImageView) v.findViewById(R.id.icon)).setImageBitmap(bitmap);
+            }
             ((TextView) v.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
             ((TextView) v.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
+            int resID = 0;
+            String licenseCode = localObject.getLicenseCode();
+            if (licenseCode.equals("cc-by")) {
+                resID = R.string.ccby;
+            }
+            ((TextView) v.findViewById(R.id.licenseId)).setText(getString(resID));
+
+            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(v.getContext());
+            ((TextView) v.findViewById(R.id.dateId)).setText(dateFormat.format(localObject.getLastModificationDate()));
         }
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View gameView = inflater.inflate(R.layout.store_game_overview, container, false);
+        gameView = inflater.inflate(R.layout.store_game_overview, container, false);
         star1 = (ImageView) gameView.findViewById(R.id.star1);
         star2 = (ImageView) gameView.findViewById(R.id.star2);
         star3 = (ImageView) gameView.findViewById(R.id.star3);
@@ -96,7 +115,7 @@ public class GameFragment extends SherlockFragment {
     public void onEventMainThread(GameEvent event) {
         if (event.getGameId() == gameId) {
             gameId = event.getGameId();
-//            drawGameContent();
+            if (gameView != null) drawGameContent(gameView);
         }
     }
 

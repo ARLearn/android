@@ -40,7 +40,7 @@ public class StoreFragment extends SherlockFragment {
     private View searchButton;
     private View categoryButton;
 
-    private View button3;
+    private View nearMeButton;
     private View button4;
 
     @Override
@@ -67,6 +67,9 @@ public class StoreFragment extends SherlockFragment {
 
         categoryButton = v.findViewById(R.id.category);
         categoryButton.setOnClickListener(new CategoryButton());
+
+        nearMeButton = v.findViewById(R.id.nearme);
+        nearMeButton.setOnClickListener(new NearMeButton());
 
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
 
@@ -117,6 +120,20 @@ public class StoreFragment extends SherlockFragment {
             CategoryFragment frag = new CategoryFragment();
             frag.setArguments(args);
             fm.beginTransaction().replace(R.id.right_pane, frag).addToBackStack(null).commit();
+        }
+    }
+
+    private class NearMeButton implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Bundle args = new Bundle();
+
+            NearMeFragment frag = new NearMeFragment();
+            frag.setArguments(args);
+            FragmentTransaction ft = fm.beginTransaction();
+
+            ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
         }
     }
 

@@ -9,7 +9,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.celstec.arlearn.download.FileDownloader;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.AbstractDelegator;
 import org.celstec.arlearn2.android.delegators.RunDelegator;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.InquiryLocalObjectDao;
@@ -43,7 +45,7 @@ import java.io.InputStream;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class InquiryDelegator {
+public class InquiryDelegator extends AbstractDelegator {
 
     public static final String SYNC_TAG = "SYNCING";
 
@@ -107,60 +109,42 @@ public class InquiryDelegator {
 
     private void downloadInquiries() {
         Log.i(SYNC_TAG, "Syncing user inquires ");
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            String inquiries = InquiryClient.getInquiryClient().userInquiries(token);
 
-        String inquiries = InquiryClient.getInquiryClient().userInquiries();
+            if (inquiries == null) return;
+            JSONObject json = null;
+            try {
+                json = new JSONObject(inquiries);
+                JSONArray array = json.getJSONArray("result");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject inqJsonObject = array.getJSONObject(i);
+                    long inquiryId = inqJsonObject.getLong("inquiryId");
+                    InquiryLocalObject inquiry = DaoConfiguration.getInstance().getInquiryLocalObjectDao().load(inquiryId);
+                    if (inquiry == null) {
+                        inquiry = new InquiryLocalObject();
+                    }
+                    inquiry.setId(inquiryId);
+                    inquiry.setTitle(inqJsonObject.getString("title"));
+                    inquiry.setDescription(inqJsonObject.getString("description"));
+                    inquiry.setIsSynchronized(true);
+                    long runId = InquiryClient.getInquiryClient().getArlearnRunId(inquiry.getId());
+                    inquiry.setRunId(runId);
 
-        if (inquiries == null) return;
-        JSONObject json = null;
-        try {
-            json = new JSONObject(inquiries);
-            JSONArray array = json.getJSONArray("result");
-            for (int i = 0; i< array.length(); i++) {
-                JSONObject inqJsonObject = array.getJSONObject(i);
-                long inquiryId =       inqJsonObject.getLong("inquiryId");
-                InquiryLocalObject inquiry = DaoConfiguration.getInstance().getInquiryLocalObjectDao().load(inquiryId);
-                if (inquiry == null) {
-                    inquiry= new InquiryLocalObject();
+                    inquiry.setIcon(new FileDownloader(inqJsonObject.getString("icon")).syncDownload());
+
+
+                    long rid = DaoConfiguration.getInstance().getInquiryLocalObjectDao().insertOrReplace(inquiry);
+                    ARL.eventBus.post(new InquiryEvent(inquiry.getId()));
                 }
-                inquiry.setId(inquiryId);
-                inquiry.setTitle(inqJsonObject.getString("title"));
-                inquiry.setDescription(inqJsonObject.getString("description"));
-                inquiry.setIsSynchronized(true);
-                long runId = InquiryClient.getInquiryClient().getArlearnRunId(inquiry.getId());
-                inquiry.setRunId(runId);
-                inquiry.setIcon(downloadImage(inqJsonObject.getString("icon")));
-
-
-                long rid = DaoConfiguration.getInstance().getInquiryLocalObjectDao().insertOrReplace(inquiry);
-                ARL.eventBus.post(new InquiryEvent(inquiry.getId()));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
-    private byte[] downloadImage(String imageUrl){
-        try {
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet(imageUrl);
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-            int imageLength = (int)(entity.getContentLength());
-            InputStream is = entity.getContent();
 
-            byte[] imageBlob = new byte[imageLength];
-            int bytesRead = 0;
-            while (bytesRead < imageLength) {
-                int n = is.read(imageBlob, bytesRead, imageLength - bytesRead);
-                if (n <= 0)
-                    ; // do some error handling
-                bytesRead += n;
-            }
-            return imageBlob;
-        }catch (Exception e) {
-            return null;
-        }
-    }
     private void onEventAsync(SyncDataCollectionTasks dcTask) {
         InquiryLocalObject currentInq = getCurrentInquiry();
         Log.i(SYNC_TAG, "Syncing data collection tasks");

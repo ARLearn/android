@@ -16,10 +16,12 @@ public class GameLocalObject {
     private Long id;
     /** Not-null value. */
     private String title;
+    private String licenseCode;
     private String description;
     private Boolean mapAvailable;
     private Boolean deleted;
     private Long lastModificationDate;
+    private byte[] icon;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -41,13 +43,15 @@ public class GameLocalObject {
         this.id = id;
     }
 
-    public GameLocalObject(Long id, String title, String description, Boolean mapAvailable, Boolean deleted, Long lastModificationDate) {
+    public GameLocalObject(Long id, String title, String licenseCode, String description, Boolean mapAvailable, Boolean deleted, Long lastModificationDate, byte[] icon) {
         this.id = id;
         this.title = title;
+        this.licenseCode = licenseCode;
         this.description = description;
         this.mapAvailable = mapAvailable;
         this.deleted = deleted;
         this.lastModificationDate = lastModificationDate;
+        this.icon = icon;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -72,6 +76,14 @@ public class GameLocalObject {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getLicenseCode() {
+        return licenseCode;
+    }
+
+    public void setLicenseCode(String licenseCode) {
+        this.licenseCode = licenseCode;
     }
 
     public String getDescription() {
@@ -104,6 +116,14 @@ public class GameLocalObject {
 
     public void setLastModificationDate(Long lastModificationDate) {
         this.lastModificationDate = lastModificationDate;
+    }
+
+    public byte[] getIcon() {
+        return icon;
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

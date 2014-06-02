@@ -10,4 +10,6 @@
     <string name="searchText">Search</string>
     <string name="category">Category</string>
     <string name="topGames">Top games</string>
+
+    <string name="ccby">Attribution</string>
 </resources>

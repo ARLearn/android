@@ -53,19 +53,22 @@ public class QuestionDelegator extends AbstractDelegator {
 
     private void onEventAsync(SyncQuestionsTask sge) {
         Log.i(SYNC_TAG, "Syncing questions for inquiry "+sge.inquiryLocalObject.getTitle()+ " "+sge.inquiryLocalObject.getId());
-        String questions = InquiryClient.getInquiryClient().userInquiries();
-        if (questions == null) return;
-        JSONObject json = null;
-        try {
-            json = new JSONObject(questions);
-            JSONArray array = json.getJSONArray("result");
-            for (int i = 0; i< array.length(); i++) {
-                JSONObject inqJsonObject = array.getJSONObject(i);
-                String question = inqJsonObject.getString("question");
-                Log.i(SYNC_TAG, "Question found "+question);
+        String token =returnTokenIfOnline();
+        if (token != null) {
+            String questions = InquiryClient.getInquiryClient().userInquiries(token);
+            if (questions == null) return;
+            JSONObject json = null;
+            try {
+                json = new JSONObject(questions);
+                JSONArray array = json.getJSONArray("result");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject inqJsonObject = array.getJSONObject(i);
+                    String question = inqJsonObject.getString("question");
+                    Log.i(SYNC_TAG, "Question found " + question);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

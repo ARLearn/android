@@ -6,7 +6,6 @@
         <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
         <fileset dir="../arlearn.thirdparty/google-play-services_lib/libs" includes="**/*.jar" />
 
-        <!--<fileset dir="${android_sdk}/extras/google/google_play_services/libproject/google-play-services_lib/libs" includes="**/*.jar" />-->
         <fileset dir="${android_sdk}/extras/android/support/v13" includes="**/*.jar" />
         <fileset dir="${android_sdk}/platforms/android-19/" includes="**/*.jar" />
     </path>

@@ -25,10 +25,12 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
-        public final static Property Description = new Property(2, String.class, "description", false, "DESCRIPTION");
-        public final static Property MapAvailable = new Property(3, Boolean.class, "mapAvailable", false, "MAP_AVAILABLE");
-        public final static Property Deleted = new Property(4, Boolean.class, "deleted", false, "DELETED");
-        public final static Property LastModificationDate = new Property(5, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
+        public final static Property LicenseCode = new Property(2, String.class, "licenseCode", false, "LICENSE_CODE");
+        public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
+        public final static Property MapAvailable = new Property(4, Boolean.class, "mapAvailable", false, "MAP_AVAILABLE");
+        public final static Property Deleted = new Property(5, Boolean.class, "deleted", false, "DELETED");
+        public final static Property LastModificationDate = new Property(6, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
+        public final static Property Icon = new Property(7, byte[].class, "icon", false, "ICON");
     };
 
     private DaoSession daoSession;
@@ -49,10 +51,12 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'GAME_LOCAL_OBJECT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'TITLE' TEXT NOT NULL ," + // 1: title
-                "'DESCRIPTION' TEXT," + // 2: description
-                "'MAP_AVAILABLE' INTEGER," + // 3: mapAvailable
-                "'DELETED' INTEGER," + // 4: deleted
-                "'LAST_MODIFICATION_DATE' INTEGER);"); // 5: lastModificationDate
+                "'LICENSE_CODE' TEXT," + // 2: licenseCode
+                "'DESCRIPTION' TEXT," + // 3: description
+                "'MAP_AVAILABLE' INTEGER," + // 4: mapAvailable
+                "'DELETED' INTEGER," + // 5: deleted
+                "'LAST_MODIFICATION_DATE' INTEGER," + // 6: lastModificationDate
+                "'ICON' BLOB);"); // 7: icon
     }
 
     /** Drops the underlying database table. */
@@ -72,24 +76,34 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         }
         stmt.bindString(2, entity.getTitle());
  
+        String licenseCode = entity.getLicenseCode();
+        if (licenseCode != null) {
+            stmt.bindString(3, licenseCode);
+        }
+ 
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(3, description);
+            stmt.bindString(4, description);
         }
  
         Boolean mapAvailable = entity.getMapAvailable();
         if (mapAvailable != null) {
-            stmt.bindLong(4, mapAvailable ? 1l: 0l);
+            stmt.bindLong(5, mapAvailable ? 1l: 0l);
         }
  
         Boolean deleted = entity.getDeleted();
         if (deleted != null) {
-            stmt.bindLong(5, deleted ? 1l: 0l);
+            stmt.bindLong(6, deleted ? 1l: 0l);
         }
  
         Long lastModificationDate = entity.getLastModificationDate();
         if (lastModificationDate != null) {
-            stmt.bindLong(6, lastModificationDate);
+            stmt.bindLong(7, lastModificationDate);
+        }
+ 
+        byte[] icon = entity.getIcon();
+        if (icon != null) {
+            stmt.bindBlob(8, icon);
         }
     }
 
@@ -111,10 +125,12 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         GameLocalObject entity = new GameLocalObject( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // title
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // description
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // mapAvailable
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // deleted
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // lastModificationDate
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // licenseCode
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // description
+            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // mapAvailable
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // deleted
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // lastModificationDate
+            cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7) // icon
         );
         return entity;
     }
@@ -124,10 +140,12 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
     public void readEntity(Cursor cursor, GameLocalObject entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.getString(offset + 1));
-        entity.setDescription(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setMapAvailable(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setDeleted(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setLastModificationDate(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setLicenseCode(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setDescription(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setMapAvailable(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
+        entity.setDeleted(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setLastModificationDate(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setIcon(cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7));
      }
     
     /** @inheritdoc */
