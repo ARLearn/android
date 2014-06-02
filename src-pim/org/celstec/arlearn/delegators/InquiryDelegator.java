@@ -2,19 +2,10 @@ package org.celstec.arlearn.delegators;
 
 import android.util.Log;
 import daoBase.DaoConfiguration;
-import de.greenrobot.dao.query.QueryBuilder;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.celstec.arlearn.download.FileDownloader;
+import org.celstec.arlearn2.android.download.FileDownloader;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AbstractDelegator;
-import org.celstec.arlearn2.android.delegators.RunDelegator;
 import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.InquiryLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObject;
 import org.celstec.events.InquiryEvent;
 import org.celstec.arlearn2.client.InquiryClient;
@@ -22,8 +13,6 @@ import org.celstec.dao.gen.InquiryLocalObject;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-
-import java.io.InputStream;
 
 /**
  * ****************************************************************************
