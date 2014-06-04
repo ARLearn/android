@@ -103,7 +103,6 @@ public class InquiryClient extends GenericClient{
         url+= "&api_key="+INQ.config.getProperty("elgg_api_key")+"&method=inquiry.arlearnrun&inquiryId="+inquiryId;
         HttpResponse response = conn.executeGET(url, null, "application/json");
         try {
-//            return EntityUtils.toString(response.getEntity());
             JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
             return json.getLong("result");
 
@@ -134,7 +133,7 @@ public class InquiryClient extends GenericClient{
         return null;
     }
 
-    public void createInquiry(InquiryLocalObject inquiry, AccountLocalObject account, int visibility, int membership, boolean dataCollectionEnabled) {
+    public void createInquiry(String token, InquiryLocalObject inquiry, AccountLocalObject account, int visibility, int membership, boolean dataCollectionEnabled) {
         String provider = providerIdToElggName(account.getAccountType());
         try {
         String postBody = "method=inquiry.create" +
@@ -150,7 +149,7 @@ public class InquiryClient extends GenericClient{
                 "&api_key="+INQ.config.getProperty("elgg_api_key");
 
             HttpResponse response = conn.executePOST(getUrlPrefix()
-                    , null, "application/json", postBody, "application/x-www-form-urlencoded");
+                    , token, "application/json", postBody, "application/x-www-form-urlencoded");
             JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
             Log.e("ARLearn", "return after creating inquiry " + json.toString());
         } catch (Exception e) {
