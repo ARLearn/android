@@ -118,7 +118,7 @@ public class InquiryDelegator extends AbstractDelegator {
                     inquiry.setTitle(inqJsonObject.getString("title"));
                     inquiry.setDescription(inqJsonObject.getString("description"));
                     inquiry.setIsSynchronized(true);
-                    long runId = InquiryClient.getInquiryClient().getArlearnRunId(inquiry.getId());
+                    long runId = InquiryClient.getInquiryClient().getArlearnRunId(token, inquiry.getId());
                     inquiry.setRunId(runId);
 
                     inquiry.setIcon(new FileDownloader(inqJsonObject.getString("icon")).syncDownload());
@@ -156,18 +156,20 @@ public class InquiryDelegator extends AbstractDelegator {
     }
 
     private void onEventAsync(SyncInquiriesHypothesis syncInquiriesHypothesis) {
-        InquiryClient.Hypothesis hypothesis = InquiryClient.getInquiryClient().getInquiryHypothesis(syncInquiriesHypothesis.inquiryId);
-        if (hypothesis != null) {
-            InquiryLocalObject inquiry = DaoConfiguration.getInstance().getInquiryLocalObjectDao().load(syncInquiriesHypothesis.inquiryId);
-            if (inquiry == null) {
-                inquiry= new InquiryLocalObject();
-                inquiry.setId(syncInquiriesHypothesis.inquiryId);
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            InquiryClient.Hypothesis hypothesis = InquiryClient.getInquiryClient().getInquiryHypothesis(token, syncInquiriesHypothesis.inquiryId);
+            if (hypothesis != null) {
+                InquiryLocalObject inquiry = DaoConfiguration.getInstance().getInquiryLocalObjectDao().load(syncInquiriesHypothesis.inquiryId);
+                if (inquiry == null) {
+                    inquiry = new InquiryLocalObject();
+                    inquiry.setId(syncInquiriesHypothesis.inquiryId);
+                }
+                inquiry.setHypothesisTitle(hypothesis.getTitle());
+                inquiry.setHypothesisDescription(hypothesis.getDescription());
+                DaoConfiguration.getInstance().getInquiryLocalObjectDao().insertOrReplace(inquiry);
+                ARL.eventBus.post(new InquiryEvent(inquiry.getId()));
             }
-            inquiry.setHypothesisTitle(hypothesis.getTitle());
-            inquiry.setHypothesisDescription(hypothesis.getDescription());
-            DaoConfiguration.getInstance().getInquiryLocalObjectDao().insertOrReplace(inquiry);
-            ARL.eventBus.post(new InquiryEvent(inquiry.getId()));
-
         }
     }
 

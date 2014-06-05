@@ -84,10 +84,10 @@ public class InquiryClient extends GenericClient{
         return "error";
     }
 
-    public String questions(long inquiryId) {
+    public String questions(String token, long inquiryId) {
         String url = getUrlPrefix();
         url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&inquiryId="+inquiryId+"&method=inquiry.questions";
-        HttpResponse response = conn.executeGET(url, null, "application/json");
+        HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
             return EntityUtils.toString(response.getEntity());
 
@@ -98,10 +98,10 @@ public class InquiryClient extends GenericClient{
         return "error";
     }
 
-    public long getArlearnRunId(long inquiryId) {
+    public long getArlearnRunId(String token, long inquiryId) {
         String url = getUrlPrefix();
         url+= "&api_key="+INQ.config.getProperty("elgg_api_key")+"&method=inquiry.arlearnrun&inquiryId="+inquiryId;
-        HttpResponse response = conn.executeGET(url, null, "application/json");
+        HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
             JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
             return json.getLong("result");
@@ -113,9 +113,9 @@ public class InquiryClient extends GenericClient{
         return 0l;
     }
 
-    public Hypothesis getInquiryHypothesis(long inquiryId) {
+    public Hypothesis getInquiryHypothesis(String token, long inquiryId) {
         HttpResponse response = conn.executeGET(getUrlPrefix()+"&api_key="+INQ.config.getProperty("elgg_api_key")+
-                "&method=inquiry.hypothesis&inquiryId="+inquiryId, null, "application/json");
+                "&method=inquiry.hypothesis&inquiryId="+inquiryId, token, "application/json");
         try {
 //            return EntityUtils.toString(response.getEntity());
             JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));

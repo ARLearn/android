@@ -63,6 +63,9 @@ public final class GameDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SearchGames(query));
     }
 
+    public void search(Double lat, Double lng, Long distance) {
+        ARL.eventBus.post(new LocationSearchGames(lat, lng, distance));
+    }
 
     public GameLocalObject asyncGame(long gameId) {
         String token = returnTokenIfOnline();
@@ -83,6 +86,14 @@ public final class GameDelegator extends AbstractDelegator{
         String token = returnTokenIfOnline();
         if (token != null) {
             GamesList result = GameClient.getGameClient().search(token, sg.query);
+            ARL.eventBus.post(new SearchResultList(result));
+        }
+    }
+
+    private void onEventAsync(LocationSearchGames sg) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            GamesList result = GameClient.getGameClient().search(token, sg.getLat(), sg.getLng(), sg.getDistance());
             ARL.eventBus.post(new SearchResultList(result));
         }
     }
@@ -264,6 +275,42 @@ public final class GameDelegator extends AbstractDelegator{
 
         public void setQuery(String query) {
             this.query = query;
+        }
+    }
+
+    private class LocationSearchGames {
+        private Double lat;
+        private Double lng;
+        private Long distance;
+
+        private LocationSearchGames(Double lat, Double lng, Long distance) {
+            this.lat = lat;
+            this.lng = lng;
+            this.distance = distance;
+        }
+
+        public Double getLat() {
+            return lat;
+        }
+
+        public void setLat(Double lat) {
+            this.lat = lat;
+        }
+
+        public Double getLng() {
+            return lng;
+        }
+
+        public void setLng(Double lng) {
+            this.lng = lng;
+        }
+
+        public Long getDistance() {
+            return distance;
+        }
+
+        public void setDistance(Long distance) {
+            this.distance = distance;
         }
     }
 
