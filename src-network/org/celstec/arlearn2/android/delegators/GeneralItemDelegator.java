@@ -124,6 +124,9 @@ public class GeneralItemDelegator extends AbstractDelegator{
         if (iEvent != null) {
             ARL.eventBus.post(iEvent);
             syncDates.put(gameLocalObject.getId(), list.getServerTime());
+            if (gameLocalObject!=null) {
+                gameLocalObject.resetGeneralItems();
+            }
         }
     }
 
