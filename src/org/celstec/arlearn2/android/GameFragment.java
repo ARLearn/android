@@ -83,8 +83,22 @@ public class GameFragment extends SherlockFragment {
             ((TextView) v.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
             int resID = 0;
             String licenseCode = localObject.getLicenseCode();
-            if (licenseCode.equals("cc-by")) {
-                resID = R.string.ccby;
+            if (licenseCode != null) {
+                if (licenseCode.equals("cc-by")) {
+                    resID = R.string.ccby;
+                } else if (licenseCode.equals("cc-by-nd")) {
+                    resID = R.string.bynd;
+                } else if (licenseCode.equals("cc-by-sa")) {
+                    resID = R.string.bysa;
+                } else if (licenseCode.equals("cc-by-nc")) {
+                    resID = R.string.bync;
+                } else if (licenseCode.equals("cc-by-nc-sa")) {
+                    resID = R.string.byncsa;
+                } else if (licenseCode.equals("cc-by-nc-nd")) {
+                    resID = R.string.byncnd;
+                }
+            } else {
+                resID = R.string.nolicense;
             }
             ((TextView) v.findViewById(R.id.licenseId)).setText(getString(resID));
 

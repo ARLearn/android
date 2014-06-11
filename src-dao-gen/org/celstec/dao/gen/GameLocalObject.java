@@ -22,6 +22,8 @@ public class GameLocalObject {
     private Boolean deleted;
     private Long lastModificationDate;
     private byte[] icon;
+    private Double lat;
+    private Double lng;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -43,7 +45,7 @@ public class GameLocalObject {
         this.id = id;
     }
 
-    public GameLocalObject(Long id, String title, String licenseCode, String description, Boolean mapAvailable, Boolean deleted, Long lastModificationDate, byte[] icon) {
+    public GameLocalObject(Long id, String title, String licenseCode, String description, Boolean mapAvailable, Boolean deleted, Long lastModificationDate, byte[] icon, Double lat, Double lng) {
         this.id = id;
         this.title = title;
         this.licenseCode = licenseCode;
@@ -52,6 +54,8 @@ public class GameLocalObject {
         this.deleted = deleted;
         this.lastModificationDate = lastModificationDate;
         this.icon = icon;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -124,6 +128,22 @@ public class GameLocalObject {
 
     public void setIcon(byte[] icon) {
         this.icon = icon;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

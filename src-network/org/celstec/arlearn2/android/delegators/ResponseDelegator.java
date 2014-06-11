@@ -118,8 +118,10 @@ public class ResponseDelegator extends AbstractDelegator{
                     Response responseResult = ResponseClient.getResponseClient().publishAction(token, responseBean);
                     DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
                     response.setId(responseResult.getResponseId());
+                    response.setThumbnailUriAsString(response.getUriAsString());
                     DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
                     ARL.eventBus.post(new ResponseEvent(response.getRunId()));
+                    response.getGeneralItemLocalObject().resetResponses();
 
                 } catch (FileNotFoundException e) {
                     Log.e("ARLearn", e.getMessage(), e);

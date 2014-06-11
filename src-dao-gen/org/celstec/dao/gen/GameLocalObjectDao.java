@@ -31,6 +31,8 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         public final static Property Deleted = new Property(5, Boolean.class, "deleted", false, "DELETED");
         public final static Property LastModificationDate = new Property(6, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
         public final static Property Icon = new Property(7, byte[].class, "icon", false, "ICON");
+        public final static Property Lat = new Property(8, Double.class, "lat", false, "LAT");
+        public final static Property Lng = new Property(9, Double.class, "lng", false, "LNG");
     };
 
     private DaoSession daoSession;
@@ -56,7 +58,9 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
                 "'MAP_AVAILABLE' INTEGER," + // 4: mapAvailable
                 "'DELETED' INTEGER," + // 5: deleted
                 "'LAST_MODIFICATION_DATE' INTEGER," + // 6: lastModificationDate
-                "'ICON' BLOB);"); // 7: icon
+                "'ICON' BLOB," + // 7: icon
+                "'LAT' REAL," + // 8: lat
+                "'LNG' REAL);"); // 9: lng
     }
 
     /** Drops the underlying database table. */
@@ -105,6 +109,16 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         if (icon != null) {
             stmt.bindBlob(8, icon);
         }
+ 
+        Double lat = entity.getLat();
+        if (lat != null) {
+            stmt.bindDouble(9, lat);
+        }
+ 
+        Double lng = entity.getLng();
+        if (lng != null) {
+            stmt.bindDouble(10, lng);
+        }
     }
 
     @Override
@@ -130,7 +144,9 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // mapAvailable
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // deleted
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // lastModificationDate
-            cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7) // icon
+            cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7), // icon
+            cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8), // lat
+            cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9) // lng
         );
         return entity;
     }
@@ -146,6 +162,8 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         entity.setDeleted(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setLastModificationDate(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
         entity.setIcon(cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7));
+        entity.setLat(cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8));
+        entity.setLng(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
      }
     
     /** @inheritdoc */

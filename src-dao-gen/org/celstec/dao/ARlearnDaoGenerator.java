@@ -239,7 +239,8 @@ public class ARlearnDaoGenerator {
         game.addBooleanProperty("deleted");
         game.addLongProperty("lastModificationDate");
         game.addByteArrayProperty("icon");
-
+        game.addDoubleProperty("lat");
+        game.addDoubleProperty("lng");
         return game;
     }
 

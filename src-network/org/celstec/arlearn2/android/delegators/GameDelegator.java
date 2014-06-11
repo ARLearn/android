@@ -94,6 +94,9 @@ public final class GameDelegator extends AbstractDelegator{
         String token = returnTokenIfOnline();
         if (token != null) {
             GamesList result = GameClient.getGameClient().search(token, sg.getLat(), sg.getLng(), sg.getDistance());
+            for (Game gameResult: result.getGames()) {
+                process(gameResult);
+            }
             ARL.eventBus.post(new SearchResultList(result));
         }
     }
@@ -164,9 +167,11 @@ public final class GameDelegator extends AbstractDelegator{
         gameDao.setTitle(gBean.getTitle());
         gameDao.setDeleted(gBean.getDeleted());
         gameDao.setDescription(gBean.getDescription());
-        gameDao.setLastModificationDate(gBean.getLastModificationDate());
         gameDao.setLicenseCode(gBean.getLicenseCode());
         gameDao.setLastModificationDate(gBean.getLastModificationDate());
+        if (gameDao.getLastModificationDate() == null) gameDao.setLastModificationDate(0l);
+        gameDao.setLat(gBean.getLat());
+        gameDao.setLng(gBean.getLng());
         return gameDao;
     }
 
