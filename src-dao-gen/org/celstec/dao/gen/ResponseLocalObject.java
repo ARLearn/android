@@ -330,9 +330,16 @@ public class ResponseLocalObject {
             if (jsonObject.has("imageUrl")) {
                 setUriAsString(jsonObject.getString("imageUrl")+"?thumbnail=600");
                 setThumbnailUriAsString(jsonObject.getString("imageUrl")+"?thumbnail=200&crop=true");
+                setPictureType();
             }
-            if (jsonObject.has("audioUrl")) setUriAsString(jsonObject.getString("audioUrl"));
-            if (jsonObject.has("videoUrl")) setUriAsString(jsonObject.getString("videoUrl"));
+            if (jsonObject.has("audioUrl")) {
+                setUriAsString(jsonObject.getString("audioUrl"));
+                setAudioType();
+            }
+            if (jsonObject.has("videoUrl")) {
+                setUriAsString(jsonObject.getString("videoUrl"));
+                setVideoType();
+            }
             if (jsonObject.has("width")) setWidth(jsonObject.getInt("width"));
             if (jsonObject.has("height")) setHeight(jsonObject.getInt("height"));
             if (jsonObject.has("lat")) setLat(jsonObject.getDouble("lat"));
@@ -410,6 +417,7 @@ public class ResponseLocalObject {
             jsonResponse.put("imageUrl", buildRemotePath(getUri(), runId, getAccountLocalObject().getFullId()));
             jsonResponse.put("width", getWidth());
             jsonResponse.put("height", getHeight());
+            jsonResponse.put("contentType", getContentType());
         } catch (JSONException e) {
             e.printStackTrace();
         }

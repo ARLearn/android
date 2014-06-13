@@ -17,8 +17,8 @@
             android:textSize="25dp"
             android:textColor="#33485f"
             android:typeface="sans"
-            android:paddingBottom="20dp"
-
+            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
             android:layout_weight="1"/>
 
     <LinearLayout
@@ -27,7 +27,6 @@
             android:layout_height="0dp"
             android:background="@drawable/searchbar_border"
             android:paddingLeft="15dp"
-            android:paddingTop="5dp"
             android:paddingBottom="2dp"
             android:paddingRight="4dip"
             android:layout_weight="1">

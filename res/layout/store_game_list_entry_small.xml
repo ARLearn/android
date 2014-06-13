@@ -41,6 +41,6 @@
             android:layout_height="30dip"
             android:layout_marginLeft="6dip"
 
-            android:src="@drawable/icon" />
+            android:src="@drawable/ic_mygames" />
 
 </LinearLayout>
