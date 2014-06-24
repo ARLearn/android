@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.GameDelegator;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
@@ -146,6 +147,7 @@ public class GameFragment extends SherlockFragment {
         @Override
         public void onClick(View view) {
             Log.e("ARLearn", "Click Star");
+            GameDelegator.getInstance().rating.submitRating(starId, gameId);
             for (int i =0 ; i<6; i++) {
                 if (i <=starId) {
                     setStar(i);

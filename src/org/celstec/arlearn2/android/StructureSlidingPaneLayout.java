@@ -1,8 +1,11 @@
 package org.celstec.arlearn2.android;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -12,6 +15,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import org.celstec.arlearn2.android.events.CategoryEvent;
+import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.CategoryLocalObject;
 
 /**
@@ -43,6 +47,7 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
 
     private ActionBarHelper mActionBar;
     private SherlockFragment frag;
+    private long gameToLoad = 0l;
 
     /**
      * Called when the activity is first created.
@@ -50,7 +55,16 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            Intent i = getIntent();
 
+            Uri uri = i.getData();
+            if (uri.toString().startsWith("http://streetlearn.appspot.com/game/")) {
+                gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
+            }
+        } catch (NullPointerException e){
+
+        }
         setContentView(R.layout.structure_sliding_pane);
         getSupportActionBar().setIcon(R.drawable.ic_ab_menu);
 
@@ -73,7 +87,17 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
 
             frag = new MainMenu();
             frag.setArguments(args);
-            fm.beginTransaction().replace(R.id.right_pane, frag).addToBackStack(null).commit();
+            FragmentTransaction ft = fm.beginTransaction();
+
+            if (gameToLoad != 0l) {
+                ft.replace(R.id.right_pane, frag).addToBackStack(null);
+                Game game = new Game();
+                game.setGameId(gameToLoad);
+                GameFragment gf = new GameFragment(game);
+                ft.replace(R.id.right_pane, gf).addToBackStack(null).commit();
+            } else {
+                ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+            }
         }
     }
 

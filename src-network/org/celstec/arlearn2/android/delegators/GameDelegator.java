@@ -2,6 +2,7 @@ package org.celstec.arlearn2.android.delegators;
 
 import android.util.Log;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.delegators.game.Rating;
 import org.celstec.arlearn2.android.download.FileDownloader;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.events.GameEvent;
@@ -43,6 +44,7 @@ public final class GameDelegator extends AbstractDelegator{
 
     private static long lastSyncDateParticipate = 0l;
     private static long lastSyncDate = 0l;
+    public Rating rating = new Rating();
 
     private GameDelegator() {
         ARL.eventBus.register(this);
