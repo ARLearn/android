@@ -97,7 +97,7 @@
 
     <style name="ARLearn.SlidingPane">
         <item name="android:layout_width">280dp</item>
-        <item name="android:background">#212e3d</item>
+        <item name="android:background">@color/dark_grey</item>
         <item name="android:typeface">sans</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">left</item>
