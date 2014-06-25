@@ -2,6 +2,14 @@
 <resources>
     <string name="app_name">ARLearn</string>
 
+    <string name="login_facebook">Login with Facebook</string>
+    <string name="login_google">Login with Google</string>
+    <string name="login_twitter">Login with Twitter</string>
+    <string name="login_linked_in">Login with LinkedIn</string>
+
+    <string name="login_to_continue">Login to continue</string>
+    <string name="login_from_my_games_text">To access My Games you have to first login. \nPlease choose one of the login types.</string>
+
     <string name="myGames">My Games</string>
     <string name="library">Library</string>
     <string name="scan">Scan</string>

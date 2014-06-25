@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+
+              android:orientation="vertical"
+              android:background="@drawable/background"
+              android:id="@+id/storeLinearLayout">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Games"
+            android:textSize="25dp"
+            android:textColor="#33485f"
+            android:typeface="sans"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:layout_weight="0"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingBottom="2dp"
+            android:paddingRight="4dip"
+            android:layout_weight="0">
+        <ListView
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/transparent"
+                android:cacheColorHint="#00000000" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

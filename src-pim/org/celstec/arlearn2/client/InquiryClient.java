@@ -145,7 +145,7 @@ public class InquiryClient extends GenericClient{
                 "&wespot_arlearn_enable=" + (dataCollectionEnabled==true?"yes":"no")+
                 "&group_multiple_admin_allow_enable=no" +
                 "&provider=" + provider +
-                "&user_uid=" + provider + "_" + account.getLocalId() +
+                "&user_uid=" +  account.getLocalId() +
                 "&api_key="+INQ.config.getProperty("elgg_api_key");
 
             HttpResponse response = conn.executePOST(getUrlPrefix()

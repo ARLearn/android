@@ -1,15 +1,14 @@
 package org.celstec.arlearn2.android;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
+import authentication.LoginFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.delegators.ARL;
@@ -48,8 +47,8 @@ public class MainMenu extends SherlockFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
         INQ.init(getActivity());
-        ARL.properties.setAuthToken(authToken);
-        ARL.properties.setFullId("2:116757187626671489073");
+//        ARL.properties.setAuthToken(authToken);
+//        ARL.properties.setFullId("2:116757187626671489073");
 
         ARL.accounts.syncMyAccountDetails();
 
@@ -85,8 +84,25 @@ public class MainMenu extends SherlockFragment {
     private class ClickButton1 implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.e(TAG, "Click My Games");
+
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Bundle args = new Bundle();
+            Fragment frag;
+//
+            if (ARL.accounts.isAuthenticated()){
+                frag = new MyGamesFragment();
+            } else {
+                frag = new LoginFragment();
+            }
+
+            frag.setArguments(args);
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.right_pane, frag).addToBackStack(null).commit();
         }
+
+
+
     }
 
     private class ClickButton2 implements View.OnClickListener {

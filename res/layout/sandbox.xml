@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="100dip"
+                android:padding="1dp"
+                android:background="@drawable/gradient_store_game_overview_gray_seperator"
+                android:orientation="horizontal"
+        >
+
+    <ImageView
+
+            android:id="@+id/star1"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:src="@drawable/ic_star_grey"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"/>
+
+    <TextView
+            android:id="@+id/languageId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:textColor="@color/purple"
+            android:singleLine="true"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:layout_centerInParent="true"
+            android:text="Nederlands"/>
+</RelativeLayout>

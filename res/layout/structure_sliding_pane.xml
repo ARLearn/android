@@ -23,6 +23,12 @@
                         style="@style/ARLearn.SlidingPane.Text"
                         android:text="About me"
                         />
+
+                <Button
+                        android:id="@+id/logoutButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="logout"/>
                 <!--<ScrollView-->
                         <!--android:layout_height="wrap_content"-->
                         <!--android:layout_width="match_parent">-->

@@ -1,0 +1,77 @@
+package org.celstec.arlearn2.android;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import com.actionbarsherlock.app.SherlockListFragment;
+import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
+import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
+import org.celstec.arlearn2.android.listadapter.impl.SearchResultsLazyListAdapter;
+import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.dao.gen.GameLocalObject;
+
+/**
+ * ****************************************************************************
+ * Copyright (C) 2013 Open Universiteit Nederland
+ * <p/>
+ * This library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p/>
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p/>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * <p/>
+ * Contributors: Stefaan Ternier
+ * ****************************************************************************
+ */
+public class MyGamesFragment extends SherlockListFragment implements ListItemClickInterface<GameLocalObject> {
+
+    private GamesLazyListAdapter adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        ARL.games.syncMyGames();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        final View v = inflater.inflate(R.layout.mygames_list, container, false);
+        if (adapter == null) {
+            adapter = new GamesLazyListAdapter(getActivity());
+            adapter.setOnListItemClickCallback(this);
+        }
+
+        setListAdapter(adapter);
+        return v;
+    }
+
+    @Override
+    public void onListItemClick(View v, int position, GameLocalObject game) {
+
+    }
+
+    @Override
+    public boolean setOnLongClickListener(View v, int position, GameLocalObject object) {
+        return false;
+    }
+
+}

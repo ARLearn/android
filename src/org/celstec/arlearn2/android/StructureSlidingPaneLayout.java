@@ -9,11 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.CategoryEvent;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.CategoryLocalObject;
@@ -62,10 +64,20 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
             if (uri.toString().startsWith("http://streetlearn.appspot.com/game/")) {
                 gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
             }
+            if (uri.toString().startsWith("http://streetlearn.appspot.com/oai/resolve/")) {
+                gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
+            }
         } catch (NullPointerException e){
 
         }
         setContentView(R.layout.structure_sliding_pane);
+        Button logout = (Button) this.findViewById(R.id.logoutButton);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ARL.accounts.disAuthenticate();
+            }
+        });
         getSupportActionBar().setIcon(R.drawable.ic_ab_menu);
 
         // Action bar

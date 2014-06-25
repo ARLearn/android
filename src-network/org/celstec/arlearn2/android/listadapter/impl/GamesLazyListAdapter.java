@@ -72,22 +72,22 @@ public class GamesLazyListAdapter extends LazyListAdapter<GameLocalObject> {
     public View newView(Context context, GameLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.store_game_list_entry, parent, false);
+        return inflater.inflate(R.layout.store_game_list_entry_small, parent, false);
 
     }
     @Override
     public void bindView(View view, Context context,  GameLocalObject item) {
         TextView firstLineView =(TextView) view.findViewById(R.id.gameTitleId);
         firstLineView.setText(item.getTitle());
-        TextView secondLineView =(TextView) view.findViewById(R.id.gameDescriptionId);
-        String description = item.getDescription()==null?"":item.getDescription();
-        for (RunLocalObject run: item.getRuns()) {
-            description+= " run :"+run.getTitle();
-        }
-        for (GameContributorLocalObject owner: item.getContributors()){
-            description += " owner "+owner.getType()+":"+owner.getAccountLocalObject().getName();
-        }
-        secondLineView.setText(description + " id " +item.getId() );
+//        TextView secondLineView =(TextView) view.findViewById(R.id.gameDescriptionId);
+//        String description = item.getDescription()==null?"":item.getDescription();
+//        for (RunLocalObject run: item.getRuns()) {
+//            description+= " run :"+run.getTitle();
+//        }
+//        for (GameContributorLocalObject owner: item.getContributors()){
+//            description += " owner "+owner.getType()+":"+owner.getAccountLocalObject().getName();
+//        }
+//        secondLineView.setText(description + " id " +item.getId() );
     }
 
 
