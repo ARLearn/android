@@ -53,7 +53,11 @@ public class InquiryDelegator extends AbstractDelegator {
     }
 
     public void syncDataCollectionTasks(){
-        ARL.eventBus.post(new SyncDataCollectionTasks());
+        ARL.eventBus.post(new SyncDataCollectionTasks(null));
+    }
+
+    public void syncDataCollectionTasks(InquiryLocalObject inquiry){
+        ARL.eventBus.post(new SyncDataCollectionTasks(inquiry));
     }
 
     public InquiryLocalObject getCurrentInquiry() {
@@ -135,16 +139,19 @@ public class InquiryDelegator extends AbstractDelegator {
 
 
     private void onEventAsync(SyncDataCollectionTasks dcTask) {
-        InquiryLocalObject currentInq = getCurrentInquiry();
+        if (dcTask.getInquiry() == null) {
+            dcTask.setInquiry(getCurrentInquiry());
+        }
+
         Log.i(SYNC_TAG, "Syncing data collection tasks");
-        if (currentInq != null) {
-            if (currentInq.getRunLocalObject() == null) {
-                if (currentInq.getRunId() == 0) return;
-                INQ.runs.asyncRun(currentInq.getRunId()); //this is done synchronously
+        if (dcTask.getInquiry() != null) {
+            if (dcTask.getInquiry().getRunLocalObject() == null) {
+                if (dcTask.getInquiry().getRunId() == 0) return;
+                INQ.runs.asyncRun(dcTask.getInquiry().getRunId()); //this is done synchronously
             }
-            RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(currentInq.getRunId());
+            RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(dcTask.getInquiry().getRunId());
             if (run != null) {
-                currentInq.setRunLocalObject(run);
+                dcTask.getInquiry().setRunLocalObject(run);
                 if (run.getGameLocalObject() == null) {
                     GameLocalObject gameLocalObject = INQ.games.asyncGame(run.getGameId());
                     run.setGameLocalObject(gameLocalObject);
@@ -192,5 +199,18 @@ public class InquiryDelegator extends AbstractDelegator {
     }
 
     private class SyncDataCollectionTasks {
+        InquiryLocalObject inquiry;
+
+        private SyncDataCollectionTasks(InquiryLocalObject inquiry) {
+            this.inquiry = inquiry;
+        }
+
+        public InquiryLocalObject getInquiry() {
+            return inquiry;
+        }
+
+        public void setInquiry(InquiryLocalObject inquiry) {
+            this.inquiry = inquiry;
+        }
     }
 }

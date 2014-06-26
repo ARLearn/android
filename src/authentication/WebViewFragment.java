@@ -71,8 +71,7 @@ public abstract class WebViewFragment extends SherlockFragment {
                 ARL.accounts.syncMyAccountDetails();
                 getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().popBackStack();
-            }
-            if (url.endsWith("oauth.html") || url.contains("twitter?denied")) {
+            } else  if (url.endsWith("oauth.html") || url.contains("twitter?denied")) {
                 getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().popBackStack();
             }

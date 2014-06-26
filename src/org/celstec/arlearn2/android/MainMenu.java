@@ -12,6 +12,7 @@ import authentication.LoginFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.qrCodeScanning.ScannerFragment;
 
 /**
  * ****************************************************************************
@@ -130,7 +131,15 @@ public class MainMenu extends SherlockFragment {
     private class ClickButton3 implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.e(TAG, "Click Scan Code" );
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Bundle args = new Bundle();
+
+
+            ScannerFragment frag = new ScannerFragment();
+            frag.setArguments(args);
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.right_pane, frag).addToBackStack(null).commit();
         }
     }
 

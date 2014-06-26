@@ -15,6 +15,7 @@ import org.celstec.arlearn2.client.GameClient;
 import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.GameLocalObjectDao;
 
 import java.util.Iterator;
 
@@ -76,6 +77,14 @@ public final class GameDelegator extends AbstractDelegator{
             if (game.getError() == null) {
                 return process(game);
             }
+        }
+        return null;
+    }
+
+    public Game asyncGameBean(long gameId) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            return GameClient.getGameClient().getGame(token, gameId);
         }
         return null;
     }
@@ -177,7 +186,10 @@ public final class GameDelegator extends AbstractDelegator{
         return gameDao;
     }
 
-
+    public void deleteGames() {
+        lastSyncDate = 0l;
+        DaoConfiguration.getInstance().getGameLocalObjectDao().deleteAll();
+    }
 
 
     private class SyncGame {
