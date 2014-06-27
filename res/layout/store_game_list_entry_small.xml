@@ -41,6 +41,6 @@
             android:layout_height="30dip"
             android:layout_marginLeft="6dip"
 
-            android:src="@drawable/ic_mygames" />
+            android:src="@drawable/ic_list_arrow_right" />
 
 </LinearLayout>
