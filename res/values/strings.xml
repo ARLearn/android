@@ -26,4 +26,6 @@
     <string name="bync">Attribution-NonCommercial</string>
     <string name="byncsa">Attribution-NonCommercial-ShareAlike</string>
     <string name="byncnd">Attribution-NonCommercial-NoDerivs</string>
+
+    <string name="unabletosyncgame">Unable to sync game</string>
 </resources>

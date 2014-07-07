@@ -82,7 +82,7 @@ public class SearchResultsLazyListAdapter extends ListAdapter<Game> {
         GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(item.getGameId());
         if (gameLocalObject != null) {
             byte[] data = gameLocalObject.getIcon();
-            if (data != null) {
+            if (data != null && data.length!=0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bitmap);
             }

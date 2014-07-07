@@ -1,10 +1,16 @@
-package org.celstec.arlearn2.android.testAdapters;
+package org.celstec.arlearn2.android.store;
 
-import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.app.SherlockListFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.listadapter.impl.MessageLazyListAdapter;
+import org.celstec.arlearn2.android.listadapter.impl.CategoryGamesLazyListAdapter;
+import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
 
 /**
  * ****************************************************************************
@@ -26,23 +32,32 @@ import org.celstec.arlearn2.android.listadapter.impl.MessageLazyListAdapter;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class MessagesActivity extends ListActivity {
+public class StoreGameListFragment extends SherlockListFragment{
 
-    private MessageLazyListAdapter adapter;
+    private CategoryGamesLazyListAdapter adapter;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_game_list);
-        long threadId = getIntent().getExtras().getLong("threadId");
-        ARL.messages.syncMessages(threadId);
-        adapter = new MessageLazyListAdapter(this);
-        setListAdapter(adapter);
+    private long categoryId;
+
+    public StoreGameListFragment(long categoryId) {
+        this.categoryId = categoryId;
+        ARL.store.syncGamesForCategory(categoryId);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ARL.games.syncGamesParticipate();
 
+    }
 
-    public void onDestroy(){
-        adapter.close();
-        super.onDestroy();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        final View v = inflater.inflate(R.layout.store_game_list, container, false);
+
+        adapter = new CategoryGamesLazyListAdapter(getActivity(), categoryId);
+        setListAdapter(adapter);
+        return v;
+
     }
 }

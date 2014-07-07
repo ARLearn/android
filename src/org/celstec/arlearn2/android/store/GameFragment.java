@@ -1,5 +1,7 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.store;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,10 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
 import org.celstec.arlearn2.android.events.GameEvent;
@@ -75,13 +80,19 @@ public class GameFragment extends SherlockFragment {
     private void drawGameContent(View v) {
         GameLocalObject localObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         if (localObject != null) {
+            v.findViewById(R.id.gamePane).setVisibility(View.VISIBLE);
+            if (pd != null && pd.isShowing()) {
+                pd.dismiss();
+            }
             byte[] data = localObject.getIcon();
-            if (localObject.getIcon() != null) {
+            if (localObject.getIcon() != null && data.length != 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 ((ImageView) v.findViewById(R.id.icon)).setImageBitmap(bitmap);
             }
             ((TextView) v.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
-            ((TextView) v.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
+//            ((WebView) v.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
+            ((WebView) v.findViewById(R.id.gameDescriptionId)).loadData(localObject.getDescription(), "text/html", "utf-8");
+
             int resID = 0;
             String licenseCode = localObject.getLicenseCode();
             if (licenseCode != null) {
@@ -123,14 +134,24 @@ public class GameFragment extends SherlockFragment {
         star3.setOnClickListener(new StarOneButton(3));
         star4.setOnClickListener(new StarOneButton(4));
         star5.setOnClickListener(new StarOneButton(5));
+        pd = ProgressDialog.show(getActivity(), "Loading", "Wait", true);
+        gameView.findViewById(R.id.gamePane).setVisibility(View.INVISIBLE);
         drawGameContent(gameView);
         return gameView;
     }
+    ProgressDialog pd;
 
     public void onEventMainThread(GameEvent event) {
         if (event.getGameId() == gameId) {
             gameId = event.getGameId();
             if (gameView != null) drawGameContent(gameView);
+        } else {
+            if (gameId == 0 && event.getError() == GameEvent.ERROR_SYNCING_FAILED) {
+                if (pd != null && pd.isShowing()) {
+                    pd.dismiss();
+                }
+                Toast.makeText(getActivity(), getString(R.string.unabletosyncgame), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -1,11 +1,9 @@
 package org.celstec.arlearn2.android.testAdapters;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
@@ -37,7 +35,7 @@ public class ThreadsActivity extends ListActivity implements ListItemClickInterf
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_list);
+        setContentView(R.layout.test_game_list);
         ARL.threads.syncThreads(5908010983489536l);
         adapter = new ThreadsLazyListAdapter(this);
         adapter.setOnListItemClickCallback(this);

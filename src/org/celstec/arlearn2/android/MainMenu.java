@@ -13,6 +13,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.qrCodeScanning.ScannerFragment;
+import org.celstec.arlearn2.android.store.StoreFragment;
 
 /**
  * ****************************************************************************

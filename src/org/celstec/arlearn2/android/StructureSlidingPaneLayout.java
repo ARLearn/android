@@ -16,9 +16,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.events.CategoryEvent;
+import org.celstec.arlearn2.android.store.GameFragment;
 import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.dao.gen.CategoryLocalObject;
 
 /**
  * ****************************************************************************

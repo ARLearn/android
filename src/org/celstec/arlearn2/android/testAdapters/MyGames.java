@@ -31,7 +31,7 @@ public class MyGames extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_list);
+        setContentView(R.layout.test_game_list);
         ARL.games.syncGamesParticipate();
         adapter = new GamesLazyListAdapter(this, false);
         setListAdapter(adapter);

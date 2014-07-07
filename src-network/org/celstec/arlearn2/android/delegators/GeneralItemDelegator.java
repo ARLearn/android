@@ -182,4 +182,14 @@ public class GeneralItemDelegator extends AbstractDelegator{
             this.game = game;
         }
     }
+
+    private void loadGame(GameLocalObject gameLocalObject) {
+        for (GeneralItemLocalObject generalItemLocalObject: gameLocalObject.getGeneralItems()){
+            generalItemLocalObject.getResponses(); //todo for run only
+            generalItemLocalObject.getActions(); //todo for run only
+            generalItemLocalObject.getVisibilities();
+            generalItemLocalObject.getGeneralItemMedia();
+
+        }
+    }
 }

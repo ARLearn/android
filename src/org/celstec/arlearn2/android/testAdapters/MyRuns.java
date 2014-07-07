@@ -31,7 +31,7 @@ public class MyRuns  extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_list);
+        setContentView(R.layout.test_game_list);
 
         ARL.runs.syncRunsParticipate();
         adapter = new RunsLazyListAdapter(this);

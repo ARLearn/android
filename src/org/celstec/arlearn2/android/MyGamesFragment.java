@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
 import org.celstec.arlearn2.android.listadapter.impl.SearchResultsLazyListAdapter;
@@ -43,6 +45,7 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ARL.games.syncMyGames();
+
     }
 
     @Override
@@ -66,7 +69,9 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
 
     @Override
     public void onListItemClick(View v, int position, GameLocalObject game) {
-
+        Intent gameIntent = new Intent(getActivity(), GameSplashScreen.class);
+        gameIntent.putExtra(GameLocalObject.class.getName(), game.getId());
+        getActivity().startActivity(gameIntent);
     }
 
     @Override

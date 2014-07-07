@@ -23,6 +23,9 @@ package org.celstec.arlearn2.android.events;
 public class GameEvent {
 
     private long gameId;
+    private int error = 0;
+
+    public static final int ERROR_SYNCING_FAILED = 1;
 
     public GameEvent(long gameId) {
         this.gameId = gameId;
@@ -34,5 +37,19 @@ public class GameEvent {
 
     public void setGameId(long gameId) {
         this.gameId = gameId;
+    }
+
+    public int getError() {
+        return error;
+    }
+
+    public void setError(int error) {
+        this.error = error;
+    }
+
+    public static Object syncError() {
+        GameEvent ge = new GameEvent(0l);
+        ge.setError(ERROR_SYNCING_FAILED);
+        return ge;
     }
 }

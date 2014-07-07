@@ -76,6 +76,8 @@ public final class GameDelegator extends AbstractDelegator{
             Game game = GameClient.getGameClient().getGame(token, gameId);
             if (game.getError() == null) {
                 return process(game);
+            } else {
+                ARL.eventBus.post(GameEvent.syncError());
             }
         }
         return null;

@@ -1,10 +1,4 @@
-package org.celstec.arlearn2.android.testAdapters;
-
-import android.app.ListActivity;
-import android.os.Bundle;
-import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.listadapter.impl.MessageLazyListAdapter;
+package org.celstec.arlearn2.android.game;
 
 /**
  * ****************************************************************************
@@ -26,23 +20,5 @@ import org.celstec.arlearn2.android.listadapter.impl.MessageLazyListAdapter;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class MessagesActivity extends ListActivity {
-
-    private MessageLazyListAdapter adapter;
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_game_list);
-        long threadId = getIntent().getExtras().getLong("threadId");
-        ARL.messages.syncMessages(threadId);
-        adapter = new MessageLazyListAdapter(this);
-        setListAdapter(adapter);
-    }
-
-
-
-    public void onDestroy(){
-        adapter.close();
-        super.onDestroy();
-    }
+public class GameLoadedEvent {
 }

@@ -1,4 +1,4 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.store;
 
 
 import android.os.Bundle;
@@ -9,17 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.SearchResultList;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.SearchResultsLazyListAdapter;
+import org.celstec.arlearn2.android.store.GameFragment;
 import org.celstec.arlearn2.beans.game.Game;
 
 /**

@@ -5,6 +5,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.client.exception.ARLearnException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -48,7 +49,7 @@ public class BadgesClient extends GenericClient{
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet request = new HttpGet(getUrlPrefix().replace("***",account));
         request.setHeader("Accept", "application/json");
-        request.setHeader("Authorization", "ufnhsj6ojdunf3ms4j807vrnks");
+        request.setHeader("Authorization", ARL.config.getProperty("badges_authorization_key"));
         try {
         HttpResponse response = httpClient.execute(request);
 //        HttpResponse response = conn.executeGET(getUrlPrefix().replace("***",account), "test", "application/json");

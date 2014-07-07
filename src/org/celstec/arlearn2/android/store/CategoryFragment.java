@@ -1,8 +1,7 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.store;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockListActivity;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.CategoryEvent;
-import org.celstec.arlearn2.android.views.SquareLinearLayout;
+import org.celstec.arlearn2.android.store.StoreGameListFragment;
 import org.celstec.dao.gen.CategoryLocalObject;
 
 import java.util.HashMap;

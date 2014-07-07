@@ -30,7 +30,7 @@ public class ContributingElements extends ListActivity {
     private ContributorsLazyListAdapter adapter;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_list);
+        setContentView(R.layout.test_game_list);
 
         adapter = new ContributorsLazyListAdapter(this);
         setListAdapter(adapter);

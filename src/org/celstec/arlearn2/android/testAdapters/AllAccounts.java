@@ -32,7 +32,7 @@ public class AllAccounts extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_list);
+        setContentView(R.layout.test_game_list);
 
         DaoConfiguration daoConfiguration= DaoConfiguration.getInstance(this);
 

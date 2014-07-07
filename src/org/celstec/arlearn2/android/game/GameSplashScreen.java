@@ -1,15 +1,14 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.game;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
+import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.listadapter.impl.CategoryGamesLazyListAdapter;
-import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
+import org.celstec.arlearn2.android.events.GameEvent;
+import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.GameLocalObjectDao;
 
 /**
  * ****************************************************************************
@@ -31,32 +30,28 @@ import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class StoreGameListFragment extends SherlockListFragment{
+public class GameSplashScreen extends Activity {
 
-    private CategoryGamesLazyListAdapter adapter;
+    GameLocalObject gameLocalObject;
 
-    private long categoryId;
-
-    public StoreGameListFragment(long categoryId) {
-        this.categoryId = categoryId;
-        ARL.store.syncGamesForCategory(categoryId);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ARL.games.syncGamesParticipate();
+        setContentView(R.layout.game_splash_screen);
+        ARL.eventBus.register(this);
+        Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
+        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        System.out.println(gameLocalObject);
+        ARL.generalItems.syncGeneralItems();
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onDestroy() {
+        super.onDestroy();
+        ARL.eventBus.unregister(this);
+    }
 
-        final View v = inflater.inflate(R.layout.store_game_list, container, false);
-
-        adapter = new CategoryGamesLazyListAdapter(getActivity(), categoryId);
-        setListAdapter(adapter);
-        return v;
+    public void onEventMainThread(GameLoadedEvent event) {
 
     }
 }

@@ -1,4 +1,4 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.store;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.viewWrappers.GameRowBig;
 
 /**
