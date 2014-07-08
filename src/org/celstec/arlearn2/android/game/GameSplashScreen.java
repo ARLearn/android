@@ -41,7 +41,7 @@ public class GameSplashScreen extends Activity {
         Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         System.out.println(gameLocalObject);
-        ARL.generalItems.syncGeneralItems();
+//        ARL.generalItems.syncGeneralItems();
 
     }
 
