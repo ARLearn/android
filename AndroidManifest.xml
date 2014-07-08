@@ -14,44 +14,44 @@
     <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCTggsIytn8aJICgFVEnaMfCMztgfjUFqY"/> <!-- -keystore ~/.android/debug.keystore -->
-    <!--<activity android:name=".StructureSlidingPaneLayout"-->
-              <!--android:label="@string/app_name"-->
-              <!--android:screenOrientation="portrait"-->
-              <!--android:theme="@style/ARLearn">-->
-        <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN"/>-->
-            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-        <!--</intent-filter>-->
+    <activity android:name=".StructureSlidingPaneLayout"
+              android:label="@string/app_name"
+              android:screenOrientation="portrait"
+              android:theme="@style/ARLearn">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
 
-        <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.VIEW" >-->
-            <!--</action>-->
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" >
+            </action>
 
-            <!--<category android:name="android.intent.category.DEFAULT" >-->
-            <!--</category>-->
-            <!--<category android:name="android.intent.category.BROWSABLE" >-->
-            <!--</category>-->
+            <category android:name="android.intent.category.DEFAULT" >
+            </category>
+            <category android:name="android.intent.category.BROWSABLE" >
+            </category>
 
-            <!--<data-->
-                    <!--android:host="streetlearn.appspot.com"-->
-                    <!--android:scheme="http"-->
-                    <!--android:pathPrefix="/oai/">-->
-            <!--</data>-->
-        <!--</intent-filter>-->
-    <!--</activity>-->
+            <data
+                    android:host="streetlearn.appspot.com"
+                    android:scheme="http"
+                    android:pathPrefix="/oai/">
+            </data>
+        </intent-filter>
+    </activity>
 
     <activity android:name=".game.GameSplashScreen"
               android:screenOrientation="portrait"
               android:theme="@style/ARLearn"/>
 
-    <activity
-            android:name=".testAdapters.TestAdapters"
-            android:label="@string/app_name">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
-            <category android:name="android.intent.category.LAUNCHER"/>
-        </intent-filter>
-    </activity>
+    <!--<activity-->
+            <!--android:name=".testAdapters.TestAdapters"-->
+            <!--android:label="@string/app_name">-->
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
+            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+        <!--</intent-filter>-->
+    <!--</activity>-->
 
     <activity android:name=".testAdapters.MyGames" android:label="@string/app_name"/>
     <activity android:name=".testAdapters.AllAccounts" android:label="@string/app_name"/>
