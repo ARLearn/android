@@ -1,12 +1,18 @@
 package org.celstec.arlearn.delegators;
 
+import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AbstractDelegator;
 import org.celstec.arlearn2.client.FriendsClient;
-import org.celstec.events.FriendInviteResultEvent;
-import org.celstec.events.FriendRemoveResultEvent;
-import org.celstec.events.ReceivedFriendEvent;
-import org.celstec.events.SentFriendRequestsEvent;
+import org.celstec.arlearn2.client.InquiryClient;
+import org.celstec.dao.gen.FriendsLocalObject;
+import org.celstec.dao.gen.FriendsLocalObjectDao;
+import org.celstec.events.*;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -44,6 +50,16 @@ public class FriendsDelegator extends AbstractDelegator {
     }
 
 
+    public void syncFriends(){
+        if (INQ.accounts.getLoggedInAccount() == null) {
+            return;
+        }
+        String myUserId = INQ.accounts.getLoggedInAccount().getLocalId();
+        int myProviderId = INQ.accounts.getLoggedInAccount().getAccountType();
+        ARL.eventBus.post(new SyncFriends(myProviderId, myUserId));
+
+    }
+
     public void inviteFriend(int myProviderId, String myUserId, int friendProviderId, String friendUserId) {
         ARL.eventBus.post(new InviteFriend(myProviderId,myUserId,friendProviderId, friendUserId));
     }
@@ -61,6 +77,66 @@ public class FriendsDelegator extends AbstractDelegator {
     public void sentFriendRequests(int myProviderId, String myUserId) {
         ARL.eventBus.post(new SentFriendRequests(myProviderId,myUserId));
 
+    }
+
+    private void onEventAsync(SyncFriends syncFriends){
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            JSONObject json = FriendsClient.getFriendsClient().syncFriends(token, syncFriends.getProviderId(), syncFriends.getUserId());
+
+            if (json.has("result")) {
+                JSONArray array = null;
+                List<FriendsLocalObject> allFriends = DaoConfiguration.getInstance().getFriendsLocalObjectDao().loadAll();
+                try {
+                    array = json.getJSONArray("result");
+                    FriendEvent event = null;
+                    for (int i = 0; i <array.length(); i++){
+                        JSONObject user = array.getJSONObject(i);
+                        String oauthId = user.getString("oauthId");
+                        String oauthProvider = user.getString("oauthProvider");
+                        String name = user.getString("name");
+                        String icon = user.getString("icon");
+                        String fullAccountId = InquiryClient.getProviderIdAsInt(oauthProvider)+":"+oauthId;
+                        boolean found = false;
+                        for (FriendsLocalObject existingFriend: allFriends) {
+                            if (existingFriend.getAccountIdAsString().equals(fullAccountId)){
+                                existingFriend.setDirty(true);
+                                if (!name.equals(existingFriend.getName())) {
+                                    existingFriend.setName(name);
+                                    existingFriend.setWasChanged(true);
+
+                                }
+                                found = true;
+                            }
+
+                        }
+                        if (!found) {
+                            FriendsLocalObject newFriend = new FriendsLocalObject();
+                            newFriend.setName(name);
+                            newFriend.setAccountIdAsString(fullAccountId);
+                            DaoConfiguration.getInstance().getFriendsLocalObjectDao().insertOrReplace(newFriend);
+                            event = new FriendEvent(newFriend.getAccountIdAsString());
+                        }
+                    }
+
+                    for (FriendsLocalObject existingFriend: allFriends) {
+                        if (existingFriend.isDirty()) {
+                            if (existingFriend.isWasChanged()) {
+                                DaoConfiguration.getInstance().getFriendsLocalObjectDao().insertOrReplace(existingFriend);
+                                event = new FriendEvent(existingFriend.getAccountIdAsString());
+                            }
+                        } else {
+                            event = new FriendEvent(existingFriend.getAccountIdAsString());
+                            DaoConfiguration.getInstance().getFriendsLocalObjectDao().delete(existingFriend);
+                        }
+                    }
+                    if (event != null) ARL.eventBus.post(event);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+//            ARL.eventBus.post(result);
+        }
     }
 
     private void onEventAsync(InviteFriend invite){
@@ -244,5 +320,31 @@ public class FriendsDelegator extends AbstractDelegator {
             this.myUserId = myUserId;
         }
 
+    }
+
+    class SyncFriends {
+        private int providerId;
+        private String userId;
+
+        SyncFriends(int providerId, String userId) {
+            this.providerId = providerId;
+            this.userId = userId;
+        }
+
+        public int getProviderId() {
+            return providerId;
+        }
+
+        public void setProviderId(int providerId) {
+            this.providerId = providerId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
     }
 }

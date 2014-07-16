@@ -45,6 +45,7 @@ public class ARlearnDaoGenerator {
     private static Entity message;
     private static Entity inquiry;
     private static Entity badge;
+    private static Entity friends;
 
     private static Entity category;
     private static Entity gameCategory;
@@ -73,6 +74,7 @@ public class ARlearnDaoGenerator {
 
         category = createCategory(schema);
         gameCategory = createGameCategory(schema);
+        friends = createFriends(schema);
         new DaoGenerator().generateAll(schema, "src-dao-gen");
 
     }
@@ -162,6 +164,20 @@ public class ARlearnDaoGenerator {
         return inquiry;
     }
 
+
+    private static Entity createFriends(Schema schema) {
+        Entity friends = schema.addEntity("FriendsLocalObject");
+
+        friends.addIdProperty();
+        friends.addStringProperty("name");
+        friends.addByteArrayProperty("icon");
+        friends.addStringProperty("accountIdAsString");
+
+        Property accountId = friends.addLongProperty("accountId").getProperty();
+        friends.addToOne(account, accountId);
+
+        return friends;
+    }
 
     private static Entity createRunItem(Schema schema) {
         Entity run = schema.addEntity("RunLocalObject");

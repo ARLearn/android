@@ -142,7 +142,7 @@ public class FriendsClient extends InquiryClient{
                 "&api_key="+INQ.config.getProperty("elgg_api_key") ;
 
         HttpResponse response = conn.executeGET(url, token, "application/json");
-        try { //{"status":0,"result":[{"oauthId":"wespot2","oauthProvider":"weSPOT","name":"wespot2 wespot2","icon":"http:\/\/inquiry.wespot.net\/_graphics\/icons\/user\/defaultmedium.gif"}]}
+        try {
             JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
             SentFriendRequestsEvent result = new SentFriendRequestsEvent(json.getInt("status"));
             if (json.has("result")) {
@@ -161,5 +161,25 @@ public class FriendsClient extends InquiryClient{
             if (e instanceof ARLearnException) throw (ARLearnException) e;
             return null;
         }
+    }
+
+    public JSONObject syncFriends(String token, int providerId, String userId) {
+        if (INQ.accounts.getLoggedInAccount() == null) {
+            return null;
+        }
+        String url = getUrlPrefix() + "method=user.friends&" +
+                "oauthProvider=" +providerIdToElggName(providerId) +
+                "&oauthId=" + userId +
+                "&api_key="+INQ.config.getProperty("elgg_api_key") ;
+
+        HttpResponse response = conn.executeGET(url, token, "application/json");
+        try {
+            return new JSONObject(EntityUtils.toString(response.getEntity()));
+
+        } catch (Exception e) {
+            if (e instanceof ARLearnException) throw (ARLearnException) e;
+            return null;
+        }
+
     }
 }

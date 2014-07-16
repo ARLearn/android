@@ -116,5 +116,9 @@ public class DaoConfiguration {
         return session.getGameCategoryLocalObjectDao();
     }
 
+    public FriendsLocalObjectDao getFriendsLocalObjectDao() {
+        return session.getFriendsLocalObjectDao();
+    }
+
 
 }

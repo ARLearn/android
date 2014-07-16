@@ -189,7 +189,7 @@ public class InquiryClient extends GenericClient{
         return INQ.config.getProperty("wespot_server");
     }
 
-    protected String providerIdToElggName(int id){
+    public static String providerIdToElggName(int id){
         switch (id){
             case 1:
                 return  "Facebook";
@@ -203,5 +203,14 @@ public class InquiryClient extends GenericClient{
                 return  "weSPOT";
         }
         return "idNotMappedToProviderName";
+    }
+
+    public static int getProviderIdAsInt(String providerId) {
+        if (providerId.equalsIgnoreCase("facebook")) return 1;
+        if (providerId.equalsIgnoreCase("google")) return 2;
+        if (providerId.equalsIgnoreCase("LinkedId")) return 3;
+        if (providerId.equalsIgnoreCase("Twitter")) return 4;
+        if (providerId.equalsIgnoreCase("weSPOT")) return 5;
+        return 0;
     }
 }
