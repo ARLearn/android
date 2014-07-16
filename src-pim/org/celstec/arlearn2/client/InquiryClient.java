@@ -49,7 +49,7 @@ public class InquiryClient extends GenericClient{
     public final static int VIS_LOGGED_IN_USERS=1;
     public final static int VIS_PUBLIC=2;
 
-    private InquiryClient() {
+    protected InquiryClient() {
         super("");
     }
 
@@ -189,7 +189,7 @@ public class InquiryClient extends GenericClient{
         return INQ.config.getProperty("wespot_server");
     }
 
-    private String providerIdToElggName(int id){
+    protected String providerIdToElggName(int id){
         switch (id){
             case 1:
                 return  "Facebook";

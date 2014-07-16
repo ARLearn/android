@@ -39,12 +39,13 @@ public class ARL {
 
     public static GameDelegator games;
     public static GeneralItemDelegator generalItems;
+    public static GeneralItemVisibilityDelegator generalItemVisibilityDelegator;
     public static GiFileReferenceDelegator fileReferences;
     public static RunDelegator runs;
     public static AccountDelegator accounts;
     public static ResponseDelegator responses;
     public static PropertiesAdapter properties;
-    public static Properties config;
+    public static ConfigAdapter.PropertiesExt config;
     public static TimeDelegator time;
     public static StoreDelegator store;
     public static ThreadsDelegator threads;
@@ -70,9 +71,14 @@ public class ARL {
         store = StoreDelegator.getInstance();
         threads = ThreadsDelegator.getInstance();
         messages = MessagesDelegator.getInstance();
+        generalItemVisibilityDelegator = GeneralItemVisibilityDelegator.getInstance();
 
         new GCMRegisterTask().execute((Activity) ctx);
 
+    }
+
+    public static boolean isInit() {
+        return !(ARL.ctx == null);
     }
 
     public static boolean isOnline() {
@@ -88,6 +94,7 @@ public class ARL {
     public static Context getContext(){
         return ctx;
     }
+
 
 
 }

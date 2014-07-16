@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.GameLocalObjectDao;
+import org.celstec.dao.gen.RunLocalObject;
 
 /**
  * ****************************************************************************
@@ -33,25 +35,59 @@ import org.celstec.dao.gen.GameLocalObjectDao;
 public class GameSplashScreen extends Activity {
 
     GameLocalObject gameLocalObject;
+    RunLocalObject runLocalObject;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
-        ARL.eventBus.register(this);
-        Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
-        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
-        System.out.println(gameLocalObject);
-//        ARL.generalItems.syncGeneralItems();
+        if (!ARL.isInit()) ARL.init(this);
 
+//        ARL.eventBus.register(this);
+
+
+
+        if (ARL.config.getBooleanProperty("white_label")) {
+            whiteLabelMetadata();
+        } else {
+            Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
+            gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+
+        }
+    }
+
+    private void whiteLabelMetadata() {
+        Long gameId = Long.parseLong(ARL.config.getProperty("white_label_gameId"));
+        Long runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
+        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        if (ARL.config.getBooleanProperty("white_label_online")) {
+            syncGameContent();
+        }
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new DelayedGameLauncher(gameLocalObject.getId(), this, 2000);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ARL.eventBus.unregister(this);
+//        ARL.eventBus.unregister(this);
     }
 
-    public void onEventMainThread(GameLoadedEvent event) {
 
+    public void syncGameContent() {
+        ARL.generalItems.syncGeneralItems(gameLocalObject);
+        //TODO
+        //ARL.responses.syncResponses(runId);
+        //ARL.actions.sync
     }
+
+//    public void onEventMainThread(GameLoadedEvent event) {
+//
+//    }
 }

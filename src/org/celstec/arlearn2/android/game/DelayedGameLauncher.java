@@ -1,9 +1,9 @@
-package org.celstec.arlearn.delegators;
+package org.celstec.arlearn2.android.game;
 
 import android.content.Context;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.delegators.GameDelegator;
-import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
+import android.content.Intent;
+import android.os.Handler;
+import org.celstec.dao.gen.GameLocalObject;
 
 /**
  * ****************************************************************************
@@ -25,20 +25,29 @@ import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class INQ extends ARL {
+public class DelayedGameLauncher  implements  Runnable {
 
-    public static InquiryDelegator inquiry;
-    public static BadgesDelegator badges;
-    public static DataCollectionTaskDelegator dataCollection;
-    public static FriendsDelegator friendsDelegator;
+    private Long gameId;
+    private Context ctx;
+//    private int delay;
+    private Handler handler = new Handler();
 
-    public static void init(Context ctx) {
-        ARL.init(ctx);
-        inquiry = InquiryDelegator.getInstance();
-        badges = BadgesDelegator.getInstance();
-        dataCollection = DataCollectionTaskDelegator.getInstance();
-        friendsDelegator = FriendsDelegator.getInstance();
+
+    public DelayedGameLauncher(Long gameId, Context ctx, int delay) {
+//        this.delay = delay;
+        this.gameId = gameId;
+        this.ctx = ctx;
+        handler.postDelayed(this, delay);
     }
 
 
+    public void run() {
+        Intent gameIntent = new Intent(ctx, GameMessages.class);
+        gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
+        ctx.startActivity(gameIntent);
+    }
+
+//    private void launchGame() {
+//
+//    }
 }

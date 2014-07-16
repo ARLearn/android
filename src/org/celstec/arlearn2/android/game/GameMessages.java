@@ -1,5 +1,14 @@
 package org.celstec.arlearn2.android.game;
 
+import android.app.Activity;
+import android.app.ListActivity;
+import android.os.Bundle;
+import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.listadapter.impl.GeneralItemsLazyListAdapter;
+import org.celstec.dao.gen.GameLocalObject;
+
 /**
  * ****************************************************************************
  * Copyright (C) 2013 Open Universiteit Nederland
@@ -20,5 +29,23 @@ package org.celstec.arlearn2.android.game;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GameMessages {
+public class GameMessages extends ListActivity{
+
+    GameLocalObject gameLocalObject;
+    private GeneralItemsLazyListAdapter adapter;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.game_list_messages);
+//        ARL.eventBus.register(this);
+        Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
+        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+//        System.out.println(gameLocalObject);
+
+        adapter = new GeneralItemsLazyListAdapter(this, gameLocalObject.getId());
+        setListAdapter(adapter);
+
+
+
+    }
 }

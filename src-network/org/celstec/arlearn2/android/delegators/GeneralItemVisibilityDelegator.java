@@ -1,9 +1,6 @@
-package org.celstec.arlearn.delegators;
+package org.celstec.arlearn2.android.delegators;
 
-import android.content.Context;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.delegators.GameDelegator;
-import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -25,20 +22,23 @@ import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class INQ extends ARL {
+public class GeneralItemVisibilityDelegator extends AbstractDelegator{
 
-    public static InquiryDelegator inquiry;
-    public static BadgesDelegator badges;
-    public static DataCollectionTaskDelegator dataCollection;
-    public static FriendsDelegator friendsDelegator;
+    protected static GeneralItemVisibilityDelegator instance;
+    private static HashMap<Long, Long> syncDates = new HashMap<Long, Long>();
 
-    public static void init(Context ctx) {
-        ARL.init(ctx);
-        inquiry = InquiryDelegator.getInstance();
-        badges = BadgesDelegator.getInstance();
-        dataCollection = DataCollectionTaskDelegator.getInstance();
-        friendsDelegator = FriendsDelegator.getInstance();
+    protected GeneralItemVisibilityDelegator() {
+//        ARL.eventBus.register(this);
     }
 
+    public static GeneralItemVisibilityDelegator getInstance() {
+        if (instance == null) {
+            instance = new GeneralItemVisibilityDelegator();
+        }
+        return instance;
+    }
 
+    public void syncGeneralItemVisibilities(Long runId) {
+
+    }
 }

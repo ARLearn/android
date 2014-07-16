@@ -431,6 +431,9 @@ public class DependencyLocalObject {
         long minSatisfiedAt = Long.MAX_VALUE;
         if (getGeneralItemId() != null) {
             for (ActionLocalObject action :getGeneralItemLocalObject().getActions()){
+                if (action == null) {
+                    System.out.println(action);
+                } else
                 if (action.getRunId() == run.getId()) {
                     long newValue =                                   actionSatisfiedAt(action);
                     minSatisfiedAt = Math.min(minSatisfiedAt,newValue);

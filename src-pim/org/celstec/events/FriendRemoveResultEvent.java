@@ -1,9 +1,4 @@
-package org.celstec.arlearn.delegators;
-
-import android.content.Context;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.delegators.GameDelegator;
-import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
+package org.celstec.events;
 
 /**
  * ****************************************************************************
@@ -25,20 +20,28 @@ import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class INQ extends ARL {
+public class FriendRemoveResultEvent {
+    private int resultCode;
+    private String result;
 
-    public static InquiryDelegator inquiry;
-    public static BadgesDelegator badges;
-    public static DataCollectionTaskDelegator dataCollection;
-    public static FriendsDelegator friendsDelegator;
-
-    public static void init(Context ctx) {
-        ARL.init(ctx);
-        inquiry = InquiryDelegator.getInstance();
-        badges = BadgesDelegator.getInstance();
-        dataCollection = DataCollectionTaskDelegator.getInstance();
-        friendsDelegator = FriendsDelegator.getInstance();
+    public FriendRemoveResultEvent(int resultCode, String result) {
+        this.resultCode = resultCode;
+        this.result = result;
     }
 
+    public int getResultCode() {
+        return resultCode;
+    }
 
+    public void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

@@ -28,14 +28,14 @@ import android.util.Log;
  */
 public class ConfigAdapter {
     private Context context;
-    private Properties properties;
+    private PropertiesExt properties;
 
     public ConfigAdapter(Context context) {
         this.context = context;
-        properties = new Properties();
+        properties = new PropertiesExt();
     }
 
-    public Properties getProperties() {
+    public PropertiesExt getProperties() {
         try {
             AssetManager assetManager = context.getAssets();
 
@@ -46,6 +46,17 @@ public class ConfigAdapter {
             Log.e("ConfigAdapter",e.toString());
         }
         return properties;
+
+    }
+
+    public class PropertiesExt extends Properties {
+
+        public boolean getBooleanProperty(String key) {
+            String value = getProperty(key);
+            if (value == null) return false;
+            if ("yes".equals(value.toLowerCase().trim())) return true;
+            return "true".equals(value.toLowerCase().trim());
+        }
 
     }
 

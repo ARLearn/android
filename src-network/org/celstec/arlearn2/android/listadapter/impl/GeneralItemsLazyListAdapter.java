@@ -41,7 +41,12 @@ public class GeneralItemsLazyListAdapter  extends AbstractGeneralItemsLazyListAd
         super(context);
     }
 
-    @Override
+    public GeneralItemsLazyListAdapter(Context context, long gameId) {
+        super(context, gameId);
+    }
+
+
+        @Override
     public void bindView(View view, Context context,  GeneralItemLocalObject item) {
         TextView firstLineView =(TextView) view.findViewById(R.id.firstLine);
         firstLineView.setText(item.getTitle());
@@ -50,7 +55,7 @@ public class GeneralItemsLazyListAdapter  extends AbstractGeneralItemsLazyListAd
         if (item.getDependencyLocalObject() != null) {
             description += "dep "+(item.getDependencyLocalObject()).toString();
             long time = System.currentTimeMillis();
-            description += "sat "+ item.getDependencyLocalObject().satisfiedAt(DaoConfiguration.getInstance().getRunLocalObjectDao().load(19806001l));
+//            description += "sat "+ item.getDependencyLocalObject().satisfiedAt(DaoConfiguration.getInstance().getRunLocalObjectDao().load(19806001l));
             Log.e("ARLearn", "sat time "+(System.currentTimeMillis()-time));
         }
 //        for (GeneralItemMediaLocalObject media: item.getGeneralItemMedia()){
