@@ -1,5 +1,7 @@
 package org.celstec.events;
 
+import org.celstec.events.objects.User;
+
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -25,7 +27,7 @@ import java.util.Vector;
  */
 public class SentFriendRequestsEvent {
     private int resultCode;
-    private Vector<Friend> friends = new Vector<Friend>();
+    private Vector<User> friends = new Vector<User>();
 
     public SentFriendRequestsEvent(int resultCode) {
         this.resultCode = resultCode;
@@ -40,65 +42,65 @@ public class SentFriendRequestsEvent {
     }
 
     public void addEntry(String oauthId, String oauthProvider, String name, String icon) {
-        friends.add(new Friend(oauthId, oauthProvider, name, icon));
+        friends.add(new User(oauthId, oauthProvider, name, icon));
     }
 
     public int size() {
         return friends.size();
     }
 
-    public Iterator<Friend> getIterator() {
+    public Iterator<User> getIterator() {
         return friends.iterator();
     }
 
-    public Friend getFriend(int index) {
+    public User getFriend(int index) {
         return friends.get(index);
     }
 
-    class Friend {
-        private String oauthId;
-        private String oauthProvider;
-        private String name;
-        private String icon;
-
-        Friend(String oauthId, String oauthProvider, String name, String icon) {
-            this.oauthId = oauthId;
-            this.oauthProvider = oauthProvider;
-            this.name = name;
-            this.icon = icon;
-        }
-
-        public String getOauthId() {
-            return oauthId;
-        }
-
-        public void setOauthId(String oauthId) {
-            this.oauthId = oauthId;
-        }
-
-        public String getOauthProvider() {
-            return oauthProvider;
-        }
-
-        public void setOauthProvider(String oauthProvider) {
-            this.oauthProvider = oauthProvider;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-
-        public void setIcon(String icon) {
-            this.icon = icon;
-        }
-    }
+//    class Friend {
+//        private String oauthId;
+//        private String oauthProvider;
+//        private String name;
+//        private String icon;
+//
+//        Friend(String oauthId, String oauthProvider, String name, String icon) {
+//            this.oauthId = oauthId;
+//            this.oauthProvider = oauthProvider;
+//            this.name = name;
+//            this.icon = icon;
+//        }
+//
+//        public String getOauthId() {
+//            return oauthId;
+//        }
+//
+//        public void setOauthId(String oauthId) {
+//            this.oauthId = oauthId;
+//        }
+//
+//        public String getOauthProvider() {
+//            return oauthProvider;
+//        }
+//
+//        public void setOauthProvider(String oauthProvider) {
+//            this.oauthProvider = oauthProvider;
+//        }
+//
+//        public String getName() {
+//            return name;
+//        }
+//
+//        public void setName(String name) {
+//            this.name = name;
+//        }
+//
+//        public String getIcon() {
+//            return icon;
+//        }
+//
+//        public void setIcon(String icon) {
+//            this.icon = icon;
+//        }
+//    }
 
 }

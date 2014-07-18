@@ -79,6 +79,11 @@ public class FriendsDelegator extends AbstractDelegator {
 
     }
 
+    public void siteUsersRequests() {
+        ARL.eventBus.post(new AllSiteUsers());
+
+    }
+
     private void onEventAsync(SyncFriends syncFriends){
         String token = returnTokenIfOnline();
         if (token != null) {
@@ -167,6 +172,14 @@ public class FriendsDelegator extends AbstractDelegator {
         String token = returnTokenIfOnline();
         if (token != null) {
             SentFriendRequestsEvent result = FriendsClient.getFriendsClient().sentFriendRequests(token, invite.getMyProviderId(), invite.getMyUserId());
+            ARL.eventBus.post(result);
+        }
+    }
+
+    private void onEventAsync(AllSiteUsers invite){
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            ElggUsersEvent result = FriendsClient.getFriendsClient().siteUsers(token);
             ARL.eventBus.post(result);
         }
     }
@@ -346,5 +359,9 @@ public class FriendsDelegator extends AbstractDelegator {
         public void setUserId(String userId) {
             this.userId = userId;
         }
+    }
+
+    class AllSiteUsers {
+
     }
 }

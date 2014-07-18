@@ -4,10 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.client.exception.ARLearnException;
-import org.celstec.events.FriendInviteResultEvent;
-import org.celstec.events.FriendRemoveResultEvent;
-import org.celstec.events.ReceivedFriendEvent;
-import org.celstec.events.SentFriendRequestsEvent;
+import org.celstec.events.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -181,5 +178,32 @@ public class FriendsClient extends InquiryClient{
             return null;
         }
 
+    }
+
+    public ElggUsersEvent siteUsers(String token) {
+
+        String url = getUrlPrefix() + "method=site.users&" +
+                "&api_key="+INQ.config.getProperty("elgg_api_key") ;
+
+        HttpResponse response = conn.executeGET(url, token, "application/json");
+        try {
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            ElggUsersEvent result = new ElggUsersEvent(json.getInt("status"));
+            if (json.has("result")) {
+                JSONArray array = json.getJSONArray("result");
+                for (int i = 0; i <array.length(); i++){
+                    JSONObject user = array.getJSONObject(i);
+                    String oauthId = user.getString("oauthId");
+                    String oauthProvider = user.getString("oauthProvider");
+                    String name = user.getString("name");
+                    String icon = user.getString("icon");
+                    result.addEntry(oauthId, oauthProvider, name, icon);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            if (e instanceof ARLearnException) throw (ARLearnException) e;
+            return null;
+        }
     }
 }
