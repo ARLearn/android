@@ -340,6 +340,15 @@ public class ResponseLocalObject {
                 setUriAsString(jsonObject.getString("videoUrl"));
                 setVideoType();
             }
+            if (jsonObject.has("text")){
+                setTextValue(jsonObject.getString("text"));
+                setTextType();
+            }
+            if (jsonObject.has("value")){
+                setNumberValue(jsonObject.getDouble("value"));
+                setValueType();
+            }
+
             if (jsonObject.has("width")) setWidth(jsonObject.getInt("width"));
             if (jsonObject.has("height")) setHeight(jsonObject.getInt("height"));
             if (jsonObject.has("lat")) setLat(jsonObject.getDouble("lat"));
@@ -353,6 +362,8 @@ public class ResponseLocalObject {
     private static final int PICTURE_TYPE = 1;
     private static final  int VIDEO_TYPE = 2;
     private static final  int AUDIO_TYPE = 3;
+    private static final  int TEXT_TYPE = 4;
+    private static final  int VALUE_TYPE = 5;
 
     public void setPictureType(){
         setType(PICTURE_TYPE);
@@ -364,6 +375,14 @@ public class ResponseLocalObject {
 
     public void setAudioType(){
         setType(AUDIO_TYPE);
+    }
+
+    public void setTextType(){
+        setType(TEXT_TYPE);
+    }
+
+    public void setValueType(){
+        setType(VALUE_TYPE);
     }
 
     public boolean isPicture() {
@@ -406,7 +425,14 @@ public class ResponseLocalObject {
                 break;
             case AUDIO_TYPE:
                 bean.setResponseValue(getAudioValue());
-            break;
+                break;
+            case TEXT_TYPE:
+                bean.setResponseValue(getTextValue());
+                break;
+            case VALUE_TYPE:
+                bean.setResponseValue(getNumberValue());
+
+                break;
         }
         return bean;
     }
@@ -444,6 +470,34 @@ public class ResponseLocalObject {
             e.printStackTrace();
         }
         return jsonResponse.toString();
+    }
+
+    private String getTextValue() {
+        JSONObject jsonResponse = new JSONObject();
+        try {
+            jsonResponse.put("text", getValue());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonResponse.toString();
+    }
+
+    private String getNumberValue() {
+        JSONObject jsonResponse = new JSONObject();
+        try {
+            jsonResponse.put("value", Double.parseDouble(getValue()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonResponse.toString();
+    }
+
+    public void setTextValue(String textValue) {
+        setValue(textValue);
+    }
+
+    public void setNumberValue(double value){
+        setValue(""+value);
     }
 
     private String buildRemotePath(Uri uri, long runId, String account) {
