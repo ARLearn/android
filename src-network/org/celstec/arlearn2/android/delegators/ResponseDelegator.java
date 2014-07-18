@@ -144,7 +144,11 @@ public class ResponseDelegator extends AbstractDelegator{
                 if (responseLocalObject == null) {
                     responseLocalObject = new ResponseLocalObject(response);
                     DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
-                    if (responseEvent != null) responseEvent = new ResponseEvent(runId);
+                    if (responseEvent != null) {
+                        responseEvent = new ResponseEvent(runId);
+                        if (responseLocalObject.getGeneralItemLocalObject() != null) responseLocalObject.getGeneralItemLocalObject().resetResponses();
+                    }
+                        
                 } else {
                     if (response.getTimestamp() > responseLocalObject.getTimeStamp()) {
                         responseLocalObject.setValuesFromBean(response);
