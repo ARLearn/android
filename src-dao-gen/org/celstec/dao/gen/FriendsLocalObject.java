@@ -49,7 +49,6 @@ public class FriendsLocalObject {
     public void setWasChanged(boolean wasChanged) {
         this.wasChanged = wasChanged;
     }
-
     // KEEP FIELDS END
 
     public FriendsLocalObject() {
