@@ -7,4 +7,11 @@
     <color name="blue_turquish">#ff134663</color>
     <color name="dark_grey">#212e3d</color>
     <color name="white">#ffffff</color>
+
+    <!--Schema 1-->
+    <color name="schema1_primary1">#ffffff</color>
+
+
+    <!--Schema 2-->
+    <color name="schema1_primary1">#ffffff</color>
 </resources>
