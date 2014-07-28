@@ -72,10 +72,10 @@ public class MessagesDelegator extends AbstractDelegator {
 
             MessageList ml = null;
             if (syncMessages.getThreadId() != null){
-                ThreadsClient.getThreadsClient().getMessages(token, syncMessages.getThreadId());
+                ml = ThreadsClient.getThreadsClient().getMessages(token, syncMessages.getThreadId());
             }
             if (syncMessages.getRunId() != null){
-                ThreadsClient.getThreadsClient().getDefaultThreadMessages(token, syncMessages.getRunId());
+                ml = ThreadsClient.getThreadsClient().getDefaultThreadMessages(token, syncMessages.getRunId());
             }
             if (ml.getError() ==null) {
                 process(ml);
