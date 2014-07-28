@@ -44,14 +44,10 @@ public class GameSplashScreen extends Activity {
 
 //        ARL.eventBus.register(this);
 
-
-
         if (ARL.config.getBooleanProperty("white_label")) {
             whiteLabelMetadata();
         } else {
-            Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
-            gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
-
+            nativeArlearnMetadata();
         }
     }
 
@@ -66,11 +62,28 @@ public class GameSplashScreen extends Activity {
     }
 
 
+    private void nativeArlearnMetadata(){
+        Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
+        Long runId = getIntent().getLongExtra(RunLocalObject.class.getName(), 0l);
+        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        syncGameContent();
+    }
+
+    private void syncGameContent() {
+        ARL.generalItems.syncGeneralItems(gameLocalObject);
+        ARL.generalItemVisibility.syncGeneralItemVisibilities(runLocalObject);
+        //TODO
+        //ARL.responses.syncResponses(runId);
+        //ARL.actions.sync
+
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        new DelayedGameLauncher(gameLocalObject.getId(), this, 2000);
+        new DelayedGameLauncher(gameLocalObject.getId(), runLocalObject.getId(), this, 2000);
     }
 
     @Override
@@ -80,14 +93,5 @@ public class GameSplashScreen extends Activity {
     }
 
 
-    public void syncGameContent() {
-        ARL.generalItems.syncGeneralItems(gameLocalObject);
-        //TODO
-        //ARL.responses.syncResponses(runId);
-        //ARL.actions.sync
-    }
 
-//    public void onEventMainThread(GameLoadedEvent event) {
-//
-//    }
 }

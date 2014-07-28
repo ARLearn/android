@@ -46,6 +46,10 @@ public class GeneralItemDelegator extends AbstractDelegator{
         return instance;
     }
 
+    /*
+    Public API
+     */
+
     public void syncGeneralItems(Long gameId) {
         syncGeneralItems(DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId));
     }
@@ -61,6 +65,10 @@ public class GeneralItemDelegator extends AbstractDelegator{
     public void createGeneralItem(GeneralItem generalItem){
         ARL.eventBus.post(new CreateGeneralItem(generalItem));
     }
+
+    /*
+    Implementation
+     */
 
     private void onEventAsync(CreateGeneralItem sgi) {
         String token = returnTokenIfOnline();

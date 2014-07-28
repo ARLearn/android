@@ -36,6 +36,7 @@ import org.celstec.dao.gen.*;
 public class RunsLazyListAdapter extends LazyListAdapter<RunLocalObject> {
 
     private QueryBuilder qb;
+    private Long gameId;
 
     public RunsLazyListAdapter(Context context) {
         super(context);
@@ -43,6 +44,18 @@ public class RunsLazyListAdapter extends LazyListAdapter<RunLocalObject> {
         RunLocalObjectDao dao = DaoConfiguration.getInstance().getRunLocalObjectDao();
 
         qb = dao.queryBuilder().orderAsc(RunLocalObjectDao.Properties.Title);
+        ARL.eventBus.register(this);
+        setLazyList(qb.listLazy());
+    }
+
+    public RunsLazyListAdapter(Context context, long gameId) {
+        super(context);
+        this.gameId = gameId;
+        RunLocalObjectDao dao = DaoConfiguration.getInstance().getRunLocalObjectDao();
+
+        qb = dao.queryBuilder()
+                .where(RunLocalObjectDao.Properties.GameId.eq(this.gameId))
+                .orderAsc(RunLocalObjectDao.Properties.Title);
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());
     }
@@ -63,23 +76,13 @@ public class RunsLazyListAdapter extends LazyListAdapter<RunLocalObject> {
     public View newView(Context context, RunLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.list_game_row, parent, false);
+        return inflater.inflate(R.layout.game_message_entry, parent, false);
 
     }
     @Override
     public void bindView(View view, Context context,  RunLocalObject item) {
-        TextView firstLineView =(TextView) view.findViewById(R.id.firstLine);
+        TextView firstLineView =(TextView) view.findViewById(R.id.messageText);
         firstLineView.setText(item.getTitle());
-        TextView secondLineView =(TextView) view.findViewById(R.id.secondLine);
-        String description = item.getTitle();
-        if (item.getGameLocalObject()!= null) {
-            description += " game: "+item.getGameLocalObject().getTitle();
-        }
-
-//        for (GameContributorLocalObject owner: item.getContributors()){
-//            description += " owner "+owner.getType()+":"+owner.getAccountLocalObject().getName();
-//        }
-        secondLineView.setText(description + " id " +item.getId() );
     }
 
 

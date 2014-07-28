@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/game_splash_screen">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-</LinearLayout>
+    <ImageView
+            android:id="@+id/main_backgroundImage"
+            android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:scaleType="centerCrop"
+
+    android:src="@drawable/game_splash_screen" />
+
+</RelativeLayout>

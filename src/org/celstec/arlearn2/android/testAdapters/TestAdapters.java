@@ -7,17 +7,13 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
-import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn.delegators.INQ;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.FileDownloadStatus;
-import org.celstec.arlearn2.beans.generalItem.GeneralItem;
-import org.celstec.arlearn2.beans.generalItem.NarratorItem;
-import org.celstec.arlearn2.beans.generalItem.OpenQuestion;
-import org.celstec.arlearn2.client.GenericClient;
-import org.celstec.arlearn2.client.InquiryClient;
 import org.celstec.dao.gen.ActionLocalObject;
 import org.celstec.dao.gen.InquiryLocalObject;
+import org.celstec.dao.gen.MessageLocalObject;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -135,13 +131,12 @@ public class TestAdapters extends Activity {
 //    }
 
 
-
 //        BadgesDelegator.getInstance().syncBadges(2, "116743449349920850150");
 //
 
 
-        INQ.inquiry.syncInquiries();
-        INQ.inquiry.syncHypothesis(151l);
+//        INQ.inquiry.syncInquiries();
+//        INQ.inquiry.syncHypothesis(151l);
 //        InquiryLocalObject object;
 //        InquiryLocalObject ilo = INQ.inquiry.getInquiryLocalObject(28845l);
 //        INQ.inquiry.setCurrentInquiry(ilo);
@@ -170,17 +165,33 @@ public class TestAdapters extends Activity {
 //        }
 
 //       INQ.dataCollection.createDataCollectionTask(5941304764661760l, "data colleciton", "description");
+//        INQ.friendsDelegator.inviteFriend(5, "wespot1", 5, "wespot2");
+//        INQ.friendsDelegator.removeFriend(5, "wespot2", 5, "wespot1");
+//        INQ.friendsDelegator.receivedFriendRequests(5, "wespot2");
+//        INQ.friendsDelegator.sentFriendRequests(5, "wespot1");
+//        INQ.friendsDelegator.siteUsersRequests();
 
+        MessageLocalObject newMessage = new MessageLocalObject();
+        newMessage.setBody("message 7");
+        newMessage.setSubject("test");
+        newMessage.setRunId(21606001l);
+        newMessage.setTime(ARL.time.getServerTime());
+        newMessage.setAuthor(ARL.accounts.getLoggedInAccount().getFullId());
+        newMessage.setSynced(false);
+
+        DaoConfiguration.getInstance().getMessageLocalObject().insertOrReplace(newMessage);
+
+        ARL.messages.postMessagesToServer();
     }
+
     private class CreateInquiryObject {
         public InquiryLocalObject inquiry;
 
     }
 
-    private void onEventBackgroundThread(CreateInquiryObject inquiryObject){
+    private void onEventBackgroundThread(CreateInquiryObject inquiryObject) {
 
 //        InquiryClient.getInquiryClient().createInquiry(inquiryObject.inquiry, INQ.accounts.getLoggedInAccount(), InquiryClient.VIS_PUBLIC, InquiryClient.OPEN_MEMBERSHIP);
-
 
 
     }
@@ -190,7 +201,7 @@ public class TestAdapters extends Activity {
         if (event.getStatus() == FileDownloadStatus.FINISHED) {
             editText.setText("---");
         } else {
-            editText.setText(event.getBytesDownloaded()+":"+event.getAmountOfBytes()+":"+event.getFileName());
+            editText.setText(event.getBytesDownloaded() + ":" + event.getAmountOfBytes() + ":" + event.getFileName());
         }
     }
 
@@ -206,7 +217,7 @@ public class TestAdapters extends Activity {
         mHandler.postDelayed(counterTask, 300);
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         ARL.eventBus.unregister(this);
     }
@@ -218,7 +229,7 @@ public class TestAdapters extends Activity {
             long serverTime = ARL.time.getServerTime();
             long localTime = System.currentTimeMillis();
 
-            ((TextView) findViewById(R.id.localTimeView)).setText("localTime: "+ DateFormat.getDateTimeInstance().format(new Date(localTime)));
+            ((TextView) findViewById(R.id.localTimeView)).setText("localTime: " + DateFormat.getDateTimeInstance().format(new Date(localTime)));
 
             ((TextView) findViewById(R.id.serverTimeView)).setText("serverTime: " + DateFormat.getDateTimeInstance().format(new Date(serverTime)) + " " + (serverTime - localTime));
             mHandler.postDelayed(counterTask, 100);

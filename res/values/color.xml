@@ -9,9 +9,9 @@
     <color name="white">#ffffff</color>
 
     <!--Schema 1-->
-    <color name="schema1_primary1">#ffffff</color>
+    <color name="schema1_primary1">#33485f</color>
 
 
     <!--Schema 2-->
-    <color name="schema1_primary1">#ffffff</color>
+    <color name="schema2_primary1">#22000000</color>
 </resources>

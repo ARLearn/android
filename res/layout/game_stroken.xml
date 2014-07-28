@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/animStrokenView"
+                    android:background="?attr/primaryColor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    >
+
+    <ImageView
+
+            android:id="@+id/strokenIcon"
+
+            android:layout_width="wrap_content"
+            android:layout_height="55dip"
+            android:layout_marginRight="0dip"
+            android:layout_alignParentLeft="true"
+
+            android:src="@drawable/ic_stroken_alert_normal" />
+
+    <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/strokenIcon"
+            android:layout_centerVertical="true"
+
+
+            android:text="Nieuw bericht!"
+            android:textColor="@color/white"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+            android:id="@+id/viewMessageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:text="bekijk"
+            android:textColor="@color/white"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:textStyle="italic"
+
+            />
+
+    </RelativeLayout>
+

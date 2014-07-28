@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--<theme name="ARLearn" parent="android:Theme" />-->
+
+    <!--<theme name="ARLearn.Schema1" parent="ARLearn">-->
+        <!--<item name="android:background">@color/brown</item>-->
+    <!--</theme>-->
+
+    <!--<theme name="ARLearn.Schema2" parent="ARLearn">-->
+        <!--<item name="android:background">@color/green</item>-->
+    <!--</theme>-->
+
+
+    <style name="ARLearn.Theme1"  parent="Theme.Sherlock">
+        <item name="primaryColor">#3498db</item>
+        <item name="primaryColorLight">#76cdff</item>
+        <item name="primaryColorDark">#33485f</item>
+        <item name="primaryColorHighlight">#ffffff</item>
+        <item name="highlightColor">#ffffff</item>
+        <item name="buttonColor">#3498db</item>
+        <item name="buttonAlternativeColor">#f45840</item>
+        <item name="backgroundColor">#f6f6f6</item>
+        <item name="backgroundColorLight">#ffffff</item>
+        <item name="backgroundColorDark">#3348df</item>
+        <item name="text">#95a5a6</item>
+        <item name="textLight">#ffffff</item>
+        <item name="textDark">#33485f</item>
+        <item name="textInactive">#f6f6f6</item>
+    </style>
+
+    <style name="ARLearn.Theme2"  parent="Theme.Sherlock">
+        <item name="primaryColor">#3498db</item>
+        <item name="primaryColorLight">#76cdff</item>
+        <item name="primaryColorDark">#33485f</item>
+        <item name="primaryColorHighlight">#ffffff</item>
+        <item name="highlightColor">#ffffff</item>
+        <item name="buttonColor">#3498db</item>
+        <item name="buttonAlternativeColor">#f45840</item>
+        <item name="backgroundColor">#f6f6f6</item>
+        <item name="backgroundColorLight">#ffffff</item>
+        <item name="backgroundColorDark">#3348df</item>
+        <item name="text">#95a5a6</item>
+        <item name="textLight">#ffffff</item>
+        <item name="textDark">#33485f</item>
+        <item name="textInactive">#f6f6f6</item>
+    </style>
+</resources>

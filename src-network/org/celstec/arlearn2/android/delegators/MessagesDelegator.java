@@ -6,6 +6,9 @@ import org.celstec.arlearn2.beans.run.Message;
 import org.celstec.arlearn2.beans.run.MessageList;
 import org.celstec.arlearn2.client.ThreadsClient;
 import org.celstec.dao.gen.MessageLocalObject;
+import org.celstec.dao.gen.MessageLocalObjectDao;
+
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -42,15 +45,38 @@ public class MessagesDelegator extends AbstractDelegator {
         }
         return instance;
     }
+    /*
+        Public API
+         */
+
 
     public void syncMessages(Long threadId) {
-        ARL.eventBus.post(new SyncMessages(threadId));
+        ARL.eventBus.post(new SyncMessages(threadId, null));
     }
+
+    public void syncMessagesForDefaultThread(Long runId) {
+        ARL.eventBus.post(new SyncMessages(null, runId));
+    }
+
+    public void postMessagesToServer() {
+        ARL.eventBus.post(new PostMessagesToServer());
+    }
+
+    /*
+    Implementation
+    */
 
     private void onEventAsync(SyncMessages syncMessages) {
         String token = returnTokenIfOnline();
         if (token != null) {
-            MessageList ml = ThreadsClient.getThreadsClient().getMessages(token, syncMessages.getThreadId());
+
+            MessageList ml = null;
+            if (syncMessages.getThreadId() != null){
+                ThreadsClient.getThreadsClient().getMessages(token, syncMessages.getThreadId());
+            }
+            if (syncMessages.getRunId() != null){
+                ThreadsClient.getThreadsClient().getDefaultThreadMessages(token, syncMessages.getRunId());
+            }
             if (ml.getError() ==null) {
                 process(ml);
             }
@@ -82,19 +108,59 @@ public class MessagesDelegator extends AbstractDelegator {
     }
 
 
-    private class SyncMessages{
-        long threadId;
 
-        private SyncMessages(long threadId) {
-            this.threadId = threadId;
+    private void onEventAsync(PostMessagesToServer syncMessages) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+
+            List<MessageLocalObject> list= DaoConfiguration.getInstance().getMessageLocalObject().queryBuilder()
+                    .where(MessageLocalObjectDao.Properties.Synced.eq(false))
+                    .list();
+            for (MessageLocalObject messageLocalObject: list) {
+                Message returnMessage = ThreadsClient.getThreadsClient().createMessage(token, messageLocalObject.getBean(false));
+                DaoConfiguration.getInstance().getMessageLocalObject().delete(messageLocalObject);
+
+                messageLocalObject.setId(returnMessage.getMessageId());
+                messageLocalObject.setSynced(true);
+                DaoConfiguration.getInstance().getMessageLocalObject().insertOrReplace(messageLocalObject);
+                System.out.println(returnMessage);
+            }
         }
 
-        public long getThreadId() {
+    }
+
+
+    private class SyncMessages{
+        Long threadId;
+        Long runId;
+
+        private SyncMessages(Long threadId, Long runId) {
+            this.threadId = threadId;
+            this.runId = runId;
+        }
+
+        public Long getThreadId() {
             return threadId;
         }
 
         public void setThreadId(long threadId) {
             this.threadId = threadId;
         }
+
+        public Long getRunId() {
+            return runId;
+        }
+
+        public void setRunId(Long runId) {
+            this.runId = runId;
+        }
+    }
+
+    private class PostMessagesToServer{
+
+        private PostMessagesToServer() {
+
+        }
+
     }
 }

@@ -1,11 +1,11 @@
-package org.celstec.arlearn2.android.game;
+package org.celstec.arlearn2.android.game.generalItem;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
-import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.RunLocalObject;
+import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.game.GameActivityFeatures;
 
 /**
  * ****************************************************************************
@@ -27,33 +27,16 @@ import org.celstec.dao.gen.RunLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class DelayedGameLauncher  implements  Runnable {
+public class GeneralItemActivity extends Activity {
 
-    private Long gameId;
-    private Long runId;
-    private Activity ctx;
-//    private int delay;
-    private Handler handler = new Handler();
+    GameActivityFeatures gameActivityFeatures;
+    GeneralItemActivityFeatures generalItemActivityFeatures;
 
-
-    public DelayedGameLauncher(Long gameId, Long runId, Activity ctx, int delay) {
-//        this.delay = delay;
-        this.gameId = gameId;
-        this.runId = runId;
-        this.ctx = ctx;
-        handler.postDelayed(this, delay);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.game_general_item);
+        setTheme(R.style.ARLearn_schema2);
+        gameActivityFeatures = new GameActivityFeatures(this);
+        generalItemActivityFeatures = new GeneralItemActivityFeatures(this);
     }
-
-
-    public void run() {
-        Intent gameIntent = new Intent(ctx, GameMessages.class);
-        gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
-        gameIntent.putExtra(RunLocalObject.class.getName(), runId);
-        ctx.startActivity(gameIntent);
-        ctx.finish();
-    }
-
-//    private void launchGame() {
-//
-//    }
 }

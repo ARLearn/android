@@ -93,6 +93,10 @@ public class DaoConfiguration {
         return session.getGeneralItemMediaLocalObjectDao();
     }
 
+    public GeneralItemVisibilityLocalObjectDao getGeneralItemVisibilityLocalObjectDao(){
+        return session.getGeneralItemVisibilityLocalObjectDao();
+    }
+
     public ThreadLocalObjectDao getThreadLocalObject() {
         return session.getThreadLocalObjectDao();
     }

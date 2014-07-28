@@ -28,4 +28,8 @@
     <string name="byncnd">Attribution-NonCommercial-NoDerivs</string>
 
     <string name="unabletosyncgame">Unable to sync game</string>
+
+    <!--Notifications-->
+    <string name="readMessage">Read Message</string>
+    <string name="closeMessage">Close Message</string>
 </resources>

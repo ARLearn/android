@@ -62,7 +62,7 @@ public class DependenciesLazyListAdapter extends LazyListAdapter<DependencyLocal
     public View newView(Context context, DependencyLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.list_game_row, parent, false);
+        return inflater.inflate(R.layout.game_message_entry, parent, false);
 
     }
     @Override

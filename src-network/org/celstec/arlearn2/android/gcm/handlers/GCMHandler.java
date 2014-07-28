@@ -47,6 +47,8 @@ public abstract class GCMHandler {
                 return new GCMRunHandler(ctx);
             }  else if (map.get("type").equals(GeneralItemModification.class.getName())){
                 return new GCMGeneralItemHandler(ctx, Long.parseLong(map.get("gameId")));
+            } else if (map.get("type").equals(Message.class.getName())){
+                return new GCMMessageHandler(ctx, Long.parseLong(map.get("threadId")));
             }
 //            else if (map.get("type").equals(Message.class.getName())) {
 //                return new GCMMessageHandler(ctx, map);

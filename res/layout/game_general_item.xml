@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="?attr/backgroundColorLight"
+              android:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/generalItemIcon"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dip"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_default_game" />
+
+    <TextView
+            android:id="@+id/titleId"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:singleLine="false"
+            android:gravity="center"
+            android:text="Opdracht beschrijving multi line multi line multi lin" />
+
+    <WebView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+    </WebView>
+
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundColor"
+            >
+        <ImageView
+                android:id="@+id/audioButtonIcon"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="6dip"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_default_game" />
+        <ImageView
+                android:id="@+id/pictureButtonIcon"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="6dip"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_default_game" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundColorDark"
+            >
+
+    </LinearLayout>
+</LinearLayout>

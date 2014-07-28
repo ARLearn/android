@@ -1,13 +1,26 @@
 package org.celstec.arlearn2.android.game;
 
-import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
+import org.celstec.arlearn2.android.game.notification.StrokenView;
+import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
+import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemsLazyListAdapter;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.GeneralItemLocalObject;
+import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
+import org.celstec.dao.gen.RunLocalObject;
 
 /**
  * ****************************************************************************
@@ -29,23 +42,43 @@ import org.celstec.dao.gen.GameLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GameMessages extends ListActivity{
+public class GameMessages extends ListActivity implements ListItemClickInterface<GeneralItemVisibilityLocalObject> {
+    GameActivityFeatures gameActivityFeatures;
 
-    GameLocalObject gameLocalObject;
-    private GeneralItemsLazyListAdapter adapter;
+    private GeneralItemVisibilityAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_list_messages);
-//        ARL.eventBus.register(this);
-        Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
-        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
-//        System.out.println(gameLocalObject);
-
-        adapter = new GeneralItemsLazyListAdapter(this, gameLocalObject.getId());
+        gameActivityFeatures = new GameActivityFeatures(this);
+        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId());
         setListAdapter(adapter);
+        adapter.setOnListItemClickCallback(this);
+        ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
+//        Handler handler = new Handler();
+//        handler.postDelayed(new AnimationRunnable(), 2000l);
+
+    }
+
+    @Override
+    public void onListItemClick(View v, int position, GeneralItemVisibilityLocalObject object) {
+        Intent intent = new Intent(this, GeneralItemActivity.class);
+        gameActivityFeatures.addMetadataToIntent(intent);
+        intent.putExtra(GeneralItemLocalObject.class.getName(), object.getGeneralItemLocalObject().getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean setOnLongClickListener(View v, int position, GeneralItemVisibilityLocalObject object) {
+        return false;
+    }
 
 
-
+    class AnimationRunnable implements Runnable {
+//        StrokenView view;
+        public void run() {
+//            gameActivityFeatures.showStrokenNotification();
+            gameActivityFeatures.showAlertViewNotification();
+        }
     }
 }

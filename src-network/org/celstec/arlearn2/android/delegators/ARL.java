@@ -39,7 +39,7 @@ public class ARL {
 
     public static GameDelegator games;
     public static GeneralItemDelegator generalItems;
-    public static GeneralItemVisibilityDelegator generalItemVisibilityDelegator;
+    public static GeneralItemVisibilityDelegator generalItemVisibility;
     public static GiFileReferenceDelegator fileReferences;
     public static RunDelegator runs;
     public static AccountDelegator accounts;
@@ -71,7 +71,7 @@ public class ARL {
         store = StoreDelegator.getInstance();
         threads = ThreadsDelegator.getInstance();
         messages = MessagesDelegator.getInstance();
-        generalItemVisibilityDelegator = GeneralItemVisibilityDelegator.getInstance();
+        generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
 
         new GCMRegisterTask().execute((Activity) ctx);
 

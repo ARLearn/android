@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.listadapter.AbstractMessagesLazyListAdapter;
-import org.celstec.dao.gen.MessageLocalObject;
+import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
+import org.celstec.dao.gen.GeneralItemLocalObject;
+import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 
 /**
  * ****************************************************************************
@@ -29,34 +30,36 @@ import org.celstec.dao.gen.MessageLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class MessageLazyListAdapter extends AbstractMessagesLazyListAdapter {
+public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibilityAdapter {
 
-    public MessageLazyListAdapter(Context context) {
-        super(context);
+
+    public GeneralItemVisibilityAdapter(Context context, long runId) {
+        super(context, runId);
     }
 
     @Override
-    public View newView(Context context, MessageLocalObject item, ViewGroup parent) {
+    public View newView(Context context, GeneralItemVisibilityLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return inflater.inflate(R.layout.game_message_entry, parent, false);
     }
 
     @Override
-    public void bindView(View view, Context context, MessageLocalObject item) {
-        TextView firstLineView =(TextView) view.findViewById(R.id.firstLine);
-        firstLineView.setText(item.getSubject());
-        TextView secondLineView =(TextView) view.findViewById(R.id.secondLine);
-        secondLineView.setText(item.getBody() );
+    public void bindView(View view, Context context, GeneralItemVisibilityLocalObject item) {
+        TextView messageText =(TextView) view.findViewById(R.id.messageText);
+        if (item.getGeneralItemLocalObject()!=null) {
+            messageText.setText(item.getGeneralItemLocalObject().getTitle());
+        } else {
+            messageText.setText("message not loaded");
+        }
     }
-
 
     @Override
     public long getItemId(int position) {
         if (dataValid && lazyList != null) {
-            MessageLocalObject item = lazyList.get(position);
+            GeneralItemVisibilityLocalObject item = lazyList.get(position);
             if (item != null) {
-                return item.getId();
+                return item.getGeneralItemId();
             } else {
                 return 0;
             }

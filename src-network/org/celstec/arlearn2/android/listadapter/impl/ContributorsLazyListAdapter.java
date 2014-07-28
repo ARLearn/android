@@ -65,7 +65,7 @@ public class ContributorsLazyListAdapter extends LazyListAdapter<GameContributor
     public View newView(Context context, GameContributorLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.list_game_row, parent, false);
+        return inflater.inflate(R.layout.game_message_entry, parent, false);
 
     }
     @Override

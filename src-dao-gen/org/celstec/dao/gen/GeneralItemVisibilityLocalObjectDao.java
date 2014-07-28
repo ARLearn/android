@@ -19,7 +19,7 @@ import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 /** 
  * DAO for table GENERAL_ITEM_VISIBILITY_LOCAL_OBJECT.
 */
-public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItemVisibilityLocalObject, Void> {
+public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItemVisibilityLocalObject, String> {
 
     public static final String TABLENAME = "GENERAL_ITEM_VISIBILITY_LOCAL_OBJECT";
 
@@ -28,11 +28,12 @@ public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItem
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Account = new Property(0, String.class, "account", false, "ACCOUNT");
-        public final static Property Status = new Property(1, Long.class, "status", false, "STATUS");
-        public final static Property TimeStamp = new Property(2, Long.class, "timeStamp", false, "TIME_STAMP");
-        public final static Property GeneralItemId = new Property(3, long.class, "generalItemId", false, "GENERAL_ITEM_ID");
-        public final static Property RunId = new Property(4, long.class, "runId", false, "RUN_ID");
+        public final static Property Id = new Property(0, String.class, "id", true, "ID");
+        public final static Property Account = new Property(1, String.class, "account", false, "ACCOUNT");
+        public final static Property Status = new Property(2, Integer.class, "status", false, "STATUS");
+        public final static Property TimeStamp = new Property(3, Long.class, "timeStamp", false, "TIME_STAMP");
+        public final static Property GeneralItemId = new Property(4, long.class, "generalItemId", false, "GENERAL_ITEM_ID");
+        public final static Property RunId = new Property(5, long.class, "runId", false, "RUN_ID");
     };
 
     private DaoSession daoSession;
@@ -53,11 +54,12 @@ public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItem
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'GENERAL_ITEM_VISIBILITY_LOCAL_OBJECT' (" + //
-                "'ACCOUNT' TEXT," + // 0: account
-                "'STATUS' INTEGER," + // 1: status
-                "'TIME_STAMP' INTEGER," + // 2: timeStamp
-                "'GENERAL_ITEM_ID' INTEGER NOT NULL ," + // 3: generalItemId
-                "'RUN_ID' INTEGER NOT NULL );"); // 4: runId
+                "'ID' TEXT PRIMARY KEY NOT NULL ," + // 0: id
+                "'ACCOUNT' TEXT," + // 1: account
+                "'STATUS' INTEGER," + // 2: status
+                "'TIME_STAMP' INTEGER," + // 3: timeStamp
+                "'GENERAL_ITEM_ID' INTEGER NOT NULL ," + // 4: generalItemId
+                "'RUN_ID' INTEGER NOT NULL );"); // 5: runId
     }
 
     /** Drops the underlying database table. */
@@ -71,22 +73,27 @@ public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItem
     protected void bindValues(SQLiteStatement stmt, GeneralItemVisibilityLocalObject entity) {
         stmt.clearBindings();
  
-        String account = entity.getAccount();
-        if (account != null) {
-            stmt.bindString(1, account);
+        String id = entity.getId();
+        if (id != null) {
+            stmt.bindString(1, id);
         }
  
-        Long status = entity.getStatus();
+        String account = entity.getAccount();
+        if (account != null) {
+            stmt.bindString(2, account);
+        }
+ 
+        Integer status = entity.getStatus();
         if (status != null) {
-            stmt.bindLong(2, status);
+            stmt.bindLong(3, status);
         }
  
         Long timeStamp = entity.getTimeStamp();
         if (timeStamp != null) {
-            stmt.bindLong(3, timeStamp);
+            stmt.bindLong(4, timeStamp);
         }
-        stmt.bindLong(4, entity.getGeneralItemId());
-        stmt.bindLong(5, entity.getRunId());
+        stmt.bindLong(5, entity.getGeneralItemId());
+        stmt.bindLong(6, entity.getRunId());
     }
 
     @Override
@@ -97,19 +104,20 @@ public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItem
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public GeneralItemVisibilityLocalObject readEntity(Cursor cursor, int offset) {
         GeneralItemVisibilityLocalObject entity = new GeneralItemVisibilityLocalObject( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // account
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // status
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // timeStamp
-            cursor.getLong(offset + 3), // generalItemId
-            cursor.getLong(offset + 4) // runId
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // account
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // status
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // timeStamp
+            cursor.getLong(offset + 4), // generalItemId
+            cursor.getLong(offset + 5) // runId
         );
         return entity;
     }
@@ -117,24 +125,28 @@ public class GeneralItemVisibilityLocalObjectDao extends AbstractDao<GeneralItem
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, GeneralItemVisibilityLocalObject entity, int offset) {
-        entity.setAccount(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setStatus(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setTimeStamp(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setGeneralItemId(cursor.getLong(offset + 3));
-        entity.setRunId(cursor.getLong(offset + 4));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setAccount(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setStatus(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setTimeStamp(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setGeneralItemId(cursor.getLong(offset + 4));
+        entity.setRunId(cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(GeneralItemVisibilityLocalObject entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected String updateKeyAfterInsert(GeneralItemVisibilityLocalObject entity, long rowId) {
+        return entity.getId();
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(GeneralItemVisibilityLocalObject entity) {
-        return null;
+    public String getKey(GeneralItemVisibilityLocalObject entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

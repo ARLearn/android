@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="ARLearn.schema1" parent="ARLearn.Theme1">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
+    </style>
+
+    <style name="ARLearn.schema2" parent="ARLearn.Theme2">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
     <style name="ARLearn" parent="Theme.Sherlock">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
@@ -71,6 +80,15 @@
 
 
     </style>
+
+    <style name="ARLearn.notificationDialog" parent="@android:Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
     <style name="ARLearn.StoreGameRowBigDownload">
         <item name="android:background">@drawable/gradient_store_game_entry_big_download</item>
         <item name="android:layout_width">wrap_content</item>

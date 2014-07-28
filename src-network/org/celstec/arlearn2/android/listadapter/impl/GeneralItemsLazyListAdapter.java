@@ -6,13 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import daoBase.DaoConfiguration;
-import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsLazyListAdapter;
-import org.celstec.arlearn2.android.listadapter.LazyListAdapter;
 import org.celstec.dao.gen.*;
 
 /**
@@ -48,20 +43,8 @@ public class GeneralItemsLazyListAdapter  extends AbstractGeneralItemsLazyListAd
 
         @Override
     public void bindView(View view, Context context,  GeneralItemLocalObject item) {
-        TextView firstLineView =(TextView) view.findViewById(R.id.firstLine);
-        firstLineView.setText(item.getTitle());
-        TextView secondLineView =(TextView) view.findViewById(R.id.secondLine);
-        String description = item.getDescription()==null?"":item.getDescription();
-        if (item.getDependencyLocalObject() != null) {
-            description += "dep "+(item.getDependencyLocalObject()).toString();
-            long time = System.currentTimeMillis();
-//            description += "sat "+ item.getDependencyLocalObject().satisfiedAt(DaoConfiguration.getInstance().getRunLocalObjectDao().load(19806001l));
-            Log.e("ARLearn", "sat time "+(System.currentTimeMillis()-time));
-        }
-//        for (GeneralItemMediaLocalObject media: item.getGeneralItemMedia()){
-//            description += " fr "+media.getLocalId()+":"+media.getMd5Hash();
-//        }
-        secondLineView.setText(description + " id " +item.getId() );
+        TextView messageText =(TextView) view.findViewById(R.id.messageText);
+        messageText.setText(item.getTitle());
     }
 
 
@@ -83,7 +66,7 @@ public class GeneralItemsLazyListAdapter  extends AbstractGeneralItemsLazyListAd
     public View newView(Context context, GeneralItemLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.list_game_row, parent, false);
+        return inflater.inflate(R.layout.game_message_entry, parent, false);
 
     }
 

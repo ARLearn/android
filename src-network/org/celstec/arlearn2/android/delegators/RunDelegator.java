@@ -50,6 +50,10 @@ public class RunDelegator extends AbstractDelegator{
         return instance;
     }
 
+    /*
+    Public API
+     */
+
     public void syncRunsParticipate() {
         ARL.eventBus.post(new SyncRunsEventParticipate());
     }
@@ -58,12 +62,17 @@ public class RunDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncRun(runId));
     }
 
+//    public void syncRun(GameLocalObject game) {
+//        SyncRun sr = new SyncRun(game);
+//    }
+
+    /*
+    Implementation
+     */
 
     private void onEventAsync(SyncRunsEventParticipate sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
-            Log.i(SYNC_TAG, "Syncing runs since : " + lastSyncDateParticipate);
-
             RunList rl =RunClient.getRunClient().getRunsParticipate(token, lastSyncDateParticipate);
                 if (rl.getError() == null) {
                     process(rl);
@@ -74,7 +83,12 @@ public class RunDelegator extends AbstractDelegator{
     }
 
     private void onEventAsync(SyncRun syncRun) {
-        asyncRun(syncRun.runId);
+        if (syncRun.getRunId()!=null) {
+            asyncRun(syncRun.runId);
+        } else if (syncRun.getGameId() != null) {
+//            asyncGame(syncRun.getGameId());
+        }
+
     }
 
     public void asyncRun(long runId) {
@@ -89,6 +103,19 @@ public class RunDelegator extends AbstractDelegator{
             }
         }
     }
+
+//    private void asyncGame(long gameId) {
+//        String token = returnTokenIfOnline();
+//        if (token != null) {
+//
+//            Run run =RunClient.getRunClient().getRun(runId, token);
+//            if (run.getError() == null) {
+//                RunList rl = new RunList();
+//                rl.addRun(run);
+//                process(rl);
+//            }
+//        }
+//    }
 
     private void process(RunList rl) {
         for (Run rBean: rl.getRuns()) {
@@ -131,6 +158,8 @@ public class RunDelegator extends AbstractDelegator{
 
     }
 
+
+
     private class SyncRunsEventParticipate {
 
     }
@@ -139,17 +168,34 @@ public class RunDelegator extends AbstractDelegator{
     }
 
     private class SyncRun {
-        private  long runId;
+        private  Long runId;
+        private  Long gameId;
+
         public SyncRun(long runId) {
             this.runId = runId;
         }
 
-        public long getRunId() {
+        private SyncRun() {
+        }
+
+        public SyncRun(GameLocalObject game) {
+            this.gameId = game.getId();
+        }
+
+        public Long getRunId() {
             return runId;
         }
 
-        public void setRunId(long runId) {
+        public void setRunId(Long runId) {
             this.runId = runId;
+        }
+
+        public Long getGameId() {
+            return gameId;
+        }
+
+        public void setGameId(Long gameId) {
+            this.gameId = gameId;
         }
     }
 }

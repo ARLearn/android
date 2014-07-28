@@ -111,6 +111,8 @@ public class ARlearnDaoGenerator {
         messageLocalObject.addIdProperty();
         messageLocalObject.addStringProperty("subject");
         messageLocalObject.addStringProperty("body");
+        messageLocalObject.addStringProperty("author");
+        messageLocalObject.addBooleanProperty("synced");
         messageLocalObject.addLongProperty("time");
         messageLocalObject.addStringProperty("userIds");
 
@@ -390,8 +392,9 @@ public class ARlearnDaoGenerator {
 
     private static Entity createGeneralItemVisibility(Schema schema) {
         Entity generalItemVisibility = schema.addEntity("GeneralItemVisibilityLocalObject");
+        generalItemVisibility.addStringProperty("id").primaryKey();
         generalItemVisibility.addStringProperty("account");
-        generalItemVisibility.addLongProperty("status");
+        generalItemVisibility.addIntProperty("status");
         generalItemVisibility.addLongProperty("timeStamp");
 
         Property generalItemId = generalItemVisibility.addLongProperty("generalItemId").notNull().getProperty();

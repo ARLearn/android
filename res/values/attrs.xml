@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ARLearn">
+        <attr name="primaryColor" format="color" />
+        <attr name="primaryColorLight" format="color" />
+        <attr name="primaryColorDark" format="color" />
+        <attr name="primaryColorHighlight" format="color" />
+        <attr name="highlightColor" format="color" />
+        <attr name="buttonColor" format="color" />
+        <attr name="buttonAlternativeColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="backgroundColorLight" format="color" />
+        <attr name="backgroundColorDark" format="color" />
+        <attr name="text" format="color" />
+        <attr name="textLight" format="color" />
+        <attr name="textDark" format="color" />
+        <attr name="textInactive" format="color" />
+    </declare-styleable>
+</resources>

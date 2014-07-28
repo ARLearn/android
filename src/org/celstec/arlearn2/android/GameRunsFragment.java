@@ -2,21 +2,17 @@ package org.celstec.arlearn2.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListFragment;
-import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
-import org.celstec.arlearn2.android.listadapter.impl.SearchResultsLazyListAdapter;
-import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.android.listadapter.impl.RunsLazyListAdapter;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.RunLocalObject;
 
 /**
  * ****************************************************************************
@@ -38,16 +34,23 @@ import org.celstec.dao.gen.GameLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class MyGamesFragment extends SherlockListFragment implements ListItemClickInterface<GameLocalObject> {
+public class GameRunsFragment extends SherlockListFragment implements ListItemClickInterface<RunLocalObject> {
 
-    private GamesLazyListAdapter adapter;
+    private RunsLazyListAdapter adapter;
+    private GameLocalObject game;
+
+    public GameRunsFragment() {
+    }
+
+    public GameRunsFragment(GameLocalObject gameLocalObject) {
+        this.game = gameLocalObject;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ARL.games.syncMyGames();
-        ARL.runs.syncRunsParticipate();
+//        ARL.runs.syncRun(game);
 
     }
 
@@ -60,9 +63,9 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.mygames_list, container, false);
+        final View v = inflater.inflate(R.layout.run_list, container, false);
         if (adapter == null) {
-            adapter = new GamesLazyListAdapter(getActivity());
+            adapter = new RunsLazyListAdapter(getActivity(), game.getId());
             adapter.setOnListItemClickCallback(this);
         }
 
@@ -71,23 +74,15 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
     }
 
     @Override
-    public void onListItemClick(View v, int position, GameLocalObject game) {
-//        Intent gameIntent = new Intent(getActivity(), GameSplashScreen.class);
-//        gameIntent.putExtra(GameLocalObject.class.getName(), game.getId());
-//        getActivity().startActivity(gameIntent);
-
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        Bundle args = new Bundle();
-        Fragment frag = new GameRunsFragment(game);
-
-        frag.setArguments(args);
-        fm.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.right_pane, frag).addToBackStack(null).commit();
+    public void onListItemClick(View v, int position, RunLocalObject run) {
+        Intent gameIntent = new Intent(getActivity(), GameSplashScreen.class);
+        gameIntent.putExtra(GameLocalObject.class.getName(), game.getId());
+        gameIntent.putExtra(RunLocalObject.class.getName(), run.getId());
+        getActivity().startActivity(gameIntent);
     }
 
     @Override
-    public boolean setOnLongClickListener(View v, int position, GameLocalObject object) {
+    public boolean setOnLongClickListener(View v, int position, RunLocalObject object) {
         return false;
     }
 
