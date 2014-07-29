@@ -102,7 +102,10 @@ public class MessagesDelegator extends AbstractDelegator {
         messageLocalObject.setRunId(message.getRunId());
         messageLocalObject.setSubject(message.getSubject());
         messageLocalObject.setThreadId(message.getThreadId());
-        messageLocalObject.setTime(message.getTimestamp());
+        messageLocalObject.setTime(message.getDate());
+        messageLocalObject.setAuthor(message.getSenderProviderId()+":"+message.getSenderId());
+        messageLocalObject.setSynced(true);
+
 
         return messageLocalObject;
     }
