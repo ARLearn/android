@@ -32,4 +32,12 @@
     <!--Notifications-->
     <string name="readMessage">Read Message</string>
     <string name="closeMessage">Close Message</string>
+
+    <!--Network-->
+    <string name="noInternet">No connection to the internet.</string>
+    <string name="cancel">Cancel</string>
+    <string name="wireless">Open wireless settings</string>
+    <string name="operatingOffline">Operating in offline mode</string>
+    <string name="contentMissingNoInternet">Some game content has not been downloaded.</string>
+
 </resources>

@@ -3,10 +3,7 @@ package org.celstec.arlearn2.android.gcm.handlers;
 import android.content.Context;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.arlearn2.beans.notification.GeneralItemModification;
-import org.celstec.arlearn2.beans.run.Message;
-import org.celstec.arlearn2.beans.run.Run;
-import org.celstec.arlearn2.beans.run.User;
-import org.celstec.arlearn2.beans.run.VariableInstance;
+import org.celstec.arlearn2.beans.run.*;
 
 import java.util.HashMap;
 
@@ -49,6 +46,10 @@ public abstract class GCMHandler {
                 return new GCMGeneralItemHandler(ctx, Long.parseLong(map.get("gameId")));
             } else if (map.get("type").equals(Message.class.getName())){
                 return new GCMMessageHandler(ctx, Long.parseLong(map.get("threadId")));
+            } else if (map.get("type").equals(User.class.getName())) {
+                return new GCMRunHandler(ctx);
+            } else if (map.get("type").equals(Action.class.getName())) {
+                return new GCMActionHandler(ctx, Long.parseLong(map.get("runId")));
             }
 //            else if (map.get("type").equals(Message.class.getName())) {
 //                return new GCMMessageHandler(ctx, map);

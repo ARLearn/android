@@ -359,11 +359,11 @@ public class ResponseLocalObject {
 
     }
 
-    private static final int PICTURE_TYPE = 1;
-    private static final  int VIDEO_TYPE = 2;
-    private static final  int AUDIO_TYPE = 3;
-    private static final  int TEXT_TYPE = 4;
-    private static final  int VALUE_TYPE = 5;
+    public static final int PICTURE_TYPE = 1;
+    public static final  int VIDEO_TYPE = 2;
+    public static final  int AUDIO_TYPE = 3;
+    public static final  int TEXT_TYPE = 4;
+    public static final  int VALUE_TYPE = 5;
 
     public void setPictureType(){
         setType(PICTURE_TYPE);
@@ -398,6 +398,16 @@ public class ResponseLocalObject {
     public boolean isAudio() {
         if (getType() == null) return false;
         return getType() == AUDIO_TYPE;
+    }
+
+    public boolean isText() {
+        if (getType() == null) return false;
+        return getType() == TEXT_TYPE;
+    }
+
+    public boolean isValue() {
+        if (getType() == null) return false;
+        return getType() == VALUE_TYPE;
     }
 
     public Uri getUri() {
@@ -502,6 +512,10 @@ public class ResponseLocalObject {
 
     private String buildRemotePath(Uri uri, long runId, String account) {
         return GenericClient.urlPrefix + "uploadService/" + runId + "/" + account + "/" + uri.getLastPathSegment();
+    }
+
+    public boolean hasFile() {
+        return getUriAsString() != null;
     }
     // KEEP METHODS END
 

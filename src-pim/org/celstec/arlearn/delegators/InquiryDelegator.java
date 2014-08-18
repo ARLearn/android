@@ -2,7 +2,7 @@ package org.celstec.arlearn.delegators;
 
 import android.util.Log;
 import daoBase.DaoConfiguration;
-import org.celstec.arlearn2.android.download.FileDownloader;
+import org.celstec.arlearn2.android.download.FileByteDownloader;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AbstractDelegator;
 import org.celstec.dao.gen.GameLocalObject;
@@ -125,7 +125,7 @@ public class InquiryDelegator extends AbstractDelegator {
                     long runId = InquiryClient.getInquiryClient().getArlearnRunId(token, inquiry.getId());
                     inquiry.setRunId(runId);
 
-                    inquiry.setIcon(new FileDownloader(inqJsonObject.getString("icon")).syncDownload());
+                    inquiry.setIcon(new FileByteDownloader(inqJsonObject.getString("icon")).syncDownload());
 
 
                     long rid = DaoConfiguration.getInstance().getInquiryLocalObjectDao().insertOrReplace(inquiry);
@@ -153,7 +153,7 @@ public class InquiryDelegator extends AbstractDelegator {
             if (run != null) {
                 dcTask.getInquiry().setRunLocalObject(run);
                 if (run.getGameLocalObject() == null) {
-                    GameLocalObject gameLocalObject = INQ.games.asyncGame(run.getGameId());
+                    GameLocalObject gameLocalObject = INQ.games.asyncGame(run.getGameId(),true);
                     run.setGameLocalObject(gameLocalObject);
                 }
             run.refresh();

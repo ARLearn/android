@@ -70,7 +70,7 @@ public class DaoConfiguration {
         return session.getAccountLocalObjectDao();
     }
 
-    public ActionLocalObjectDao getActionDependencyLocalObjectDao() {
+    public ActionLocalObjectDao getActionLocalObjectDao() {
         return session.getActionLocalObjectDao();
     }
 
@@ -118,6 +118,10 @@ public class DaoConfiguration {
 
     public GameCategoryLocalObjectDao getGameCategoryDao() {
         return session.getGameCategoryLocalObjectDao();
+    }
+
+    public GameFileLocalObjectDao getGameFileDao() {
+        return session.getGameFileLocalObjectDao();
     }
 
     public FriendsLocalObjectDao getFriendsLocalObjectDao() {

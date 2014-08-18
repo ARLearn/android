@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -40,6 +41,7 @@ public class SearchFragment  extends SherlockListFragment implements ListItemCli
 
     private SearchResultsLazyListAdapter adapter;
     private LinearLayout searchBarLayout;
+    private View header;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class SearchFragment  extends SherlockListFragment implements ListItemCli
         }
         ListView lv = (ListView) v.findViewById(android.R.id.list);
 
-        View header = inflater.inflate(R.layout.store_search_bar, null);
+        header = inflater.inflate(R.layout.store_search_bar, null);
         lv.addHeaderView(header);
 
         View searchButton = header.findViewById(R.id.searchButton);
@@ -100,7 +102,8 @@ public class SearchFragment  extends SherlockListFragment implements ListItemCli
     private class SearchButton implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            ARL.games.search("game");
+            String query = ((EditText)header.findViewById(R.id.searchText)).getText().toString();
+            if (query != null && query.length() > 2) ARL.games.search(query);
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.celstec.dao.gen;
 
+import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -15,9 +16,11 @@ public class ActionLocalObject {
     private Long id;
     /** Not-null value. */
     private String action;
+    private String generalItemType;
     private Long time;
+    private Boolean isSynchronized;
     private long runId;
-    private long generalItem;
+    private Long generalItem;
     private long account;
 
     /** Used to resolve relations */
@@ -25,6 +28,12 @@ public class ActionLocalObject {
 
     /** Used for active entity operations. */
     private transient ActionLocalObjectDao myDao;
+
+    private RunLocalObject runLocalObject;
+    private Long runLocalObject__resolvedKey;
+
+    private GeneralItemLocalObject generalItemLocalObject;
+    private Long generalItemLocalObject__resolvedKey;
 
     private AccountLocalObject accountLocalObject;
     private Long accountLocalObject__resolvedKey;
@@ -40,10 +49,12 @@ public class ActionLocalObject {
         this.id = id;
     }
 
-    public ActionLocalObject(Long id, String action, Long time, long runId, long generalItem, long account) {
+    public ActionLocalObject(Long id, String action, String generalItemType, Long time, Boolean isSynchronized, long runId, Long generalItem, long account) {
         this.id = id;
         this.action = action;
+        this.generalItemType = generalItemType;
         this.time = time;
+        this.isSynchronized = isSynchronized;
         this.runId = runId;
         this.generalItem = generalItem;
         this.account = account;
@@ -73,12 +84,28 @@ public class ActionLocalObject {
         this.action = action;
     }
 
+    public String getGeneralItemType() {
+        return generalItemType;
+    }
+
+    public void setGeneralItemType(String generalItemType) {
+        this.generalItemType = generalItemType;
+    }
+
     public Long getTime() {
         return time;
     }
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    public Boolean getIsSynchronized() {
+        return isSynchronized;
+    }
+
+    public void setIsSynchronized(Boolean isSynchronized) {
+        this.isSynchronized = isSynchronized;
     }
 
     public long getRunId() {
@@ -89,11 +116,11 @@ public class ActionLocalObject {
         this.runId = runId;
     }
 
-    public long getGeneralItem() {
+    public Long getGeneralItem() {
         return generalItem;
     }
 
-    public void setGeneralItem(long generalItem) {
+    public void setGeneralItem(Long generalItem) {
         this.generalItem = generalItem;
     }
 
@@ -103,6 +130,59 @@ public class ActionLocalObject {
 
     public void setAccount(long account) {
         this.account = account;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public RunLocalObject getRunLocalObject() {
+        long __key = this.runId;
+        if (runLocalObject__resolvedKey == null || !runLocalObject__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            RunLocalObjectDao targetDao = daoSession.getRunLocalObjectDao();
+            RunLocalObject runLocalObjectNew = targetDao.load(__key);
+            synchronized (this) {
+                runLocalObject = runLocalObjectNew;
+            	runLocalObject__resolvedKey = __key;
+            }
+        }
+        return runLocalObject;
+    }
+
+    public void setRunLocalObject(RunLocalObject runLocalObject) {
+        if (runLocalObject == null) {
+            throw new DaoException("To-one property 'runId' has not-null constraint; cannot set to-one to null");
+        }
+        synchronized (this) {
+            this.runLocalObject = runLocalObject;
+            runId = runLocalObject.getId();
+            runLocalObject__resolvedKey = runId;
+        }
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public GeneralItemLocalObject getGeneralItemLocalObject() {
+        Long __key = this.generalItem;
+        if (generalItemLocalObject__resolvedKey == null || !generalItemLocalObject__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            GeneralItemLocalObjectDao targetDao = daoSession.getGeneralItemLocalObjectDao();
+            GeneralItemLocalObject generalItemLocalObjectNew = targetDao.load(__key);
+            synchronized (this) {
+                generalItemLocalObject = generalItemLocalObjectNew;
+            	generalItemLocalObject__resolvedKey = __key;
+            }
+        }
+        return generalItemLocalObject;
+    }
+
+    public void setGeneralItemLocalObject(GeneralItemLocalObject generalItemLocalObject) {
+        synchronized (this) {
+            this.generalItemLocalObject = generalItemLocalObject;
+            generalItem = generalItemLocalObject == null ? null : generalItemLocalObject.getId();
+            generalItemLocalObject__resolvedKey = generalItem;
+        }
     }
 
     /** To-one relationship, resolved on first access. */
@@ -157,7 +237,21 @@ public class ActionLocalObject {
         myDao.refresh(this);
     }
 
+
     // KEEP METHODS - put your custom methods here
+
+    public Action getActionBean() {
+        Action actionBean = new Action();
+        actionBean.setUserEmail(getAccountLocalObject().getFullId());
+        actionBean.setTime(getTime());
+        actionBean.setRunId(getRunId());
+        actionBean.setAction(getAction());
+        actionBean.setGeneralItemId(getGeneralItem());
+        actionBean.setGeneralItemType(getGeneralItemType());
+
+        return actionBean;
+    }
+
     // KEEP METHODS END
 
 }

@@ -56,7 +56,7 @@ public class GCMIntentService extends IntentService {
         for (String key: intent.getExtras().keySet()) {
 
             if ("type".equals(key) || "gameId".equals(key)) map.put(key, intent.getExtras().getString(key));
-
+            if ("type".equals(key) || "runId".equals(key)) map.put(key, intent.getExtras().getString(key));
 
         }
 

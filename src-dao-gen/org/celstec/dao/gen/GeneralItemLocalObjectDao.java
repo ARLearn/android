@@ -29,13 +29,15 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
-        public final static Property Description = new Property(2, String.class, "description", false, "DESCRIPTION");
-        public final static Property RichText = new Property(3, String.class, "richText", false, "RICH_TEXT");
-        public final static Property AutoLaunch = new Property(4, Boolean.class, "autoLaunch", false, "AUTO_LAUNCH");
-        public final static Property LastModificationDate = new Property(5, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
-        public final static Property GameId = new Property(6, long.class, "gameId", false, "GAME_ID");
-        public final static Property DependsOn = new Property(7, Long.class, "dependsOn", false, "DEPENDS_ON");
+        public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
+        public final static Property Deleted = new Property(2, Boolean.class, "deleted", false, "DELETED");
+        public final static Property Title = new Property(3, String.class, "title", false, "TITLE");
+        public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
+        public final static Property Bean = new Property(5, String.class, "bean", false, "BEAN");
+        public final static Property AutoLaunch = new Property(6, Boolean.class, "autoLaunch", false, "AUTO_LAUNCH");
+        public final static Property LastModificationDate = new Property(7, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
+        public final static Property GameId = new Property(8, long.class, "gameId", false, "GAME_ID");
+        public final static Property DependsOn = new Property(9, Long.class, "dependsOn", false, "DEPENDS_ON");
     };
 
     private DaoSession daoSession;
@@ -56,13 +58,15 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'GENERAL_ITEM_LOCAL_OBJECT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'TITLE' TEXT," + // 1: title
-                "'DESCRIPTION' TEXT," + // 2: description
-                "'RICH_TEXT' TEXT," + // 3: richText
-                "'AUTO_LAUNCH' INTEGER," + // 4: autoLaunch
-                "'LAST_MODIFICATION_DATE' INTEGER," + // 5: lastModificationDate
-                "'GAME_ID' INTEGER NOT NULL ," + // 6: gameId
-                "'DEPENDS_ON' INTEGER);"); // 7: dependsOn
+                "'TYPE' TEXT," + // 1: type
+                "'DELETED' INTEGER," + // 2: deleted
+                "'TITLE' TEXT," + // 3: title
+                "'DESCRIPTION' TEXT," + // 4: description
+                "'BEAN' TEXT," + // 5: bean
+                "'AUTO_LAUNCH' INTEGER," + // 6: autoLaunch
+                "'LAST_MODIFICATION_DATE' INTEGER," + // 7: lastModificationDate
+                "'GAME_ID' INTEGER NOT NULL ," + // 8: gameId
+                "'DEPENDS_ON' INTEGER);"); // 9: dependsOn
     }
 
     /** Drops the underlying database table. */
@@ -81,35 +85,45 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
             stmt.bindLong(1, id);
         }
  
+        String type = entity.getType();
+        if (type != null) {
+            stmt.bindString(2, type);
+        }
+ 
+        Boolean deleted = entity.getDeleted();
+        if (deleted != null) {
+            stmt.bindLong(3, deleted ? 1l: 0l);
+        }
+ 
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(2, title);
+            stmt.bindString(4, title);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(3, description);
+            stmt.bindString(5, description);
         }
  
-        String richText = entity.getRichText();
-        if (richText != null) {
-            stmt.bindString(4, richText);
+        String bean = entity.getBean();
+        if (bean != null) {
+            stmt.bindString(6, bean);
         }
  
         Boolean autoLaunch = entity.getAutoLaunch();
         if (autoLaunch != null) {
-            stmt.bindLong(5, autoLaunch ? 1l: 0l);
+            stmt.bindLong(7, autoLaunch ? 1l: 0l);
         }
  
         Long lastModificationDate = entity.getLastModificationDate();
         if (lastModificationDate != null) {
-            stmt.bindLong(6, lastModificationDate);
+            stmt.bindLong(8, lastModificationDate);
         }
-        stmt.bindLong(7, entity.getGameId());
+        stmt.bindLong(9, entity.getGameId());
  
         Long dependsOn = entity.getDependsOn();
         if (dependsOn != null) {
-            stmt.bindLong(8, dependsOn);
+            stmt.bindLong(10, dependsOn);
         }
     }
 
@@ -130,13 +144,15 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
     public GeneralItemLocalObject readEntity(Cursor cursor, int offset) {
         GeneralItemLocalObject entity = new GeneralItemLocalObject( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // description
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // richText
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // autoLaunch
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // lastModificationDate
-            cursor.getLong(offset + 6), // gameId
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // dependsOn
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // type
+            cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // deleted
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // title
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // bean
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // autoLaunch
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // lastModificationDate
+            cursor.getLong(offset + 8), // gameId
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // dependsOn
         );
         return entity;
     }
@@ -145,13 +161,15 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
     @Override
     public void readEntity(Cursor cursor, GeneralItemLocalObject entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setDescription(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setRichText(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setAutoLaunch(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setLastModificationDate(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setGameId(cursor.getLong(offset + 6));
-        entity.setDependsOn(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setType(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setDeleted(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
+        entity.setTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setBean(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setAutoLaunch(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setLastModificationDate(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setGameId(cursor.getLong(offset + 8));
+        entity.setDependsOn(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */

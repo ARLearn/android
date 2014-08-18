@@ -2,22 +2,27 @@ package org.celstec.arlearn2.android.delegators;
 
 import android.util.Log;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.delegators.game.Rating;
-import org.celstec.arlearn2.android.download.FileDownloader;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
+import org.celstec.arlearn2.android.download.FileByteDownloader;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.events.SearchResultList;
-import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.arlearn2.beans.game.GameAccess;
-import org.celstec.arlearn2.beans.game.GameAccessList;
-import org.celstec.arlearn2.beans.game.GamesList;
+
+import org.celstec.arlearn2.android.util.FileDownloader;
+import org.celstec.arlearn2.android.util.MediaFolders;
+import org.celstec.arlearn2.beans.game.*;
 import org.celstec.arlearn2.client.GameClient;
 import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.GameLocalObjectDao;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -58,9 +63,24 @@ public final class GameDelegator extends AbstractDelegator{
         return instance;
     }
 
-    public void syncGame(Long gameId) {
-        ARL.eventBus.post(new SyncGame(gameId));
+     /*
+    Public API
+     */
+
+    public void syncGameWithoutToken(Long gameId) {
+        ARL.eventBus.post(new SyncGameNoToken(gameId));
     }
+
+    public void syncGameFiles(Long gameId) {
+        ARL.eventBus.post(new SyncGameFiles(gameId));
+
+    }
+
+//    public GameDownloadManager downloadGame(Long gameId) {
+//        GameDownloadManager gm  = new GameDownloadManager(gameId);
+//        ARL.eventBus.post(gm);
+//        return gm;
+//    }
 
     public void search(String query) {
         ARL.eventBus.post(new SearchGames(query));
@@ -70,9 +90,9 @@ public final class GameDelegator extends AbstractDelegator{
         ARL.eventBus.post(new LocationSearchGames(lat, lng, distance));
     }
 
-    public GameLocalObject asyncGame(long gameId) {
+    public GameLocalObject asyncGame(long gameId, boolean withToken) {
         String token = returnTokenIfOnline();
-        if (token != null) {
+        if (token != null || !withToken) {
             Game game = GameClient.getGameClient().getGame(token, gameId);
             if (game.getError() == null) {
                 return process(game);
@@ -83,6 +103,14 @@ public final class GameDelegator extends AbstractDelegator{
         return null;
     }
 
+    public void asyncDownloadGame(GameDownloadManager gm) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            gm.asyncDownloadGame();
+        }
+
+    }
+
     public Game asyncGameBean(long gameId) {
         String token = returnTokenIfOnline();
         if (token != null) {
@@ -91,14 +119,21 @@ public final class GameDelegator extends AbstractDelegator{
         return null;
     }
 
-    private void onEventAsync(SyncGame g) {
-        asyncGame(g.getGameId());
+    /*
+   Implementation
+    */
+
+    private void onEventAsync(SyncGameNoToken g) {
+        asyncGame(g.getGameId(), false);
+    }
+
+    private void onEventAsync(GameDownloadManager g) {
+        asyncDownloadGame(g);
     }
 
     private void onEventAsync(SearchGames sg) {
-        String token = returnTokenIfOnline();
-        if (token != null) {
-            GamesList result = GameClient.getGameClient().search(token, sg.query);
+        if (ARL.isOnline()) {
+            GamesList result = GameClient.getGameClient().search(null, sg.query);
             ARL.eventBus.post(new SearchResultList(result));
         }
     }
@@ -162,7 +197,7 @@ public final class GameDelegator extends AbstractDelegator{
     private GameLocalObject process(Game gBean) {
             GameLocalObject existingGame = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gBean.getGameId());
             GameLocalObject newGame = toDaoLocalObject(gBean);
-            newGame.setIcon(new FileDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+gBean.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
+            newGame.setIcon(new FileByteDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+gBean.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
             if ( (existingGame == null || newGame.getLastModificationDate() > existingGame.getLastModificationDate())) {
                 DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(newGame);
                 ARL.eventBus.post(new SyncGameContributors(existingGame, newGame));
@@ -193,11 +228,74 @@ public final class GameDelegator extends AbstractDelegator{
         DaoConfiguration.getInstance().getGameLocalObjectDao().deleteAll();
     }
 
+    private void onEventAsync(SyncGameFiles gameFiles) {
+        asyncRetrieveGameFiles(gameFiles.getGameId());
+    }
 
-    private class SyncGame {
+    public GameFileList asyncRetrieveGameFiles(long gameId) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            boolean reset = false;
+            for (GameFile gf: GameClient.getGameClient().getGameFileList(token, gameId).getGameFiles()) {
+//                boolean update = false;
+                GameFileLocalObject gameFileLocalObject = DaoConfiguration.getInstance().getGameFileDao().load(gf.getId());
+
+                if (gameFileLocalObject == null) {
+                    gameFileLocalObject = new GameFileLocalObject(gf);
+                    if (gf.getPath().contains("/generalItems/")) {
+                        String itemId = gf.getPath().substring(14);
+                        itemId = itemId.substring(0, itemId.indexOf("/"));
+                        gameFileLocalObject.setGeneralItem(Long.parseLong(itemId));
+                    }
+                    gameFileLocalObject.setGameId(gameId);
+                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_TO_DOWNLOAD);
+                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                    reset = true;
+                } else {
+                    if (gf.getDeleted() != null && gf.getDeleted() && !gameFileLocalObject.getDeleted()) {
+                        gameFileLocalObject.setDeleted(true);
+                        DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                    }
+                }
+            }
+            if (reset) {
+                DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).resetGameFiles();
+            }
+        }
+        return null;
+    }
+
+    public void asyncDownloadGameContent(long gameId) {
+        List<GameFileLocalObject> gameFiles = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getGameFiles();
+        for (GameFileLocalObject gameFileLocalObject : gameFiles) {
+            if (gameFileLocalObject.getSyncStatus() == GameFileLocalObject.FILE_TO_DOWNLOAD){
+                try {
+                    File targetFile = new File(MediaFolders.getIncommingFilesDir(), gameId+gameFileLocalObject.getPath());
+                    MediaFolders.createFileFoldersRecursively(targetFile);
+                    FileDownloader fd = new FileDownloader(ARL.config.getProperty("arlearn_server")+"game/"+gameId+gameFileLocalObject.getPath(), targetFile);
+                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_IS_DOWNLOADING);
+                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                    fd.download();
+                    if (fd.getTargetLocation().exists()) {
+                        gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_DOWNLOADED);
+                        DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                    }
+                } catch (MalformedURLException e) {
+                    Log.e("ARLearn", e.getMessage(), e);
+                } catch (FileNotFoundException e) {
+                    Log.e("ARLearn", e.getMessage(), e);
+                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_TO_DOWNLOAD);
+                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                }
+            }
+        }
+    }
+
+
+    private class SyncGameNoToken {
         private long gameId;
 
-        private SyncGame(long gameId) {
+        private SyncGameNoToken(long gameId) {
             this.gameId = gameId;
         }
 
@@ -209,6 +307,22 @@ public final class GameDelegator extends AbstractDelegator{
             this.gameId = gameId;
         }
     }
+
+//    private class DownloadGame {
+//        private long gameId;
+//
+//        private DownloadGame(long gameId) {
+//            this.gameId = gameId;
+//        }
+//
+//        public long getGameId() {
+//            return gameId;
+//        }
+//
+//        public void setGameId(long gameId) {
+//            this.gameId = gameId;
+//        }
+//    }
 
     private class SyncGamesEventParticipate {
 
@@ -299,6 +413,21 @@ public final class GameDelegator extends AbstractDelegator{
         }
     }
 
+    private class SyncGameFiles {
+        private long gameId;
+
+        private SyncGameFiles(long gameId) {
+            this.gameId = gameId;
+        }
+
+        public long getGameId() {
+            return gameId;
+        }
+
+        public void setGameId(long gameId) {
+            this.gameId = gameId;
+        }
+    }
     private class LocationSearchGames {
         private Double lat;
         private Double lng;

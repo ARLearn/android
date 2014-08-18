@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+<LinearLayout
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:background="?attr/backgroundColorLight"
               android:layout_height="match_parent">
 
-    <ImageView
-            android:id="@+id/generalItemIcon"
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="6dip"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_default_game" />
+        <Button
+                android:id="@+id/previousButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:rotation="180"
+                android:layout_alignParentLeft="true"
+
+                android:background="@drawable/ic_arrow_right" />
+        <ImageView
+                android:id="@+id/generalItemIcon"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="6dip"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_default_game" />
+        <Button
+                android:id="@+id/nextButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:rotation="180"
+                android:layout_alignParentRight="true"
+
+                android:background="@drawable/ic_arrow_left" />
+    </RelativeLayout>
+
 
     <TextView
             android:id="@+id/titleId"
@@ -25,35 +47,129 @@
             android:text="Opdracht beschrijving multi line multi line multi lin" />
 
     <WebView
+            android:id="@+id/descriptionId"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
     </WebView>
 
+    <LinearLayout
+            android:id="@+id/mediaBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
+
+        <ImageButton
+                android:id="@+id/playPauseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/imageButton3"
+                android:layout_marginLeft="24dp"
+                android:layout_toRightOf="@+id/imageButton3"
+                android:src="@android:drawable/ic_media_play" />
+        <SeekBar
+                android:id="@+id/seekbar"
+                    android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical"
+                 android:progressDrawable="@drawable/game_general_item_seekbar_progress_theme1"
+                 android:thumb="@drawable/game_general_item_seekbar_thumb_theme1"
+                />
+    </LinearLayout>
+
+
 
     <LinearLayout
+            android:id="@+id/dataCollection"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="?attr/backgroundColor"
+            android:padding="7dip"
+            android:gravity="center"
             >
-        <ImageView
-                android:id="@+id/audioButtonIcon"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="6dip"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_default_game" />
-        <ImageView
-                android:id="@+id/pictureButtonIcon"
+        <RelativeLayout
+                android:id="@+id/audioLayout"
+                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+            <ImageView
+                    android:id="@+id/audioButtonIcon"
+                    style="@style/ARLearn.Game.DataCollectionButton"
+                    android:src="@drawable/game_data_collection_audio" />
+            <ImageView
+                    android:id="@+id/audioButtonCheckIcon"
+                    style="@style/ARLearn.Game.DataCollectionCheck"
+                    android:src="@drawable/game_data_collection_audio" />
+        </RelativeLayout>
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="6dip"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_default_game" />
+        <RelativeLayout
+                android:id="@+id/pictureLayout"
+                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+
+            <ImageView
+                    android:id="@+id/pictureButtonIcon"
+                    style="@style/ARLearn.Game.DataCollectionButton"
+                    android:src="@drawable/game_data_collection_image" />
+
+            <ImageView
+                    android:id="@+id/pictureButtonCheckIcon"
+                    style="@style/ARLearn.Game.DataCollectionCheck"
+                    android:src="@drawable/game_data_collection_image" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/videoLayout"
+                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+
+            <ImageView
+                    android:id="@+id/videoButtonIcon"
+                    style="@style/ARLearn.Game.DataCollectionButton"
+                    android:src="@drawable/game_data_collection_video" />
+
+            <ImageView
+                    android:id="@+id/videoButtonCheckIcon"
+                    style="@style/ARLearn.Game.DataCollectionCheck"
+                    android:src="@drawable/game_data_collection_video" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/textLayout"
+                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+
+            <ImageView
+                    android:id="@+id/textButtonIcon"
+                    style="@style/ARLearn.Game.DataCollectionButton"
+                    android:src="@drawable/game_data_collection_text" />
+
+            <ImageView
+                    android:id="@+id/textButtonCheckIcon"
+                    style="@style/ARLearn.Game.DataCollectionCheck"
+                    android:src="@drawable/game_data_collection_text" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/numberLayout"
+                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+
+            <ImageView
+                    android:id="@+id/numberButtonIcon"
+                    style="@style/ARLearn.Game.DataCollectionButton"
+                    android:src="@drawable/game_data_collection_number" />
+
+            <ImageView
+                    android:id="@+id/numberButtonCheckIcon"
+                    style="@style/ARLearn.Game.DataCollectionCheck"
+                    android:src="@drawable/game_data_collection_number" />
+
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
+            android:id="@+id/dataCollectionResultsLayout"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="?attr/backgroundColorDark"
@@ -61,3 +177,4 @@
 
     </LinearLayout>
 </LinearLayout>
+</ScrollView>

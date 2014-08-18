@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
@@ -33,8 +35,8 @@ import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibilityAdapter {
 
 
-    public GeneralItemVisibilityAdapter(Context context, long runId) {
-        super(context, runId);
+    public GeneralItemVisibilityAdapter(Context context, long runId, long gameId) {
+        super(context, runId, gameId);
     }
 
     @Override
@@ -47,8 +49,15 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
     @Override
     public void bindView(View view, Context context, GeneralItemVisibilityLocalObject item) {
         TextView messageText =(TextView) view.findViewById(R.id.messageText);
+        ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIcon);
         if (item.getGeneralItemLocalObject()!=null) {
             messageText.setText(item.getGeneralItemLocalObject().getTitle());
+            messageIcon.setImageResource(
+                    GeneralItemMapper.mapConstantToDrawable(
+                            GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
+                    )
+            );
+
         } else {
             messageText.setText("message not loaded");
         }
@@ -57,9 +66,9 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
     @Override
     public long getItemId(int position) {
         if (dataValid && lazyList != null) {
-            GeneralItemVisibilityLocalObject item = lazyList.get(position);
+            GeneralItemLocalObject item = lazyList.get(position).getGeneralItemLocalObject();
             if (item != null) {
-                return item.getGeneralItemId();
+                return item.getId();
             } else {
                 return 0;
             }

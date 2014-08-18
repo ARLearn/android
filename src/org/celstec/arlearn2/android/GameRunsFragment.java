@@ -75,10 +75,11 @@ public class GameRunsFragment extends SherlockListFragment implements ListItemCl
 
     @Override
     public void onListItemClick(View v, int position, RunLocalObject run) {
-        Intent gameIntent = new Intent(getActivity(), GameSplashScreen.class);
-        gameIntent.putExtra(GameLocalObject.class.getName(), game.getId());
-        gameIntent.putExtra(RunLocalObject.class.getName(), run.getId());
-        getActivity().startActivity(gameIntent);
+//        Intent gameIntent = new Intent(getActivity(), GameSplashScreen.class);
+//        gameIntent.putExtra(GameLocalObject.class.getName(), game.getId());
+//        gameIntent.putExtra(RunLocalObject.class.getName(), run.getId());
+//        getActivity().startActivity(gameIntent);
+        GameSplashScreen.startActivity(getActivity(), game.getId(), run.getId());
     }
 
     @Override

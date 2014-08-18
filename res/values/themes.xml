@@ -27,6 +27,8 @@
         <item name="textLight">#ffffff</item>
         <item name="textDark">#33485f</item>
         <item name="textInactive">#f6f6f6</item>
+        <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme1</item>
+        <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
     </style>
 
     <style name="ARLearn.Theme2"  parent="Theme.Sherlock">
@@ -44,5 +46,8 @@
         <item name="textLight">#ffffff</item>
         <item name="textDark">#33485f</item>
         <item name="textInactive">#f6f6f6</item>
+
+        <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme2</item>
+        <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
     </style>
 </resources>

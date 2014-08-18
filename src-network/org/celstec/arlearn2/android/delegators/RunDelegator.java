@@ -121,6 +121,7 @@ public class RunDelegator extends AbstractDelegator{
         for (Run rBean: rl.getRuns()) {
             RunLocalObject newRun = toDaoLocalObject(rBean);
             DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(newRun);
+            if (newRun.getGameLocalObject()!=null) newRun.getGameLocalObject().resetRuns();
             ARL.eventBus.post(new RunEvent(newRun.getId()));
         }
     }

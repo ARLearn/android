@@ -1,9 +1,9 @@
 package org.celstec.arlearn2.android.game;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 

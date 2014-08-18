@@ -1,12 +1,11 @@
 package org.celstec.arlearn2.android.store;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +14,21 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import authentication.LoginFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.MyGamesFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
+import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
+import org.celstec.arlearn2.android.delegators.game.GameDownloadProgressView;
 import org.celstec.arlearn2.android.events.GameEvent;
+import org.celstec.arlearn2.android.views.DownloadViewManager;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.GameLocalObjectDao;
 
 import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * ****************************************************************************
@@ -58,17 +60,33 @@ public class GameFragment extends SherlockFragment {
     private ImageView star4;
     private ImageView star5;
 
+    private GameDownloadProgressView progressView ;
+    private GameDownloadManager gameDownloadManager;
+
     public GameFragment(Game game) {
         this.gameId = game.getGameId();
-        ARL.games.syncGame(game.getGameId());
-        ARL.eventBus.register(this);
+        ARL.games.syncGameWithoutToken(game.getGameId());
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (progressView == null) {
+            gameDownloadManager = new GameDownloadManager(gameId);
+            progressView = new GameDownloadProgressView(this, gameDownloadManager);
+
+        }
+        ARL.eventBus.register(this);
+        progressView.register();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         ARL.eventBus.unregister(this);
+        progressView.unregister();
     }
 
     @Override
@@ -90,8 +108,8 @@ public class GameFragment extends SherlockFragment {
                 ((ImageView) v.findViewById(R.id.icon)).setImageBitmap(bitmap);
             }
             ((TextView) v.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
-//            ((WebView) v.findViewById(R.id.gameDescriptionId)).setText(localObject.getDescription());
-            ((WebView) v.findViewById(R.id.gameDescriptionId)).loadData(localObject.getDescription(), "text/html", "utf-8");
+
+            ((WebView) v.findViewById(R.id.gameStoreDescriptionId)).loadData(localObject.getDescription(), "text/html", "utf-8");
 
             int resID = 0;
             String licenseCode = localObject.getLicenseCode();
@@ -134,6 +152,27 @@ public class GameFragment extends SherlockFragment {
         star3.setOnClickListener(new StarOneButton(3));
         star4.setOnClickListener(new StarOneButton(4));
         star5.setOnClickListener(new StarOneButton(5));
+
+        TextView downloadButton = (TextView) gameView.findViewById(R.id.downloadId);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ARL.accounts.isAuthenticated()) {
+                    progressView.show();
+                } else {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    Bundle args = new Bundle();
+                    Fragment frag = new LoginFragment();
+
+                    frag.setArguments(args);
+                    fm.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
+                            .replace(R.id.right_pane, frag).addToBackStack(null).commit();
+                }
+
+            }
+        });
+
         pd = ProgressDialog.show(getActivity(), "Loading", "Wait", true);
         gameView.findViewById(R.id.gamePane).setVisibility(View.INVISIBLE);
         drawGameContent(gameView);
@@ -155,6 +194,11 @@ public class GameFragment extends SherlockFragment {
         }
     }
 
+    public void downloadComplete() {
+        gameView.findViewById(R.id.downloadId).setVisibility(View.GONE);
+        gameView.findViewById(R.id.openId).setVisibility(View.VISIBLE);
+
+    }
 
 
     private class StarOneButton implements View.OnClickListener {

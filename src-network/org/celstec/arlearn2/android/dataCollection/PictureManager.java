@@ -50,33 +50,33 @@ public class PictureManager extends DataCollectionManager {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (resultCode == Activity.RESULT_OK) {
-                Uri uri = null;
-                String filePath = null;
-                if (data != null) {
-                    uri = data.getData();
-                    filePath = data.getData().getPath();
-                } else {
-                    uri = Uri.fromFile(bitmapFile);
-                    filePath = bitmapFile.getAbsolutePath();
-                }
-                response.setUriAsString(uri.toString());
 
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-
-                BitmapFactory.decodeFile(filePath, options);
-                response.setContentType(options.outMimeType);
-                response.setWidth(options.outWidth);
-                response.setHeight(options.outHeight);
-
-                saveResponseForSyncing();
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // User cancelled the image capture
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri = null;
+            String filePath = null;
+            if (data != null) {
+                uri = data.getData();
+                filePath = data.getData().getPath();
             } else {
-                // Image capture failed, advise user
+                uri = Uri.fromFile(bitmapFile);
+                filePath = bitmapFile.getAbsolutePath();
             }
+            response.setUriAsString(uri.toString());
 
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+
+            BitmapFactory.decodeFile(filePath, options);
+            response.setContentType(options.outMimeType);
+            response.setWidth(options.outWidth);
+            response.setHeight(options.outHeight);
+
+            saveResponseForSyncing();
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            // User cancelled the image capture
+        } else {
+            // Image capture failed, advise user
+        }
     }
 
 

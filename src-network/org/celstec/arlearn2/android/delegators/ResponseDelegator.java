@@ -90,9 +90,32 @@ public class ResponseDelegator extends AbstractDelegator{
 
 
 
+    private void synchronizeWithoutFile(ResponseLocalObject response) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            Response responseBean = response.getBean();
+            Response responseResult = ResponseClient.getResponseClient().publishAction(token, responseBean);
+            DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
+            response.setId(responseResult.getResponseId());
+            response.setIsSynchronized(true);
+            DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
+            ARL.eventBus.post(new ResponseEvent(response.getRunId()));
+            response.getGeneralItemLocalObject().resetResponses();
+        }
+    }
     private void synchronize(ResponseLocalObject response) {
+        if (!response.hasFile()) {
+            synchronizeWithoutFile(response);
+            return;
+        }
         Response responseBean = response.getBean();
-        AppengineFileUploader uploader = new AppengineFileUploader(response.getRunId(), response.getAccountLocalObject().getFullId(), response.getUri().getLastPathSegment());
+
+        AppengineFileUploader uploader = new AppengineFileUploader(
+                    response.getRunId(),
+                    response.getAccountLocalObject().getFullId(),
+                    response.getUri().getLastPathSegment());
+
+
         String token = returnTokenIfOnline();
         if (token != null) {
             String uploadUrl = uploader.requestUploadUrl(token) ;
@@ -118,6 +141,7 @@ public class ResponseDelegator extends AbstractDelegator{
                     Response responseResult = ResponseClient.getResponseClient().publishAction(token, responseBean);
                     DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
                     response.setId(responseResult.getResponseId());
+                    response.setIsSynchronized(true);
                     response.setThumbnailUriAsString(response.getUriAsString());
                     DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
                     ARL.eventBus.post(new ResponseEvent(response.getRunId()));

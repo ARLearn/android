@@ -13,6 +13,7 @@ import org.celstec.dao.gen.GameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
+import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemMediaLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObjectDao;
 import org.celstec.dao.gen.ActionLocalObjectDao;
@@ -40,6 +41,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GameContributorLocalObjectDao.createTable(db, ifNotExists);
         DependencyLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemLocalObjectDao.createTable(db, ifNotExists);
+        GameFileLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemMediaLocalObjectDao.createTable(db, ifNotExists);
         RunLocalObjectDao.createTable(db, ifNotExists);
         ActionLocalObjectDao.createTable(db, ifNotExists);
@@ -61,6 +63,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GameContributorLocalObjectDao.dropTable(db, ifExists);
         DependencyLocalObjectDao.dropTable(db, ifExists);
         GeneralItemLocalObjectDao.dropTable(db, ifExists);
+        GameFileLocalObjectDao.dropTable(db, ifExists);
         GeneralItemMediaLocalObjectDao.dropTable(db, ifExists);
         RunLocalObjectDao.dropTable(db, ifExists);
         ActionLocalObjectDao.dropTable(db, ifExists);
@@ -109,6 +112,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(GameContributorLocalObjectDao.class);
         registerDaoClass(DependencyLocalObjectDao.class);
         registerDaoClass(GeneralItemLocalObjectDao.class);
+        registerDaoClass(GameFileLocalObjectDao.class);
         registerDaoClass(GeneralItemMediaLocalObjectDao.class);
         registerDaoClass(RunLocalObjectDao.class);
         registerDaoClass(ActionLocalObjectDao.class);

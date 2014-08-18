@@ -1,26 +1,19 @@
-package org.celstec.arlearn2.android.game;
+package org.celstec.arlearn2.android.game.messageViews;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
-import org.celstec.arlearn2.android.game.notification.StrokenView;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
-import org.celstec.arlearn2.android.listadapter.impl.GeneralItemsLazyListAdapter;
-import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
-import org.celstec.dao.gen.RunLocalObject;
 
 /**
  * ****************************************************************************
@@ -44,6 +37,7 @@ import org.celstec.dao.gen.RunLocalObject;
  */
 public class GameMessages extends ListActivity implements ListItemClickInterface<GeneralItemVisibilityLocalObject> {
     GameActivityFeatures gameActivityFeatures;
+    ActionBarMenuController actionBarMenuController;
 
     private GeneralItemVisibilityAdapter adapter;
 
@@ -51,12 +45,25 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_list_messages);
         gameActivityFeatures = new GameActivityFeatures(this);
-        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId());
+        actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
+        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
         setListAdapter(adapter);
         adapter.setOnListItemClickCallback(this);
         ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
 //        Handler handler = new Handler();
 //        handler.postDelayed(new AnimationRunnable(), 2000l);
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        actionBarMenuController.inflateMenu(menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return actionBarMenuController.onOptionsItemSelected(item);
 
     }
 

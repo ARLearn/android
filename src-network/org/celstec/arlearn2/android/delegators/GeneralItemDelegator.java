@@ -33,7 +33,7 @@ import java.util.HashMap;
 public class GeneralItemDelegator extends AbstractDelegator{
 
     protected static GeneralItemDelegator instance;
-    private static HashMap<Long, Long> syncDates = new HashMap<Long, Long>();
+//    private static HashMap<Long, Long> syncDates = new HashMap<Long, Long>();
 
     protected GeneralItemDelegator() {
         ARL.eventBus.register(this);
@@ -78,14 +78,34 @@ public class GeneralItemDelegator extends AbstractDelegator{
         }
     }
 
+    public GeneralItemList asyncRetrieveItems(long gameId){
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            return GeneralItemClient.getGeneralItemClient().getGameGeneralItems(token, gameId, 0l);
+        } else {
+            System.out.println("token was null ");
+        }
+        return null;
+    }
+
+    public void storeItemsInDatabase(GeneralItemList list, long gameId){
+            if (list.getError()== null) {
+                process(list, DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId), true);
+            } else {
+                Log.e("ARLearn", "error returning list of gis"+list.getError());
+            }
+    }
+
     private void onEventAsync(SyncGeneralItems sgi) {
         String token = returnTokenIfOnline();
         if (token != null) {
             long gameId = sgi.getGame().getId();
-            Log.i(SYNC_TAG, "Syncing general items for "+sgi.getGame().getTitle()+" "+getLastSyncDate(gameId));
-            GeneralItemList list = GeneralItemClient.getGeneralItemClient().getGameGeneralItems(token, gameId, getLastSyncDate(gameId));
+//            Log.i(SYNC_TAG, "Syncing general items for "+sgi.getGame().getTitle()+" "+getLastSyncDate(gameId));
+            Long lastSyncDate = sgi.getGame().getLastSyncGeneralItemsDate();
+            if (lastSyncDate == null) lastSyncDate = 0l;
+            GeneralItemList list = GeneralItemClient.getGeneralItemClient().getGameGeneralItems(token, gameId, lastSyncDate);
             if (list.getError()== null) {
-                process(list, sgi.getGame());
+                process(list, sgi.getGame(), false);
             } else {
                 System.out.println("error "+list.getError());
                 Log.e("ARLearn", "error returning list of gis"+list.getError());
@@ -96,14 +116,13 @@ public class GeneralItemDelegator extends AbstractDelegator{
 
     }
 
-    public void process (GeneralItemList list, GameLocalObject gameLocalObject) {
+    public void process (GeneralItemList list, GameLocalObject gameLocalObject, boolean individualEvents) {
         GeneralItemEvent iEvent = null;
         for (GeneralItem giBean: list.getGeneralItems()) {
-            DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(123l);
             GeneralItemLocalObject giDao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(giBean.getId());
-            if (giDao == null) {
-                giDao = toDaoLocalObject(giBean);
-            }
+
+            giDao = toDaoLocalObject(giBean, giDao);
+
             giDao.setGameLocalObject(gameLocalObject);
 
 
@@ -128,32 +147,41 @@ public class GeneralItemDelegator extends AbstractDelegator{
 
             GiFileReferenceDelegator.getInstance().createReference(giBean, giDao);
             iEvent = new GeneralItemEvent(giDao.getId());
+            if (individualEvents) ARL.eventBus.post(iEvent);
         }
-        if (iEvent != null) {
+        if (iEvent != null && !individualEvents) {
             ARL.eventBus.post(iEvent);
-            syncDates.put(gameLocalObject.getId(), list.getServerTime());
+        }
+        gameLocalObject.setLastSyncGeneralItemsDate(list.getServerTime());
+        DaoConfiguration.getInstance().getGameLocalObjectDao().update(gameLocalObject);
+        if (iEvent != null){
+//        syncDates.put(gameLocalObject.getId(), list.getServerTime());
+//
             if (gameLocalObject!=null) {
+
                 gameLocalObject.resetGeneralItems();
             }
         }
     }
 
-    private GeneralItemLocalObject toDaoLocalObject (GeneralItem giBean) {
-        GeneralItemLocalObject giDao = new GeneralItemLocalObject();
+    private GeneralItemLocalObject toDaoLocalObject (GeneralItem giBean, GeneralItemLocalObject giDao) {
+        if (giDao == null)giDao = new GeneralItemLocalObject();
         giDao.setTitle(giBean.getName());
         giDao.setId(giBean.getId());
         giDao.setAutoLaunch(giBean.getAutoLaunch());
         giDao.setLastModificationDate(giBean.getLastModificationDate());
         giDao.setDescription(giBean.getDescription());
+        giDao.setBean(giBean.toString());
+        giDao.setDeleted(giBean.getDeleted());
         return giDao;
     }
 
-    private long getLastSyncDate(long gameId) {
-        if (syncDates.containsKey(gameId)) {
-            return syncDates.get(gameId);
-        }
-        return 0l;
-    }
+//    private long getLastSyncDate(long gameId) {
+//        if (syncDates.containsKey(gameId)) {
+//            return syncDates.get(gameId);
+//        }
+//        return 0l;
+//    }
 
 
     private void GeneralItemLocalObject(GeneralItem giBean) {}

@@ -21,6 +21,7 @@ public class GameLocalObject {
     private Boolean mapAvailable;
     private Boolean deleted;
     private Long lastModificationDate;
+    private Long lastSyncGeneralItemsDate;
     private byte[] icon;
     private Double lat;
     private Double lng;
@@ -33,6 +34,7 @@ public class GameLocalObject {
 
     private List<GameContributorLocalObject> contributors;
     private List<GeneralItemLocalObject> generalItems;
+    private List<GameFileLocalObject> gameFiles;
     private List<RunLocalObject> runs;
 
     // KEEP FIELDS - put your custom fields here
@@ -45,7 +47,7 @@ public class GameLocalObject {
         this.id = id;
     }
 
-    public GameLocalObject(Long id, String title, String licenseCode, String description, Boolean mapAvailable, Boolean deleted, Long lastModificationDate, byte[] icon, Double lat, Double lng) {
+    public GameLocalObject(Long id, String title, String licenseCode, String description, Boolean mapAvailable, Boolean deleted, Long lastModificationDate, Long lastSyncGeneralItemsDate, byte[] icon, Double lat, Double lng) {
         this.id = id;
         this.title = title;
         this.licenseCode = licenseCode;
@@ -53,6 +55,7 @@ public class GameLocalObject {
         this.mapAvailable = mapAvailable;
         this.deleted = deleted;
         this.lastModificationDate = lastModificationDate;
+        this.lastSyncGeneralItemsDate = lastSyncGeneralItemsDate;
         this.icon = icon;
         this.lat = lat;
         this.lng = lng;
@@ -122,6 +125,14 @@ public class GameLocalObject {
         this.lastModificationDate = lastModificationDate;
     }
 
+    public Long getLastSyncGeneralItemsDate() {
+        return lastSyncGeneralItemsDate;
+    }
+
+    public void setLastSyncGeneralItemsDate(Long lastSyncGeneralItemsDate) {
+        this.lastSyncGeneralItemsDate = lastSyncGeneralItemsDate;
+    }
+
     public byte[] getIcon() {
         return icon;
     }
@@ -188,6 +199,28 @@ public class GameLocalObject {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetGeneralItems() {
         generalItems = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<GameFileLocalObject> getGameFiles() {
+        if (gameFiles == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            GameFileLocalObjectDao targetDao = daoSession.getGameFileLocalObjectDao();
+            List<GameFileLocalObject> gameFilesNew = targetDao._queryGameLocalObject_GameFiles(id);
+            synchronized (this) {
+                if(gameFiles == null) {
+                    gameFiles = gameFilesNew;
+                }
+            }
+        }
+        return gameFiles;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetGameFiles() {
+        gameFiles = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

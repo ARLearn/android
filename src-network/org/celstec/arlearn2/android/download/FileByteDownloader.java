@@ -27,10 +27,10 @@ import java.io.InputStream;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class FileDownloader {
+public class FileByteDownloader {
 
     private String fileUrl;
-    public FileDownloader(String fileUrl) {
+    public FileByteDownloader(String fileUrl) {
         this.fileUrl = fileUrl;
 
     }

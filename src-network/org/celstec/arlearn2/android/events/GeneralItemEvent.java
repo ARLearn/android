@@ -27,4 +27,12 @@ public class GeneralItemEvent {
     public GeneralItemEvent(long generalItemId) {
         this.generalItemId = generalItemId;
     }
+
+    public long getGeneralItemId() {
+        return generalItemId;
+    }
+
+    public void setGeneralItemId(long generalItemId) {
+        this.generalItemId = generalItemId;
+    }
 }

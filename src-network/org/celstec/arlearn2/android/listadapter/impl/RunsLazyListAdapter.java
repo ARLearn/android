@@ -53,8 +53,8 @@ public class RunsLazyListAdapter extends LazyListAdapter<RunLocalObject> {
         this.gameId = gameId;
         RunLocalObjectDao dao = DaoConfiguration.getInstance().getRunLocalObjectDao();
 
-        qb = dao.queryBuilder()
-                .where(RunLocalObjectDao.Properties.GameId.eq(this.gameId))
+        qb = dao.queryBuilder();
+        qb = qb.where(qb.and(RunLocalObjectDao.Properties.GameId.eq(this.gameId), RunLocalObjectDao.Properties.Deleted.eq(0)))
                 .orderAsc(RunLocalObjectDao.Properties.Title);
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());

@@ -70,4 +70,18 @@ public class MediaFolders {
         }
     }
 
+    public static void createFileFoldersRecursively(File file) {
+        if (file.isDirectory()) {
+            if (!file.getParentFile().exists()) createFileFoldersRecursively(file.getParentFile());
+            if (!file.exists()) file.mkdir();
+        }
+        if (file.getParentFile().exists()) return;
+        createFoldersRecursively(file.getParentFile());
+
+    }
+
+    private static void createFoldersRecursively(File file) {
+            if (!file.getParentFile().exists()) createFoldersRecursively(file.getParentFile());
+            if (!file.exists()) file.mkdir();
+    }
 }

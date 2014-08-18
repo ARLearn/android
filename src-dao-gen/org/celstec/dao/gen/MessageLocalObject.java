@@ -4,10 +4,7 @@ package org.celstec.dao.gen;
 
 // KEEP INCLUDES - put your custom includes here
 import org.celstec.arlearn2.beans.run.Message;
-
 // KEEP INCLUDES END
-
-
 /**
  * Entity mapped to table MESSAGE_LOCAL_OBJECT.
  */

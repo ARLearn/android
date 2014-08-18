@@ -1,4 +1,4 @@
-package org.celstec.arlearn2.android.game;
+package org.celstec.arlearn2.android.game.messageViews;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -42,7 +42,7 @@ public class GameActivityFeatures {
 
     public GameActivityFeatures(final Activity activity) {
         this.activity = activity;
-        this.activity.setTheme(R.style.ARLearn_schema2);
+//        this.activity.setTheme(R.style.ARLearn_schema2);
         Long gameId = activity.getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
         Long runId = activity.getIntent().getLongExtra(RunLocalObject.class.getName(), 0l);
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);

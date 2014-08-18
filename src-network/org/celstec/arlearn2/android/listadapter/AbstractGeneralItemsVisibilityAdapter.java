@@ -3,8 +3,11 @@ package org.celstec.arlearn2.android.listadapter;
 import android.content.Context;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.QueryBuilder;
+import de.greenrobot.dao.query.WhereCondition;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
+import org.celstec.dao.gen.GeneralItemLocalObject;
+import org.celstec.dao.gen.GeneralItemLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObjectDao;
 
@@ -33,14 +36,24 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
     private QueryBuilder qb;
     private AbstractGeneralItemsVisibilityAdapter adapter;
 
-    public AbstractGeneralItemsVisibilityAdapter(Context context, long runId) {
+    public AbstractGeneralItemsVisibilityAdapter(Context context, long runId, long gameId) {
         super(context);
-        GeneralItemVisibilityLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao();
-        qb = dao.queryBuilder()
-                .where(GeneralItemVisibilityLocalObjectDao.Properties.RunId.eq(runId))
-                .orderAsc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
+        qb = getQueryBuilder(runId, gameId);
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());
+    }
+
+    public static QueryBuilder<GeneralItemVisibilityLocalObject> getQueryBuilder(long runId, long gameId){
+        GeneralItemVisibilityLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao();
+        QueryBuilder<GeneralItemVisibilityLocalObject> qb =dao.queryBuilder();
+
+//        qb.where(
+//                qb.and(GeneralItemVisibilityLocalObjectDao.Properties.RunId.eq(runId)),
+//                .orderAsc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
+        qb.where(new WhereCondition.StringCondition("status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"))
+//        qb.where(new WhereCondition.StringCondition("deleted = 0 and _id in (select general_item_id from general_item_visibility_local_object where run_id = "+runId+" and status = 1)"));
+                .orderAsc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
+        return qb;
     }
 
     public void onEventMainThread(GeneralItemEvent event) {

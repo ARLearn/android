@@ -44,6 +44,7 @@ public class ARL {
     public static RunDelegator runs;
     public static AccountDelegator accounts;
     public static ResponseDelegator responses;
+    public static ActionsDelegator actions;
     public static PropertiesAdapter properties;
     public static ConfigAdapter.PropertiesExt config;
     public static TimeDelegator time;
@@ -67,6 +68,7 @@ public class ARL {
         accounts = AccountDelegator.getInstance();
         time = TimeDelegator.getInstance(ctx);
         fileReferences = GiFileReferenceDelegator.getInstance();
+        actions = ActionsDelegator.getInstance();
         responses = ResponseDelegator.getInstance();
         store = StoreDelegator.getInstance();
         threads = ThreadsDelegator.getInstance();

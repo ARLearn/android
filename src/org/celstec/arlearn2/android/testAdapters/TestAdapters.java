@@ -109,10 +109,10 @@ public class TestAdapters extends Activity {
 //        alo.setId(1l);
         alo.setAction("read");
         alo.setRunId(19806001l);
-        alo.setGeneralItem(19966001l);
+//        alo.setGeneralItem(19966001l);
         alo.setTime(1230l);
         alo.setAccount(5);
-        DaoConfiguration.getInstance().getActionDependencyLocalObjectDao().insertOrReplace(alo);
+        DaoConfiguration.getInstance().getActionLocalObjectDao().insertOrReplace(alo);
 //for (int i =0; i<=100;i ++) {
 //        alo = new ActionLocalObject();
 //        alo.setAction("read");

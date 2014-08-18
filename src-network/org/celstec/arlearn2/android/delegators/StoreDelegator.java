@@ -10,10 +10,7 @@ import org.celstec.arlearn2.client.StoreClient;
 import org.celstec.dao.gen.CategoryLocalObject;
 import org.celstec.dao.gen.GameCategoryLocalObject;
 
-import java.util.HashMap;
 import java.util.List;
-
-import static daoBase.DaoConfiguration.*;
 
 /**
  * ****************************************************************************
@@ -101,7 +98,7 @@ public class StoreDelegator extends AbstractDelegator{
                 gameCategoryLocalObject.setCategoryId(gameCategory.getCategoryId());
                 DaoConfiguration.getInstance().getGameCategoryDao().insertOrReplace(gameCategoryLocalObject);
                 if (ARL.dao.getGameCategoryDao().load(gameCategory.getGameId())==null) {
-                    ARL.games.syncGame(gameCategory.getGameId());
+                    ARL.games.syncGameWithoutToken(gameCategory.getGameId());
                 }
                 if (event != null) {
                     ARL.eventBus.post(event);

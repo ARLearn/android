@@ -30,9 +30,10 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         public final static Property MapAvailable = new Property(4, Boolean.class, "mapAvailable", false, "MAP_AVAILABLE");
         public final static Property Deleted = new Property(5, Boolean.class, "deleted", false, "DELETED");
         public final static Property LastModificationDate = new Property(6, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
-        public final static Property Icon = new Property(7, byte[].class, "icon", false, "ICON");
-        public final static Property Lat = new Property(8, Double.class, "lat", false, "LAT");
-        public final static Property Lng = new Property(9, Double.class, "lng", false, "LNG");
+        public final static Property LastSyncGeneralItemsDate = new Property(7, Long.class, "lastSyncGeneralItemsDate", false, "LAST_SYNC_GENERAL_ITEMS_DATE");
+        public final static Property Icon = new Property(8, byte[].class, "icon", false, "ICON");
+        public final static Property Lat = new Property(9, Double.class, "lat", false, "LAT");
+        public final static Property Lng = new Property(10, Double.class, "lng", false, "LNG");
     };
 
     private DaoSession daoSession;
@@ -58,9 +59,10 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
                 "'MAP_AVAILABLE' INTEGER," + // 4: mapAvailable
                 "'DELETED' INTEGER," + // 5: deleted
                 "'LAST_MODIFICATION_DATE' INTEGER," + // 6: lastModificationDate
-                "'ICON' BLOB," + // 7: icon
-                "'LAT' REAL," + // 8: lat
-                "'LNG' REAL);"); // 9: lng
+                "'LAST_SYNC_GENERAL_ITEMS_DATE' INTEGER," + // 7: lastSyncGeneralItemsDate
+                "'ICON' BLOB," + // 8: icon
+                "'LAT' REAL," + // 9: lat
+                "'LNG' REAL);"); // 10: lng
     }
 
     /** Drops the underlying database table. */
@@ -105,19 +107,24 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
             stmt.bindLong(7, lastModificationDate);
         }
  
+        Long lastSyncGeneralItemsDate = entity.getLastSyncGeneralItemsDate();
+        if (lastSyncGeneralItemsDate != null) {
+            stmt.bindLong(8, lastSyncGeneralItemsDate);
+        }
+ 
         byte[] icon = entity.getIcon();
         if (icon != null) {
-            stmt.bindBlob(8, icon);
+            stmt.bindBlob(9, icon);
         }
  
         Double lat = entity.getLat();
         if (lat != null) {
-            stmt.bindDouble(9, lat);
+            stmt.bindDouble(10, lat);
         }
  
         Double lng = entity.getLng();
         if (lng != null) {
-            stmt.bindDouble(10, lng);
+            stmt.bindDouble(11, lng);
         }
     }
 
@@ -144,9 +151,10 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // mapAvailable
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // deleted
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // lastModificationDate
-            cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7), // icon
-            cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8), // lat
-            cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9) // lng
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // lastSyncGeneralItemsDate
+            cursor.isNull(offset + 8) ? null : cursor.getBlob(offset + 8), // icon
+            cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9), // lat
+            cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10) // lng
         );
         return entity;
     }
@@ -161,9 +169,10 @@ public class GameLocalObjectDao extends AbstractDao<GameLocalObject, Long> {
         entity.setMapAvailable(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setDeleted(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setLastModificationDate(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
-        entity.setIcon(cursor.isNull(offset + 7) ? null : cursor.getBlob(offset + 7));
-        entity.setLat(cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8));
-        entity.setLng(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
+        entity.setLastSyncGeneralItemsDate(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setIcon(cursor.isNull(offset + 8) ? null : cursor.getBlob(offset + 8));
+        entity.setLat(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
+        entity.setLng(cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10));
      }
     
     /** @inheritdoc */

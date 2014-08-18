@@ -29,6 +29,7 @@ public class ARlearnDaoGenerator {
     private static Entity account;
     private static Entity game;
     private static Entity gameContributors;
+    private static Entity gameFiles;
     private static Entity generalItem;
     private static Entity generalItemMediaObjects;
     private static Entity dependency;
@@ -60,6 +61,7 @@ public class ARlearnDaoGenerator {
         gameContributors = createGameContributor(schema);
         dependency = createDependency(schema);
         generalItem = createGeneralItem(schema);
+        gameFiles = createGameFiles(schema);
 
         generalItemMediaObjects = createGeneralItemMediaObjects(schema);
         run = createRunItem(schema);
@@ -198,14 +200,16 @@ public class ARlearnDaoGenerator {
         Entity action = schema.addEntity("ActionLocalObject");
         action.addIdProperty();
         action.addStringProperty("action").notNull();
+        action.addStringProperty("generalItemType");
         action.addLongProperty("time");
+        action.addBooleanProperty("isSynchronized");
 
         Property runId = action.addLongProperty("runId").notNull().getProperty();
-//        action.addToOne(run, runId);
+        action.addToOne(run, runId);
         run.addToMany(action, runId, "actions");
 
-        Property itemId = action.addLongProperty("generalItem").notNull().getProperty();
-//        action.addToOne(generalItem, itemId, );
+        Property itemId = action.addLongProperty("generalItem").getProperty();
+        action.addToOne(generalItem, itemId);
         generalItem.addToMany(action, itemId, "actions");
 
         Property accountId = action.addLongProperty("account").notNull().getProperty();
@@ -256,6 +260,7 @@ public class ARlearnDaoGenerator {
         game.addBooleanProperty("mapAvailable");
         game.addBooleanProperty("deleted");
         game.addLongProperty("lastModificationDate");
+        game.addLongProperty("lastSyncGeneralItemsDate");
         game.addByteArrayProperty("icon");
         game.addDoubleProperty("lat");
         game.addDoubleProperty("lng");
@@ -281,12 +286,39 @@ public class ARlearnDaoGenerator {
         return gameContributor;
     }
 
+    private static Entity createGameFiles(Schema schema) {
+        Entity gameFile = schema.addEntity("GameFileLocalObject");
+        gameFile.addIdProperty();
+        gameFile.addStringProperty("md5Hash");
+        gameFile.addStringProperty("path");
+        gameFile.addStringProperty("uri");
+        gameFile.addLongProperty("size");
+        gameFile.addIntProperty("syncStatus");
+        gameFile.addBooleanProperty("deleted");
+
+        Property gameId = gameFile.addLongProperty("gameId").notNull().getProperty();
+        gameFile.addToOne(game, gameId);
+
+        ToMany gameToFiles = game.addToMany(gameFile, gameId);
+        gameToFiles.setName("gameFiles");
+
+        Property generalItemId = gameFile.addLongProperty("generalItem").getProperty();
+        gameFile.addToOne(generalItem, generalItemId);
+
+        ToMany mediaToGeneralItems = generalItem.addToMany(gameFile, generalItemId);
+        mediaToGeneralItems.setName("generalItemFiles");
+
+        return gameFile;
+    }
+
     private static Entity createGeneralItem(Schema schema) {
         Entity generalItem = schema.addEntity("GeneralItemLocalObject");
         generalItem.addIdProperty();
+        generalItem.addStringProperty("type");
+        generalItem.addBooleanProperty("deleted");
         generalItem.addStringProperty("title");
         generalItem.addStringProperty("description");
-        generalItem.addStringProperty("richText");
+        generalItem.addStringProperty("bean");
         generalItem.addBooleanProperty("autoLaunch");
         generalItem.addLongProperty("lastModificationDate");
 

@@ -14,6 +14,7 @@ import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
 import org.celstec.dao.gen.DependencyLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemMediaLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 import org.celstec.dao.gen.ActionLocalObject;
@@ -32,6 +33,7 @@ import org.celstec.dao.gen.GameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
+import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemMediaLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObjectDao;
 import org.celstec.dao.gen.ActionLocalObjectDao;
@@ -59,6 +61,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig gameContributorLocalObjectDaoConfig;
     private final DaoConfig dependencyLocalObjectDaoConfig;
     private final DaoConfig generalItemLocalObjectDaoConfig;
+    private final DaoConfig gameFileLocalObjectDaoConfig;
     private final DaoConfig generalItemMediaLocalObjectDaoConfig;
     private final DaoConfig runLocalObjectDaoConfig;
     private final DaoConfig actionLocalObjectDaoConfig;
@@ -77,6 +80,7 @@ public class DaoSession extends AbstractDaoSession {
     private final GameContributorLocalObjectDao gameContributorLocalObjectDao;
     private final DependencyLocalObjectDao dependencyLocalObjectDao;
     private final GeneralItemLocalObjectDao generalItemLocalObjectDao;
+    private final GameFileLocalObjectDao gameFileLocalObjectDao;
     private final GeneralItemMediaLocalObjectDao generalItemMediaLocalObjectDao;
     private final RunLocalObjectDao runLocalObjectDao;
     private final ActionLocalObjectDao actionLocalObjectDao;
@@ -108,6 +112,9 @@ public class DaoSession extends AbstractDaoSession {
 
         generalItemLocalObjectDaoConfig = daoConfigMap.get(GeneralItemLocalObjectDao.class).clone();
         generalItemLocalObjectDaoConfig.initIdentityScope(type);
+
+        gameFileLocalObjectDaoConfig = daoConfigMap.get(GameFileLocalObjectDao.class).clone();
+        gameFileLocalObjectDaoConfig.initIdentityScope(type);
 
         generalItemMediaLocalObjectDaoConfig = daoConfigMap.get(GeneralItemMediaLocalObjectDao.class).clone();
         generalItemMediaLocalObjectDaoConfig.initIdentityScope(type);
@@ -150,6 +157,7 @@ public class DaoSession extends AbstractDaoSession {
         gameContributorLocalObjectDao = new GameContributorLocalObjectDao(gameContributorLocalObjectDaoConfig, this);
         dependencyLocalObjectDao = new DependencyLocalObjectDao(dependencyLocalObjectDaoConfig, this);
         generalItemLocalObjectDao = new GeneralItemLocalObjectDao(generalItemLocalObjectDaoConfig, this);
+        gameFileLocalObjectDao = new GameFileLocalObjectDao(gameFileLocalObjectDaoConfig, this);
         generalItemMediaLocalObjectDao = new GeneralItemMediaLocalObjectDao(generalItemMediaLocalObjectDaoConfig, this);
         runLocalObjectDao = new RunLocalObjectDao(runLocalObjectDaoConfig, this);
         actionLocalObjectDao = new ActionLocalObjectDao(actionLocalObjectDaoConfig, this);
@@ -168,6 +176,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(GameContributorLocalObject.class, gameContributorLocalObjectDao);
         registerDao(DependencyLocalObject.class, dependencyLocalObjectDao);
         registerDao(GeneralItemLocalObject.class, generalItemLocalObjectDao);
+        registerDao(GameFileLocalObject.class, gameFileLocalObjectDao);
         registerDao(GeneralItemMediaLocalObject.class, generalItemMediaLocalObjectDao);
         registerDao(RunLocalObject.class, runLocalObjectDao);
         registerDao(ActionLocalObject.class, actionLocalObjectDao);
@@ -188,6 +197,7 @@ public class DaoSession extends AbstractDaoSession {
         gameContributorLocalObjectDaoConfig.getIdentityScope().clear();
         dependencyLocalObjectDaoConfig.getIdentityScope().clear();
         generalItemLocalObjectDaoConfig.getIdentityScope().clear();
+        gameFileLocalObjectDaoConfig.getIdentityScope().clear();
         generalItemMediaLocalObjectDaoConfig.getIdentityScope().clear();
         runLocalObjectDaoConfig.getIdentityScope().clear();
         actionLocalObjectDaoConfig.getIdentityScope().clear();
@@ -220,6 +230,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public GeneralItemLocalObjectDao getGeneralItemLocalObjectDao() {
         return generalItemLocalObjectDao;
+    }
+
+    public GameFileLocalObjectDao getGameFileLocalObjectDao() {
+        return gameFileLocalObjectDao;
     }
 
     public GeneralItemMediaLocalObjectDao getGeneralItemMediaLocalObjectDao() {

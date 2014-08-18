@@ -35,6 +35,7 @@ public  abstract class DataCollectionManager {
     public static final int AUDIO_RESULT = 2;
     public static final int VIDEO_RESULT = 3;
     public static final int TEXT_RESULT = 4;
+    public static final int VALUE_RESULT = 5;
 
     protected Activity ctx;
     protected ResponseLocalObject response;

@@ -2,7 +2,10 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:id="@+id/splashScreen"
+
+        >
 
     <ImageView
             android:id="@+id/main_backgroundImage"
@@ -12,5 +15,62 @@
     android:scaleType="centerCrop"
 
     android:src="@drawable/game_splash_screen" />
+
+    <LinearLayout
+            android:id="@+id/downloadStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dip"
+            android:orientation="vertical"
+            android:layout_marginRight="20dip"
+            android:layout_marginLeft="20dip"
+            android:layout_alignParentBottom="true"
+
+            android:background="@drawable/gradient_alert_window"
+
+            >
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dip"
+
+                android:text="Download Status"
+                android:textColor="@color/white"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dip"
+
+                android:text="Game Messages"
+                android:textColor="@color/white"
+                />
+        <ProgressBar
+                android:id="@+id/messageProgressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dip"
+                android:layout_margin="10dip"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dip"
+
+                android:text="Game Content"
+                android:textColor="@color/white"
+                />
+        <ProgressBar
+                android:id="@+id/contentProgressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dip"
+                android:layout_margin="10dip"/>
+
+
+    </LinearLayout>
 
 </RelativeLayout>

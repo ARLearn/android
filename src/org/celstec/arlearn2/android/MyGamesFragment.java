@@ -78,7 +78,13 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         Bundle args = new Bundle();
-        Fragment frag = new GameRunsFragment(game);
+        Fragment frag = null;
+        if (game.getRuns().size() ==1) {
+            GameSplashScreen.startActivity(getActivity(), game.getId(), game.getRuns().get(0).getId());
+            return;
+        } else {
+            frag = new GameRunsFragment(game);
+        }
 
         frag.setArguments(args);
         fm.beginTransaction()

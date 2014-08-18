@@ -9,7 +9,6 @@
               android:paddingTop="16dp"
               android:paddingBottom="16dp"
               android:orientation="vertical"
-
               android:background="@drawable/background"
         >
 
@@ -77,6 +76,17 @@
                         android:textSize="10dp"
                         android:gravity="center_vertical"
                         android:text="Download"/>
+                <TextView
+                        android:id="@+id/openId"
+                        style="@style/ARLearn.StoreGameRowBigDownload"
+
+
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:textSize="10dp"
+                        android:gravity="center_vertical"
+                        android:visibility="gone"
+                        android:text="Open"/>
 
             </LinearLayout>
 
@@ -152,7 +162,7 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="2">
 
             <!--<TextView-->
@@ -167,7 +177,7 @@
                     <!--android:textColor="@color/purple"-->
                     <!--android:text=""/>-->
 
-            <WebView  android:id="@+id/gameDescriptionId"
+            <WebView  android:id="@+id/gameStoreDescriptionId"
                       android:layout_width="fill_parent"
                       android:layout_height="match_parent"
                       android:textSize="10dp"

@@ -15,5 +15,8 @@
         <attr name="textLight" format="color" />
         <attr name="textDark" format="color" />
         <attr name="textInactive" format="color" />
+
+        <attr name="dataCollectionBackground" format="reference" />
+        <attr name="dataCollectionBackgroundCheck" format="reference" />
     </declare-styleable>
 </resources>

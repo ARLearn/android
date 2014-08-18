@@ -30,10 +30,12 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Action = new Property(1, String.class, "action", false, "ACTION");
-        public final static Property Time = new Property(2, Long.class, "time", false, "TIME");
-        public final static Property RunId = new Property(3, long.class, "runId", false, "RUN_ID");
-        public final static Property GeneralItem = new Property(4, long.class, "generalItem", false, "GENERAL_ITEM");
-        public final static Property Account = new Property(5, long.class, "account", false, "ACCOUNT");
+        public final static Property GeneralItemType = new Property(2, String.class, "generalItemType", false, "GENERAL_ITEM_TYPE");
+        public final static Property Time = new Property(3, Long.class, "time", false, "TIME");
+        public final static Property IsSynchronized = new Property(4, Boolean.class, "isSynchronized", false, "IS_SYNCHRONIZED");
+        public final static Property RunId = new Property(5, long.class, "runId", false, "RUN_ID");
+        public final static Property GeneralItem = new Property(6, Long.class, "generalItem", false, "GENERAL_ITEM");
+        public final static Property Account = new Property(7, long.class, "account", false, "ACCOUNT");
     };
 
     private DaoSession daoSession;
@@ -56,10 +58,12 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'ACTION_LOCAL_OBJECT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'ACTION' TEXT NOT NULL ," + // 1: action
-                "'TIME' INTEGER," + // 2: time
-                "'RUN_ID' INTEGER NOT NULL ," + // 3: runId
-                "'GENERAL_ITEM' INTEGER NOT NULL ," + // 4: generalItem
-                "'ACCOUNT' INTEGER NOT NULL );"); // 5: account
+                "'GENERAL_ITEM_TYPE' TEXT," + // 2: generalItemType
+                "'TIME' INTEGER," + // 3: time
+                "'IS_SYNCHRONIZED' INTEGER," + // 4: isSynchronized
+                "'RUN_ID' INTEGER NOT NULL ," + // 5: runId
+                "'GENERAL_ITEM' INTEGER," + // 6: generalItem
+                "'ACCOUNT' INTEGER NOT NULL );"); // 7: account
     }
 
     /** Drops the underlying database table. */
@@ -79,13 +83,27 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
         }
         stmt.bindString(2, entity.getAction());
  
+        String generalItemType = entity.getGeneralItemType();
+        if (generalItemType != null) {
+            stmt.bindString(3, generalItemType);
+        }
+ 
         Long time = entity.getTime();
         if (time != null) {
-            stmt.bindLong(3, time);
+            stmt.bindLong(4, time);
         }
-        stmt.bindLong(4, entity.getRunId());
-        stmt.bindLong(5, entity.getGeneralItem());
-        stmt.bindLong(6, entity.getAccount());
+ 
+        Boolean isSynchronized = entity.getIsSynchronized();
+        if (isSynchronized != null) {
+            stmt.bindLong(5, isSynchronized ? 1l: 0l);
+        }
+        stmt.bindLong(6, entity.getRunId());
+ 
+        Long generalItem = entity.getGeneralItem();
+        if (generalItem != null) {
+            stmt.bindLong(7, generalItem);
+        }
+        stmt.bindLong(8, entity.getAccount());
     }
 
     @Override
@@ -106,10 +124,12 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
         ActionLocalObject entity = new ActionLocalObject( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // action
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // time
-            cursor.getLong(offset + 3), // runId
-            cursor.getLong(offset + 4), // generalItem
-            cursor.getLong(offset + 5) // account
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // generalItemType
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // time
+            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isSynchronized
+            cursor.getLong(offset + 5), // runId
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // generalItem
+            cursor.getLong(offset + 7) // account
         );
         return entity;
     }
@@ -119,10 +139,12 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
     public void readEntity(Cursor cursor, ActionLocalObject entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setAction(cursor.getString(offset + 1));
-        entity.setTime(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setRunId(cursor.getLong(offset + 3));
-        entity.setGeneralItem(cursor.getLong(offset + 4));
-        entity.setAccount(cursor.getLong(offset + 5));
+        entity.setGeneralItemType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setTime(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setIsSynchronized(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
+        entity.setRunId(cursor.getLong(offset + 5));
+        entity.setGeneralItem(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setAccount(cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -163,7 +185,7 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
     }
 
     /** Internal query to resolve the "actions" to-many relationship of GeneralItemLocalObject. */
-    public List<ActionLocalObject> _queryGeneralItemLocalObject_Actions(long generalItem) {
+    public List<ActionLocalObject> _queryGeneralItemLocalObject_Actions(Long generalItem) {
         synchronized (this) {
             if (generalItemLocalObject_ActionsQuery == null) {
                 QueryBuilder<ActionLocalObject> queryBuilder = queryBuilder();
@@ -183,9 +205,15 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getAccountLocalObjectDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getRunLocalObjectDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getGeneralItemLocalObjectDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T2", daoSession.getAccountLocalObjectDao().getAllColumns());
             builder.append(" FROM ACTION_LOCAL_OBJECT T");
-            builder.append(" LEFT JOIN ACCOUNT_LOCAL_OBJECT T0 ON T.'ACCOUNT'=T0.'_id'");
+            builder.append(" LEFT JOIN RUN_LOCAL_OBJECT T0 ON T.'RUN_ID'=T0.'_id'");
+            builder.append(" LEFT JOIN GENERAL_ITEM_LOCAL_OBJECT T1 ON T.'GENERAL_ITEM'=T1.'_id'");
+            builder.append(" LEFT JOIN ACCOUNT_LOCAL_OBJECT T2 ON T.'ACCOUNT'=T2.'_id'");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -195,6 +223,16 @@ public class ActionLocalObjectDao extends AbstractDao<ActionLocalObject, Long> {
     protected ActionLocalObject loadCurrentDeep(Cursor cursor, boolean lock) {
         ActionLocalObject entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
+
+        RunLocalObject runLocalObject = loadCurrentOther(daoSession.getRunLocalObjectDao(), cursor, offset);
+         if(runLocalObject != null) {
+            entity.setRunLocalObject(runLocalObject);
+        }
+        offset += daoSession.getRunLocalObjectDao().getAllColumns().length;
+
+        GeneralItemLocalObject generalItemLocalObject = loadCurrentOther(daoSession.getGeneralItemLocalObjectDao(), cursor, offset);
+        entity.setGeneralItemLocalObject(generalItemLocalObject);
+        offset += daoSession.getGeneralItemLocalObjectDao().getAllColumns().length;
 
         AccountLocalObject accountLocalObject = loadCurrentOther(daoSession.getAccountLocalObjectDao(), cursor, offset);
          if(accountLocalObject != null) {
