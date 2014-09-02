@@ -1,4 +1,4 @@
-package org.celstec.arlearn2.android.game.generalItem.dataCollection;
+package org.celstec.arlearn2.android.dataCollection.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.delegators.ARL;
+
 
 import java.io.IOException;
 
@@ -36,7 +35,7 @@ import java.io.IOException;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class AudioCollectionActivity extends Activity {
+public abstract class AudioCollectionActivity extends Activity {
     static final private double EMA_FILTER = 0.6;
 
     private MediaRecorder mRecorder = null;
@@ -44,14 +43,20 @@ public class AudioCollectionActivity extends Activity {
 
     private int mInterval = 100; // 5 seconds by default, can be changed later
     private Handler mHandler = new Handler();
-    ;
+
+    public  abstract int getGameGeneralitemAudioInput();
+
+    public  abstract int getAudioFeedbackView();
+    public  abstract int getStartRecordingButton();
+    public  abstract int getStopRecordingButton();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_general_item_dc_audio_input);
-        ((ImageView) findViewById(R.id.audioFeedbackView)).setLayoutParams(new LinearLayout.LayoutParams(100,
+        setContentView(getGameGeneralitemAudioInput());
+        ImageView view = (ImageView) findViewById(getAudioFeedbackView());
+        view.setLayoutParams(new LinearLayout.LayoutParams(100,
                 100));
-        findViewById(R.id.startRecording).setOnClickListener(
+        findViewById(getStartRecordingButton()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -59,7 +64,7 @@ public class AudioCollectionActivity extends Activity {
                     }
                 }
         );
-        findViewById(R.id.stopRecording).setOnClickListener(
+        findViewById(getStopRecordingButton()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -135,9 +140,10 @@ public class AudioCollectionActivity extends Activity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((50+(int) (100*getAmplitudeEMA())),
                     100);
             params.gravity= Gravity.CENTER_HORIZONTAL;
-            ((ImageView) findViewById(R.id.audioFeedbackView)).setLayoutParams(params);
+            findViewById(getAudioFeedbackView()).setLayoutParams(params);
         }
     };
+
 
 
 }

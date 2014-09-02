@@ -2,8 +2,6 @@ package org.celstec.arlearn2.android.delegators;
 
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.QueryBuilder;
-import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
-import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.arlearn2.client.ActionClient;
 import org.celstec.dao.gen.ActionLocalObject;
@@ -31,7 +29,7 @@ import java.util.List;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class ActionsDelegator extends AbstractDelegator{
+public class ActionsDelegator extends AbstractDelegator {
 
     public final static int READ = 0;
     public final static int START_RUN = 1;
@@ -103,14 +101,16 @@ public class ActionsDelegator extends AbstractDelegator{
         ActionLocalObject actionLocalObject = new ActionLocalObject();
         actionLocalObject.setTime(createAction.getAction().getTime());
         actionLocalObject.setAccount(createAction.account);
-        if (createAction.getAction().getGeneralItemId() !=null) actionLocalObject.setGeneralItem(createAction.getAction().getGeneralItemId());
+        if (createAction.getAction().getGeneralItemId() != null)
+            actionLocalObject.setGeneralItem(createAction.getAction().getGeneralItemId());
         actionLocalObject.setAction(createAction.getAction().getAction());
         actionLocalObject.setRunId(createAction.getAction().getRunId());
         actionLocalObject.setGeneralItemType(createAction.getAction().getGeneralItemType());
         actionLocalObject.setIsSynchronized(false);
         DaoConfiguration.getInstance().getActionLocalObjectDao().insertOrReplace(actionLocalObject);
         if (actionLocalObject.getRunLocalObject() != null) actionLocalObject.getRunLocalObject().resetActions();
-        if (actionLocalObject.getGeneralItemLocalObject() != null) actionLocalObject.getGeneralItemLocalObject().resetActions();
+        if (actionLocalObject.getGeneralItemLocalObject() != null)
+            actionLocalObject.getGeneralItemLocalObject().resetActions();
     }
 
     private void onEventAsync(UploadActions uploadActions) {
@@ -123,7 +123,7 @@ public class ActionsDelegator extends AbstractDelegator{
                     ActionLocalObjectDao.Properties.IsSynchronized.eq(0)
             )).list();
 
-            for (ActionLocalObject actionLocalObject: actionsList) {
+            for (ActionLocalObject actionLocalObject : actionsList) {
                 uploadAction(token, actionLocalObject);
             }
         }
@@ -155,38 +155,38 @@ public class ActionsDelegator extends AbstractDelegator{
         }
     }
 
-   private class CreateAction {
-       private Action action;
-       private Long account;
+    private class CreateAction {
+        private Action action;
+        private Long account;
 
-       private CreateAction(Action action) {
-           this.action = action;
-           this.account = ARL.accounts.getAccount(action.getUserEmail()).getId();
-       }
+        private CreateAction(Action action) {
+            this.action = action;
+            this.account = ARL.accounts.getAccount(action.getUserEmail()).getId();
+        }
 
-       private CreateAction(long runId, String action) {
-           this.action = new Action();
-           this.action.setRunId(runId);
-           this.action.setAction(action);
-           this.action.setTime(ARL.time.getServerTime());
-           this.action.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
-           this.account = ARL.accounts.getLoggedInAccount().getId();
-       }
+        private CreateAction(long runId, String action) {
+            this.action = new Action();
+            this.action.setRunId(runId);
+            this.action.setAction(action);
+            this.action.setTime(ARL.time.getServerTime());
+            this.action.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
+            this.account = ARL.accounts.getLoggedInAccount().getId();
+        }
 
-       public Action getAction() {
-           return action;
-       }
+        public Action getAction() {
+            return action;
+        }
 
-       public void setAction(Action action) {
-           this.action = action;
-       }
+        public void setAction(Action action) {
+            this.action = action;
+        }
 
-       public Long getAccount() {
-           return account;
-       }
+        public Long getAccount() {
+            return account;
+        }
 
-       public void setAccount(Long account) {
-           this.account = account;
-       }
-   }
+        public void setAccount(Long account) {
+            this.account = account;
+        }
+    }
 }

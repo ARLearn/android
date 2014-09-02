@@ -1,9 +1,7 @@
-package org.celstec.arlearn2.android.dataCollection;
+package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
-import android.app.Activity;
-import android.content.Intent;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.TextInputCollectionActivity;
-import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
 
 /**
  * ****************************************************************************
@@ -25,28 +23,19 @@ import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollecti
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class ValueInputManager extends DataCollectionManager {
-
-
-    public ValueInputManager(Activity ctx) {
-        super(ctx);
-        response.setValueType();
-
-    }
+public class TextInputCollectionActivityImpl extends TextInputCollectionActivity {
     @Override
-    public void takeDataSample() {
-        Intent textInputIntent = new Intent(ctx, ValueInputCollectionActivity.class);
-
-//        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
-        ctx.startActivityForResult(textInputIntent, VALUE_RESULT);
+    public int getGameGeneralItemDcTextInput() {
+        return R.layout.game_general_item_dc_text_input;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            Double text = data.getExtras().getDouble("value");
-            response.setNumberValue(text);
-            saveResponseForSyncing();
-        }
+    public int getDataCollectionText() {
+        return R.id.dataCollectionText;
+    }
+
+    @Override
+    public int getDataCollectionSubmit() {
+        return R.id.dataCollectionSubmit;
     }
 }

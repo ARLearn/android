@@ -4,6 +4,7 @@
         <fileset dir="../arlearn.android/libs" includes="**/*.jar" />
         <fileset dir="../arlearn.beans/build/jar/" includes="**/*.jar" />
         <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
+
         <fileset dir="../arlearn.thirdparty/google-play-services_lib/libs" includes="**/*.jar" />
 
         <fileset dir="${android_sdk}/extras/android/support/v13" includes="**/*.jar" />
@@ -32,8 +33,16 @@
         <javac target="1.6" srcdir="src-dao-gen" verbose="true"
                destdir="build/base/classes" classpathref="classpath" debug="on" excludes="org/celstec/dao/ARlearnDaoGenerator.java,org/celstec/arlearn2/android/listadapter/**">
             <src path="src-network"></src>
+            <!--<src>-->
+                <!--<pathelement location="src/org/celstec/arlearn2/android/game/generalItem/dataCollection" />-->
+            <!--</src>-->
         </javac>
-        <javac target="1.6" srcdir="src-network" destdir="build/base/classes" classpathref="classpath" debug="on" excludes="org/celstec/arlearn2/android/listadapter/impl/**"/>
+        <!--<javac target="1.6" srcdir="src"-->
+               <!--destdir="build/base/classes" classpathref="classpath" debug="on"-->
+               <!--includes="org/celstec/arlearn2/android/game/generalItem/dataCollection/**"-->
+               <!--excludes="org/celstec/arlearn2/android/game/generalItem/dataCollection/impl/**"/>-->
+        <javac target="1.6" srcdir="src-network" destdir="build/base/classes"
+               classpathref="classpath" debug="on" excludes="org/celstec/arlearn2/android/listadapter/impl/**"/>
     </target>
 
     <target name="compile_pim" depends="clean pim">
@@ -45,6 +54,7 @@
         <mkdir dir="build/base/jar" />
         <jar destfile="build/jar/ARLearn-Android-Base.jar" basedir="build/base/classes">
             <fileset dir="src-dao-gen" includes="**/*.java"/>
+            <fileset dir="src" includes="**/dataCollection/*.java"/>
             <fileset dir="src-network" includes="**/*.java"/>
         </jar>
     </target>

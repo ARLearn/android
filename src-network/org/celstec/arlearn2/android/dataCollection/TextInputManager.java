@@ -3,7 +3,7 @@ package org.celstec.arlearn2.android.dataCollection;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import org.celstec.arlearn2.android.game.generalItem.dataCollection.TextInputCollectionActivity;
+import org.celstec.arlearn2.android.dataCollection.activities.TextInputCollectionActivity;
 import org.celstec.arlearn2.android.util.MediaFolders;
 
 /**

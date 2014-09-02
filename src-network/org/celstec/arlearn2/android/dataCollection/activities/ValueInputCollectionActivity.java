@@ -1,12 +1,11 @@
-package org.celstec.arlearn2.android.game.generalItem.dataCollection;
+package org.celstec.arlearn2.android.dataCollection.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import org.celstec.arlearn2.android.R;
+
 
 /**
  * ****************************************************************************
@@ -28,13 +27,29 @@ import org.celstec.arlearn2.android.R;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class ValueInputCollectionActivity extends Activity {
+public abstract class ValueInputCollectionActivity extends Activity {
 
     String textValue = "";
+    public abstract  int getTextView();
+    public abstract  int getGameGeneralItemDcNumberInput();
+    public abstract  int getDataCollectionSubmit();
+    public abstract  int getButton0();
+    public abstract  int getButton1();
+    public abstract  int getButton2();
+    public abstract  int getButton3();
+    public abstract  int getButton4();
+    public abstract  int getButton5();
+    public abstract  int getButton6();
+    public abstract  int getButton7();
+    public abstract  int getButton8();
+    public abstract  int getButton9();
+    public abstract  int getButtonDot();
+    public abstract  int getButtonBack();
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_general_item_dc_number_input);
-        findViewById(R.id.dataCollectionSubmit).setOnClickListener(new View.OnClickListener() {
+        setContentView(getGameGeneralItemDcNumberInput());
+        findViewById(getDataCollectionSubmit()).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!textValue.equals("")) {
@@ -47,19 +62,19 @@ public class ValueInputCollectionActivity extends Activity {
                 }
             }
         });
-        findViewById(R.id.button0).setOnClickListener(new ButtonListener(0));
-        findViewById(R.id.button1).setOnClickListener(new ButtonListener(1));
-        findViewById(R.id.button2).setOnClickListener(new ButtonListener(2));
-        findViewById(R.id.button3).setOnClickListener(new ButtonListener(3));
-        findViewById(R.id.button4).setOnClickListener(new ButtonListener(4));
-        findViewById(R.id.button5).setOnClickListener(new ButtonListener(5));
-        findViewById(R.id.button6).setOnClickListener(new ButtonListener(6));
-        findViewById(R.id.button7).setOnClickListener(new ButtonListener(7));
-        findViewById(R.id.button8).setOnClickListener(new ButtonListener(8));
-        findViewById(R.id.button9).setOnClickListener(new ButtonListener(9));
+        findViewById(getButton0()).setOnClickListener(new ButtonListener(0));
+        findViewById(getButton1()).setOnClickListener(new ButtonListener(1));
+        findViewById(getButton2()).setOnClickListener(new ButtonListener(2));
+        findViewById(getButton3()).setOnClickListener(new ButtonListener(3));
+        findViewById(getButton4()).setOnClickListener(new ButtonListener(4));
+        findViewById(getButton5()).setOnClickListener(new ButtonListener(5));
+        findViewById(getButton6()).setOnClickListener(new ButtonListener(6));
+        findViewById(getButton7()).setOnClickListener(new ButtonListener(7));
+        findViewById(getButton8()).setOnClickListener(new ButtonListener(8));
+        findViewById(getButton9()).setOnClickListener(new ButtonListener(9));
 
-        findViewById(R.id.buttonDot).setOnClickListener(new ButtonListener(ButtonListener.DOT));
-        findViewById(R.id.buttonBack).setOnClickListener(new ButtonListener(ButtonListener.BACK));
+        findViewById(getButtonDot()).setOnClickListener(new ButtonListener(ButtonListener.DOT));
+        findViewById(getButtonBack()).setOnClickListener(new ButtonListener(ButtonListener.BACK));
     }
 
     public class ButtonListener implements View.OnClickListener {
@@ -80,7 +95,7 @@ public class ValueInputCollectionActivity extends Activity {
             } else {
                 textValue += value;
             }
-            ((TextView)findViewById(R.id.textView1)).setText(textValue);
+            ((TextView)findViewById(getTextView())).setText(textValue);
         }
     }
 }

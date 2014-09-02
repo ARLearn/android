@@ -1,9 +1,7 @@
-package org.celstec.arlearn2.android.dataCollection;
+package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
-import android.app.Activity;
-import android.content.Intent;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
-
 
 /**
  * ****************************************************************************
@@ -25,27 +23,23 @@ import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionAct
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class AudioInputManager extends DataCollectionManager {
-
-
-    public AudioInputManager(Activity ctx) {
-        super(ctx);
-        response.setAudioType();
-
-    }
-    @Override
-    public void takeDataSample() {
-        Intent textInputIntent = new Intent(ctx, AudioCollectionActivity.class);
-        ctx.startActivityForResult(textInputIntent, AUDIO_RESULT);
+public class AudioCollectionActivityImpl extends AudioCollectionActivity{
+    public  int getGameGeneralitemAudioInput() {
+        return R.layout.game_general_item_dc_audio_input;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-//            String text = data.getExtras().get("textValue").toString();
-//            response.setValue(text);
-//            saveResponseForSyncing();
-        }
+    public int getAudioFeedbackView() {
+        return R.id.audioFeedbackView;
+    }
+
+    @Override
+    public int getStartRecordingButton() {
+        return R.id.startRecording;
+    }
+
+    @Override
+    public int getStopRecordingButton() {
+        return R.id.stopRecording;
     }
 }
-

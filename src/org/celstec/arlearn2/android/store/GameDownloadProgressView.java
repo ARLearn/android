@@ -1,14 +1,12 @@
-package org.celstec.arlearn2.android.delegators.game;
+package org.celstec.arlearn2.android.store;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.store.GameFragment;
+import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.views.DownloadViewManager;
 
 /**

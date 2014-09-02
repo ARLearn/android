@@ -17,14 +17,11 @@ import android.widget.Toast;
 import authentication.LoginFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import daoBase.DaoConfiguration;
-import org.celstec.arlearn2.android.MyGamesFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
-import org.celstec.arlearn2.android.delegators.game.GameDownloadProgressView;
 import org.celstec.arlearn2.android.events.GameEvent;
-import org.celstec.arlearn2.android.views.DownloadViewManager;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
 

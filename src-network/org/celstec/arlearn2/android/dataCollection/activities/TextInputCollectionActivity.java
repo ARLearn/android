@@ -1,11 +1,10 @@
-package org.celstec.arlearn2.android.game.generalItem.dataCollection;
+package org.celstec.arlearn2.android.dataCollection.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import org.celstec.arlearn2.android.R;
 
 /**
  * ****************************************************************************
@@ -27,17 +26,21 @@ import org.celstec.arlearn2.android.R;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class TextInputCollectionActivity extends Activity {
+public abstract class TextInputCollectionActivity extends Activity {
 
     String textValue = "";
 
+    public abstract int getGameGeneralItemDcTextInput();
+    public abstract int getDataCollectionText();
+    public abstract int getDataCollectionSubmit();
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_general_item_dc_text_input);
-        findViewById(R.id.dataCollectionSubmit).setOnClickListener(new View.OnClickListener() {
+        setContentView(getGameGeneralItemDcTextInput());
+        findViewById(getDataCollectionSubmit()).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text = ((EditText) findViewById(R.id.dataCollectionText)).getText().toString();
+                String text = ((EditText) findViewById(getDataCollectionText())).getText().toString();
                 Bundle conData = new Bundle();
                 conData.putString("value", text);
                 Intent intent = new Intent();
