@@ -54,7 +54,6 @@
         <mkdir dir="build/base/jar" />
         <jar destfile="build/jar/ARLearn-Android-Base.jar" basedir="build/base/classes">
             <fileset dir="src-dao-gen" includes="**/*.java"/>
-            <fileset dir="src" includes="**/dataCollection/*.java"/>
             <fileset dir="src-network" includes="**/*.java"/>
         </jar>
     </target>
