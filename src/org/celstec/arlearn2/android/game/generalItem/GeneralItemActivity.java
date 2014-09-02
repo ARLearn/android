@@ -44,7 +44,7 @@ public class GeneralItemActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.ARLearn_schema2);
+        setTheme(R.style.ARLearn_schema1);
         setContentView(R.layout.game_general_item);
         gameActivityFeatures = new GameActivityFeatures(this);
         generalItemActivityFeatures = GeneralItemActivityFeatures.getGeneralItemActivityFeatures(this);

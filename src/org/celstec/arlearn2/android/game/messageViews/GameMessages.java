@@ -46,14 +46,21 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         setContentView(R.layout.game_list_messages);
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
-        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
-        setListAdapter(adapter);
-        adapter.setOnListItemClickCallback(this);
-        ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
+
 //        Handler handler = new Handler();
 //        handler.postDelayed(new AnimationRunnable(), 2000l);
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+        setListAdapter(adapter);
+        adapter.setOnListItemClickCallback(this);
+        ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         actionBarMenuController.inflateMenu(menu);

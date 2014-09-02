@@ -34,6 +34,7 @@ public class GeneralItemMapper {
     public final static int SINGLE_CHOICE = 5;
     public final static int MULTI_CHOICE_IMAGE = 6;
     public final static int SINGLE_CHOICE_IMAGE = 7;
+    public final static int YOUTUBE = 8;
     
     public static int mapBeanToConstant (GeneralItem giBean) {
         if (giBean instanceof SingleChoiceImageTest) {
@@ -60,28 +61,31 @@ public class GeneralItemMapper {
         int result = R.drawable.game_data_collection_audio;
         switch (constant){
             case GeneralItemMapper.NARRATOR_ITEM:
-                result =R.drawable.ic_default_game;
+                result =R.drawable.game_general_item_type_narrator;
                 break;
             case GeneralItemMapper.SCAN_TAG:
-                result =R.drawable.game_data_collection_audio;
+                result =R.drawable.game_general_item_type_scan;
                 break;
             case GeneralItemMapper.SINGLE_CHOICE:
-                result =R.drawable.game_data_collection_audio;
+                result =R.drawable.game_general_item_type_mc;
                 break;
             case GeneralItemMapper.MULTI_CHOICE:
-                result =R.drawable.game_data_collection_audio;
+                result =R.drawable.game_general_item_type_mc;
                 break;
             case GeneralItemMapper.SINGLE_CHOICE_IMAGE:
-                result =R.drawable.ic_default_game;
+                result =R.drawable.game_general_item_type_mc;
                 break;
             case GeneralItemMapper.MULTI_CHOICE_IMAGE:
-                result =R.drawable.game_data_collection_audio;
+                result =R.drawable.game_general_item_type_mc;
                 break;
             case GeneralItemMapper.AUDIO_OBJECT:
-                result =R.drawable.game_data_collection_audio;
+                result =R.drawable.game_general_item_type_audio;
                 break;
             case GeneralItemMapper.VIDEO_OBJECT:
-                result =R.drawable.game_data_collection_video;
+                result =R.drawable.game_general_item_type_video;
+                break;
+            case GeneralItemMapper.YOUTUBE:
+                result =R.drawable.game_general_item_type_youtube;
                 break;
         }
         return result;

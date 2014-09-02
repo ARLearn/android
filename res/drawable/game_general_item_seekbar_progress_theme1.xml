@@ -6,8 +6,8 @@
 
             <gradient
                     android:angle="270"
-                    android:endColor="#ffcec7ba"
-                    android:startColor="#ffcec7ba" />
+                    android:endColor="#dcd5cb"
+                    android:startColor="#dcd5cb" />
         </shape>
             </item>
 
@@ -33,8 +33,9 @@
 
                 <gradient
                         android:angle="270"
-                        android:endColor="#ffa858ca"
-                        android:startColor="#ffa858ca" />
+                        android:endColor="#b873d4"
+                        android:startColor="#b873d4" />
+                <!--this primaryColorLight-->
             </shape>
         </clip>
     </item>

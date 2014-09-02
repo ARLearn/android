@@ -4,7 +4,8 @@
         android:shape="oval">
 
     <solid
-            android:color="#ff26a728"/>
+            android:color="#14ddb3"/>
+    <!--this value is equal to buttonAlternativeColor-->
 
     <size
             android:width="10dip"

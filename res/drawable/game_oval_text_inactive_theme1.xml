@@ -4,8 +4,8 @@
         android:shape="oval">
 
     <solid
-            android:color="#9b59b6"/>
-    <!--this value is equal to primaryColor-->
+            android:color="#c5beb2"/>
+    <!--this value is equal to textInactive-->
 
     <size
             android:width="30dip"

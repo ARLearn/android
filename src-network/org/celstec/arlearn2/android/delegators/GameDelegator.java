@@ -237,7 +237,6 @@ public final class GameDelegator extends AbstractDelegator{
         if (token != null) {
             boolean reset = false;
             for (GameFile gf: GameClient.getGameClient().getGameFileList(token, gameId).getGameFiles()) {
-//                boolean update = false;
                 GameFileLocalObject gameFileLocalObject = DaoConfiguration.getInstance().getGameFileDao().load(gf.getId());
 
                 if (gameFileLocalObject == null) {

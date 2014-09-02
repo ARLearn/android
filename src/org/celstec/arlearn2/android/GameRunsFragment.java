@@ -50,6 +50,7 @@ public class GameRunsFragment extends SherlockListFragment implements ListItemCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        getActivity().setTheme(R.style.ARLearn_schema1);
 //        ARL.runs.syncRun(game);
 
     }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="?attr/backgroundColor">
 <LinearLayout
               android:orientation="vertical"
               android:layout_width="match_parent"
@@ -59,6 +60,7 @@
             android:visibility="gone"
             >
 
+
         <ImageButton
                 android:id="@+id/playPauseButton"
                 android:layout_width="wrap_content"
@@ -66,6 +68,8 @@
                 android:layout_alignTop="@+id/imageButton3"
                 android:layout_marginLeft="24dp"
                 android:layout_toRightOf="@+id/imageButton3"
+                android:background="?attr/primaryColor"
+                android:layout_margin="10dip"
                 android:src="@android:drawable/ic_media_play" />
         <SeekBar
                 android:id="@+id/seekbar"
@@ -97,8 +101,9 @@
                     android:src="@drawable/game_data_collection_audio" />
             <ImageView
                     android:id="@+id/audioButtonCheckIcon"
+
                     style="@style/ARLearn.Game.DataCollectionCheck"
-                    android:src="@drawable/game_data_collection_audio" />
+                     />
         </RelativeLayout>
 
         <RelativeLayout
@@ -112,8 +117,7 @@
 
             <ImageView
                     android:id="@+id/pictureButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck"
-                    android:src="@drawable/game_data_collection_image" />
+                    style="@style/ARLearn.Game.DataCollectionCheck" />
 
         </RelativeLayout>
 
@@ -128,8 +132,7 @@
 
             <ImageView
                     android:id="@+id/videoButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck"
-                    android:src="@drawable/game_data_collection_video" />
+                    style="@style/ARLearn.Game.DataCollectionCheck"/>
 
         </RelativeLayout>
 
@@ -144,8 +147,7 @@
 
             <ImageView
                     android:id="@+id/textButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck"
-                    android:src="@drawable/game_data_collection_text" />
+                    style="@style/ARLearn.Game.DataCollectionCheck"/>
 
         </RelativeLayout>
 
@@ -160,8 +162,7 @@
 
             <ImageView
                     android:id="@+id/numberButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck"
-                    android:src="@drawable/game_data_collection_number" />
+                    style="@style/ARLearn.Game.DataCollectionCheck" />
 
         </RelativeLayout>
 

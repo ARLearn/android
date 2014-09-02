@@ -16,7 +16,12 @@
         <attr name="textDark" format="color" />
         <attr name="textInactive" format="color" />
 
+        <attr name="marginLeft" format="dimension" />
+
         <attr name="dataCollectionBackground" format="reference" />
         <attr name="dataCollectionBackgroundCheck" format="reference" />
+
+        <attr name="messageListOval" format="reference" />
+        <attr name="messageListOvalRead" format="reference" />
     </declare-styleable>
 </resources>

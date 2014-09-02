@@ -35,9 +35,11 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
 
     private QueryBuilder qb;
     private AbstractGeneralItemsVisibilityAdapter adapter;
+    protected long runId;
 
     public AbstractGeneralItemsVisibilityAdapter(Context context, long runId, long gameId) {
         super(context);
+        this.runId = runId;
         qb = getQueryBuilder(runId, gameId);
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());

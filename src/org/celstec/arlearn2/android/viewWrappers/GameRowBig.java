@@ -1,6 +1,8 @@
 package org.celstec.arlearn2.android.viewWrappers;
 
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
@@ -52,4 +54,11 @@ public class GameRowBig {
         TextView view = (TextView) gameRow.findViewById(R.id.gameDescriptionId);
         view.setText(description);
     }
+
+    public void setIcon(Bitmap icon) {
+        ((ImageView) gameRow.findViewById(R.id.icon)).setImageBitmap(icon);
+
+    }
+
+
 }

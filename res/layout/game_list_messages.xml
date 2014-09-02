@@ -11,9 +11,9 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
+            android:paddingLeft="0dp"
             android:paddingBottom="2dp"
-            android:paddingRight="4dip"
+            android:paddingRight="0dip"
             android:layout_weight="0">
         <ListView
                 android:id="@android:id/list"

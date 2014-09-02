@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="?attr/marginLeft"
-                android:background="@drawable/game_list_messages_background"
+              android:layout_width="match_parent"
+              android:layout_height="?android:attr/listPreferredItemHeight"
+              android:padding="?attr/marginLeft"
+              android:background="@drawable/game_list_messages_background_read"
         >
 
     <ImageView
@@ -13,7 +13,7 @@
             android:layout_height="40dip"
             android:layout_gravity="center_vertical"
             android:layout_alignParentLeft="true"
-            android:background="?attr/messageListOval"
+            android:background="?attr/messageListOvalRead"
             android:padding="4dip"
             android:src="@drawable/game_general_item_type_narrator" />
 
@@ -24,7 +24,7 @@
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:text="Example application"
-            android:textColor="?attr/textLight"
+            android:textColor="?attr/textInactive"
             android:textSize="16sp" />
 
 </LinearLayout>

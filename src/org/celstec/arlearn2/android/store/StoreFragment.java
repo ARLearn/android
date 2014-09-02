@@ -1,5 +1,7 @@
 package org.celstec.arlearn2.android.store;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,9 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.events.FeaturedGameEvent;
 import org.celstec.arlearn2.android.viewWrappers.GameRowBig;
 
 /**
@@ -41,6 +46,8 @@ public class StoreFragment extends SherlockFragment {
     private View nearMeButton;
     private View button4;
 
+    private LayoutInflater inflater;
+    private View v;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +60,19 @@ public class StoreFragment extends SherlockFragment {
     public void onResume() {
         super.onResume();
         getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+        ARL.eventBus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ARL.eventBus.unregister(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        final View v = inflater.inflate(R.layout.store, container, false);
+        this.inflater = inflater;
+        v = inflater.inflate(R.layout.store, container, false);
 
         searchButton = v.findViewById(R.id.search);
         searchButton.setOnClickListener(new SearchButton());
@@ -70,23 +84,40 @@ public class StoreFragment extends SherlockFragment {
         nearMeButton.setOnClickListener(new NearMeButton());
 
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
+        ARL.store.downloadFeaturedGames();
 
-        GameRowBig big3 = new GameRowBig(inflater, layout);
-        big3.setGameTitle("Record game");
-        big3.setGameCategory("Music");
-        big3.setGameDescription("A location based game where the goal is to take as many pictures of music as possible.");
-
-        GameRowBig big1 = new GameRowBig(inflater, layout);
-        big1.setGameTitle("Get The picture");
-        big1.setGameCategory("Photography");
-        big1.setGameDescription("A location based game where the goal is to take as many pictures  as possible.");
-
-        GameRowBig big2 = new GameRowBig(inflater, layout);
-        big2.setGameTitle("Shop-a-holic");
-        big2.setGameCategory("Shopping");
-        big2.setGameDescription("A game that woman can play while their husbands are attending a football game");
+//        GameRowBig big3 = new GameRowBig(inflater, layout);
+//        big3.setGameTitle("Record game");
+//        big3.setGameCategory("Music");
+//        big3.setGameDescription("A location based game where the goal is to take as many pictures of music as possible.");
+//
+//        GameRowBig big1 = new GameRowBig(inflater, layout);
+//        big1.setGameTitle("Get The picture");
+//        big1.setGameCategory("Photography");
+//        big1.setGameDescription("A location based game where the goal is to take as many pictures  as possible.");
+//
+//        GameRowBig big2 = new GameRowBig(inflater, layout);
+//        big2.setGameTitle("Shop-a-holic");
+//        big2.setGameCategory("Shopping");
+//        big2.setGameDescription("A game that woman can play while their husbands are attending a football game");
 
         return v;
+    }
+
+    public void onEventMainThread(FeaturedGameEvent featuredGameEvent) {
+
+
+
+        LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
+        GameRowBig big2 = new GameRowBig(inflater, layout);
+        big2.setGameTitle(featuredGameEvent.getGameObject().getTitle());
+        big2.setGameCategory("Shopping");
+        big2.setGameDescription(featuredGameEvent.getGameObject().getDescription());
+        byte[] data = featuredGameEvent.getGameObject().getIcon();
+        if (data != null && data.length!=0) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            big2.setIcon(bitmap);
+        }
     }
 
 

@@ -142,15 +142,17 @@
     <style name="ARLearn.Game.DataCollectionButton">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:padding">7dip</item>
+        <item name="android:layout_margin">5dip</item>
+        <item name="android:padding">8dip</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:background">?attr/dataCollectionBackground</item>
     </style>
 
     <style name="ARLearn.Game.DataCollectionCheck">
-        <item name="android:layout_width">20dip</item>
-        <item name="android:layout_height">20dip</item>
-        <item name="android:padding">1dip</item>
+        <item name="android:layout_width">25dip</item>
+        <item name="android:layout_height">25dip</item>
+        <item name="android:src">@drawable/game_data_collection_checkmark</item>
+        <item name="android:padding">4dip</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">?attr/dataCollectionBackgroundCheck</item>
     </style>

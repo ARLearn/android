@@ -1,16 +1,24 @@
 package org.celstec.arlearn2.android.delegators;
 
+import com.google.android.gms.games.GamesClient;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.download.FileByteDownloader;
 import org.celstec.arlearn2.android.events.CategoryEvent;
+import org.celstec.arlearn2.android.events.FeaturedGameEvent;
 import org.celstec.arlearn2.android.events.GameCategoryEvent;
+import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.game.GamesList;
 import org.celstec.arlearn2.beans.store.Category;
 import org.celstec.arlearn2.beans.store.CategoryList;
 import org.celstec.arlearn2.beans.store.GameCategory;
+import org.celstec.arlearn2.client.GameClient;
 import org.celstec.arlearn2.client.StoreClient;
 import org.celstec.dao.gen.CategoryLocalObject;
 import org.celstec.dao.gen.GameCategoryLocalObject;
+import org.celstec.dao.gen.GameLocalObject;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * ****************************************************************************
@@ -54,6 +62,25 @@ public class StoreDelegator extends AbstractDelegator{
 
     public void syncGamesForCategory(Long categoryId) {
         ARL.eventBus.post(new SyncGames(categoryId));
+    }
+
+    public void downloadFeaturedGames() {
+        ARL.eventBus.post(new DownloadFeaturedGames());
+    }
+
+    private void onEventAsync(DownloadFeaturedGames downloadFeaturedGames) {
+        if (ARL.isOnline()) {
+            GamesList gl =StoreClient.getStoreClient().getFeaturedGames(Locale.getDefault().getDisplayLanguage());
+            for  (Game game: gl.getGames()) {
+                FeaturedGameEvent event = new FeaturedGameEvent(game.getGameId(), game.getRank());
+//                event.setIcon(new FileByteDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+game.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
+//                GameClient.getGameClient().getGame(null, event.getGameId());
+                GameLocalObject gameLocalObject = ARL.games.asyncGame(event.getGameId(), false);
+                event.setGameObject(gameLocalObject);
+
+                ARL.eventBus.post(event);
+            }
+        }
     }
 
     private void onEventAsync(SyncCategories syncResponses) {
@@ -109,7 +136,10 @@ public class StoreDelegator extends AbstractDelegator{
 
 
 
+
     private class SyncCategories{}
+
+    private class DownloadFeaturedGames{}
 
     private class SyncGames{
         private Long categoryId;
