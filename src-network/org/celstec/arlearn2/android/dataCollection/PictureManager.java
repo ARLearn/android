@@ -41,7 +41,7 @@ public class PictureManager extends DataCollectionManager {
         response.setPictureType();
     }
 
-    public void takeDataSample() {
+    public void takeDataSample(Class className) {
 
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         bitmapFile = MediaFolders.createOutgoingJpgFile();

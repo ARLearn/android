@@ -34,8 +34,9 @@ public class AudioInputManager extends DataCollectionManager {
 
     }
     @Override
-    public void takeDataSample() {
-        Intent textInputIntent = new Intent(ctx, AudioCollectionActivity.class);
+    public void takeDataSample(Class className) {
+        Intent textInputIntent = new Intent(ctx, className);
+//        Intent textInputIntent = new Intent(ctx, AudioCollectionActivity.class);
         ctx.startActivityForResult(textInputIntent, AUDIO_RESULT);
     }
 

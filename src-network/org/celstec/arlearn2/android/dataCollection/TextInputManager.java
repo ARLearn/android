@@ -34,13 +34,22 @@ public class TextInputManager extends DataCollectionManager {
         response.setTextType();
 
     }
+
     @Override
-    public void takeDataSample() {
-        Intent textInputIntent = new Intent(ctx, TextInputCollectionActivity.class);
+    public void takeDataSample(Class className) {
+        Intent textInputIntent = new Intent(ctx, className);
 
 //        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
         ctx.startActivityForResult(textInputIntent, TEXT_RESULT);
     }
+
+//    @Override
+//    public void takeDataSample() {
+//        Intent textInputIntent = new Intent(ctx, TextInputCollectionActivity.class);
+//
+////        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
+//        ctx.startActivityForResult(textInputIntent, TEXT_RESULT);
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

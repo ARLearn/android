@@ -34,9 +34,9 @@ public class ValueInputManager extends DataCollectionManager {
 
     }
     @Override
-    public void takeDataSample() {
-        Intent textInputIntent = new Intent(ctx, ValueInputCollectionActivity.class);
-
+    public void takeDataSample(Class className) {
+        Intent textInputIntent = new Intent(ctx, className);
+//        Intent textInputIntent = new Intent(ctx, ValueInputCollectionActivity.class);
 //        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
         ctx.startActivityForResult(textInputIntent, VALUE_RESULT);
     }

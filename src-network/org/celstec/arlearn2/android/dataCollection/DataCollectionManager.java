@@ -45,7 +45,7 @@ public  abstract class DataCollectionManager {
         response = new ResponseLocalObject();
     }
 
-    public abstract void takeDataSample();
+    public abstract void takeDataSample(Class className);
 
     public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
 

@@ -43,7 +43,7 @@ public class VideoManager extends DataCollectionManager {
         response.setVideoType();
     }
 
-    public void takeDataSample() {
+    public void takeDataSample(Class className) {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
         String fileName = ARL.time.getServerTime()+".mp4";
         ContentValues values = new ContentValues();
