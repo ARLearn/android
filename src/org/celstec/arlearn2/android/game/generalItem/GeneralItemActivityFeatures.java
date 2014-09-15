@@ -6,10 +6,14 @@ import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.*;
+import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
+import org.celstec.arlearn2.android.dataCollection.activities.TextInputCollectionActivity;
+import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollectionResultController;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollectionViewController;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.LazyListAdapter;
+import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
 import org.celstec.arlearn2.beans.generalItem.*;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -107,7 +111,7 @@ public abstract class GeneralItemActivityFeatures {
                 if (audioInputManager == null) audioInputManager = new AudioInputManager(activity);
                 audioInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 audioInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-                audioInputManager.takeDataSample();
+                audioInputManager.takeDataSample(AudioCollectionActivityImpl.class);
             }
 
             @Override
@@ -115,7 +119,7 @@ public abstract class GeneralItemActivityFeatures {
                 if (pictureManager == null) pictureManager = new PictureManager(activity);
                 pictureManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 pictureManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-                pictureManager.takeDataSample();
+                pictureManager.takeDataSample(null);
             }
 
             @Override
@@ -128,7 +132,7 @@ public abstract class GeneralItemActivityFeatures {
                 if (textInputManager == null) textInputManager = new TextInputManager(activity);
                 textInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 textInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-                textInputManager.takeDataSample();
+                textInputManager.takeDataSample(TextInputCollectionActivity.class);
             }
 
             @Override
@@ -139,7 +143,7 @@ public abstract class GeneralItemActivityFeatures {
                 if (valueInputManager == null) valueInputManager = new ValueInputManager(activity);
                 valueInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 valueInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-                valueInputManager.takeDataSample();
+                valueInputManager.takeDataSample(ValueInputCollectionActivity.class);
             }
 
         };

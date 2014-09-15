@@ -119,47 +119,49 @@ public class GeneralItemDelegator extends AbstractDelegator{
     public void process (GeneralItemList list, GameLocalObject gameLocalObject, boolean individualEvents) {
         GeneralItemEvent iEvent = null;
         for (GeneralItem giBean: list.getGeneralItems()) {
-            GeneralItemLocalObject giDao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(giBean.getId());
+            if (giBean != null) {
+                GeneralItemLocalObject giDao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(giBean.getId());
 
-            giDao = toDaoLocalObject(giBean, giDao);
+                giDao = toDaoLocalObject(giBean, giDao);
 
-            giDao.setGameLocalObject(gameLocalObject);
+                giDao.setGameLocalObject(gameLocalObject);
 
 
-            if (giBean.getDependsOn()!=null) {
-                if (giDao.getDependsOn() != null && !giDao.getDependencyLocalObject().recursiveEquals(giBean.getDependsOn())) {
-                    giDao.getDependencyLocalObject().recursiveDelete();
-                    giDao.setDependencyLocalObject(null);
+                if (giBean.getDependsOn() != null) {
+                    if (giDao.getDependsOn() != null && !giDao.getDependencyLocalObject().recursiveEquals(giBean.getDependsOn())) {
+                        giDao.getDependencyLocalObject().recursiveDelete();
+                        giDao.setDependencyLocalObject(null);
+                    }
+
+                    if (giDao.getDependsOn() == null) {
+                        DependencyLocalObject dependsOn = DependencyLocalObject.createDependencyLocalObject(giBean.getDependsOn());
+                        giDao.setDependencyLocalObject(dependsOn);
+                    }
+                } else {
+                    if (giDao.getDependsOn() != null) {
+                        giDao.getDependencyLocalObject().recursiveDelete();
+                        giDao.setDependencyLocalObject(null);
+                    }
                 }
 
-                if (giDao.getDependsOn() == null) {
-                    DependencyLocalObject dependsOn = DependencyLocalObject.createDependencyLocalObject(giBean.getDependsOn());
-                    giDao.setDependencyLocalObject(dependsOn);
-                }
-            } else {
-                if (giDao.getDependsOn()!= null) {
-                    giDao.getDependencyLocalObject().recursiveDelete();
-                    giDao.setDependencyLocalObject(null);
-                }
+                DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().insertOrReplace(giDao);
+
+                GiFileReferenceDelegator.getInstance().createReference(giBean, giDao);
+                iEvent = new GeneralItemEvent(giDao.getId());
+                if (individualEvents) ARL.eventBus.post(iEvent);
             }
-
-            DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().insertOrReplace(giDao);
-
-            GiFileReferenceDelegator.getInstance().createReference(giBean, giDao);
-            iEvent = new GeneralItemEvent(giDao.getId());
-            if (individualEvents) ARL.eventBus.post(iEvent);
-        }
-        if (iEvent != null && !individualEvents) {
-            ARL.eventBus.post(iEvent);
-        }
-        gameLocalObject.setLastSyncGeneralItemsDate(list.getServerTime());
-        DaoConfiguration.getInstance().getGameLocalObjectDao().update(gameLocalObject);
-        if (iEvent != null){
+            if (iEvent != null && !individualEvents) {
+                ARL.eventBus.post(iEvent);
+            }
+            gameLocalObject.setLastSyncGeneralItemsDate(list.getServerTime());
+            DaoConfiguration.getInstance().getGameLocalObjectDao().update(gameLocalObject);
+            if (iEvent != null) {
 //        syncDates.put(gameLocalObject.getId(), list.getServerTime());
 //
-            if (gameLocalObject!=null) {
+                if (gameLocalObject != null) {
 
-                gameLocalObject.resetGeneralItems();
+                    gameLocalObject.resetGeneralItems();
+                }
             }
         }
     }

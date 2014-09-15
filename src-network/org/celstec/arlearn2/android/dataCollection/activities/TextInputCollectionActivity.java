@@ -42,7 +42,7 @@ public abstract class TextInputCollectionActivity extends Activity {
             public void onClick(View view) {
                 String text = ((EditText) findViewById(getDataCollectionText())).getText().toString();
                 Bundle conData = new Bundle();
-                conData.putString("value", text);
+                conData.putString("textValue", text);
                 Intent intent = new Intent();
                 intent.putExtras(conData);
                 setResult(Activity.RESULT_OK, intent);

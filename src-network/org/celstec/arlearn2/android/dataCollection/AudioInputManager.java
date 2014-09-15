@@ -2,7 +2,10 @@ package org.celstec.arlearn2.android.dataCollection;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
+
+import java.io.File;
 
 
 /**
@@ -43,9 +46,11 @@ public class AudioInputManager extends DataCollectionManager {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-//            String text = data.getExtras().get("textValue").toString();
+            String filePath = data.getExtras().get("filePath").toString();
+            File audioFile = new File(filePath);
+            response.setUriAsString(Uri.fromFile(audioFile).toString());
 //            response.setValue(text);
-//            saveResponseForSyncing();
+            saveResponseForSyncing();
         }
     }
 }

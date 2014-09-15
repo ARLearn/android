@@ -42,14 +42,14 @@ public class DataCollectionTestActivity extends Activity{
         findViewById(R.id.pictureButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataCollectorManager.takeDataSample();
+                dataCollectorManager.takeDataSample(null);
             }
         });
 
         findViewById(R.id.videoButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                videoDataCollectorManager.takeDataSample();
+                videoDataCollectorManager.takeDataSample(null);
             }
         });
 

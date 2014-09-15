@@ -93,7 +93,7 @@ public class GameSplashScreen extends Activity {
     private void onlineTest() {
         gameDownloadManager = new GameDownloadManager(gameLocalObject.getId());
         gameDownloadManager.setDownloadEventListener(downloadViewManager);
-        notOnline();
+//        notOnline();
         if (ARL.isOnline()) {
             ARL.eventBus.post(new NetworkTest());
         } else {

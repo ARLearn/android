@@ -42,4 +42,9 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     public int getStopRecordingButton() {
         return R.id.stopRecording;
     }
+
+    @Override
+    public int getSubmitButton() {
+        return R.id.dataCollectionSubmit;
+    }
 }

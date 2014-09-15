@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import org.celstec.arlearn2.android.util.MediaFolders;
 
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -38,6 +40,7 @@ import java.io.IOException;
 public abstract class AudioCollectionActivity extends Activity {
     static final private double EMA_FILTER = 0.6;
 
+    private File recording = null;
     private MediaRecorder mRecorder = null;
     private double mEMA = 0.0;
 
@@ -49,6 +52,8 @@ public abstract class AudioCollectionActivity extends Activity {
     public  abstract int getAudioFeedbackView();
     public  abstract int getStartRecordingButton();
     public  abstract int getStopRecordingButton();
+    public  abstract int getSubmitButton();
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +74,14 @@ public abstract class AudioCollectionActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         stopRecording();
+                    }
+                }
+        );
+        findViewById(getSubmitButton()).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        submitAudio();
                     }
                 }
         );
@@ -94,7 +107,8 @@ public abstract class AudioCollectionActivity extends Activity {
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mRecorder.setOutputFile("/dev/null");
+            recording = MediaFolders.createOutgoingAmrFile();
+            mRecorder.setOutputFile(recording.toString());
             try {
                 mRecorder.prepare();
             } catch (IOException e) {
@@ -144,6 +158,20 @@ public abstract class AudioCollectionActivity extends Activity {
         }
     };
 
+
+    public void submitAudio() {
+        // TODO
+
+        if (recording!=null) {
+            System.out.println(recording.toString());
+            Bundle conData = new Bundle();
+            conData.putString("filePath", recording.getAbsolutePath());
+            Intent intent = new Intent();
+            intent.putExtras(conData);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
+    }
 
 
 }

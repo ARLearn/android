@@ -77,14 +77,16 @@ public class DataCollectionResultController {
 
     public void notifyDataSetChanged(){
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
-            DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), ""+responseLocalObject.getTimeStamp());
-            if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
-                result.setDataAsString(responseLocalObject.getValue());
+            if (responseLocalObject !=null) {
+                DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp());
+                if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
+                    result.setDataAsString(responseLocalObject.getValue());
+                }
+                if (responseLocalObject.getType() == ResponseLocalObject.VALUE_TYPE) {
+                    result.setDataAsString(responseLocalObject.getValue());
+                }
+                addResult(result);
             }
-            if (responseLocalObject.getType() == ResponseLocalObject.VALUE_TYPE) {
-                result.setDataAsString(responseLocalObject.getValue());
-            }
-            addResult(result);
         }
     }
 
