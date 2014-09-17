@@ -8,6 +8,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.dao.gen.ResponseLocalObject;
 
+import java.util.HashSet;
 import java.util.Vector;
 
 /**
@@ -36,6 +37,7 @@ public class DataCollectionResultController {
     private Vector<DataCollectionResult> results = new Vector<DataCollectionResult>();
     private LinearLayout resultsLinearLayout;
     private LazyListAdapter adapter;
+    private HashSet<Long> displayedIds = new HashSet<Long>();
 
     public DataCollectionResultController(GeneralItemActivity activity) {
         this.activity = activity;
@@ -78,7 +80,7 @@ public class DataCollectionResultController {
     public void notifyDataSetChanged(){
         adapter.updateList();
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
-            if (responseLocalObject !=null) {
+            if (responseLocalObject !=null && !displayedIds.contains(responseLocalObject.getId())) {
                 DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp());
                 if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
                     result.setDataAsString(responseLocalObject.getValue());
@@ -87,6 +89,7 @@ public class DataCollectionResultController {
                     result.setDataAsString(responseLocalObject.getValue());
                 }
                 addResult(result);
+                displayedIds.add(responseLocalObject.getId());
             }
         }
     }

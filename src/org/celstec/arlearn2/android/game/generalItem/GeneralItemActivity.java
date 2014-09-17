@@ -60,7 +60,7 @@ public class GeneralItemActivity extends Activity {
         if (event.getGeneralItemId() == generalItemActivityFeatures.generalItemLocalObject.getId()){
             Boolean deleted = generalItemActivityFeatures.generalItemLocalObject.getDeleted();
             if (deleted!= null && deleted){
-                GeneralItemActivity.this.finish();;
+                GeneralItemActivity.this.finish();
             }
             generalItemActivityFeatures.setMetadata();
         }
@@ -89,6 +89,7 @@ public class GeneralItemActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (generalItemActivityFeatures != null)
             generalItemActivityFeatures.onActivityResult(requestCode, resultCode, data);
+        generalItemActivityFeatures.updateResponses();
     }
 
     public GameActivityFeatures getGameActivityFeatures() {

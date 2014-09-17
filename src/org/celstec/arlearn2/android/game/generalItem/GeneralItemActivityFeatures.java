@@ -107,9 +107,8 @@ public abstract class GeneralItemActivityFeatures {
 
             @Override
             public void onAudioClick() {
-//                dataCollectionViewController.checkAudio();
-//                dataCollectionViewController.checkPicture();
-                if (audioInputManager == null) audioInputManager = new AudioInputManager(activity);
+
+                audioInputManager = new AudioInputManager(activity);
                 audioInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 audioInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 audioInputManager.takeDataSample(AudioCollectionActivityImpl.class);
@@ -117,7 +116,7 @@ public abstract class GeneralItemActivityFeatures {
 
             @Override
             public void onPictureClick() {
-                if (pictureManager == null) pictureManager = new PictureManager(activity);
+                pictureManager = new PictureManager(activity);
                 pictureManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 pictureManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 pictureManager.takeDataSample(null);
@@ -130,7 +129,7 @@ public abstract class GeneralItemActivityFeatures {
 
             @Override
             public void onTextClick() {
-                if (textInputManager == null) textInputManager = new TextInputManager(activity);
+                textInputManager = new TextInputManager(activity);
                 textInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 textInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 textInputManager.takeDataSample(TextInputCollectionActivity.class);
@@ -138,10 +137,7 @@ public abstract class GeneralItemActivityFeatures {
 
             @Override
             public void onNumberClick() {
-//                dataCollectionViewController.checkNumbers();
-//                DataCollectionResult res = new DataCollectionResult(1, "test");
-//                dataCollectionResultController.addResult(res);
-                if (valueInputManager == null) valueInputManager = new ValueInputManager(activity);
+                valueInputManager = new ValueInputManager(activity);
                 valueInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 valueInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 valueInputManager.takeDataSample(ValueInputCollectionActivityImpl.class);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import org.celstec.arlearn2.android.dataCollection.activities.TextInputCollectionActivity;
 import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
+import org.celstec.dao.gen.ResponseLocalObject;
 
 /**
  * ****************************************************************************
@@ -31,13 +32,10 @@ public class ValueInputManager extends DataCollectionManager {
     public ValueInputManager(Activity ctx) {
         super(ctx);
         response.setValueType();
-
     }
     @Override
     public void takeDataSample(Class className) {
         Intent textInputIntent = new Intent(ctx, className);
-//        Intent textInputIntent = new Intent(ctx, ValueInputCollectionActivity.class);
-//        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
         ctx.startActivityForResult(textInputIntent, VALUE_RESULT);
     }
 
