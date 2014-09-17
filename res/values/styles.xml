@@ -157,4 +157,15 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">?attr/dataCollectionBackgroundCheck</item>
     </style>
+
+    <style name="ARLearn.Game.DataCollectionValue">
+    </style>
+    <style name="ARLearn.Game.DataCollectionValue.Button">
+        <item name="android:background">@drawable/game_data_collection_background_circle_theme1</item>
+        <item name="android:textSize">25sp</item>
+
+        <item name="android:layout_margin">10dip</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 </resources>
