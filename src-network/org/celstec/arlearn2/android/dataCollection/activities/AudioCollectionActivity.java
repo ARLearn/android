@@ -2,15 +2,15 @@ package org.celstec.arlearn2.android.dataCollection.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.*;
 import org.celstec.arlearn2.android.util.MediaFolders;
 
 
@@ -37,7 +37,7 @@ import java.io.IOException;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public abstract class AudioCollectionActivity extends Activity {
+public abstract class AudioCollectionActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
     static final private double EMA_FILTER = 0.6;
 
     private File recording = null;
@@ -50,17 +50,28 @@ public abstract class AudioCollectionActivity extends Activity {
     public  abstract int getGameGeneralitemAudioInput();
 
     public  abstract int getAudioFeedbackView();
+
+    public  abstract int getAudioRecordingLevel0();
+    public  abstract int getAudioRecordingLevel1();
+    public  abstract int getAudioRecordingLevel2();
+    public  abstract int getAudioRecordingLevel3();
+    public  abstract int getAudioRecordingLevel4();
+
     public  abstract int getStartRecordingButton();
     public  abstract int getStopRecordingButton();
     public  abstract int getSubmitButton();
-
+    public  abstract  int getCancelButton();
+    public  abstract  int getMediaPlayButton();
+    public abstract int getPlayPauseButton();
+    public abstract int getDeleteMediaButton();
+    public abstract int getSeekBar();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getGameGeneralitemAudioInput());
         ImageView view = (ImageView) findViewById(getAudioFeedbackView());
-        view.setLayoutParams(new LinearLayout.LayoutParams(100,
-                100));
+//        view.setLayoutParams(new LinearLayout.LayoutParams(100,
+//                100));
         findViewById(getStartRecordingButton()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -85,6 +96,35 @@ public abstract class AudioCollectionActivity extends Activity {
                     }
                 }
         );
+        findViewById(getCancelButton()).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (recording!= null && recording.exists()) recording.deleteOnExit();
+                        AudioCollectionActivity.this.finish();
+                    }
+                }
+        );
+        playPauseButton = (ImageButton)findViewById(getPlayPauseButton());
+        playPauseButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        playPauseButton();
+                    }
+                }
+        );
+        findViewById(getDeleteMediaButton()).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        deleteMedia();
+                    }
+                }
+        );
+
+        seekbar = (SeekBar) findViewById(getSeekBar());
+        seekbar.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -116,6 +156,8 @@ public abstract class AudioCollectionActivity extends Activity {
             }
             mRecorder.start();
             mEMA = 0.0;
+            findViewById(getStopRecordingButton()).setVisibility(View.VISIBLE);
+            findViewById(getStartRecordingButton()).setVisibility(View.GONE);
         }
     }
 
@@ -125,6 +167,13 @@ public abstract class AudioCollectionActivity extends Activity {
             mRecorder.reset();
             mRecorder.release();
             mRecorder = null;
+            findViewById(getStopRecordingButton()).setVisibility(View.GONE);
+            findViewById(getSubmitButton()).setVisibility(View.VISIBLE);
+            findViewById(getMediaPlayButton()).setVisibility(View.VISIBLE);
+            ImageView leftView = (ImageView) findViewById(getAudioFeedbackView());
+            leftView.setVisibility(View.GONE);
+            leftView.setImageResource(getAudioRecordingLevel0());
+            preparePlayer();
         }
     }
 
@@ -151,10 +200,25 @@ public abstract class AudioCollectionActivity extends Activity {
         public void run() {
 
             mHandler.postDelayed(mStatusChecker, mInterval);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((50+(int) (100*getAmplitudeEMA())),
-                    100);
-            params.gravity= Gravity.CENTER_HORIZONTAL;
-            findViewById(getAudioFeedbackView()).setLayoutParams(params);
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((50+(int) (100*getAmplitudeEMA())),
+//                    100);
+//            params.gravity= Gravity.CENTER_HORIZONTAL;
+//            findViewById(getAudioFeedbackView()).setLayoutParams(params);
+            ImageView leftView = (ImageView) findViewById(getAudioFeedbackView());
+            if (mRecorder == null) {
+                leftView.setImageResource(getAudioRecordingLevel0());
+            } else if (getAmplitudeEMA()<0.2d) {
+                leftView.setImageResource(getAudioRecordingLevel1());
+            } else if (getAmplitudeEMA()<0.5d) {
+                leftView.setImageResource(getAudioRecordingLevel2());
+            } else if (getAmplitudeEMA()< 0.8d) {
+                leftView.setImageResource(getAudioRecordingLevel3());
+            } else {
+                leftView.setImageResource(getAudioRecordingLevel4());
+            }
+//            leftView.setMinimumWidth(100);
+//            leftView.setMinimumHeight(100);
+
         }
     };
 
@@ -174,4 +238,113 @@ public abstract class AudioCollectionActivity extends Activity {
     }
 
 
+    private MediaPlayer mediaPlayer;
+    private ImageButton playPauseButton;
+    private SeekBar seekbar;
+    private int status = PAUSE;
+    private final static int PAUSE = 0;
+    private final static int PLAYING = 1;
+
+    private double startTime = 0;
+    private double finalTime = 0;
+    public static int oneTimeOnly = 0;
+
+    private Handler playHandler = new Handler();
+
+    public void preparePlayer() {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+        }
+        mediaPlayer.reset();
+        oneTimeOnly = 0;
+        status = PAUSE;
+        try {
+            if (recording != null) {
+                Uri uri = Uri.fromFile(recording);
+                mediaPlayer.setDataSource(this, uri);
+                mediaPlayer.prepare();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void playPauseButton() {
+        if (status == PAUSE) {
+            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+
+            status = PLAYING;
+            mediaPlayer.start();
+            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+            finalTime = mediaPlayer.getDuration();
+            startTime = mediaPlayer.getCurrentPosition();
+            if(oneTimeOnly == 0){
+                seekbar.setMax((int) finalTime);
+                oneTimeOnly = 1;
+            }
+            seekbar.setProgress((int)startTime);
+            playHandler.postDelayed(UpdateSongTime,100);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    status = PAUSE;
+                    playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+
+                }
+            });
+        } else {
+            playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+
+            status = PAUSE;
+            mediaPlayer.pause();
+        }
+    }
+
+    private Runnable UpdateSongTime = new Runnable() {
+        public void run() {
+            startTime = mediaPlayer.getCurrentPosition();
+
+            seekbar.setProgress((int)startTime);
+            playHandler.postDelayed(this, 100);
+        }
+    };
+
+    public void deleteMedia() {
+        recording.deleteOnExit();
+        findViewById(getStartRecordingButton()).setVisibility(View.VISIBLE);
+        ImageView feedbackView = (ImageView) findViewById(getAudioFeedbackView());
+        feedbackView.setVisibility(View.VISIBLE);
+        feedbackView.setImageResource(getAudioRecordingLevel0());
+
+        findViewById(getStopRecordingButton()).setVisibility(View.GONE);
+        findViewById(getSubmitButton()).setVisibility(View.GONE);
+        findViewById(getMediaPlayButton()).setVisibility(View.GONE);
+
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        if (seekBar.getProgress() == finalTime){
+            status = PAUSE;
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(0);
+        } else
+        if (status == PAUSE) {
+            mediaPlayer.seekTo(seekBar.getProgress());
+        } else {
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(seekBar.getProgress());
+            mediaPlayer.start();
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
 }

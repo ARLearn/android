@@ -85,9 +85,11 @@
     <activity
             android:name=".game.generalItem.dataCollection.impl.AudioCollectionActivityImpl"
             android:label="audio input"
+
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             >
     </activity>
+
 
 
     <activity android:name=".testAdapters.MyGames" android:label="@string/app_name"/>

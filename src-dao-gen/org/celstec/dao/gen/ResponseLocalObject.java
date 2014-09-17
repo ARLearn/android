@@ -348,6 +348,11 @@ public class ResponseLocalObject {
                 setNumberValue(jsonObject.getDouble("value"));
                 setValueType();
             }
+            if (jsonObject.has("answer")) {
+                setMultipleChoiceAnswerType();
+                setMultipleChoiceAnswerValue(jsonObject.getString("answer"));
+
+            }
 
             if (jsonObject.has("width")) setWidth(jsonObject.getInt("width"));
             if (jsonObject.has("height")) setHeight(jsonObject.getInt("height"));
@@ -364,6 +369,7 @@ public class ResponseLocalObject {
     public static final  int AUDIO_TYPE = 3;
     public static final  int TEXT_TYPE = 4;
     public static final  int VALUE_TYPE = 5;
+    public static final  int ANSWER_TYPE = 6;
 
     public void setPictureType(){
         setType(PICTURE_TYPE);
@@ -383,6 +389,10 @@ public class ResponseLocalObject {
 
     public void setValueType(){
         setType(VALUE_TYPE);
+    }
+
+    public void setMultipleChoiceAnswerType() {
+        setType(ANSWER_TYPE);
     }
 
     public boolean isPicture() {
@@ -408,6 +418,11 @@ public class ResponseLocalObject {
     public boolean isValue() {
         if (getType() == null) return false;
         return getType() == VALUE_TYPE;
+    }
+
+    public boolean isMultipleChoiceAnswerType(){
+        if (getType() == null) return false;
+        return getType() == ANSWER_TYPE;
     }
 
     public Uri getUri() {
@@ -508,6 +523,10 @@ public class ResponseLocalObject {
 
     public void setNumberValue(double value){
         setValue(""+value);
+    }
+
+    public void setMultipleChoiceAnswerValue(String value) {
+        setValue(value);
     }
 
     private String buildRemotePath(Uri uri, long runId, String account) {

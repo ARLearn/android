@@ -67,6 +67,8 @@ public class GameSplashScreen extends Activity {
         ARL.actions.createAction(runLocalObject.getId(), "startRun");
         ARL.actions.uploadActions(runLocalObject.getId());
         ARL.actions.downloadActions(runLocalObject.getId());
+        ARL.responses.syncResponses(runLocalObject.getId());
+
         this.startActivity(gameIntent);
         this.finish();
     }
@@ -123,6 +125,8 @@ public class GameSplashScreen extends Activity {
 //            System.out.println("error message, switch on network to sync first");
             displayAlert(R.string.contentMissingNoInternet);
         }
+        startGeneralItemListActivity();
+
     }
 
     private void displayAlert(int messageId) {

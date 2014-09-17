@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
+import android.widget.SeekBar;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
 
@@ -34,6 +35,37 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     }
 
     @Override
+    public int getAudioRecordingLevel0() {
+        return R.drawable.game_data_collection_input_norecording;
+    }
+
+    @Override
+    public int getAudioRecordingLevel1() {
+        return R.drawable.game_data_collection_input_recording_level1;
+    }
+
+    @Override
+    public int getAudioRecordingLevel2() {
+        return R.drawable.game_data_collection_input_recording_level2;
+    }
+
+    @Override
+    public int getAudioRecordingLevel3() {
+        return R.drawable.game_data_collection_input_recording_level3;
+    }
+
+    @Override
+    public int getAudioRecordingLevel4() {
+        return R.drawable.game_data_collection_input_recording_level4;
+    }
+
+
+//    @Override
+//    public int getAudioFeedbackViewLeft() {
+//        return R.id.audioFeedback_left;
+//    }
+
+    @Override
     public int getStartRecordingButton() {
         return R.id.startRecording;
     }
@@ -47,4 +79,31 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     public int getSubmitButton() {
         return R.id.dataCollectionSubmit;
     }
+
+    @Override
+    public int getCancelButton() {
+        return R.id.cancelId;
+    }
+
+    @Override
+    public int getMediaPlayButton() {
+        return R.id.mediaBar;
+    }
+
+    @Override
+    public int getPlayPauseButton() {
+        return R.id.playPauseButton;
+    }
+
+    @Override
+    public int getDeleteMediaButton() {
+        return R.id.deleteRecordingButton;
+    }
+
+    @Override
+    public int getSeekBar() {
+        return R.id.seekbar;
+    }
+
+
 }
