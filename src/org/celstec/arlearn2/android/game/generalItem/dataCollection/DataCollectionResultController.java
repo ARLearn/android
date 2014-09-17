@@ -76,6 +76,7 @@ public class DataCollectionResultController {
     }
 
     public void notifyDataSetChanged(){
+        adapter.updateList();
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
             if (responseLocalObject !=null) {
                 DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp());

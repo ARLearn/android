@@ -10,6 +10,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
+import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -65,6 +66,10 @@ public class GeneralItemActivity extends Activity {
         }
     }
 
+
+    public void onEventMainThread(ResponseEvent event) {
+        generalItemActivityFeatures.updateResponses();
+    }
 
     @Override
     protected void onPause() {

@@ -33,8 +33,17 @@ public class LazyListAdapter {
 
     protected LazyList<ResponseLocalObject> lazyList;
     protected QueryBuilder<ResponseLocalObject> qb;
+    protected long runId;
+    protected long generalItemId;
+
 
     public LazyListAdapter(long runId, long generalItemId) {
+        lazyList = getQueryBuilder(runId, generalItemId).listLazy();
+        this.runId = runId;
+        this.generalItemId = generalItemId;
+    }
+
+    public void updateList() {
         lazyList = getQueryBuilder(runId, generalItemId).listLazy();
     }
 

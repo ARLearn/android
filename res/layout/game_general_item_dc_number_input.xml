@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/functionPad"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:orientation="vertical"
               android:background="@drawable/gradient_alert_window"
@@ -13,15 +13,17 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
               android:text="instruction text"
-              android:textSize="30dp"/>
+              android:textSize="30dp"
+              android:padding="15dip"/>
 
     <LinearLayout
             android:id="@+id/row1"
 
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:padding="15dip"
 
-            android:layout_weight=".12" >
+             >
 
         <TextView
                 android:id="@+id/textView1"
@@ -33,40 +35,40 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="0"
+                android:textColor="@color/abs__background_holo_dark"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="40sp" />
     </LinearLayout>
 
-
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+        >
 
     <LinearLayout
             android:id="@+id/row4"
             android:layout_width="match_parent"
 
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight=".12" >
 
 
         <Button
                 android:id="@+id/button7"
-
-
-                android:layout_weight=".25"
                 style="@style/ARLearn.Game.DataCollectionValue.Button"
                 android:text="7"
                 />
 
         <Button
                 android:id="@+id/button8"
-
-                android:layout_weight=".25"
                 android:text="8"
                 style="@style/ARLearn.Game.DataCollectionValue.Button"
                 />
 
         <Button
                 android:id="@+id/button9"
-                android:layout_weight=".25"
                 android:text="9"
                 style="@style/ARLearn.Game.DataCollectionValue.Button"
                 />
@@ -82,27 +84,18 @@
 
         <Button
                 android:id="@+id/button4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
                 android:text="4"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button"/>
 
         <Button
                 android:id="@+id/button5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
                 android:text="5"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button" />
 
         <Button
                 android:id="@+id/button6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
                 android:text="6"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button" />
 
 
     </LinearLayout>
@@ -115,27 +108,21 @@
 
         <Button
                 android:id="@+id/button1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
+
                 android:text="1"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button"/>
 
         <Button
                 android:id="@+id/button2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
+
                 android:text="2"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button" />
 
         <Button
                 android:id="@+id/button3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
+
                 android:text="3"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button"/>
 
 
     </LinearLayout>
@@ -148,29 +135,22 @@
 
         <Button
                 android:id="@+id/buttonDot"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
+
                 android:text="."
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button" />
 
         <Button
                 android:id="@+id/button0"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
                 android:text="0"
-                android:textSize="25sp" />
+                style="@style/ARLearn.Game.DataCollectionValue.Button"/>
 
         <Button
                 android:id="@+id/buttonBack"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
-                android:text="back"
-                android:textSize="25sp" />
+                android:text="B"
+                style="@style/ARLearn.Game.DataCollectionValue.Button"/>
 
 
+    </LinearLayout>
     </LinearLayout>
     <Button
             android:id="@+id/dataCollectionSubmit"

@@ -14,6 +14,7 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollecti
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollectionViewController;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.LazyListAdapter;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCollectionActivityImpl;
+import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
 import org.celstec.arlearn2.beans.generalItem.*;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -143,7 +144,7 @@ public abstract class GeneralItemActivityFeatures {
                 if (valueInputManager == null) valueInputManager = new ValueInputManager(activity);
                 valueInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 valueInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-                valueInputManager.takeDataSample(ValueInputCollectionActivity.class);
+                valueInputManager.takeDataSample(ValueInputCollectionActivityImpl.class);
             }
 
         };
@@ -193,4 +194,8 @@ public abstract class GeneralItemActivityFeatures {
 
 
     public void onPauseActivity(){}
+
+    public void updateResponses() {
+        dataCollectionResultController.notifyDataSetChanged();
+    }
 }

@@ -34,8 +34,7 @@
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
-            android:background="@drawable/game_data_collection_background_circle_theme1"
             android:padding="4dip"
-            android:src="@drawable/game_data_collection_audio" />
+            android:src="@drawable/game_data_collection_input_trash" />
 
 </RelativeLayout>

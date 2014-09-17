@@ -182,6 +182,7 @@ public class ResponseDelegator extends AbstractDelegator{
 
             }
             if (responseEvent != null) {
+                DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId).resetResponses();
                 ARL.eventBus.post(responseEvent);
             }
         }
