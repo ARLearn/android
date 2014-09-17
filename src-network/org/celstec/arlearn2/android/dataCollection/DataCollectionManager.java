@@ -68,6 +68,7 @@ public  abstract class DataCollectionManager {
         response.setNextSynchronisationTime(0l);
         setLocationDetails();
         DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
+        DaoConfiguration.getInstance().getRunLocalObjectDao().load(response.getRunId()).resetResponses();
     }
 
     private void setLocationDetails() {
