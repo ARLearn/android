@@ -77,12 +77,11 @@ public class ResponseDelegator extends AbstractDelegator{
 
         notSyncedQuery.setParameter(0, serverTime);
 
-        for (ResponseLocalObject response : notSyncedQuery.list()) {
-            Log.i(SYNC_TAG, "Uploading response: "+response.getUriAsString()    );
+        for (ResponseLocalObject response : notSyncedQuery.list()) { //uploading responses
             synchronize(response);
         }
 
-        if (syncResponses.getRunId() != null) {
+        if (syncResponses.getRunId() != null) { //downloading responses
             synchronizeResponsesWithServer(syncResponses.getRunId());
             synchronizeResponseFilesWithServer(syncResponses.getRunId());
         }
@@ -94,17 +93,30 @@ public class ResponseDelegator extends AbstractDelegator{
         String token = returnTokenIfOnline();
         if (token != null) {
             Response responseBean = response.getBean();
-            Response responseResult = ResponseClient.getResponseClient().publishAction(token, responseBean);
-            DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
-            response.setId(responseResult.getResponseId());
-            response.setIsSynchronized(true);
+            ResponseEvent re = new ResponseEvent(response.getRunId());
+            if (response.getRevoked()) {
+                Response responseResult =  ResponseClient.getResponseClient().deleteResponse(token, response.getId());
+                re.setDeletion(true);
+                if (responseResult.getRevoked() == null) {
+                    System.out.println("test");
+                }
+                if (responseResult.getRevoked()){
+                    response.setIsSynchronized(true);
+                }
+            } else {
+                Response responseResult = ResponseClient.getResponseClient().publishAction(token, responseBean);
+                DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
+                response.setId(responseResult.getResponseId());
+                response.setIsSynchronized(true);
+            }
             DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
-            ARL.eventBus.post(new ResponseEvent(response.getRunId()));
+
+            ARL.eventBus.post(re);
             response.getGeneralItemLocalObject().resetResponses();
         }
     }
     private void synchronize(ResponseLocalObject response) {
-        if (!response.hasFile()) {
+        if (!response.hasFile() || response.getRevoked()) {
             synchronizeWithoutFile(response);
             return;
         }

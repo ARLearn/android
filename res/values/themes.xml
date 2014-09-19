@@ -27,6 +27,7 @@
         <item name="textLight">#ffffff</item>
         <item name="textDark">#33485f</item>
         <item name="textInactive">#c5beb2</item>
+        <item name="transparency">#99000000</item>
 
         <item name="marginLeft">10dip</item>
 
@@ -35,6 +36,8 @@
 
         <item name="messageListOval">@drawable/game_oval_button_alternative_color_theme1</item>
         <item name="messageListOvalRead">@drawable/game_oval_text_inactive_theme1</item>
+
+        <item name="textSizeTitle">20dp</item>
     </style>
 
     <style name="ARLearn.Theme2" parent="Theme.Sherlock">
@@ -52,10 +55,12 @@
         <item name="textLight">#ffffff</item>
         <item name="textDark">#33485f</item>
         <item name="textInactive">#f6f6f6</item>
+        <item name="transparency">#99000000</item>
 
         <item name="marginLeft">10dip</item>
 
         <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme2</item>
         <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
+        <item name="textSizeTitle">20dp</item>
     </style>
 </resources>

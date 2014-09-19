@@ -1,5 +1,6 @@
 package org.celstec.dao.gen;
 
+import org.celstec.arlearn2.android.delegators.AccountDelegator;
 import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.DaoSession;
 import de.greenrobot.dao.DaoException;
@@ -235,6 +236,20 @@ public class ActionLocalObject {
             throw new DaoException("Entity is detached from DAO context");
         }    
         myDao.refresh(this);
+    }
+
+    public ActionLocalObject(Action bean) {
+        setValuesFromBean(bean);
+    }
+
+    private void setValuesFromBean(Action bean) {
+        setId(bean.getIdentifier());
+        if (bean.getGeneralItemId() != null) setGeneralItem(bean.getGeneralItemId());
+        if (bean.getAction() != null) setAction(bean.getAction());
+        if (bean.getGeneralItemType() !=null) setGeneralItemType(bean.getGeneralItemType());
+        if (bean.getRunId() != null) setRunId(bean.getRunId());
+        if (bean.getTime() != null) setTime(bean.getTime());
+        if (bean.getUserEmail() != null) setAccount(AccountDelegator.getInstance().getAccount(bean.getUserEmail()).getId());
     }
 
 

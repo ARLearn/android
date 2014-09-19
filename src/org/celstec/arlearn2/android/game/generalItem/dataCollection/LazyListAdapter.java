@@ -50,7 +50,11 @@ public class LazyListAdapter {
     public QueryBuilder<ResponseLocalObject> getQueryBuilder(long runId, long generalItemId) {
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         qb = dao.queryBuilder();
-        qb.where(qb.and(ResponseLocalObjectDao.Properties.RunId.eq(runId), ResponseLocalObjectDao.Properties.GeneralItem.eq(generalItemId)))
+        qb.where(
+//                ResponseLocalObjectDao.Properties.Revoked.notEq(1))
+                qb.and(ResponseLocalObjectDao.Properties.Revoked.eq(0),
+                qb.and(ResponseLocalObjectDao.Properties.RunId.eq(runId),
+                        ResponseLocalObjectDao.Properties.GeneralItem.eq(generalItemId))))
                 .orderAsc(ResponseLocalObjectDao.Properties.TimeStamp);
         return qb;
     }

@@ -43,6 +43,7 @@ public  abstract class DataCollectionManager {
     protected DataCollectionManager(Activity ctx) {
         this.ctx = ctx;
         response = new ResponseLocalObject();
+        response.setRevoked(false);
     }
 
     public abstract void takeDataSample(Class className);

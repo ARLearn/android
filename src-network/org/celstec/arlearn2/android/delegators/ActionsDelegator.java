@@ -3,7 +3,9 @@ package org.celstec.arlearn2.android.delegators;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.beans.run.Action;
+import org.celstec.arlearn2.beans.run.ActionList;
 import org.celstec.arlearn2.client.ActionClient;
+import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.ActionLocalObject;
 import org.celstec.dao.gen.ActionLocalObjectDao;
 
@@ -61,18 +63,50 @@ public class ActionsDelegator extends AbstractDelegator {
             default:
                 break;
         }
-        actionBean.setGeneralItemType(generalItemType);
-        actionBean.setGeneralItemId(generalItemId);
-        actionBean.setRunId(runId);
-        actionBean.setTime(ARL.time.getServerTime());
-        actionBean.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
-        ARL.actions.createAction(actionBean);
-
+        if (actionDoesNotExist(runId, actionBean.getAction(), generalItemId, generalItemType, ARL.accounts.getLoggedInAccount())) {
+            actionBean.setGeneralItemType(generalItemType);
+            actionBean.setGeneralItemId(generalItemId);
+            actionBean.setRunId(runId);
+            actionBean.setTime(ARL.time.getServerTime());
+            actionBean.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
+            ARL.actions.createAction(actionBean);
+        }
 
     }
 
+
+
     public void createAction(long runId, String action) {
-        ARL.eventBus.post(new CreateAction(runId, action));
+        if (actionDoesNotExist(runId, action, ARL.accounts.getLoggedInAccount())) {
+            ARL.eventBus.post(new CreateAction(runId, action));
+        }
+    }
+    private boolean actionDoesNotExist(Long runId, String action, Long generalItemId, String generalItemType, AccountLocalObject account) {
+        ActionLocalObjectDao dao = DaoConfiguration.getInstance().getActionLocalObjectDao();
+        QueryBuilder<ActionLocalObject> queryBuilder = dao.queryBuilder();
+        queryBuilder.where(
+                queryBuilder.and(
+                        ActionLocalObjectDao.Properties.RunId.eq(runId),
+                        ActionLocalObjectDao.Properties.Action.eq(action),
+                        ActionLocalObjectDao.Properties.GeneralItem.eq(generalItemId),
+                        ActionLocalObjectDao.Properties.GeneralItemType.eq(generalItemType),
+                        ActionLocalObjectDao.Properties.Account.eq(account.getId())
+                )
+        );
+        return queryBuilder.count() == 0;
+    }
+
+    private boolean actionDoesNotExist(long runId, String action, AccountLocalObject account) {
+        ActionLocalObjectDao dao = DaoConfiguration.getInstance().getActionLocalObjectDao();
+        QueryBuilder<ActionLocalObject> queryBuilder = dao.queryBuilder();
+        queryBuilder.where(
+                queryBuilder.and(
+                        queryBuilder.and(ActionLocalObjectDao.Properties.RunId.eq(runId),
+                                ActionLocalObjectDao.Properties.Action.eq(action)),
+                        ActionLocalObjectDao.Properties.Account.eq(account.getId())
+                )
+        );
+        return queryBuilder.count() == 0;
     }
 
     public void createAction(Action action) {
@@ -81,7 +115,7 @@ public class ActionsDelegator extends AbstractDelegator {
     }
 
     public void downloadActions(long runId) {
-
+        ARL.eventBus.post(new DownloadActions(runId));
     }
 
     public void uploadActions(long runId) {
@@ -113,7 +147,7 @@ public class ActionsDelegator extends AbstractDelegator {
             actionLocalObject.getGeneralItemLocalObject().resetActions();
     }
 
-    private void onEventAsync(UploadActions uploadActions) {
+    private synchronized void onEventAsync(UploadActions uploadActions) {
         String token = returnTokenIfOnline();
         if (token != null) {
 
@@ -126,6 +160,33 @@ public class ActionsDelegator extends AbstractDelegator {
             for (ActionLocalObject actionLocalObject : actionsList) {
                 uploadAction(token, actionLocalObject);
             }
+        }
+    }
+
+    private void onEventAsync(DownloadActions downloadActions) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            ActionList list = ActionClient.getActionClient().getRunActions(token, downloadActions.getRunId(), 0l, null);
+            storeActionsInLocalDatabase(list);
+            while (list.getResumptionToken()!= null) {
+                list = ActionClient.getActionClient().getRunActions(token, downloadActions.getRunId(), 0l, list.getResumptionToken());
+                storeActionsInLocalDatabase(list);
+            }
+        }
+    }
+
+    private void storeActionsInLocalDatabase(ActionList list){
+        for (Action action: list.getActions()) {
+            storeActionsInLocalDatabase(action);
+        }
+    }
+
+    private void storeActionsInLocalDatabase(Action action) {
+        ActionLocalObject actionLocalObject = DaoConfiguration.getInstance().getActionLocalObjectDao().load(action.getIdentifier());
+        if (actionLocalObject == null) {
+            actionLocalObject = new ActionLocalObject(action);
+            actionLocalObject.setIsSynchronized(true);
+            DaoConfiguration.getInstance().getActionLocalObjectDao().insertOrReplace(actionLocalObject);
         }
     }
 
@@ -143,6 +204,22 @@ public class ActionsDelegator extends AbstractDelegator {
         private long runId;
 
         private UploadActions(long runId) {
+            this.runId = runId;
+        }
+
+        public long getRunId() {
+            return runId;
+        }
+
+        public void setRunId(long runId) {
+            this.runId = runId;
+        }
+    }
+
+    private class DownloadActions {
+        private long runId;
+
+        private DownloadActions(long runId) {
             this.runId = runId;
         }
 

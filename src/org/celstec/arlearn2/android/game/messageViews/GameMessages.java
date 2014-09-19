@@ -46,10 +46,6 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         setContentView(R.layout.game_list_messages);
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
-
-//        Handler handler = new Handler();
-//        handler.postDelayed(new AnimationRunnable(), 2000l);
-
     }
 
     @Override
@@ -89,7 +85,6 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 
 
     class AnimationRunnable implements Runnable {
-//        StrokenView view;
         public void run() {
 //            gameActivityFeatures.showStrokenNotification();
             gameActivityFeatures.showAlertViewNotification();

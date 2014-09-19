@@ -319,6 +319,7 @@ public class ResponseLocalObject {
     public void setValuesFromBean(Response bean) {
         setId(bean.getResponseId());
         setRevoked(bean.getRevoked());
+        if (getRevoked() == null) setRevoked(false);
         setIsSynchronized(true);
         setTimeStamp(bean.getTimestamp());
         setRunId(bean.getRunId());
@@ -436,9 +437,11 @@ public class ResponseLocalObject {
 
     public Response getBean() {
         Response bean = new Response();
+        bean.setResponseId(getId());
         bean.setRunId(getRunId());
         bean.setGeneralItemId(getGeneralItem());
         bean.setTimestamp(getTimeStamp());
+        bean.setRevoked(getRevoked());
         if (getLat()!= null) bean.setLat(getLat());
         if (getLng()!= null) bean.setLng(getLng());
         switch (getType()) {

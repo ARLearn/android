@@ -17,16 +17,14 @@
                 android:layout_height="70dp"
                 android:rotation="180"
                 android:layout_alignParentLeft="true"
-
                 android:background="@drawable/ic_arrow_right" />
         <ImageView
                 android:id="@+id/generalItemIcon"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="6dip"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_default_game" />
+                style="@style/ARLearn.Game.GeneralItemActivity.TopIcon"
+                 />
         <Button
                 android:id="@+id/nextButton"
                 android:layout_width="70dp"
@@ -40,17 +38,12 @@
 
     <TextView
             android:id="@+id/titleId"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:singleLine="false"
-            android:gravity="center"
-            android:text="Opdracht beschrijving multi line multi line multi lin" />
+            style="@style/ARLearn.Game.GeneralItemActivity.TitleTextView"
+            />
 
     <WebView
             android:id="@+id/descriptionId"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            style="@style/ARLearn.Game.GeneralItemActivity.RichTextView">
     </WebView>
 
     <LinearLayout
@@ -73,7 +66,7 @@
                 android:src="@android:drawable/ic_media_play" />
         <SeekBar
                 android:id="@+id/seekbar"
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_gravity="center_vertical"
                  android:progressDrawable="@drawable/game_general_item_seekbar_progress_theme1"
@@ -94,75 +87,75 @@
 
         <RelativeLayout
                 android:id="@+id/audioLayout"
-                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+                style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionRelativeLayout">
             <ImageView
                     android:id="@+id/audioButtonIcon"
-                    style="@style/ARLearn.Game.DataCollectionButton"
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionButton"
                     android:src="@drawable/game_data_collection_audio" />
             <ImageView
                     android:id="@+id/audioButtonCheckIcon"
 
-                    style="@style/ARLearn.Game.DataCollectionCheck"
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionCheck"
                      />
         </RelativeLayout>
 
         <RelativeLayout
                 android:id="@+id/pictureLayout"
-                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+                style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionRelativeLayout">
 
             <ImageView
                     android:id="@+id/pictureButtonIcon"
-                    style="@style/ARLearn.Game.DataCollectionButton"
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionButton"
                     android:src="@drawable/game_data_collection_image" />
 
             <ImageView
                     android:id="@+id/pictureButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck" />
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionCheck" />
 
         </RelativeLayout>
 
         <RelativeLayout
                 android:id="@+id/videoLayout"
-                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+                style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionRelativeLayout">
 
             <ImageView
                     android:id="@+id/videoButtonIcon"
-                    style="@style/ARLearn.Game.DataCollectionButton"
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionButton"
                     android:src="@drawable/game_data_collection_video" />
 
             <ImageView
                     android:id="@+id/videoButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck"/>
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionCheck"/>
 
         </RelativeLayout>
 
         <RelativeLayout
                 android:id="@+id/textLayout"
-                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+                style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionRelativeLayout">
 
             <ImageView
                     android:id="@+id/textButtonIcon"
-                    style="@style/ARLearn.Game.DataCollectionButton"
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionButton"
                     android:src="@drawable/game_data_collection_text" />
 
             <ImageView
                     android:id="@+id/textButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck"/>
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionCheck"/>
 
         </RelativeLayout>
 
         <RelativeLayout
                 android:id="@+id/numberLayout"
-                style="@style/ARLearn.Game.DataCollectionRelativeLayout">
+                style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionRelativeLayout">
 
             <ImageView
                     android:id="@+id/numberButtonIcon"
-                    style="@style/ARLearn.Game.DataCollectionButton"
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionButton"
                     android:src="@drawable/game_data_collection_number" />
 
             <ImageView
                     android:id="@+id/numberButtonCheckIcon"
-                    style="@style/ARLearn.Game.DataCollectionCheck" />
+                    style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionCheck" />
 
         </RelativeLayout>
 
@@ -171,9 +164,7 @@
     <LinearLayout
             android:id="@+id/dataCollectionResultsLayout"
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/backgroundColorDark"
+            style="@style/ARLearn.Game.GeneralItemActivity.DataCollectionResults"
             >
 
     </LinearLayout>

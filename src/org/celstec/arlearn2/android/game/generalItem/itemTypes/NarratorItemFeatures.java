@@ -2,6 +2,7 @@ package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
 import android.webkit.WebView;
 import android.widget.TextView;
+import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;

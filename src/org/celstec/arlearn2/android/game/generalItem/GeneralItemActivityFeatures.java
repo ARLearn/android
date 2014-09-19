@@ -194,4 +194,9 @@ public abstract class GeneralItemActivityFeatures {
     public void updateResponses() {
         dataCollectionResultController.notifyDataSetChanged();
     }
+
+    public void updateGeneralItem(){
+        generalItemLocalObject =DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(generalItemLocalObject.getId());
+        generalItemBean = generalItemLocalObject.getGeneralItemBean();
+    }
 }

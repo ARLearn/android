@@ -4,7 +4,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.dao.gen.ResponseLocalObject;
 
@@ -37,15 +39,15 @@ public class DataCollectionResultController {
     private Vector<DataCollectionResult> results = new Vector<DataCollectionResult>();
     private LinearLayout resultsLinearLayout;
     private LazyListAdapter adapter;
-    private HashSet<Long> displayedIds = new HashSet<Long>();
+//    private HashSet<Long> displayedIds = new HashSet<Long>();
 
     public DataCollectionResultController(GeneralItemActivity activity) {
         this.activity = activity;
         resultsLinearLayout = (LinearLayout) activity.findViewById(R.id.dataCollectionResultsLayout);
     }
 
-    public void addResult(DataCollectionResult result) {
-        View row = activity.getLayoutInflater().inflate(R.layout.game_general_item_dc_result_entry, null);
+    public void addResult(DataCollectionResult result, final ResponseLocalObject responseLocalObject) {
+        final View row = activity.getLayoutInflater().inflate(R.layout.game_general_item_dc_result_entry, null);
         switch (result.getType()) {
             case ResponseLocalObject.PICTURE_TYPE:
                 ((ImageView) row.findViewById(R.id.dcTypeIcon)).setImageResource(R.drawable.game_data_collection_image);
@@ -68,6 +70,21 @@ public class DataCollectionResultController {
         } else {
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
         }
+        row.findViewById(R.id.trashIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (responseLocalObject.getIsSynchronized() == false) {
+                    DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(responseLocalObject);
+                } else {
+                    responseLocalObject.setRevoked(true);
+                    responseLocalObject.setNextSynchronisationTime(0l);
+                    responseLocalObject.setIsSynchronized(false);
+                    DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
+                    row.setVisibility(View.GONE);
+                    ResponseDelegator.getInstance().syncResponses(responseLocalObject.getRunId());
+                }
+            }
+        });
         resultsLinearLayout.addView(row);
         results.add(result);
         result.setView(row);
@@ -79,8 +96,10 @@ public class DataCollectionResultController {
 
     public void notifyDataSetChanged(){
         adapter.updateList();
+        resultsLinearLayout.removeAllViews();
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
-            if (responseLocalObject !=null && !displayedIds.contains(responseLocalObject.getId())) {
+            //if (responseLocalObject !=null && !displayedIds.contains(responseLocalObject.getId())) {
+            if (responseLocalObject !=null ) {
                 DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp());
                 if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
                     result.setDataAsString(responseLocalObject.getValue());
@@ -88,8 +107,8 @@ public class DataCollectionResultController {
                 if (responseLocalObject.getType() == ResponseLocalObject.VALUE_TYPE) {
                     result.setDataAsString(responseLocalObject.getValue());
                 }
-                addResult(result);
-                displayedIds.add(responseLocalObject.getId());
+                addResult(result, responseLocalObject);
+//                displayedIds.add(responseLocalObject.getId());
             }
         }
     }

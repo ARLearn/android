@@ -15,6 +15,7 @@
         <attr name="textLight" format="color" />
         <attr name="textDark" format="color" />
         <attr name="textInactive" format="color" />
+        <attr name="transparency" format="color" />
 
         <attr name="marginLeft" format="dimension" />
 
@@ -23,5 +24,7 @@
 
         <attr name="messageListOval" format="reference" />
         <attr name="messageListOvalRead" format="reference" />
+
+        <attr name="textSizeTitle" format="dimension" />
     </declare-styleable>
 </resources>

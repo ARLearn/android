@@ -65,8 +65,9 @@ public class GameSplashScreen extends Activity {
         gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
         gameIntent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
         ARL.actions.createAction(runLocalObject.getId(), "startRun");
-        ARL.actions.uploadActions(runLocalObject.getId());
-        ARL.actions.downloadActions(runLocalObject.getId());
+        ARL.actions.syncActions(runLocalObject.getId());
+//        ARL.actions.uploadActions(runLocalObject.getId());
+//        ARL.actions.downloadActions(runLocalObject.getId());
         ARL.responses.syncResponses(runLocalObject.getId());
 
         this.startActivity(gameIntent);

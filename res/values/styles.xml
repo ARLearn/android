@@ -134,13 +134,36 @@
 
     </style>
 
-    <style name="ARLearn.Game.DataCollectionRelativeLayout">
+    <style name="ARLearn.Game.GeneralItemActivity">
+
+    </style>
+
+    <style name="ARLearn.Game.GeneralItemActivity.TopIcon">
+        <item name="android:layout_marginRight">60dip</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:src">@drawable/ic_default_game</item>
+    </style>
+
+    <style name="ARLearn.Game.GeneralItemActivity.TitleTextView">
+        <item name="android:textSize">?attr/textSizeTitle</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ARLearn.Game.GeneralItemActivity.RichTextView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ARLearn.Game.GeneralItemActivity.DataCollectionRelativeLayout">
         <item name="android:layout_width">60dip</item>
         <item name="android:layout_height">60dip</item>
         <item name="android:layout_marginRight">6dip</item>
     </style>
 
-    <style name="ARLearn.Game.DataCollectionButton">
+    <style name="ARLearn.Game.GeneralItemActivity.DataCollectionButton">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_margin">5dip</item>
@@ -149,7 +172,7 @@
         <item name="android:background">?attr/dataCollectionBackground</item>
     </style>
 
-    <style name="ARLearn.Game.DataCollectionCheck">
+    <style name="ARLearn.Game.GeneralItemActivity.DataCollectionCheck">
         <item name="android:layout_width">25dip</item>
         <item name="android:layout_height">25dip</item>
         <item name="android:src">@drawable/game_data_collection_checkmark</item>
@@ -157,6 +180,13 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">?attr/dataCollectionBackgroundCheck</item>
     </style>
+
+    <style name="ARLearn.Game.GeneralItemActivity.DataCollectionResults">
+        <item name="android:background">?attr/backgroundColorDark</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 
     <style name="ARLearn.Game.DataCollectionValue">
     </style>

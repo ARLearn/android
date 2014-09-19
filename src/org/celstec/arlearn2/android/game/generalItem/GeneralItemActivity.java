@@ -12,6 +12,7 @@ import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
+import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
@@ -48,6 +49,7 @@ public class GeneralItemActivity extends Activity {
         setTheme(R.style.ARLearn_schema1);
         setContentView(R.layout.game_general_item);
         gameActivityFeatures = new GameActivityFeatures(this);
+//        generalItemActivityFeatures.generalItemLocalObject.getGameLocalObject();
         generalItemActivityFeatures = GeneralItemActivityFeatures.getGeneralItemActivityFeatures(this);
         ARL.actions.issueAction(ActionsDelegator.READ,
                 gameActivityFeatures.getRunId(),
@@ -57,6 +59,7 @@ public class GeneralItemActivity extends Activity {
     }
 
     public void onEventMainThread(GeneralItemEvent event) {
+        generalItemActivityFeatures.updateGeneralItem();
         if (event.getGeneralItemId() == generalItemActivityFeatures.generalItemLocalObject.getId()){
             Boolean deleted = generalItemActivityFeatures.generalItemLocalObject.getDeleted();
             if (deleted!= null && deleted){
@@ -98,5 +101,16 @@ public class GeneralItemActivity extends Activity {
 
     public void setGameActivityFeatures(GameActivityFeatures gameActivityFeatures) {
         this.gameActivityFeatures = gameActivityFeatures;
+    }
+
+    private static int getTheme(Game game) {
+        switch (game.getTheme()){
+            case 1:
+                return R.style.ARLearn_schema1;
+            case 2:
+                return R.style.ARLearn_schema2;
+        }
+        return R.style.ARLearn_schema1;
+
     }
 }
