@@ -1,7 +1,10 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.webkit.WebView;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
@@ -39,4 +42,6 @@ public class MultipleChoiceImageTestFeatures extends MultipleChoiceFeatures {
     public MultipleChoiceImageTestFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         super(activity, generalItemLocalObject);
     }
+
+
 }

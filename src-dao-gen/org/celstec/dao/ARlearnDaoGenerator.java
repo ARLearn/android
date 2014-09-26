@@ -257,6 +257,7 @@ public class ARlearnDaoGenerator {
         game.addStringProperty("title").notNull();
         game.addStringProperty("licenseCode");
         game.addStringProperty("description");
+        game.addStringProperty("bean");
         game.addBooleanProperty("mapAvailable");
         game.addBooleanProperty("deleted");
         game.addLongProperty("lastModificationDate");

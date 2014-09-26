@@ -75,6 +75,17 @@
     </LinearLayout>
 
 
+    <LinearLayout
+            android:id="@+id/multipleChoice"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundColor"
+            android:orientation="vertical"
+            android:padding="7dip"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+    </LinearLayout>
 
     <LinearLayout
             android:id="@+id/dataCollection"

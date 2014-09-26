@@ -23,6 +23,24 @@
 
     </style>
 
+    <style name="ARLearn.ListHeaderText">
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+        <item name="android:textSize">25dp</item>
+
+        <item name="android:textColor">#33485f</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:layout_weight">0</item>
+       <item name="android:typeface">sans</item>
+
+        <item name="android:paddingLeft">20dp</item>
+
+
+    </style>
+
     <style name="ARLearn.ActionBarTitle">
         <item name="android:textSize">18dp</item>
         <item name="android:textColor">#fff</item>
@@ -67,6 +85,24 @@
 
     </style>
 
+    <style name="ARLearn.Store.GameRowSmall">
+        <item name="android:background">@drawable/gradient_store_game_entry_big</item>
+        <item name="android:textColor">#aaa</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">50dip</item>
+        <item name="android:layout_weight">0</item>
+
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingLeft">20dp</item>
+
+
+    </style>
+
     <style name="ARLearn.Store.GameRowBig">
         <item name="android:background">@drawable/gradient_store_game_entry_big</item>
         <item name="android:textColor">#aaa</item>
@@ -97,19 +133,19 @@
     </style>
 
     <style name="ARLearn.MyGames" parent="ARLearn.HomePane">
-        <item name="android:background">@drawable/gradient_home_games</item>
+        <item name="android:background">@drawable/main_menu_mygames_selector</item>
     </style>
 
     <style name="ARLearn.Store" parent="ARLearn.HomePane">
-        <item name="android:background">@drawable/gradient_home_store</item>
+        <item name="android:background">@drawable/main_menu_library_selector</item>
     </style>
 
     <style name="ARLearn.NearBy" parent="ARLearn.HomePane">
-        <item name="android:background">@drawable/gradient_home_nearme</item>
+        <item name="android:background">@drawable/main_menu_nearme_selector</item>
     </style>
 
     <style name="ARLearn.Scan" parent="ARLearn.HomePane">
-        <item name="android:background">@drawable/gradient_home_scan</item>
+        <item name="android:background">@drawable/main_menu_scan_selector</item>
 
     </style>
 

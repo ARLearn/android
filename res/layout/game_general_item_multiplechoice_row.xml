@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dip"
+
+        >
+
+    <ImageView
+            android:id="@+id/dcTypeIcon"
+
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/game_data_collection_background_circle_theme1"
+            android:padding="4dip"
+            android:src="@drawable/game_data_collection_audio" />
+
+
+
+    <TextView
+            android:id="@+id/choiceOption"
+            android:layout_marginLeft="5dip"
+            android:layout_width="match_parent"
+            android:layout_toRightOf="@id/dcTypeIcon"
+            android:layout_height="wrap_content"
+            android:text="Example application"
+            android:layout_centerVertical="true"
+            android:textSize="16sp" />
+
+    <ImageView
+            android:id="@+id/trashIcon"
+
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:padding="4dip"
+            android:src="@drawable/game_data_collection_input_trash" />
+
+</RelativeLayout>

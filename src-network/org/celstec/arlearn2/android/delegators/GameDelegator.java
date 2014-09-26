@@ -220,6 +220,7 @@ public final class GameDelegator extends AbstractDelegator{
         if (gameDao.getLastModificationDate() == null) gameDao.setLastModificationDate(0l);
         gameDao.setLat(gBean.getLat());
         gameDao.setLng(gBean.getLng());
+        gameDao.setBean(gBean.toString());
         return gameDao;
     }
 
