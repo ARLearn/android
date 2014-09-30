@@ -12,10 +12,13 @@ import android.widget.Toast;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.GameDelegator;
+import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadEventInterface;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.arlearn2.android.views.DownloadViewManager;
+import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
@@ -65,11 +68,10 @@ public class GameSplashScreen extends Activity {
         gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
         gameIntent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
         ARL.actions.createAction(runLocalObject.getId(), "startRun");
-        ARL.actions.syncActions(runLocalObject.getId());
-//        ARL.actions.uploadActions(runLocalObject.getId());
-//        ARL.actions.downloadActions(runLocalObject.getId());
-        ARL.responses.syncResponses(runLocalObject.getId());
-
+        if (ARL.config.getBooleanProperty("white_label_online")){
+            ARL.actions.syncActions(runLocalObject.getId());
+            ARL.responses.syncResponses(runLocalObject.getId());
+        }
         this.startActivity(gameIntent);
         this.finish();
     }
@@ -77,10 +79,24 @@ public class GameSplashScreen extends Activity {
     private void whiteLabelMetadata() {
         Long gameId = Long.parseLong(ARL.config.getProperty("white_label_gameId"));
         Long runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
+        ARL.accounts.syncMyAccountDetails();
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+
+        if (gameLocalObject == null) {
+            InitWhiteLabelDatabase initWhiteLabelDatabase = new InitWhiteLabelDatabase(this);
+            initWhiteLabelDatabase.init();
+
+
+            gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        }
         runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        if (runLocalObject == null) {
+            runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().loadAll().get(0);
+        }
         if (ARL.config.getBooleanProperty("white_label_online")) {
             onlineTest();
+        } else {
+            startGeneralItemListActivity();
         }
     }
 
@@ -175,9 +191,10 @@ public class GameSplashScreen extends Activity {
             whiteLabelMetadata();
         } else {
             nativeArlearnMetadata();
+            gameDownloadManager.register();
         }
 //        new DelayedGameLauncher(gameLocalObject.getId(), runLocalObject.getId(), this, 2000);
-        gameDownloadManager.register();
+
         //TODO nullpointerexception
 //        Caused by: java.lang.NullPointerException
 //        at org.celstec.arlearn2.android.game.GameSplashScreen.onResume(GameSplashScreen.java:86)
@@ -189,7 +206,7 @@ public class GameSplashScreen extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        gameDownloadManager.unregister();
+        if (gameDownloadManager!=null) gameDownloadManager.unregister();
         ARL.eventBus.unregister(this);
     }
 

@@ -55,6 +55,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         setListAdapter(adapter);
         adapter.setOnListItemClickCallback(this);
         ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
+        ARL.generalItemVisibility.calculateVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
     }
 
     @Override

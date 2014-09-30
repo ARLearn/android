@@ -36,8 +36,14 @@ public class GeneralItemVisibilityLocalObject {
 
     // KEEP FIELDS - put your custom fields here
 
+    public static final int VISIBLE = 1;
+    public static final int INVISIBLE = 2;
     public static String generateId(GeneralItemVisibility vi){
         return vi.getGeneralItemId()+":"+vi.getRunId();
+    }
+
+    public static String generateId(long runId, long itemId){
+        return itemId+":"+runId;
     }
 
     public GeneralItemVisibilityLocalObject(GeneralItemVisibility vi) {

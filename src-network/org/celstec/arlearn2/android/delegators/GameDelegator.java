@@ -1,8 +1,11 @@
 package org.celstec.arlearn2.android.delegators;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Log;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
+import org.celstec.arlearn2.android.delegators.game.GamePackageParser;
 import org.celstec.arlearn2.android.delegators.game.Rating;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.download.FileByteDownloader;
@@ -12,14 +15,17 @@ import org.celstec.arlearn2.android.events.SearchResultList;
 import org.celstec.arlearn2.android.util.FileDownloader;
 import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.game.*;
+import org.celstec.arlearn2.beans.generalItem.GeneralItemList;
 import org.celstec.arlearn2.client.GameClient;
 import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.codehaus.jettison.json.JSONTokener;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
@@ -117,6 +123,23 @@ public final class GameDelegator extends AbstractDelegator{
             return GameClient.getGameClient().getGame(token, gameId);
         }
         return null;
+    }
+
+    public void loadGameFromFile(Context context, Long gameId) {
+        AssetManager assetManager = context.getAssets();
+        try {
+            InputStream inputStream = assetManager.open("game."+gameId+".json");
+            GamePackageParser gamePackageParser = new GamePackageParser(inputStream);
+            Game game = gamePackageParser.getGameLocalObject();
+            GameLocalObject gameLocalObject = toDaoLocalObject(game);
+            DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(gameLocalObject);
+            gamePackageParser.getGeneralItems();
+            GeneralItemList generalItemList = gamePackageParser.getGeneralItems();
+            GeneralItemDelegator.getInstance().process(generalItemList, gameLocalObject, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /*
@@ -290,7 +313,6 @@ public final class GameDelegator extends AbstractDelegator{
             }
         }
     }
-
 
     private class SyncGameNoToken {
         private long gameId;

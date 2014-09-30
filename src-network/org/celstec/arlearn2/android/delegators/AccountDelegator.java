@@ -72,6 +72,11 @@ public class AccountDelegator extends AbstractDelegator{
         return loggedInAccount;
     }
 
+    public void setAccount(AccountLocalObject defaultAccount) {
+        loggedInAccount = defaultAccount;
+    }
+
+
     private void onEventAsync(SyncMyAccount sma) {
         String token = returnTokenIfOnline();
         if (token != null) {
@@ -165,6 +170,7 @@ public class AccountDelegator extends AbstractDelegator{
             return null;
         }
     }
+
 
     private class SyncMyAccount{}
 
