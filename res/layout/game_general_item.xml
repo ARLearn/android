@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/generalItemActivity"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="?attr/backgroundColor">
 <LinearLayout
+
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:background="?attr/backgroundColorLight"
               android:layout_height="match_parent">
 
-    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <LinearLayout
+            android:background="?attr/backgroundColor"
+            android:gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
+            android:padding="10dip">
 
         <Button
-                android:id="@+id/previousButton"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:rotation="180"
-                android:layout_alignParentLeft="true"
-                android:background="@drawable/ic_arrow_right" />
-        <ImageView
-                android:id="@+id/generalItemIcon"
 
+                android:id="@+id/previousButton"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_marginRight="20dip"
+                android:background="@drawable/game_general_item_previous_message_inactive" />
+
+        <TextView
+                android:id="@+id/messageCounter"
+                android:text="Bericht 1 van 77"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ARLearn.Game.GeneralItemActivity.TopIcon"
-                 />
+                />
+
         <Button
                 android:id="@+id/nextButton"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:rotation="180"
-                android:layout_alignParentRight="true"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_marginLeft="20dip"
+                android:background="@drawable/game_general_item_next_message_inactive" />
 
-                android:background="@drawable/ic_arrow_left" />
-    </RelativeLayout>
+    </LinearLayout>
 
+    <ImageView
+            android:id="@+id/generalItemIcon"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            style="@style/ARLearn.Game.GeneralItemActivity.TopIcon"
+            />
 
     <TextView
             android:id="@+id/titleId"
