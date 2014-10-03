@@ -44,6 +44,7 @@ public class GameMap extends Activity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.getController().setZoom(5);
+
     }
 
 //    @Override
