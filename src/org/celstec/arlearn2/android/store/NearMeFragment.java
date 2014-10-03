@@ -38,9 +38,9 @@ public class NearMeFragment extends SherlockListFragment implements ListItemClic
         ARL.eventBus.register(this);
     }
     @Override
-    public void onDestroy() {
+    public void onPause() {
         ARL.eventBus.unregister(this);
-        super.onDestroy();
+        super.onPause();
         Fragment f =  getFragmentManager().findFragmentById(R.id.map);
         if (f != null)
             getFragmentManager().beginTransaction().remove(f).commit();

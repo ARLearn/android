@@ -90,7 +90,12 @@
             >
     </activity>
 
-
+    <activity
+            android:name=".store.RateGameActivity"
+            android:label="rate game"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            >
+    </activity>
 
     <activity android:name=".testAdapters.MyGames" android:label="@string/app_name"/>
     <activity android:name=".testAdapters.AllAccounts" android:label="@string/app_name"/>

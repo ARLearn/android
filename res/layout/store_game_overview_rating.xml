@@ -38,7 +38,7 @@
                     android:layout_weight="0.2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/store_game_overview_star_rating_grey"
+                    android:src="@drawable/store_game_overview_rating_grey"
                     />
             <ImageView
                     android:id="@+id/star2"
@@ -46,7 +46,7 @@
                     android:layout_weight="0.2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/store_game_overview_star_rating_grey"
+                    android:src="@drawable/store_game_overview_rating_grey"
                     />
             <ImageView
                     android:id="@+id/star3"
@@ -54,7 +54,7 @@
                     android:layout_weight="0.2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/store_game_overview_star_rating_grey"
+                    android:src="@drawable/store_game_overview_rating_grey"
                     />
             <ImageView
                     android:id="@+id/star4"
@@ -62,7 +62,7 @@
                     android:layout_weight="0.2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/store_game_overview_star_rating_grey"
+                    android:src="@drawable/store_game_overview_rating_grey"
                     />
             <ImageView
                     android:id="@+id/star5"
@@ -70,7 +70,7 @@
                     android:layout_weight="0.2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/store_game_overview_star_rating_grey"
+                    android:src="@drawable/store_game_overview_rating_grey"
                     />
         </LinearLayout>
         <TextView

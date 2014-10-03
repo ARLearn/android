@@ -1,6 +1,8 @@
 package org.celstec.arlearn2.android.store;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -51,11 +53,7 @@ public class GameFragment extends SherlockFragment {
 
     private long gameId;
     private View gameView;
-    private ImageView star1;
-    private ImageView star2;
-    private ImageView star3;
-    private ImageView star4;
-    private ImageView star5;
+
 
     private GameDownloadProgressView progressView ;
     private GameDownloadManager gameDownloadManager;
@@ -80,8 +78,8 @@ public class GameFragment extends SherlockFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         ARL.eventBus.unregister(this);
         progressView.unregister();
     }
@@ -90,6 +88,14 @@ public class GameFragment extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            int rating = ((Integer)data.getExtras().get("rating"));
+            GameDelegator.getInstance().rating.submitRating(rating, gameId);
+        }
     }
 
     private void drawGameContent(View v) {
@@ -138,17 +144,15 @@ public class GameFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         gameView = inflater.inflate(R.layout.store_game_overview, container, false);
-        star1 = (ImageView) gameView.findViewById(R.id.star1);
-        star2 = (ImageView) gameView.findViewById(R.id.star2);
-        star3 = (ImageView) gameView.findViewById(R.id.star3);
-        star4 = (ImageView) gameView.findViewById(R.id.star4);
-        star5 = (ImageView) gameView.findViewById(R.id.star5);
 
-        star1.setOnClickListener(new StarOneButton(1));
-        star2.setOnClickListener(new StarOneButton(2));
-        star3.setOnClickListener(new StarOneButton(3));
-        star4.setOnClickListener(new StarOneButton(4));
-        star5.setOnClickListener(new StarOneButton(5));
+
+        gameView.findViewById(R.id.stars).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent textInputIntent = new Intent(getActivity(), RateGameActivity.class);
+                GameFragment.this.startActivityForResult(textInputIntent, 1);
+            }
+        });
 
         TextView downloadButton = (TextView) gameView.findViewById(R.id.downloadId);
         downloadButton.setOnClickListener(new View.OnClickListener() {
@@ -195,71 +199,6 @@ public class GameFragment extends SherlockFragment {
         gameView.findViewById(R.id.downloadId).setVisibility(View.GONE);
         gameView.findViewById(R.id.openId).setVisibility(View.VISIBLE);
 
-    }
-
-
-    private class StarOneButton implements View.OnClickListener {
-
-        private int starId;
-
-        private StarOneButton(int starId) {
-            this.starId = starId;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Log.e("ARLearn", "Click Star");
-            GameDelegator.getInstance().rating.submitRating(starId, gameId);
-            for (int i =0 ; i<6; i++) {
-                if (i <=starId) {
-                    setStar(i);
-                } else {
-                    unsetStar(i);
-                }
-            }
-        }
-
-        public void setStar(int i) {
-            switch (i) {
-                case 1:
-                    star1.setImageResource(R.drawable.ic_star);
-                    break;
-                case 2:
-                    star2.setImageResource(R.drawable.ic_star);
-                    break;
-                case 3:
-                    star3.setImageResource(R.drawable.ic_star);
-                    break;
-                case 4:
-                    star4.setImageResource(R.drawable.ic_star);
-                    break;
-                case 5:
-                    star5.setImageResource(R.drawable.ic_star);
-                    break;
-            }
-
-        }
-
-        public void unsetStar(int i) {
-            switch (i) {
-                case 1:
-                    star1.setImageResource(R.drawable.ic_star_grey);
-                    break;
-                case 2:
-                    star2.setImageResource(R.drawable.ic_star_grey);
-                    break;
-                case 3:
-                    star3.setImageResource(R.drawable.ic_star_grey);
-                    break;
-                case 4:
-                    star4.setImageResource(R.drawable.ic_star_grey);
-                    break;
-                case 5:
-                    star5.setImageResource(R.drawable.ic_star_grey);
-                    break;
-            }
-
-        }
     }
 
 }
