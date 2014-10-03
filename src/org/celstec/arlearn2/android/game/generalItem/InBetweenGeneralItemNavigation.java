@@ -2,6 +2,8 @@ package org.celstec.arlearn2.android.game.generalItem;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.R;
@@ -38,12 +40,27 @@ public class InBetweenGeneralItemNavigation {
     private GeneralItemLocalObject nextGeneralItemLocalObject;
     private GeneralItemActivityFeatures generalItemActivityFeatures;
 
-    public InBetweenGeneralItemNavigation(GeneralItemActivity activity, GameActivityFeatures gameActivityFeatures, GeneralItemActivityFeatures generalItemActivityFeatures) {
+    public InBetweenGeneralItemNavigation(final GeneralItemActivity activity, GameActivityFeatures gameActivityFeatures, GeneralItemActivityFeatures generalItemActivityFeatures) {
         this.activity = activity;
         this.gameActivityFeatures = gameActivityFeatures;
         this.generalItemActivityFeatures = generalItemActivityFeatures;
         setNextPrevButtons();
         setVisibilityQuery();
+        GeneralItemSwipeListener swipeListener = new GeneralItemSwipeListener(activity){
+            @Override
+            public void onSwipeLeft() {
+                navigateNext();
+            }
+
+            @Override
+            public void onSwipeRight() {
+                navigatePrev();
+            }
+        };
+        activity.findViewById(R.id.generalItemActivity).setOnTouchListener(swipeListener);
+        activity.findViewById(R.id.descriptionId).setOnTouchListener(swipeListener);
+
+
     }
 
     private void setVisibilityQuery() {
@@ -51,12 +68,15 @@ public class InBetweenGeneralItemNavigation {
 
         boolean found = false;
         boolean setNext = false;
+        int counter = 0;
+        int total = qb.listLazy().size();
         for(GeneralItemVisibilityLocalObject vi:qb.listLazy()){
             if (setNext) {
                 nextGeneralItemLocalObject = vi.getGeneralItemLocalObject();
                 setNext = false;
             } else
             if (!found) {
+                counter++;
                 if (vi.getGeneralItemLocalObject().getId().equals(generalItemActivityFeatures.generalItemLocalObject.getId())){
                     setNext = true;
                     found = true;
@@ -66,11 +86,18 @@ public class InBetweenGeneralItemNavigation {
             }
 
         }
+        ((TextView)(activity.findViewById(R.id.messageCounter))).setText(
+                "Bericht "+ counter+ " van " + total
+        );
         if (previousGeneralItemLocalObject == null) {
-            activity.findViewById(R.id.previousButton).setVisibility(View.GONE);
+            (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_inactive);
+        } else {
+            (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_upstate);
         }
         if (nextGeneralItemLocalObject == null) {
-            activity.findViewById(R.id.nextButton).setVisibility(View.GONE);
+            (activity.findViewById(R.id.nextButton)).setBackgroundResource(R.drawable.game_general_item_next_message_inactive);
+        } else {
+            (activity.findViewById(R.id.nextButton)).setBackgroundResource(R.drawable.game_general_item_next_message_upstate);
         }
     }
 
@@ -78,17 +105,29 @@ public class InBetweenGeneralItemNavigation {
         activity.findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.finish();
-                launchGeneralItemActivity(nextGeneralItemLocalObject);
+               navigateNext();
             }
         });
         activity.findViewById(R.id.previousButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.finish();
-                launchGeneralItemActivity(previousGeneralItemLocalObject);
+               navigatePrev();
             }
         });
+    }
+
+    private void navigatePrev(){
+        if (previousGeneralItemLocalObject != null) {
+            activity.finish();
+            launchGeneralItemActivity(previousGeneralItemLocalObject);
+        }
+    }
+
+    private void navigateNext(){
+        if (nextGeneralItemLocalObject != null) {
+            activity.finish();
+            launchGeneralItemActivity(nextGeneralItemLocalObject);
+        }
     }
 
     private void launchGeneralItemActivity(GeneralItemLocalObject localObject) {

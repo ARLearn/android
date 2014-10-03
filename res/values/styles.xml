@@ -175,7 +175,7 @@
     </style>
 
     <style name="ARLearn.Game.GeneralItemActivity.TopIcon">
-        <item name="android:layout_marginRight">60dip</item>
+
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:src">@drawable/ic_default_game</item>
     </style>
