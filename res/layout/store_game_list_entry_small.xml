@@ -5,6 +5,7 @@
         >
 
     <ImageView
+            android:id="@+id/icon"
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:layout_marginRight="6dip"
@@ -32,7 +33,7 @@
     </LinearLayout>
 
     <ImageView
-            android:id="@+id/icon"
+
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:layout_marginLeft="6dip"
