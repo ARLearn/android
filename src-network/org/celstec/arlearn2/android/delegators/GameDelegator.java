@@ -2,9 +2,13 @@ package org.celstec.arlearn2.android.delegators;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.util.Log;
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
+import org.celstec.arlearn2.android.delegators.game.GameFilePackageParser;
 import org.celstec.arlearn2.android.delegators.game.GamePackageParser;
 import org.celstec.arlearn2.android.delegators.game.Rating;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
@@ -261,31 +265,36 @@ public final class GameDelegator extends AbstractDelegator{
         if (token != null) {
             boolean reset = false;
             for (GameFile gf: GameClient.getGameClient().getGameFileList(token, gameId).getGameFiles()) {
-                GameFileLocalObject gameFileLocalObject = DaoConfiguration.getInstance().getGameFileDao().load(gf.getId());
-
-                if (gameFileLocalObject == null) {
-                    gameFileLocalObject = new GameFileLocalObject(gf);
-                    if (gf.getPath().contains("/generalItems/")) {
-                        String itemId = gf.getPath().substring(14);
-                        itemId = itemId.substring(0, itemId.indexOf("/"));
-                        gameFileLocalObject.setGeneralItem(Long.parseLong(itemId));
-                    }
-                    gameFileLocalObject.setGameId(gameId);
-                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_TO_DOWNLOAD);
-                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
-                    reset = true;
-                } else {
-                    if (gf.getDeleted() != null && gf.getDeleted() && !gameFileLocalObject.getDeleted()) {
-                        gameFileLocalObject.setDeleted(true);
-                        DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
-                    }
-                }
+                if (processAndStoreGameFile(gf, gameId)) reset = true;
             }
             if (reset) {
                 DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).resetGameFiles();
             }
         }
         return null;
+    }
+
+    private boolean processAndStoreGameFile(GameFile gf, long gameId){
+        GameFileLocalObject gameFileLocalObject = DaoConfiguration.getInstance().getGameFileDao().load(gf.getId());
+
+        if (gameFileLocalObject == null) {
+            gameFileLocalObject = new GameFileLocalObject(gf);
+            if (gf.getPath().contains("/generalItems/")) {
+                String itemId = gf.getPath().substring(14);
+                itemId = itemId.substring(0, itemId.indexOf("/"));
+                gameFileLocalObject.setGeneralItem(Long.parseLong(itemId));
+            }
+            gameFileLocalObject.setGameId(gameId);
+            gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_TO_DOWNLOAD);
+            DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+            return true;
+        } else {
+            if (gf.getDeleted() != null && gf.getDeleted() && !gameFileLocalObject.getDeleted()) {
+                gameFileLocalObject.setDeleted(true);
+                DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+            }
+            return false;
+        }
     }
 
     public void asyncDownloadGameContent(long gameId) {
@@ -311,6 +320,35 @@ public final class GameDelegator extends AbstractDelegator{
                     DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
                 }
             }
+        }
+    }
+
+    public void retrieveGameFilesFromFile(Context context, Long gameId){
+        AssetManager assetManager = context.getAssets();
+        try {
+            InputStream inputStream = assetManager.open("gameContent.json");
+
+            GameFilePackageParser gameFiles= new GameFilePackageParser(inputStream);
+            for (GameFile gameFile: gameFiles.getGameFiles().getGameFiles()) {
+                processAndStoreGameFile(gameFile, gameId);
+                GameFileLocalObject gameFileLocalObject = DaoConfiguration.getInstance().getGameFileDao().load(gameFile.getId());
+                gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_DOWNLOADED);
+                Resources res = context.getResources();
+                int fileId = res.getIdentifier(gameFile.getLocalRawRef(), "raw", context.getPackageName());
+
+                gameFileLocalObject.setUri("android.resource://org.celstec.arlearn2.android/"+fileId);
+
+                DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+            }
+
+//            Game game = gamePackageParser.getGameLocalObject();
+//            GameLocalObject gameLocalObject = toDaoLocalObject(game);
+//            DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(gameLocalObject);
+//            gamePackageParser.getGeneralItems();
+//            GeneralItemList generalItemList = gamePackageParser.getGeneralItems();
+//            GeneralItemDelegator.getInstance().process(generalItemList, gameLocalObject, false);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

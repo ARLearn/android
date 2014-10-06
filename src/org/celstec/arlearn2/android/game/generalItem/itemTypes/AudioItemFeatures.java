@@ -102,8 +102,8 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         status = PAUSE;
         try {
             if (audioFile != null) {
-                File file = new File(MediaFolders.getIncommingFilesDir().getPath() + "/" + generalItemLocalObject.getGameId() + audioFile.getPath());
-                Uri uri = Uri.fromFile(file);
+//                File file = new File(MediaFolders.getIncommingFilesDir().getPath() + "/" + generalItemLocalObject.getGameId() + audioFile.getPath());
+                Uri uri = audioFile.getLocalUri();
                 mediaPlayer.setDataSource(activity, uri);
                 mediaPlayer.prepare();
             }

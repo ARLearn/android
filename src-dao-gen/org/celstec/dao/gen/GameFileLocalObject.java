@@ -1,5 +1,6 @@
 package org.celstec.dao.gen;
 
+import android.net.Uri;
 import org.celstec.dao.gen.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -230,6 +231,12 @@ public class GameFileLocalObject {
 
     public File getLocalFile() {
         return new File(MediaFolders.getIncommingFilesDir()+"/"+getGameId()+getPath());
+    }
+
+    public Uri getLocalUri() {
+        if (getUri() != null) return Uri.parse(getUri());
+        File file = getLocalFile();
+        return Uri.fromFile(file);
     }
     // KEEP METHODS END
 

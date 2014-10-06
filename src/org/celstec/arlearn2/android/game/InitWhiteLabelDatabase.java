@@ -49,6 +49,7 @@ public class InitWhiteLabelDatabase {
 
         } else {
             loadGameScript();
+            loadGameFiles();
             loadRunScript();
             createDefaultAccount();
         }
@@ -58,6 +59,10 @@ public class InitWhiteLabelDatabase {
 
     private void loadGameScript() {
         GameDelegator.getInstance().loadGameFromFile(context, gameId);
+    }
+
+    private void loadGameFiles(){
+        GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
     }
 
     private void loadRunScript() {
