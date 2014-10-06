@@ -72,8 +72,15 @@ public class GameSplashScreen extends Activity {
             ARL.actions.syncActions(runLocalObject.getId());
             ARL.responses.syncResponses(runLocalObject.getId());
         }
-        this.startActivity(gameIntent);
-        this.finish();
+
+
+        if (!ARL.config.getBooleanProperty("white_label")) {
+            this.startActivity(gameIntent);
+            this.finish();
+        } else {
+            DelayedGameLauncher delayedGameLauncher = new DelayedGameLauncher(gameLocalObject.getId(), runLocalObject.getId(), this, 2000);
+//            delayedGameLauncher.run();
+        }
     }
 
     private void whiteLabelMetadata() {

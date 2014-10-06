@@ -2,18 +2,27 @@ package org.celstec.arlearn2.android.game.messageViews;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import daoBase.DaoConfiguration;
+import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
+import org.celstec.dao.gen.GameFileLocalObject;
+import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
+
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -46,6 +55,22 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         setContentView(R.layout.game_list_messages);
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
+        QueryBuilder<GameFileLocalObject> qb = DaoConfiguration.getInstance().getGameFileDao().queryBuilder();
+        qb.where(
+                qb.and(
+                        GameFileLocalObjectDao.Properties.GameId.eq(gameActivityFeatures.gameLocalObject.getId())
+                                ,
+                        GameFileLocalObjectDao.Properties.Path.eq("/gameMessagesHeader"))
+                );
+        List<GameFileLocalObject> list = qb.list();
+        if (list.isEmpty()){
+            findViewById(R.id.gameHeader).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.gameHeader).setVisibility(View.VISIBLE);
+
+            ((ImageView)findViewById(R.id.gameHeader)).setImageURI(list.get(0).getLocalUri());
+        }
+
     }
 
     @Override

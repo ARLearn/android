@@ -50,7 +50,7 @@ public class DelayedGameLauncher  implements  Runnable {
         gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
         gameIntent.putExtra(RunLocalObject.class.getName(), runId);
         ctx.startActivity(gameIntent);
-        ctx.finish();
+//        ctx.finish();
     }
 
 //    private void launchGame() {
