@@ -77,7 +77,7 @@ public final class GameDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncGameNoToken(gameId));
     }
 
-    public void syncGameFiles(Long gameId) {
+    public void syncGameFiles(Long gameId) { //TODO check if this method is still needed
         ARL.eventBus.post(new SyncGameFiles(gameId));
 
     }

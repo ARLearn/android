@@ -238,6 +238,8 @@ public class ActionsDelegator extends AbstractDelegator {
 
         private CreateAction(Action action) {
             this.action = action;
+            this.action.setTime(ARL.time.getServerTime());
+            this.action.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
             this.account = ARL.accounts.getAccount(action.getUserEmail()).getId();
         }
 

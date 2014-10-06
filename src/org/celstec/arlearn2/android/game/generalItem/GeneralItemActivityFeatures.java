@@ -17,6 +17,7 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCo
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
 import org.celstec.arlearn2.beans.generalItem.*;
+import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
@@ -184,7 +185,12 @@ public abstract class GeneralItemActivityFeatures {
                 valueInputManager.onActivityResult(requestCode, resultCode, data);
                 break;
         }
-
+        Action action = new Action();
+        action.setAction("answer_given");
+        action.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+        ARL.actions.createAction(action);
         ARL.responses.syncResponses(this.activity.getGameActivityFeatures().getRunId());
     }
 
