@@ -34,6 +34,8 @@
         <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme1</item>
         <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
 
+        <item name="buttonAlternativeColorBackground">@drawable/gradient_alternative_color_theme1</item>
+
         <item name="messageListOval">@drawable/game_oval_button_alternative_color_theme1</item>
         <item name="messageListOvalRead">@drawable/game_oval_text_inactive_theme1</item>
 
@@ -61,6 +63,9 @@
 
         <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme2</item>
         <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
+
+        <item name="buttonAlternativeColorBackground">@drawable/gradient_alternative_color_theme1</item>
+
         <item name="textSizeTitle">20dp</item>
     </style>
 </resources>

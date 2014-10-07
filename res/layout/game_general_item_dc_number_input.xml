@@ -5,7 +5,7 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:orientation="vertical"
-              android:background="@drawable/gradient_alert_window"
+              android:background="@drawable/gradient_primary_color_theme1"
               android:layout_margin="20dip"
               >
     <TextView android:id="@+id/text"
