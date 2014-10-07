@@ -58,6 +58,7 @@
 
     <WebView
             android:id="@+id/descriptionId"
+            android:background="@android:color/transparent"
             style="@style/ARLearn.Game.GeneralItemActivity.RichTextView">
     </WebView>
 

@@ -4,7 +4,13 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-
+    <org.celstec.arlearn2.android.views.AspectRatioView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameHeader"
+            android:adjustViewBounds="true"
+            android:src="@drawable/game_header"
+            />
     <org.osmdroid.views.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"

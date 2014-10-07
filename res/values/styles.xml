@@ -182,6 +182,7 @@
 
     <style name="ARLearn.Game.GeneralItemActivity.TitleTextView">
         <item name="android:textSize">?attr/textSizeTitle</item>
+        <item name="android:textColor">?attr/textDark</item>
         <item name="android:singleLine">false</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">fill_parent</item>

@@ -65,7 +65,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
                 );
         List<GameFileLocalObject> list = qb.list();
         if (list.isEmpty()){
-            findViewById(R.id.gameHeader).setVisibility(View.GONE);
+//            findViewById(R.id.gameHeader).setVisibility(View.GONE);
         } else {
             findViewById(R.id.gameHeader).setVisibility(View.VISIBLE);
 

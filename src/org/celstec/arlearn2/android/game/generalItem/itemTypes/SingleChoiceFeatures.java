@@ -51,6 +51,7 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
     public void setMetadata(){
         super.setMetadata();
         WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
+        webView.setBackgroundColor(0x00000000);
         SingleChoiceTest singleChoiceTestBean = (SingleChoiceTest) generalItemBean;
         webView.loadData(singleChoiceTestBean.getRichText(), "text/html", "utf-8");
         LinearLayout linearLayout = (LinearLayout) this.activity.findViewById(R.id.multipleChoice);

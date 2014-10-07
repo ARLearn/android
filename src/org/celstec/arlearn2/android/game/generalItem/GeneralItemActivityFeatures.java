@@ -1,6 +1,11 @@
 package org.celstec.arlearn2.android.game.generalItem;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
@@ -161,8 +166,12 @@ public abstract class GeneralItemActivityFeatures {
 
     public void setMetadata(){
 
-
-        ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageResource(getImageResource());
+        Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
+        TypedArray ta =  activity.obtainStyledAttributes(R.style.ARLearn_schema1, new int[]{ R.attr.primaryColor });
+        ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
+        iconDrawable.setColorFilter(filter);
+        ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageDrawable(iconDrawable);
+        //((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageResource(getImageResource());
         TextView titleView = (TextView) this.activity.findViewById(R.id.titleId);
         titleView.setText(generalItemLocalObject.getTitle());
 

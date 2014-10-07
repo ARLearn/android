@@ -56,6 +56,7 @@ public class NarratorItemFeatures extends GeneralItemActivityFeatures{
     public void setMetadata(){
         super.setMetadata();
         WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
+        webView.setBackgroundColor(0x00000000);
 //        webView.loadData(((NarratorItem) generalItemBean).getRichText(), "text/html", "utf-8");
         webView.loadDataWithBaseURL("file:///android_res/raw/", ((NarratorItem) generalItemBean).getRichText(), "text/html", "UTF-8", null);
 
