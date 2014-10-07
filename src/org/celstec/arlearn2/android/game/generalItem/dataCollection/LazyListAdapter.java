@@ -51,7 +51,6 @@ public class LazyListAdapter {
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         qb = dao.queryBuilder();
         qb.where(
-//                ResponseLocalObjectDao.Properties.Revoked.notEq(1))
                 qb.and(ResponseLocalObjectDao.Properties.Revoked.eq(0),
                 qb.and(ResponseLocalObjectDao.Properties.RunId.eq(runId),
                         ResponseLocalObjectDao.Properties.GeneralItem.eq(generalItemId))))

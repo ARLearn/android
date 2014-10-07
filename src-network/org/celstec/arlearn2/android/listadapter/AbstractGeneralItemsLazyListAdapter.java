@@ -35,7 +35,6 @@ import org.celstec.dao.gen.GeneralItemLocalObjectDao;
 public abstract class AbstractGeneralItemsLazyListAdapter extends LazyListAdapter<GeneralItemLocalObject> {
 
     private QueryBuilder qb;
-    private AbstractGeneralItemsLazyListAdapter adapterInq;
 
     public AbstractGeneralItemsLazyListAdapter(Context context) {
         super(context);

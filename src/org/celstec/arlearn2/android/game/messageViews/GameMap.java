@@ -1,22 +1,23 @@
 package org.celstec.arlearn2.android.game.messageViews;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
+import org.celstec.arlearn2.android.game.messageViews.map.OSMOverlayItem;
 import org.celstec.arlearn2.android.game.messageViews.map.OsmGeneralItemizedIconOverlay;
+import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.ResourceProxyImpl;
-
-import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
-
-import java.util.ArrayList;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 /**
  * ****************************************************************************
@@ -44,10 +45,12 @@ public class GameMap extends Activity {
 
     double lat;
     double lng;
-    private MyLocationOverlay myLocation;
+    private MyLocationNewOverlay myLocation;
 
     private MapView mv;
     private IMapController control;
+
+    private OsmGeneralItemizedIconOverlay itemsOverlay;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +62,7 @@ public class GameMap extends Activity {
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
 
-        MapView mv = (MapView) findViewById(R.id.map);
+        mv = (MapView) findViewById(R.id.map);
         mv.setTileSource(TileSourceFactory.MAPNIK);
 
         mv.setClickable(true);
@@ -68,28 +71,30 @@ public class GameMap extends Activity {
         mv.getController().setZoom(5);
         mv.setBuiltInZoomControls(false);
         control = mv.getController();
-//        myLocation = new MyLocationOverlay(this, mv) {
-//            public synchronized void onLocationChanged(Location location) {
-//                super.onLocationChanged(location);
-//                lat = location.getLatitude();
-//                lng = location.getLongitude();
-//            }
-//        };
-        ItemizedIconOverlay.OnItemGestureListener<OverlayItem> gestureListener = new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+        myLocation = new MyLocationNewOverlay(this, mv) {
 
             @Override
-            public boolean onItemLongPress(int index, OverlayItem arg1) {
-                return false;
-            }
-
-            @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem arg1) {
-                return false;
+            public void onLocationChanged(Location location, IMyLocationProvider source) {
+                super.onLocationChanged(location, source);
+                lat = location.getLatitude();
+                lng = location.getLongitude();
             }
         };
 
-        OsmGeneralItemizedIconOverlay itemsOverlay = new OsmGeneralItemizedIconOverlay(this, new ArrayList<OverlayItem>(), gestureListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        itemsOverlay = new OsmGeneralItemizedIconOverlay(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
         mv.getOverlays().add(itemsOverlay);
+        mv.invalidate();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (itemsOverlay != null) itemsOverlay.close();
 
     }
 
@@ -104,5 +109,12 @@ public class GameMap extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return actionBarMenuController.onOptionsItemSelected(item);
 
+    }
+
+    public void openGeneralItem(OverlayItem overlayItem){
+        Intent intent = new Intent(GameMap.this, GeneralItemActivity.class);
+        gameActivityFeatures.addMetadataToIntent(intent);
+        intent.putExtra(GeneralItemLocalObject.class.getName(), ((OSMOverlayItem)overlayItem).getGeneralItemId());
+        startActivity(intent);
     }
 }

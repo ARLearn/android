@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.android.game.messageViews.map;
 
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.osmdroid.views.overlay.OverlayItem;
 
@@ -42,21 +43,28 @@ public class OSMOverlayItem extends OverlayItem{
 
     @Override
     public Drawable getMarker(int stateBitset) {
+        return ctx.getResources().getDrawable( GeneralItemMapper.mapConstantToDrawable(
+                GeneralItemMapper.mapBeanToConstant(gi)
+        ));
 //        int icon =ListMapItemsActivity.getIcon(gi);
 //        if (icon != 0) {
 //            Drawable drawable = GenericItemsOverlay.boundCenterBottom(ctx.getResources().getDrawable(icon));
 //            return drawable; //TODO
 //        }
-//        new Drawable(R.drawable.g)
-        return null;
+//        return null;
     }
 
-    public int getMarkerHeight() {
-        BitmapDrawable bd = (BitmapDrawable) getMarker(0);
-        if (bd != null) {
-            return ((BitmapDrawable) getMarker(0)).getBitmap().getHeight();
-        }
-        return 0;
+//    @Override
+//    public int getHeight() {
+//        BitmapDrawable bd = (BitmapDrawable) getMarker(0);
+//        if (bd != null) {
+//            return ((BitmapDrawable) getMarker(0)).getBitmap().getHeight();
+//        }
+//        return 0;
+//    }
+
+    public long getGeneralItemId(){
+        return gi.getId();
     }
 }
 

@@ -34,7 +34,6 @@ import org.celstec.dao.gen.GeneralItemVisibilityLocalObjectDao;
 public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdapter<GeneralItemVisibilityLocalObject> {
 
     private QueryBuilder qb;
-    private AbstractGeneralItemsVisibilityAdapter adapter;
     protected long runId;
 
     public AbstractGeneralItemsVisibilityAdapter(Context context, long runId, long gameId) {

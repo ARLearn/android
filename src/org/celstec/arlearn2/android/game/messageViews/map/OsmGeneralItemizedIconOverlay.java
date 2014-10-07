@@ -1,11 +1,20 @@
 package org.celstec.arlearn2.android.game.messageViews.map;
 
 import android.content.Context;
+import android.view.MotionEvent;
+import de.greenrobot.dao.query.LazyList;
+import de.greenrobot.dao.query.QueryBuilder;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameMap;
+import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
+import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
+import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,21 +39,48 @@ import java.util.List;
  */
 public class OsmGeneralItemizedIconOverlay extends ItemizedIconOverlay<OverlayItem> {
 
+    private QueryBuilder qb;
+    protected LazyList<GeneralItemVisibilityLocalObject> lazyList;
+    protected long runId;
 
-    Context ctx;
+    GameMap ctx;
 
-    public OsmGeneralItemizedIconOverlay(Context pContext, List<OverlayItem> list, OnItemGestureListener<OverlayItem> pOnItemGestureListener) {
-        super(pContext, list, pOnItemGestureListener);
+    public OsmGeneralItemizedIconOverlay(GameMap pContext, long runId, long gameId) {
+        super(pContext, new ArrayList<OverlayItem>(), null);
         this.ctx = pContext;
+        this.runId = runId;
+        qb = AbstractGeneralItemsVisibilityAdapter.getQueryBuilder(runId, gameId);
+        lazyList = qb.listLazy();
+        setGeneralItemList();
+        ARL.eventBus.register(this);
     }
 
+    public void onEventMainThread(GeneralItemEvent event) {
+        if (lazyList != null) lazyList.close();
+        lazyList = qb.listLazy();
+        setGeneralItemList();
+        notifyAll();
+    }
 
-    public void setGeneralItemList(GeneralItem[] gis) {
+    public void close() {
+        if (lazyList != null)lazyList.close();
+        ARL.eventBus.unregister(this);
+    }
+
+    private void setGeneralItemList() {
         removeAllItems();
-        for (int i = 0; i < gis.length; i++) {
-            addItem(new OSMOverlayItem(gis[i], ctx));
-
+        for (GeneralItemVisibilityLocalObject object: lazyList) {
+            GeneralItem generalItem = object.getGeneralItemLocalObject().getGeneralItemBean();
+            if (generalItem.getLat()!= null) {
+                OverlayItem overlayItem = new OSMOverlayItem(generalItem, ctx);
+                addItem(overlayItem);
+            }
         }
     }
 
+    @Override
+    protected boolean onTap(int index) {
+        ctx.openGeneralItem(getItem(index));
+        return true;
+    }
 }
