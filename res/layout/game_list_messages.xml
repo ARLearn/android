@@ -14,7 +14,6 @@
 
 
             android:id="@+id/gameHeader"
-            android:src="@drawable/header_elena"
 
             android:adjustViewBounds="true"
             />

@@ -63,6 +63,7 @@ public class GameSplashScreen extends Activity {
         };
     }
 
+
     private void startGeneralItemListActivity(){
         Intent gameIntent = new Intent(this, GameMessages.class);
         gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
@@ -87,6 +88,7 @@ public class GameSplashScreen extends Activity {
         Long gameId = Long.parseLong(ARL.config.getProperty("white_label_gameId"));
         Long runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
         ARL.accounts.syncMyAccountDetails();
+
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
 
         if (gameLocalObject == null) {
@@ -100,6 +102,7 @@ public class GameSplashScreen extends Activity {
         if (runLocalObject == null) {
             runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().loadAll().get(0);
         }
+        ARL.generalItemVisibility.calculateVisibility(runId, gameId);
         if (ARL.config.getBooleanProperty("white_label_online")) {
             onlineTest();
         } else {
@@ -113,6 +116,7 @@ public class GameSplashScreen extends Activity {
         Long runId = getIntent().getLongExtra(RunLocalObject.class.getName(), 0l);
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        ARL.generalItemVisibility.calculateVisibility(runId, gameId);
         onlineTest();
     }
 
@@ -192,7 +196,6 @@ public class GameSplashScreen extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-
         ARL.eventBus.register(this);
         if (ARL.config.getBooleanProperty("white_label")) {
             whiteLabelMetadata();

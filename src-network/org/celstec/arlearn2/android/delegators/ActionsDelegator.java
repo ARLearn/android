@@ -145,6 +145,8 @@ public class ActionsDelegator extends AbstractDelegator {
         if (actionLocalObject.getRunLocalObject() != null) actionLocalObject.getRunLocalObject().resetActions();
         if (actionLocalObject.getGeneralItemLocalObject() != null)
             actionLocalObject.getGeneralItemLocalObject().resetActions();
+        ARL.generalItemVisibility.calculateVisibility(actionLocalObject.getRunId(), actionLocalObject.getRunLocalObject().getGameLocalObject().getId());
+
     }
 
     private synchronized void onEventAsync(UploadActions uploadActions) {
