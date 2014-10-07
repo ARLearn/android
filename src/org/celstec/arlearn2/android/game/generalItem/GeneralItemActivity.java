@@ -3,9 +3,7 @@ package org.celstec.arlearn2.android.game.generalItem;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import daoBase.DaoConfiguration;
-import de.greenrobot.dao.query.QueryBuilder;
+import android.view.MenuItem;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
@@ -13,10 +11,6 @@ import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.arlearn2.beans.generalItem.GeneralItem;
-import org.celstec.dao.gen.GeneralItemLocalObject;
-import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
-import org.celstec.dao.gen.GeneralItemVisibilityLocalObjectDao;
 
 /**
  * ****************************************************************************
@@ -44,10 +38,12 @@ public class GeneralItemActivity extends Activity {
     GeneralItemActivityFeatures generalItemActivityFeatures;
     InBetweenGeneralItemNavigation inBetweenGeneralItemNavigation;
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.ARLearn_schema1);
         setContentView(R.layout.game_general_item);
+        getActionBar().setIcon(R.drawable.ic_ab_back);
         gameActivityFeatures = new GameActivityFeatures(this);
 //        generalItemActivityFeatures.generalItemLocalObject.getGameLocalObject();
         generalItemActivityFeatures = GeneralItemActivityFeatures.getGeneralItemActivityFeatures(this);
@@ -93,6 +89,13 @@ public class GeneralItemActivity extends Activity {
         if (generalItemActivityFeatures != null)
             generalItemActivityFeatures.onActivityResult(requestCode, resultCode, data);
         generalItemActivityFeatures.updateResponses();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
+        return true;
+
     }
 
     public GameActivityFeatures getGameActivityFeatures() {

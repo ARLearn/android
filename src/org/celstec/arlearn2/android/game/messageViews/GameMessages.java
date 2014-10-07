@@ -53,6 +53,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_list_messages);
+        getActionBar().setIcon(R.drawable.ic_ab_back);
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
         QueryBuilder<GameFileLocalObject> qb = DaoConfiguration.getInstance().getGameFileDao().queryBuilder();

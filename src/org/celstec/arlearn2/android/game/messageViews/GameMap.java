@@ -58,6 +58,7 @@ public class GameMap extends Activity {
 
         setTheme(R.style.ARLearn_schema2);
         setContentView(R.layout.game_mapview);
+        getActionBar().setIcon(R.drawable.ic_ab_back);
 
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);

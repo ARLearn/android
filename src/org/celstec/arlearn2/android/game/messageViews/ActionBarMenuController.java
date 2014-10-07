@@ -62,6 +62,9 @@ public class ActionBarMenuController {
                     activity.finish();
                 }
                 return true;
+            case android.R.id.home:
+                activity.finish();
+                return true;
             default:
                 return false;
         }
