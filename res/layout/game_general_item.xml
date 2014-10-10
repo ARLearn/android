@@ -30,6 +30,7 @@
         <TextView
                 android:id="@+id/messageCounter"
                 android:text="Bericht 1 van 77"
+                android:textColor="?attr/textLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />

@@ -1,7 +1,10 @@
 package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
+import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
+import org.celstec.arlearn2.android.views.StyleUtil;
 
 /**
  * ****************************************************************************
@@ -24,6 +27,12 @@ import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollecti
  * ****************************************************************************
  */
 public class ValueInputCollectionActivityImpl extends ValueInputCollectionActivity {
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.functionPad)).getBackground());
+        shapeDrawable.setColor(new StyleUtil(this, R.style.ARLearn_schema1).getPrimaryColor());
+    }
 
     @Override
     public int getTextView() {

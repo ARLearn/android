@@ -206,7 +206,7 @@
         <item name="android:layout_margin">5dip</item>
         <item name="android:padding">8dip</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:background">?attr/dataCollectionBackground</item>
+        <item name="android:background">@drawable/game_data_collection_background_circle</item>
     </style>
 
     <style name="ARLearn.Game.GeneralItemActivity.DataCollectionCheck">
@@ -215,7 +215,7 @@
         <item name="android:src">@drawable/game_data_collection_checkmark</item>
         <item name="android:padding">4dip</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:background">?attr/dataCollectionBackgroundCheck</item>
+        <item name="android:background">@drawable/game_data_collection_background_check</item>
     </style>
 
     <style name="ARLearn.Game.GeneralItemActivity.DataCollectionResults">
@@ -225,10 +225,21 @@
     </style>
 
 
+    <style name="ARLearn.Game.DataCollection">
+        <item name="android:background">@drawable/round_cornered_rectangle</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_margin">20dip</item>
+        <item name="android:padding">10dip</item>
+    </style>
+
     <style name="ARLearn.Game.DataCollectionValue">
     </style>
+
     <style name="ARLearn.Game.DataCollectionValue.Button">
-        <item name="android:background">@drawable/game_data_collection_background_circle_theme1</item>
+        <item name="android:background">@drawable/game_data_collection_background_circle</item>
         <item name="android:textSize">25sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_margin">5dip</item>

@@ -41,11 +41,11 @@ public class GeneralItemActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.ARLearn_schema1);
+        gameActivityFeatures = new GameActivityFeatures(this);
+        setTheme(gameActivityFeatures.getTheme());
         setContentView(R.layout.game_general_item);
         getActionBar().setIcon(R.drawable.ic_ab_back);
-        gameActivityFeatures = new GameActivityFeatures(this);
-//        generalItemActivityFeatures.generalItemLocalObject.getGameLocalObject();
+
         generalItemActivityFeatures = GeneralItemActivityFeatures.getGeneralItemActivityFeatures(this);
         ARL.actions.issueAction(ActionsDelegator.READ,
                 gameActivityFeatures.getRunId(),
@@ -106,14 +106,5 @@ public class GeneralItemActivity extends Activity {
         this.gameActivityFeatures = gameActivityFeatures;
     }
 
-    private static int getTheme(Game game) {
-        switch (game.getTheme()){
-            case 1:
-                return R.style.ARLearn_schema1;
-            case 2:
-                return R.style.ARLearn_schema2;
-        }
-        return R.style.ARLearn_schema1;
 
-    }
 }

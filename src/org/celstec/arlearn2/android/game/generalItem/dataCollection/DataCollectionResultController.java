@@ -8,6 +8,7 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
+import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
 
 import java.util.HashSet;
@@ -48,6 +49,7 @@ public class DataCollectionResultController {
 
     public void addResult(DataCollectionResult result, final ResponseLocalObject responseLocalObject) {
         final View row = activity.getLayoutInflater().inflate(R.layout.game_general_item_dc_result_entry, null);
+        row.findViewById(R.id.dcTypeIcon).setBackground(DrawableUtil.getPrimaryColorOvalWithState());
         switch (result.getType()) {
             case ResponseLocalObject.PICTURE_TYPE:
                 ((ImageView) row.findViewById(R.id.dcTypeIcon)).setImageResource(R.drawable.game_data_collection_image);

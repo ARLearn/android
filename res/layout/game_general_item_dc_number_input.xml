@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/functionPad"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
               android:orientation="vertical"
-              android:background="@drawable/gradient_primary_color_theme1"
-              android:layout_margin="20dip"
+              android:layout_gravity="center_vertical"
+              android:background="#99000000"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" >
+
+<LinearLayout
+              android:id="@+id/functionPad"
+              style="@style/ARLearn.Game.DataCollection"
               >
+
     <TextView android:id="@+id/text"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -159,4 +162,5 @@
             android:text="submit"
             android:layout_gravity="center_horizontal"
             />
+</LinearLayout>
 </LinearLayout>

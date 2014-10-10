@@ -39,7 +39,7 @@ public class ConfigAdapter {
         try {
             AssetManager assetManager = context.getAssets();
 
-            InputStream inputStream = assetManager.open("config.properties");
+            InputStream inputStream = assetManager.open("config.elena.properties");
             properties.load(inputStream);
 
         } catch (IOException e) {

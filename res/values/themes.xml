@@ -31,8 +31,8 @@
 
         <item name="marginLeft">10dip</item>
 
-        <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme1</item>
-        <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
+        <!--<item name="dataCollectionBackground">@drawable/game_data_collection_background_circle</item>-->
+        <!--<item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check</item>-->
 
         <item name="buttonAlternativeColorBackground">@drawable/gradient_alternative_color_theme1</item>
 
@@ -43,28 +43,31 @@
     </style>
 
     <style name="ARLearn.Theme2" parent="Theme.Sherlock">
-        <item name="primaryColor">#3498db</item>
-        <item name="primaryColorLight">#76cdff</item>
-        <item name="primaryColorDark">#33485f</item>
+        <item name="primaryColor">#009efa</item>
+        <item name="primaryColorLight">#6ed4ff</item>
+        <item name="primaryColorDark">#0093d0</item>
         <item name="primaryColorHighlight">#ffffff</item>
         <item name="highlightColor">#ffffff</item>
-        <item name="buttonColor">#3498db</item>
-        <item name="buttonAlternativeColor">#f45840</item>
-        <item name="backgroundColor">#f6f6f6</item>
-        <item name="backgroundColorLight">#ffffff</item>
-        <item name="backgroundColorDark">#3348df</item>
-        <item name="text">#95a5a6</item>
+        <item name="buttonColor">#fdff01</item>
+        <item name="buttonAlternativeColor">#009efa</item>
+        <item name="backgroundColor">#abd4d5</item>
+        <item name="backgroundColorLight">#c6eff0</item>
+        <item name="backgroundColorDark">#006867</item>
+        <item name="text">#006867</item>
         <item name="textLight">#ffffff</item>
-        <item name="textDark">#33485f</item>
-        <item name="textInactive">#f6f6f6</item>
+        <item name="textDark">#006867</item>
+        <item name="textInactive">#abd4d5</item>
         <item name="transparency">#99000000</item>
 
         <item name="marginLeft">10dip</item>
 
-        <item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme2</item>
-        <item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check_theme1</item>
+        <!--<item name="dataCollectionBackground">@drawable/game_data_collection_background_circle_theme2</item>-->
+        <!--<item name="dataCollectionBackgroundCheck">@drawable/game_data_collection_background_check</item>-->
 
         <item name="buttonAlternativeColorBackground">@drawable/gradient_alternative_color_theme1</item>
+
+        <item name="messageListOval">@drawable/game_oval_button_alternative_color_theme1</item>
+        <item name="messageListOvalRead">@drawable/game_oval_text_inactive_theme1</item>
 
         <item name="textSizeTitle">20dp</item>
     </style>

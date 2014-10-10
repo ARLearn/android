@@ -53,7 +53,7 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
 //                .orderAsc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
         qb.where(new WhereCondition.StringCondition("status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"))
 //        qb.where(new WhereCondition.StringCondition("deleted = 0 and _id in (select general_item_id from general_item_visibility_local_object where run_id = "+runId+" and status = 1)"));
-                .orderAsc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
+                .orderDesc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
         return qb;
     }
 

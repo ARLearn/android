@@ -1,14 +1,20 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.graphics.Rect;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
@@ -61,6 +67,9 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
     public AudioItemFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         super(activity, generalItemLocalObject);
+//        GameFileLocalObject.getGameFileLocalObject(generalItemLocalObject.getGameId(), "/generalItems/"+generalItemLocalObject.getId()+"/audio");
+        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
+
         List<GameFileLocalObject> files = generalItemLocalObject.getGeneralItemFiles();
         if (!generalItemLocalObject.getGeneralItemFiles().isEmpty()) {
             for (GameFileLocalObject gameFileLocalObject: files) {
@@ -72,6 +81,9 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         }
 
         activity.findViewById(R.id.mediaBar).setVisibility(View.VISIBLE);
+        ((SeekBar)activity.findViewById(R.id.seekbar)).setThumb(DrawableUtil.getPrimaryColorOvalSeekbar());
+
+        ((SeekBar) activity.findViewById(R.id.seekbar)).setProgressDrawable(DrawableUtil.getSeekBarProgress());
         playPauseButton  = (ImageButton) activity.findViewById(R.id.playPauseButton);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override

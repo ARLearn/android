@@ -3,6 +3,10 @@ package org.celstec.arlearn2.android.game.messageViews;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +21,8 @@ import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
+import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -52,26 +58,20 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        gameActivityFeatures = new GameActivityFeatures(this);
+
+        setTheme(gameActivityFeatures.getTheme());
+
+        new DrawableUtil(gameActivityFeatures.getTheme(), this);
         setContentView(R.layout.game_list_messages);
         getActionBar().setIcon(R.drawable.ic_ab_back);
-        gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
-        QueryBuilder<GameFileLocalObject> qb = DaoConfiguration.getInstance().getGameFileDao().queryBuilder();
-        qb.where(
-                qb.and(
-                        GameFileLocalObjectDao.Properties.GameId.eq(gameActivityFeatures.gameLocalObject.getId())
-                                ,
-                        GameFileLocalObjectDao.Properties.Path.eq("/gameMessagesHeader"))
-                );
-        List<GameFileLocalObject> list = qb.list();
-        if (list.isEmpty()){
-//            findViewById(R.id.gameHeader).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.gameHeader).setVisibility(View.VISIBLE);
-
-            ((ImageView)findViewById(R.id.gameHeader)).setImageURI(list.get(0).getLocalUri());
+        Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
+        if (messagesHeader != null) {
+            ((ImageView)findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
         }
-
     }
 
     @Override

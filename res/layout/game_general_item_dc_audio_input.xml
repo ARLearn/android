@@ -8,16 +8,13 @@
               android:layout_height="match_parent" >
 
     <LinearLayout android:id="@+id/content"
-                  android:layout_marginTop="50dip"
-                  android:background="@drawable/gradient_alert_window"
-                  android:orientation="vertical"
-                  android:padding="10dip"
-                  android:layout_gravity="center_horizontal"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content">
+                 style="@style/ARLearn.Game.DataCollection"
+            >
+
         <TextView android:id="@+id/text"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
                   android:text="Record audio"
                   android:textSize="30dp"/>
 
@@ -25,8 +22,9 @@
 
             <ImageView
                     android:id="@+id/audioFeedbackView"
-                    android:padding="20dip"
-                    android:layout_width="fill_parent"
+                    android:paddingLeft="50dip"
+                    android:paddingRight="50dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
                     android:src="@drawable/game_data_collection_input_norecording"
@@ -83,10 +81,9 @@
 
         <TextView
                 android:id="@+id/startRecording"
-                style="@style/ARLearn.StoreGameRowBigDownload"
-
-
+                android:background="@drawable/round_cornered_button_start"
                 android:layout_height="0dip"
+                android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:textSize="15dp"
                 android:layout_gravity="center_horizontal"

@@ -19,8 +19,8 @@
 
         <attr name="marginLeft" format="dimension" />
 
-        <attr name="dataCollectionBackground" format="reference" />
-        <attr name="dataCollectionBackgroundCheck" format="reference" />
+        <!--<attr name="dataCollectionBackground" format="reference" />-->
+        <!--<attr name="dataCollectionBackgroundCheck" format="reference" />-->
 
         <attr name="buttonAlternativeColorBackground" format="reference" />
 

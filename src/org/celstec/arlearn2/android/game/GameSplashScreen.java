@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import daoBase.DaoConfiguration;
@@ -19,6 +21,7 @@ import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.arlearn2.android.views.DownloadViewManager;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
@@ -64,6 +67,15 @@ public class GameSplashScreen extends Activity {
         };
     }
 
+    private void setSplashScreen() {
+        if (gameLocalObject == null) return;
+        Drawable splashScreen = GameFileLocalObject.getDrawable(this, gameLocalObject.getId(),"/gameSplashScreen");
+        if (splashScreen != null) {
+
+            ((ImageView)findViewById(R.id.main_backgroundImage)).setImageDrawable(splashScreen);
+        }
+//        findViewById(R.id.main_backgroundImage).setBackground();
+    }
 
     private void startGeneralItemListActivity(){
         Intent gameIntent = new Intent(this, GameMessages.class);
@@ -98,6 +110,7 @@ public class GameSplashScreen extends Activity {
 
 
             gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+            setSplashScreen();
         }
         runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
         if (runLocalObject == null) {
@@ -204,6 +217,7 @@ public class GameSplashScreen extends Activity {
             nativeArlearnMetadata();
             gameDownloadManager.register();
         }
+        setSplashScreen();
 //        new DelayedGameLauncher(gameLocalObject.getId(), runLocalObject.getId(), this, 2000);
 
         //TODO nullpointerexception

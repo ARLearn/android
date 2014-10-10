@@ -7,9 +7,11 @@
             <gradient
                     android:angle="270"
                     android:endColor="#dcd5cb"
+
                     android:startColor="#dcd5cb" />
         </shape>
-            </item>
+        <!--backgroundColor-->
+    </item>
 
     <item android:id="@android:id/secondaryProgress">
         <clip>

@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.android.listadapter.impl;
 
 import android.content.Context;
+import android.graphics.drawable.StateListDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
+import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 
@@ -44,9 +46,17 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (item.getGeneralItemLocalObject().isRead(runId)) {
-            return inflater.inflate(R.layout.game_message_entry_read, parent, false);
+            View returnView = inflater.inflate(R.layout.game_message_entry_read, parent, false);
+            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
+            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageTextRead());
+            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
+            return returnView;
         } else {
-            return inflater.inflate(R.layout.game_message_entry, parent, false);
+            View returnView = inflater.inflate(R.layout.game_message_entry, parent, false);
+            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
+            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageText());
+            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
+            return returnView;
         }
 
     }

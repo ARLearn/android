@@ -21,6 +21,9 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.LazyListAdap
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
+import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
+import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.arlearn2.beans.generalItem.*;
 import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -62,6 +65,7 @@ public abstract class GeneralItemActivityFeatures {
 
 
     public static GeneralItemActivityFeatures getGeneralItemActivityFeatures(final GeneralItemActivity activity){
+
         Long generalItemId = activity.getIntent().getLongExtra(GeneralItemLocalObject.class.getName(), 0l);
         GeneralItemLocalObject generalItemLocalObject = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(generalItemId);
         GeneralItemActivityFeatures result = null;
@@ -165,13 +169,26 @@ public abstract class GeneralItemActivityFeatures {
     }
 
     public void setMetadata(){
-
+        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
         Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
-        TypedArray ta =  activity.obtainStyledAttributes(R.style.ARLearn_schema1, new int[]{ R.attr.primaryColor });
+        TypedArray ta =  activity.obtainStyledAttributes(activity.getGameActivityFeatures().getTheme(), new int[]{R.attr.primaryColor});
         ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
         iconDrawable.setColorFilter(filter);
         ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageDrawable(iconDrawable);
         //((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageResource(getImageResource());
+
+        activity.findViewById(R.id.audioButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.pictureButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.videoButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.textButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.numberButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
+
+        activity.findViewById(R.id.audioButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.pictureButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.videoButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.textButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.numberButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
+
         TextView titleView = (TextView) this.activity.findViewById(R.id.titleId);
         titleView.setText(generalItemLocalObject.getTitle());
 

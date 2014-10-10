@@ -1,8 +1,18 @@
 package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
+import org.celstec.arlearn2.android.views.StyleUtil;
 
 /**
  * ****************************************************************************
@@ -25,6 +35,16 @@ import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionAct
  * ****************************************************************************
  */
 public class AudioCollectionActivityImpl extends AudioCollectionActivity{
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        StyleUtil styleUtil = new StyleUtil(this, R.style.ARLearn_schema1);
+        GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());
+        shapeDrawable.setColor(styleUtil.getPrimaryColor());
+
+        ((GradientDrawable) (findViewById(R.id.startRecording)).getBackground()).setColor(styleUtil.getButtonAlternativeColor());
+        ((TextView)findViewById(R.id.startRecording)).setTextColor(styleUtil.getTextLight());
+    }
     public  int getGameGeneralitemAudioInput() {
         return R.layout.game_general_item_dc_audio_input;
     }
@@ -58,12 +78,6 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     public int getAudioRecordingLevel4() {
         return R.drawable.game_data_collection_input_recording_level4;
     }
-
-
-//    @Override
-//    public int getAudioFeedbackViewLeft() {
-//        return R.id.audioFeedback_left;
-//    }
 
     @Override
     public int getStartRecordingButton() {

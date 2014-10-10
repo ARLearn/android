@@ -7,6 +7,7 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.notification.AlertView;
 import org.celstec.arlearn2.android.game.notification.StrokenView;
+import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
@@ -89,5 +90,18 @@ public class GameActivityFeatures {
     public void addMetadataToIntent(Intent intent) {
         intent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
         intent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
+    }
+
+    public int getTheme() {
+        if (gameLocalObject == null) return R.style.ARLearn_schema1;
+        Game game = gameLocalObject.getGameBean();
+        switch (game.getTheme()){
+            case 1:
+                return R.style.ARLearn_schema1;
+            case 2:
+                return R.style.ARLearn_schema2;
+        }
+        return R.style.ARLearn_schema1;
+
     }
 }
