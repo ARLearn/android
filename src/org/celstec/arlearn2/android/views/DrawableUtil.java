@@ -167,6 +167,7 @@ public class DrawableUtil {
         LayerDrawable progressLayerDrawable = new LayerDrawable(progressDrawables);
         progressLayerDrawable.setId(0, android.R.id.background);
         progressLayerDrawable.setId(1, android.R.id.progress);
+        progressLayerDrawable.setBounds(0,0,64,0);
         return  progressLayerDrawable;
 
     }

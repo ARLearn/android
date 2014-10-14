@@ -53,7 +53,7 @@ public class ARL {
     public static MessagesDelegator messages;
     public static EventBus eventBus = new EventBus();
     public static DaoConfiguration dao;
-    private static Context ctx;
+    public static Context ctx;
 
     public static void init(Context ctx) {
         ARL.ctx = ctx;

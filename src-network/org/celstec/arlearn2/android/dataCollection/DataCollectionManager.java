@@ -39,6 +39,7 @@ public  abstract class DataCollectionManager {
 
     protected Activity ctx;
     protected ResponseLocalObject response;
+    protected int theme;
 
     protected DataCollectionManager(Activity ctx) {
         this.ctx = ctx;
@@ -60,6 +61,14 @@ public  abstract class DataCollectionManager {
 
     public void setGeneralItem(GeneralItemLocalObject giLocalObject) {
         response.setGeneralItemLocalObject(giLocalObject);
+    }
+
+    public int getTheme() {
+        return theme;
+    }
+
+    public void setTheme(int theme) {
+        this.theme = theme;
     }
 
     protected void saveResponseForSyncing() {

@@ -1,5 +1,7 @@
 package org.celstec.arlearn2.android.delegators;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -10,12 +12,16 @@ import org.celstec.arlearn2.android.db.Constants;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.util.AppengineFileUploader;
 import org.celstec.arlearn2.android.util.FileDownloader;
+import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.run.ResponseList;
 import org.celstec.arlearn2.client.ResponseClient;
+import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemMediaLocalObject;
 import org.celstec.dao.gen.ResponseLocalObject;
 import org.celstec.dao.gen.ResponseLocalObjectDao;
 import org.celstec.arlearn2.beans.run.Response;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,11 +58,52 @@ public class ResponseDelegator extends AbstractDelegator{
         ARL.eventBus.register(this);
     }
 
+    public void createMultipleChoiceResponse(GeneralItemLocalObject generalItemLocalObject, long runId,  MultipleChoiceAnswerItem answerItem) {
+        try {
+            JSONObject responseValueJson = new JSONObject();
+            responseValueJson.put("isCorrect", answerItem.getIsCorrect());
+            responseValueJson.put("answer", answerItem.getAnswer());
+            createResponse(generalItemLocalObject,  runId,responseValueJson.toString());
+        } catch (JSONException e) {
+            Log.e("exception", e.getMessage(), e);
+        }
+
+    }
+
+    public void createResponse(GeneralItemLocalObject generalItemLocalObject, long runId, String responseValue) {
+        ResponseLocalObject response = new ResponseLocalObject();
+        response.setTimeStamp(ARL.time.getServerTime());
+        response.setAccountLocalObject(ARL.accounts.getLoggedInAccount());
+        response.setIsSynchronized(false);
+        response.setNextSynchronisationTime(0l);
+        response.setValue(responseValue);
+        response.setRunId(runId);
+        response.setGeneralItem(generalItemLocalObject.getId());
+        setLocationDetails(response);
+        DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
+        DaoConfiguration.getInstance().getRunLocalObjectDao().load(response.getRunId()).resetResponses();
+    }
+
     public static ResponseDelegator getInstance() {
         if (instance == null) {
             instance = new ResponseDelegator();
         }
         return instance;
+    }
+
+    private void setLocationDetails(ResponseLocalObject response) {
+        LocationManager locationManager = (LocationManager) ARL.ctx.getSystemService(ARL.ctx.LOCATION_SERVICE);
+
+        String locationProviderNetwork = LocationManager.NETWORK_PROVIDER;
+        String locationProviderGPS = LocationManager.GPS_PROVIDER;
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProviderGPS);
+        if (lastKnownLocation == null) {
+            lastKnownLocation =locationManager.getLastKnownLocation(locationProviderNetwork);
+        }
+        if (lastKnownLocation != null) {
+            response.setLat(lastKnownLocation.getLatitude());
+            response.setLng(lastKnownLocation.getLongitude());
+        }
     }
 
     public void syncResponses() {

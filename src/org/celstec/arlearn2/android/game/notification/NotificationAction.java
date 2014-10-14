@@ -1,4 +1,4 @@
-package org.celstec.arlearn2.android.events;
+package org.celstec.arlearn2.android.game.notification;
 
 /**
  * ****************************************************************************
@@ -20,28 +20,7 @@ package org.celstec.arlearn2.android.events;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GeneralItemEvent {
+public interface NotificationAction {
 
-    private long generalItemId;
-    private boolean becameVisible = false;
-
-    public GeneralItemEvent(long generalItemId) {
-        this.generalItemId = generalItemId;
-    }
-
-    public long getGeneralItemId() {
-        return generalItemId;
-    }
-
-    public void setGeneralItemId(long generalItemId) {
-        this.generalItemId = generalItemId;
-    }
-
-    public boolean isBecameVisible() {
-        return becameVisible;
-    }
-
-    public void setBecameVisible(boolean becameVisible) {
-        this.becameVisible = becameVisible;
-    }
+    public void onOpen();
 }

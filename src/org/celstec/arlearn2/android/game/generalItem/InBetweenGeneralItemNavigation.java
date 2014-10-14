@@ -63,8 +63,12 @@ public class InBetweenGeneralItemNavigation {
 
     }
 
+    public void updateMessagesHeader() {
+        setVisibilityQuery();
+    }
+
     private void setVisibilityQuery() {
-        QueryBuilder<GeneralItemVisibilityLocalObject> qb = AbstractGeneralItemsVisibilityAdapter.getQueryBuilder(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+        QueryBuilder<GeneralItemVisibilityLocalObject> qb = AbstractGeneralItemsVisibilityAdapter.getQueryBuilder(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId(), true);
 
         boolean found = false;
         boolean setNext = false;

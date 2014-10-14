@@ -132,6 +132,8 @@
         <item name="android:padding">3dp</item>
     </style>
 
+
+
     <style name="ARLearn.MyGames" parent="ARLearn.HomePane">
         <item name="android:background">@drawable/main_menu_mygames_selector</item>
     </style>
@@ -224,6 +226,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="ARLearn.Game.RecordButton">
+        <item name="android:background">@drawable/game_data_collection_audio_record_button</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:padding">3dp</item>
+    </style>
+
 
     <style name="ARLearn.Game.DataCollection">
         <item name="android:background">@drawable/round_cornered_rectangle</item>
@@ -234,6 +242,7 @@
         <item name="android:layout_margin">20dip</item>
         <item name="android:padding">10dip</item>
     </style>
+
 
     <style name="ARLearn.Game.DataCollectionValue">
     </style>

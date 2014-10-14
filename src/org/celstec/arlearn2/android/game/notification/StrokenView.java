@@ -2,6 +2,7 @@ package org.celstec.arlearn2.android.game.notification;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -36,6 +37,9 @@ public abstract class StrokenView {
     Animation animIn;
     Animation animOut;
 
+    private Handler handler = new Handler();
+
+    boolean open = false;
     public StrokenView(Activity ctx) {
         this.ctx = ctx;
          animIn = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
@@ -59,12 +63,19 @@ public abstract class StrokenView {
     public void slideIn() {
         strokenView.setVisibility(View.VISIBLE);
         strokenView.startAnimation(animIn);
-
+        open = true;
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (open) slideOut();
+            }
+        }, 5000);
 
     }
 
     public void slideOut() {
-
+        open = false;
         strokenView.startAnimation(animOut);
         strokenView.setVisibility(View.GONE);
     }

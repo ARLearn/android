@@ -4,14 +4,17 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
+import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.arlearn2.android.views.StyleUtil;
 
 /**
@@ -38,12 +41,25 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StyleUtil styleUtil = new StyleUtil(this, R.style.ARLearn_schema1);
-        GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());
-        shapeDrawable.setColor(styleUtil.getPrimaryColor());
+        StyleUtil styleUtil = DrawableUtil.styleUtil;
 
-        ((GradientDrawable) (findViewById(R.id.startRecording)).getBackground()).setColor(styleUtil.getButtonAlternativeColor());
+        GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());
+        shapeDrawable.setColor(styleUtil.getBackgroundDark());
+
+        ((GradientDrawable) (findViewById(R.id.startRecording)).getBackground()).setColor(styleUtil.getPrimaryColor());
+        ((GradientDrawable) (findViewById(R.id.dataCollectionSubmit)).getBackground()).setColor(styleUtil.getButtonAlternativeColor());
+        ((TextView)findViewById(R.id.text)).setTextColor(styleUtil.getTextLight());
         ((TextView)findViewById(R.id.startRecording)).setTextColor(styleUtil.getTextLight());
+        ((TextView)findViewById(R.id.stopRecording)).setTextColor(styleUtil.getTextLight());
+        ((TextView)findViewById(R.id.dataCollectionSubmit)).setTextColor(styleUtil.getTextLight());
+        ((TextView)findViewById(R.id.cancelId)).setTextColor(styleUtil.getTextLight());
+        ((ImageButton)findViewById(R.id.playPauseButton)).setBackgroundColor(styleUtil.getPrimaryColor());
+
+
+        ((SeekBar)findViewById(R.id.seekbar)).setThumb(DrawableUtil.getPrimaryColorOvalSeekbar());
+        ((SeekBar) findViewById(R.id.seekbar)).setProgressDrawable(DrawableUtil.getSeekBarProgress());
+        Drawable drawable = ((SeekBar) findViewById(R.id.seekbar)).getProgressDrawable();
+
     }
     public  int getGameGeneralitemAudioInput() {
         return R.layout.game_general_item_dc_audio_input;

@@ -19,6 +19,7 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollecti
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollectionViewController;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.LazyListAdapter;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCollectionActivityImpl;
+import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.TextInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
@@ -121,6 +122,7 @@ public abstract class GeneralItemActivityFeatures {
                 audioInputManager = new AudioInputManager(activity);
                 audioInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 audioInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
+                audioInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
                 audioInputManager.takeDataSample(AudioCollectionActivityImpl.class);
             }
 
@@ -129,6 +131,7 @@ public abstract class GeneralItemActivityFeatures {
                 pictureManager = new PictureManager(activity);
                 pictureManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 pictureManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
+                pictureManager.setTheme(activity.getGameActivityFeatures().getTheme());
                 pictureManager.takeDataSample(null);
             }
 
@@ -142,7 +145,9 @@ public abstract class GeneralItemActivityFeatures {
                 textInputManager = new TextInputManager(activity);
                 textInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 textInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-                textInputManager.takeDataSample(TextInputCollectionActivity.class);
+                textInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
+
+                textInputManager.takeDataSample(TextInputCollectionActivityImpl.class);
             }
 
             @Override
@@ -150,6 +155,8 @@ public abstract class GeneralItemActivityFeatures {
                 valueInputManager = new ValueInputManager(activity);
                 valueInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 valueInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
+                valueInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
+
                 valueInputManager.takeDataSample(ValueInputCollectionActivityImpl.class);
             }
 

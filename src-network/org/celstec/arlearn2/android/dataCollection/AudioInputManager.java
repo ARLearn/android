@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
+import org.celstec.arlearn2.android.views.StyleUtil;
 
 import java.io.File;
 
@@ -39,6 +40,7 @@ public class AudioInputManager extends DataCollectionManager {
     @Override
     public void takeDataSample(Class className) {
         Intent textInputIntent = new Intent(ctx, className);
+        textInputIntent.putExtra(StyleUtil.class.getName(), getTheme());
 //        Intent textInputIntent = new Intent(ctx, AudioCollectionActivity.class);
         ctx.startActivityForResult(textInputIntent, AUDIO_RESULT);
     }

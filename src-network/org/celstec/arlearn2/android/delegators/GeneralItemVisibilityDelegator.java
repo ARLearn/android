@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.android.delegators;
 
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibility;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibilityList;
@@ -81,6 +82,10 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
                     generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
                     generalItemVisibilityLocalObject.setTimeStamp(satisfiedAt);
                     DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+                    GeneralItemEvent event = new GeneralItemEvent(generalItemLocalObject.getId());
+                            event.setBecameVisible(true);
+                    ARL.eventBus.postSticky(event);
+                    System.out.println("LOG postSticky "+System.currentTimeMillis());
                 } else {
                     if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.INVISIBLE) {
                         if (generalItemVisibilityLocalObject.getTimeStamp() > satisfiedAt) {

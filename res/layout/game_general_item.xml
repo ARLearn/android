@@ -104,6 +104,29 @@
             >
     </LinearLayout>
 
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:id="@+id/multipleChoiceImageTable"
+            android:layout_height="fill_parent"
+            android:layout_weight=".90"
+            android:stretchColumns="0"
+            android:visibility="gone"
+            >
+    </TableLayout>
+
+    <TextView
+            android:id="@+id/button"
+            android:background="@drawable/round_cornered_button_start"
+            android:layout_height="0dip"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Continue"
+            android:visibility="gone"
+            />
+
+
     <LinearLayout
             android:id="@+id/dataCollection"
             android:layout_width="fill_parent"

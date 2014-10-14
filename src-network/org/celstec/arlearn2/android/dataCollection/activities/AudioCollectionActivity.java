@@ -2,6 +2,8 @@ package org.celstec.arlearn2.android.dataCollection.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.*;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.util.MediaFolders;
 
 
@@ -66,10 +69,10 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.ARLearn_schema1);
         setContentView(getGameGeneralitemAudioInput());
+        this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ImageView view = (ImageView) findViewById(getAudioFeedbackView());
-//        view.setLayoutParams(new LinearLayout.LayoutParams(100,
-//                100));
         findViewById(getStartRecordingButton()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override

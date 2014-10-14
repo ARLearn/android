@@ -84,6 +84,9 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         ((SeekBar)activity.findViewById(R.id.seekbar)).setThumb(DrawableUtil.getPrimaryColorOvalSeekbar());
 
         ((SeekBar) activity.findViewById(R.id.seekbar)).setProgressDrawable(DrawableUtil.getSeekBarProgress());
+
+        Drawable drawable = ((SeekBar) activity.findViewById(R.id.seekbar)).getProgressDrawable();
+
         playPauseButton  = (ImageButton) activity.findViewById(R.id.playPauseButton);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.events.GeneralItemEvent;
+import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.notification.AlertView;
+import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.game.notification.StrokenView;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
 /**
@@ -52,7 +56,7 @@ public class GameActivityFeatures {
         strokenView = new StrokenView(activity) {
             @Override
             public void onClickView() {
-                strokenView.slideOut();
+                onClickStroken();
             }
         };
 
@@ -76,6 +80,21 @@ public class GameActivityFeatures {
 
     public void showStrokenNotification() {
         strokenView.slideIn();
+    }
+
+    public void showStrokenNotification(NotificationAction action) {
+        this.action = action;
+        strokenView.slideIn();
+    }
+
+    NotificationAction action;
+
+    private void onClickStroken() {
+        if (action != null) {
+            action.onOpen();
+
+        }
+        strokenView.slideOut();
     }
 
     public void showAlertViewNotification(){

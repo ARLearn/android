@@ -10,7 +10,10 @@ import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
+import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.generalItem.GeneralItem;
+import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
  * ****************************************************************************
@@ -54,8 +57,21 @@ public class GeneralItemActivity extends Activity {
         inBetweenGeneralItemNavigation = new InBetweenGeneralItemNavigation(this, gameActivityFeatures, generalItemActivityFeatures);
     }
 
-    public void onEventMainThread(GeneralItemEvent event) {
+    public void onEventMainThread(final GeneralItemEvent event) {
+        System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
         generalItemActivityFeatures.updateGeneralItem();
+        inBetweenGeneralItemNavigation.updateMessagesHeader();
+        if (event.isBecameVisible()) gameActivityFeatures.showStrokenNotification(new NotificationAction() {
+            @Override
+            public void onOpen() {
+
+                Intent intent = new Intent(GeneralItemActivity.this, GeneralItemActivity.class);
+                gameActivityFeatures.addMetadataToIntent(intent);
+                intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
+                startActivity(intent);
+                finish();
+            }
+        });
         if (event.getGeneralItemId() == generalItemActivityFeatures.generalItemLocalObject.getId()){
             Boolean deleted = generalItemActivityFeatures.generalItemLocalObject.getDeleted();
             if (deleted!= null && deleted){
@@ -82,6 +98,10 @@ public class GeneralItemActivity extends Activity {
         super.onResume();
         ARL.eventBus.register(this);
         generalItemActivityFeatures.onResumeActivity();
+        System.out.println("LOG onResume "+System.currentTimeMillis());
+        GeneralItemEvent event = (GeneralItemEvent) ARL.eventBus.removeStickyEvent(GeneralItemEvent.class);
+        if (event !=null) onEventMainThread(event);
+//        inBetweenGeneralItemNavigation.updateMessagesHeader();
     }
 
     @Override

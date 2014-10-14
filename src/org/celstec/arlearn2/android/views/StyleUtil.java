@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import org.celstec.arlearn2.android.R;
 
+import java.io.Serializable;
+
 /**
  * ****************************************************************************
  * Copyright (C) 2013 Open Universiteit Nederland
@@ -25,7 +27,7 @@ import org.celstec.arlearn2.android.R;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class StyleUtil {
+public class StyleUtil implements Serializable{
 
     private int primaryColor;
     private int primaryColorLight;
@@ -47,8 +49,9 @@ public class StyleUtil {
                 R.attr.primaryColorLight,
                 R.attr.backgroundColor,
                 R.attr.backgroundColorDark,
-                R.attr.textInactive,
-                R.attr.buttonColor
+                R.attr.buttonColor,
+                R.attr.textInactive
+
         });
         primaryColor = ta.getColor(0, Color.BLACK);
         buttonAlternativeColor = ta.getColor(1, Color.BLACK);
@@ -59,8 +62,9 @@ public class StyleUtil {
         backgroundColor = ta.getColor(4, Color.BLACK);
         backgroundDark = ta.getColor(5, Color.BLACK);
 
-        textInactive = ta.getColor(6, Color.BLACK);
-        buttonColor = ta.getColor(7, Color.BLACK);
+        buttonColor = ta.getColor(6, Color.BLACK);
+        textInactive = ta.getColor(7, Color.BLACK);
+
     }
 
     public int getPrimaryColor() {
