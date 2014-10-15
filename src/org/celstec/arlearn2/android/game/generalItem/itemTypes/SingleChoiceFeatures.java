@@ -5,12 +5,14 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.arlearn2.beans.generalItem.SingleChoiceTest;
+import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
@@ -52,15 +54,48 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
         super.setMetadata();
         WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
         webView.setBackgroundColor(0x00000000);
+        setRichText(webView);
+
+
+
+    }
+
+    protected void setRichText(WebView webView){
         SingleChoiceTest singleChoiceTestBean = (SingleChoiceTest) generalItemBean;
         webView.loadData(singleChoiceTestBean.getRichText(), "text/html", "utf-8");
         LinearLayout linearLayout = (LinearLayout) this.activity.findViewById(R.id.multipleChoice);
         linearLayout.setVisibility(View.VISIBLE);
-
         for (MultipleChoiceAnswerItem answerItem: singleChoiceTestBean.getAnswers()){
             final View row = activity.getLayoutInflater().inflate(R.layout.game_general_item_multiplechoice_row, null);
             ((TextView)row.findViewById(R.id.choiceOption)).setText(answerItem.getAnswer());
             linearLayout.addView(row);
         }
+    }
+
+    protected void createAnswerGivenAction(){
+        Action action = new Action();
+        action.setAction("answer_given");
+        action.setRunId(activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+        ActionsDelegator.getInstance().createAction(action);
+    }
+
+    protected void createAnswerIdAction(String id){
+        Action action = new Action();
+        action.setAction("answer_" + id);
+        action.setRunId(activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+        ActionsDelegator.getInstance().createAction(action);
+    }
+
+    protected void createAnswerResultAction(boolean correct){
+        Action action = new Action();
+        action.setAction("answer_" + (correct ? "correct" : "wrong"));
+        action.setRunId(activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+        ActionsDelegator.getInstance().createAction(action);
     }
 }

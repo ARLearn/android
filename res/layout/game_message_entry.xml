@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/messageEntryLinearLayout"
+              android:layout_width="match_parent"
+              android:layout_height="?android:attr/listPreferredItemHeight"
+              android:orientation="vertical"
+              android:background="@drawable/game_list_messages_background"
+              >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/messageEntryLinearLayoutUnRead"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:layout_height="match_parent"
                 android:padding="?attr/marginLeft"
-                android:background="@drawable/game_list_messages_background"
+
         >
 
     <ImageView
-            android:id="@+id/messageIcon"
+            android:id="@+id/messageIconUnRead"
 
             android:layout_width="40dip"
             android:layout_height="40dip"
@@ -19,7 +26,7 @@
             android:src="@drawable/game_general_item_type_narrator" />
 
     <TextView
-            android:id="@+id/messageText"
+            android:id="@+id/messageTextUnRead"
             android:layout_marginLeft="?attr/marginLeft"
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
@@ -27,5 +34,38 @@
             android:text="Example application"
             android:textColor="?attr/textLight"
             android:textSize="16sp" />
+
+</LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/messageEntryLinearLayoutRead"
+                  android:layout_width="match_parent"
+                  android:layout_height="?android:attr/listPreferredItemHeight"
+                  android:padding="?attr/marginLeft"
+
+            >
+
+        <ImageView
+                android:id="@+id/messageIconRead"
+
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:background="?attr/messageListOvalRead"
+                android:padding="8dip"
+                android:src="@drawable/game_general_item_type_narrator" />
+
+        <TextView
+                android:id="@+id/messageTextRead"
+                android:layout_marginLeft="?attr/marginLeft"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:text="Example application"
+                android:textColor="?attr/textInactive"
+                android:textSize="16sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

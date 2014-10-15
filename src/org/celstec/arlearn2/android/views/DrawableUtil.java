@@ -3,6 +3,8 @@ package org.celstec.arlearn2.android.views;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.*;
 import android.graphics.drawable.shapes.OvalShape;
@@ -120,6 +122,13 @@ public class DrawableUtil {
         return stateListDrawable;
     }
 
+    public static Drawable getPrimaryColorOval() {
+        ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+        drawable.getPaint().setColor(styleUtil.getPrimaryColor());
+
+        return drawable;
+    }
+
     public static Drawable getPrimaryColorOvalSeekbar() {
         ShapeDrawable ovalUnPressed = new ShapeDrawable(new OvalShape());
         ovalUnPressed.getPaint().setColor(styleUtil.getPrimaryColor());
@@ -174,5 +183,27 @@ public class DrawableUtil {
 
     public static int dipToPixels(int dip) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, ctx.getResources().getDisplayMetrics());
+    }
+
+    public static ColorMatrixColorFilter getBlackWhiteFilter(int colorToMapOnBlack) {
+        ColorMatrix cm = new ColorMatrix();
+
+        float pr= Color.red(colorToMapOnBlack);
+        float pg = Color.green(colorToMapOnBlack);
+        float pb = Color.blue(colorToMapOnBlack);
+
+
+        float[] blackToPrimary = new float[] {
+                256f-pr, 0f, 0f, 0f, pr,
+                0f, 256f-pg, 0f, 0f, pg,
+                0, 0f, 256f-pb, 0f, pb,
+                0f, 0f, 0f, 1f, 0f };
+        cm.set(blackToPrimary);
+        return new ColorMatrixColorFilter(cm);
+
+    }
+
+    public static int adjustAlpha(int color, float factor) {
+        return Color.argb(Math.round(Color.alpha(color) * factor), Color.red(color), Color.green(color), Color.blue(color));
     }
 }

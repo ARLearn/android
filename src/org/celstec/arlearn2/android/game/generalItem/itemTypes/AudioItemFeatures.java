@@ -1,6 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
-import android.graphics.Rect;
+import android.graphics.*;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -9,12 +9,15 @@ import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
@@ -45,9 +48,11 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
     private GameFileLocalObject audioFile;
     private MediaPlayer mediaPlayer;
+    private Drawable playDrawable;
+    private Drawable pauseDrawable;
 
     private SeekBar seekbar;
-    private ImageButton playPauseButton;
+    private ImageView playPauseButton;
 
     private Handler myHandler = new Handler();
 
@@ -87,7 +92,15 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
         Drawable drawable = ((SeekBar) activity.findViewById(R.id.seekbar)).getProgressDrawable();
 
-        playPauseButton  = (ImageButton) activity.findViewById(R.id.playPauseButton);
+        playPauseButton  = (ImageView) activity.findViewById(R.id.playPauseButton);
+
+        pauseDrawable = activity.getResources().getDrawable(R.drawable.btn_pause_black);
+        playDrawable = activity.getResources().getDrawable(R.drawable.btn_play_black);
+        ColorMatrixColorFilter filter = DrawableUtil.getBlackWhiteFilter(DrawableUtil.styleUtil.getPrimaryColor());
+        pauseDrawable.setColorFilter(filter);
+        playDrawable.setColorFilter(filter);
+
+        playPauseButton.setImageDrawable(playDrawable);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,11 +139,11 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
     public void playPause(){
         if (status == PAUSE) {
-            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
 
             status = PLAYING;
             mediaPlayer.start();
-            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+            playPauseButton.setImageDrawable(pauseDrawable);
+//            playPauseButton.setImageResource(R.drawable.btn_pause);
             finalTime = mediaPlayer.getDuration();
             startTime = mediaPlayer.getCurrentPosition();
             if(oneTimeOnly == 0){
@@ -143,12 +156,15 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     status = PAUSE;
-                    playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+                    playbackCompleted();
+                    playPauseButton.setImageDrawable(playDrawable);
+//                    playPauseButton.setImageResource(R.drawable.btn_play);
 
                 }
             });
         } else {
-            playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+            playPauseButton.setImageDrawable(playDrawable);
+//            playPauseButton.setImageResource(R.drawable.btn_play);
 
             status = PAUSE;
             mediaPlayer.pause();
@@ -189,6 +205,23 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
             mediaPlayer.seekTo(seekBar.getProgress());
             mediaPlayer.start();
         }
+    }
+
+
+
+    private void playbackCompleted() {
+        Action action = new Action();
+        action.setAction("complete");
+        action.setRunId(activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+
+        ActionsDelegator.getInstance().createAction(action);
+//        if (completeAction != null) {
+//            completeAction.setTime(System.currentTimeMillis());
+//            ActionsDelegator.getInstance().publishAction((Context) ctx, completeAction);
+//        }
+//        setStatus(STOPPED);
     }
 
 }

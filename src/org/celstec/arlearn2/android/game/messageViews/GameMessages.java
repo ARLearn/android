@@ -60,10 +60,9 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         super.onCreate(savedInstanceState);
 
 
+
         gameActivityFeatures = new GameActivityFeatures(this);
-
         setTheme(gameActivityFeatures.getTheme());
-
         new DrawableUtil(gameActivityFeatures.getTheme(), this);
         setContentView(R.layout.game_list_messages);
         getActionBar().setIcon(R.drawable.ic_ab_back);
@@ -72,6 +71,41 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         if (messagesHeader != null) {
             ((ImageView)findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
         }
+
+//        createVisibilityStatement(885015l);
+//        createVisibilityStatement(20196003l);
+//        createVisibilityStatement(1059001l);
+//        createVisibilityStatement(881016l);
+//        createVisibilityStatement(881017l);
+//        createVisibilityStatement(835208l);
+//        createVisibilityStatement(20166030l);
+//        createVisibilityStatement(865017l);
+//        createVisibilityStatement(1071003l);
+//        createVisibilityStatement(1299059l);
+//        createVisibilityStatement(866026l);
+//        createVisibilityStatement(1105009l);
+//        createVisibilityStatement(883021l);
+//        createVisibilityStatement(884022l);
+//        createVisibilityStatement(870030l);
+//        createVisibilityStatement(1313001l);
+//        createVisibilityStatement(884021l);
+//        createVisibilityStatement(865018l);
+//        createVisibilityStatement(886019l);
+//        createVisibilityStatement(1279031l);
+
+
+    }
+
+    private void createVisibilityStatement (long visibility) {
+        GeneralItemVisibilityLocalObject visibilityLocalObject = new GeneralItemVisibilityLocalObject();
+        visibilityLocalObject.setGeneralItemId(visibility);
+        visibilityLocalObject.setTimeStamp(System.currentTimeMillis());
+        visibilityLocalObject.setStatus(1);
+        visibilityLocalObject.setRunId(gameActivityFeatures.getRunId());
+        visibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
+        String id = GeneralItemVisibilityLocalObject.generateId(gameActivityFeatures.getRunId(), visibilityLocalObject.getGeneralItemId());
+        visibilityLocalObject.setId(id);
+        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(visibilityLocalObject);
     }
 
     @Override

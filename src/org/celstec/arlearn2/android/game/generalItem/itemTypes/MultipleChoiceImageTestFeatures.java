@@ -1,11 +1,18 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.view.View;
 import android.webkit.WebView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
+import org.celstec.arlearn2.beans.generalItem.MultipleChoiceImageTest;
 import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.dao.gen.GeneralItemLocalObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -27,7 +34,8 @@ import org.celstec.dao.gen.GeneralItemLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class MultipleChoiceImageTestFeatures extends MultipleChoiceFeatures {
+public class MultipleChoiceImageTestFeatures extends SingleChoiceImageTestFeatures {
+    private ArrayList<MultipleChoiceAnswerItem> selected = new ArrayList<MultipleChoiceAnswerItem>();
 
     @Override
     protected int getImageResource() {
@@ -43,5 +51,71 @@ public class MultipleChoiceImageTestFeatures extends MultipleChoiceFeatures {
         super(activity, generalItemLocalObject);
     }
 
+    protected List<MultipleChoiceAnswerItem> getMultipleChoiceAnswers() {
+        return getBean().getAnswers();
+    }
 
+    private MultipleChoiceImageTest getBean() {
+        return (MultipleChoiceImageTest) generalItemBean;
+    }
+
+    protected void submitButtonClick() {
+        createAnswerGivenAction();
+        for (MultipleChoiceAnswerItem sel : selected) {
+            ResponseDelegator.getInstance().createMultipleChoiceResponse(generalItemLocalObject, activity.getGameActivityFeatures().getRunId(),sel);
+            createAnswerIdAction(sel.getId());
+        }
+        activity.finish();
+    }
+
+    protected void setCOLUMNS(){
+        COLUMNS = getBean().getColumns();
+    }
+
+    protected View.OnClickListener createImageViewClickerListener(final String answerId, final View im) {
+        return new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                MultipleChoiceAnswerItem selectedItem = null;
+                for (MultipleChoiceAnswerItem mcai : getMultipleChoiceAnswers()) {
+                    if (mcai.getId().equals(answerId)) {
+                        selectedItem = mcai;
+                    }
+                }
+//                if (!selected.contains(selectedItem)){
+//                    new PlayAudioTask().execute(answerId + ":a");
+//
+//                }
+
+                toggleSelectedAnswer(selectedItem);
+                if (selected.isEmpty()){
+                    submitVoteButton.setVisibility(View.GONE);
+                } else{
+                    submitVoteButton.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+    }
+
+    private void toggleSelectedAnswer(MultipleChoiceAnswerItem selectedItem) {
+
+        if (selected.contains(selectedItem)) {
+            selected.remove(selectedItem);
+            unsetSelection(answerViewMapping.get(selectedItem));
+        } else {
+            selected.add(selectedItem);
+            setSelection(answerViewMapping.get(selectedItem));
+        }
+
+    }
+
+    @Override
+    public void onPauseActivity() {
+        super.onPauseActivity();
+        for (MultipleChoiceAnswerItem item: selected) {
+            unsetSelection(answerViewMapping.get(item));
+        }
+    }
 }

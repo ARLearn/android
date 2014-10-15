@@ -45,36 +45,98 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
     public View newView(Context context, GeneralItemVisibilityLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (item.getGeneralItemLocalObject().isRead(runId)) {
-            View returnView = inflater.inflate(R.layout.game_message_entry_read, parent, false);
-            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
-            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageTextRead());
-            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
-            return returnView;
-        } else {
-            View returnView = inflater.inflate(R.layout.game_message_entry, parent, false);
-            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
-            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageText());
-            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
-            return returnView;
-        }
+
+        View returnView = inflater.inflate(R.layout.game_message_entry, parent, false);
+//        returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
+//        ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageTextRead());
+//        (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
+        return returnView;
+
+//        if (item.getGeneralItemLocalObject().isRead(runId)) {
+//            View returnView = inflater.inflate(R.layout.game_message_entry_read, parent, false);
+//            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
+//            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageTextRead());
+//            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
+//            return returnView;
+//        } else {
+//            View returnView = inflater.inflate(R.layout.game_message_entry, parent, false);
+//            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
+//            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageText());
+//            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
+//            return returnView;
+//        }
+
 
     }
 
     @Override
     public void bindView(View view, Context context, GeneralItemVisibilityLocalObject item) {
-        TextView messageText =(TextView) view.findViewById(R.id.messageText);
-        ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIcon);
-        if (item.getGeneralItemLocalObject()!=null) {
-            messageText.setText(item.getGeneralItemLocalObject().getTitle());
-            messageIcon.setImageResource(
-                    GeneralItemMapper.mapConstantToDrawable(
-                            GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
-                    )
-            );
+//        TextView messageText =(TextView) view.findViewById(R.id.messageText);
+//        ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIcon);
+//        if (item.getGeneralItemLocalObject()!=null) {
+//            messageText.setText(item.getGeneralItemLocalObject().getTitle());
+//            messageIcon.setImageResource(
+//                    GeneralItemMapper.mapConstantToDrawable(
+//                            GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
+//                    )
+//            );
+//
+//        } else {
+//            messageText.setText("message not loaded");
+//        }
 
+        if (item.getGeneralItemLocalObject().isRead(runId)) {
+            view.findViewById(R.id.messageEntryLinearLayoutRead).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.messageEntryLinearLayoutUnRead).setVisibility(View.GONE);
+            view.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
+            ((TextView) view.findViewById(R.id.messageTextRead)).setTextColor(DrawableUtil.getGameMessageTextRead());
+            (view.findViewById(R.id.messageIconRead)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
+
+            TextView messageText =(TextView) view.findViewById(R.id.messageTextRead);
+            ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconRead);
+            if (item.getGeneralItemLocalObject()!=null) {
+                messageText.setText(item.getGeneralItemLocalObject().getTitle());
+                messageIcon.setImageResource(
+                        GeneralItemMapper.mapConstantToDrawable(
+                                GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
+                        )
+                );
+
+            } else {
+                messageText.setText("message not loaded");
+            }
+
+//            View returnView = inflater.inflate(R.layout.game_message_entry_read, parent, false);
+//            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
+//            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageTextRead());
+//            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
+//            return returnView;
         } else {
-            messageText.setText("message not loaded");
+            view.findViewById(R.id.messageEntryLinearLayoutUnRead).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.messageEntryLinearLayoutRead).setVisibility(View.GONE);
+            view.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
+            ((TextView) view.findViewById(R.id.messageTextUnRead)).setTextColor(DrawableUtil.getGameMessageText());
+            (view.findViewById(R.id.messageIconUnRead)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
+
+            TextView messageText =(TextView) view.findViewById(R.id.messageTextUnRead);
+            ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconUnRead);
+            if (item.getGeneralItemLocalObject()!=null) {
+                messageText.setText(item.getGeneralItemLocalObject().getTitle());
+                messageIcon.setImageResource(
+                        GeneralItemMapper.mapConstantToDrawable(
+                                GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
+                        )
+                );
+
+            } else {
+                messageText.setText("message not loaded");
+            }
+
+//            View returnView = inflater.inflate(R.layout.game_message_entry, parent, false);
+//            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
+//            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageText());
+//            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
+//            return returnView;
         }
     }
 

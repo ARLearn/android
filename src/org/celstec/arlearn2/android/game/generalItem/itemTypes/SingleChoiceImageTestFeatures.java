@@ -1,18 +1,21 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.*;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.arlearn2.beans.game.GameFile;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.generalItem.SingleChoiceImageTest;
@@ -47,12 +50,14 @@ import java.util.List;
 public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
 
     protected int COLUMNS = 3;
-    private HashMap<String, GameFileLocalObject> gameFiles= new HashMap<String, GameFileLocalObject>();
+    private HashMap<String, GameFileLocalObject> gameFiles = new HashMap<String, GameFileLocalObject>();
+    protected HashMap<MultipleChoiceAnswerItem, View> answerViewMapping = new HashMap<MultipleChoiceAnswerItem, View>();
 
     @Override
     protected int getImageResource() {
         return GeneralItemMapper.mapConstantToDrawable(GeneralItemMapper.SINGLE_CHOICE_IMAGE);
     }
+
     @Override
     protected boolean showDataCollection() {
         return false;
@@ -60,44 +65,50 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
 
     public SingleChoiceImageTestFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         super(activity, generalItemLocalObject);
-        for (GameFileLocalObject gamefile: generalItemLocalObject.getGeneralItemFiles()){
+        for (GameFileLocalObject gamefile : generalItemLocalObject.getGeneralItemFiles()) {
             gameFiles.put(gamefile.getPath(), gamefile);
         }
         initUi();
     }
 
-    private void initUi(){
-        drawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{ 0xDD000000, 0xAA000000 });
-        drawable.setCornerRadii(new float[]{ 5, 5, 5, 5, 5, 5, 5, 5 });
+    private void initUi() {
+        drawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0xDD000000, 0xAA000000});
+        drawable.setCornerRadii(new float[]{5, 5, 5, 5, 5, 5, 5, 5});
         drawable.setStroke(1, 0xFF000000);
-
-//        submitVoteButton = (Button) findViewById(R.id.mct_submit);
-//        submitVoteButton.setEnabled(false);
-//        submitVoteButton.setOnClickListener(new OnClickListener() {
-//
-//            public void onClick(View v) {
-//                submitButtonClick();
-//            }
-//        });
     }
 
-    protected List<MultipleChoiceAnswerItem> getMultipleChoiceAnswers () {
+    protected List<MultipleChoiceAnswerItem> getMultipleChoiceAnswers() {
         return getBean().getAnswers();
     }
 
-    protected SingleChoiceImageTest getBean() {
+    private SingleChoiceImageTest getBean() {
         return (SingleChoiceImageTest) generalItemBean;
     }
 
-    public void setMetadata(){
+    public void setMetadata() {
         initTableView();
     }
 
+    protected void setRichText(WebView webView){
+
+    }
+
+    protected void setCOLUMNS(){
+        COLUMNS = getBean().getColumns();
+    }
+
     private void initTableView() {
+        super.setMetadata();
+        setCOLUMNS();
         activity.findViewById(R.id.descriptionId).setVisibility(View.GONE);
-        submitVoteButton = (TextView)activity.findViewById(R.id.button);
+        activity.findViewById(R.id.multipleChoice).setVisibility(View.GONE);
+        submitVoteButton = (TextView) activity.findViewById(R.id.button);
 //        activity.findViewById(R.id.button).setVisibility(View.VISIBLE);
         submitVoteButton.setText("Submit");
+
+
+        ((GradientDrawable) submitVoteButton.getBackground()).setColor(DrawableUtil.styleUtil.getPrimaryColor());
+
         submitVoteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,57 +127,49 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
                     tableView.addView(row);
                 }
                 row = new TableRow(activity);
+                TableLayout.LayoutParams rowLayout = new TableLayout.LayoutParams();
+                rowLayout.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                row.setLayoutParams(rowLayout);
 
             }
-            final ImageView im = new ImageView(activity);
-            im.setPadding(5, 5, 5, 5);
-            Uri imageUri = gameFiles.get("/generalItems/"+generalItemLocalObject.getId()+"/"+answerId+":i").getLocalUri();
-            if (imageUri != null) {
-                im.setImageURI(imageUri);
-            }
-            row.addView(im);
+
+
+            View child = activity.getLayoutInflater().inflate(R.layout.game_general_item_mc_tile, null);
+            row.addView(child);
             TableRow.LayoutParams layoutParams = new TableRow.LayoutParams();
-            layoutParams.width = 0;
             layoutParams.weight = 1;
-
-            im.setLayoutParams(layoutParams);
-//            answerViewMapping.put(getMultipleChoiceAnswers().get(i), im);
-            im.setOnClickListener(createImageViewClickerListener(answerId, im));
-
+            child.setLayoutParams(layoutParams);
+            Uri imageUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + ":i").getLocalUri();
+            if (imageUri != null) {
+                ((ImageView) child.findViewById(R.id.tileImage)).setImageURI(imageUri);
+            }
+            answerViewMapping.put(getMultipleChoiceAnswers().get(i), child);
+            child.setOnClickListener(createImageViewClickerListener(answerId, child));
+            child.findViewById(R.id.overlay).setVisibility(View.GONE);
+            child.findViewById(R.id.overlay).setBackground(DrawableUtil.getPrimaryColorOval());
         }
         tableView.addView(row);
     }
+
     protected TextView submitVoteButton;
-    protected ImageView selectedView;
+    protected View selectedView;
     protected GradientDrawable drawable;
     private MultipleChoiceAnswerItem selected = null;
 
     protected void submitButtonClick() {
         if (selected != null) {
 
-            ResponseDelegator.getInstance().createMultipleChoiceResponse(generalItemLocalObject, activity.getGameActivityFeatures().getRunId(),selected);
-            Action action = new Action();
-            action.setAction("answer_given");
-            action.setRunId(activity.getGameActivityFeatures().getRunId());
-            action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
-            action.setGeneralItemId(generalItemLocalObject.getId());
-
-            ActionsDelegator.getInstance().createAction(action);
-            action.setAction("answer_" + selected.getId());
-            ActionsDelegator.getInstance().createAction(action);
-
-            boolean correct = selected.getIsCorrect();
-            action.setAction("answer_" + (correct ? "correct" : "wrong"));
-            ActionsDelegator.getInstance().createAction(action);
-
-//            ActionsDelegator.getInstance().issueAction(activity.getGameActivityFeatures().getRunId(), "answer_" + (correct ? "correct" : "wrong"));
-//            ResponseDelegator.getInstance().syncResponses();
+            ResponseDelegator.getInstance().createMultipleChoiceResponse(generalItemLocalObject, activity.getGameActivityFeatures().getRunId(), selected);
+            createAnswerGivenAction();
+            createAnswerIdAction(selected.getId());
+            createAnswerResultAction(selected.getIsCorrect());
             activity.finish();
 
         }
     }
 
-    protected OnClickListener createImageViewClickerListener(final String answerId, final ImageView im) {
+
+    protected OnClickListener createImageViewClickerListener(final String answerId, final View im) {
         return new OnClickListener() {
 
             @Override
@@ -176,7 +179,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
 
 //                submitVoteButton.setEnabled(true);
                 submitVoteButton.setVisibility(View.VISIBLE);
-                for (MultipleChoiceAnswerItem mcai :getMultipleChoiceAnswers()) {
+                for (MultipleChoiceAnswerItem mcai : getMultipleChoiceAnswers()) {
                     if (mcai.getId().equals(answerId)) {
                         selected = mcai;
                     }
@@ -185,10 +188,38 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
         };
     }
 
-    protected void toggleSelectedView(ImageView im) {
-        if (selectedView != null)
-            selectedView.setBackgroundDrawable(null);
-        im.setBackgroundDrawable(drawable);
-        selectedView = im;
+    protected void toggleSelectedView(View newSelection) {
+        if (selectedView != null) {
+            unsetSelection(selectedView);
+        }
+//            ImageView tileImage = (ImageView) selectedView.findViewById(R.id.tileImage);
+//            tileImage.getDrawable().clearColorFilter();
+//            selectedView.findViewById(R.id.overlay).setVisibility(View.GONE);
+
+        setSelection(newSelection);
+//        ImageView tileImage = (ImageView) im.findViewById(R.id.tileImage);
+//        tileImage.getDrawable().setColorFilter(DrawableUtil.adjustAlpha(DrawableUtil.styleUtil.getPrimaryColor(), 0.4f), PorterDuff.Mode.MULTIPLY);
+//        im.findViewById(R.id.overlay).setVisibility(View.VISIBLE);
+        selectedView = newSelection;
+    }
+
+    protected void unsetSelection(View selectedView) {
+        ImageView tileImage = (ImageView) selectedView.findViewById(R.id.tileImage);
+        tileImage.getDrawable().clearColorFilter();
+        selectedView.findViewById(R.id.overlay).setVisibility(View.GONE);
+    }
+
+    protected void setSelection(View selectedView) {
+        ImageView tileImage = (ImageView) selectedView.findViewById(R.id.tileImage);
+        tileImage.getDrawable().setColorFilter(DrawableUtil.adjustAlpha(DrawableUtil.styleUtil.getPrimaryColor(), 0.4f), PorterDuff.Mode.MULTIPLY);
+        selectedView.findViewById(R.id.overlay).setVisibility(View.VISIBLE);
+    }
+    @Override
+    public void onPauseActivity() {
+        super.onPauseActivity();
+        if (selected != null){
+            unsetSelection(answerViewMapping.get(selected));
+
+        }
     }
 }
