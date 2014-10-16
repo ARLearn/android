@@ -333,7 +333,7 @@ public final class GameDelegator extends AbstractDelegator{
                 Resources res = context.getResources();
                 int fileId = res.getIdentifier(gameFile.getLocalRawRef(), "raw", context.getPackageName());
 
-                gameFileLocalObject.setUri("android.resource://org.celstec.arlearn2.android/"+fileId);
+                gameFileLocalObject.setUri("android.resource://"+context.getPackageName()+"/"+fileId);
 
                 DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
             }

@@ -117,7 +117,8 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
             view.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
             ((TextView) view.findViewById(R.id.messageTextUnRead)).setTextColor(DrawableUtil.getGameMessageText());
             (view.findViewById(R.id.messageIconUnRead)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
-
+            int dip = DrawableUtil.dipToPixels(8);
+            (view.findViewById(R.id.messageIconUnRead)).setPadding(dip, dip, dip, dip);
             TextView messageText =(TextView) view.findViewById(R.id.messageTextUnRead);
             ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconUnRead);
             if (item.getGeneralItemLocalObject()!=null) {

@@ -104,6 +104,9 @@ public class DrawableUtil {
         StateListDrawable stateListDrawable = new StateListDrawable();
         stateListDrawable.addState(new int[]{-android.R.attr.state_pressed},  ovalUnPressed);
         stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, ovalPressed);
+//        stateListDrawable.setIntrinsicHeight(30);
+//        stateListDrawable.setIntrinsicHeight(30);
+//        stateListDrawable.set
         return stateListDrawable;
     }
 

@@ -72,26 +72,26 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
             ((ImageView)findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
         }
 
-//        createVisibilityStatement(885015l);
-//        createVisibilityStatement(20196003l);
-//        createVisibilityStatement(1059001l);
-//        createVisibilityStatement(881016l);
-//        createVisibilityStatement(881017l);
-//        createVisibilityStatement(835208l);
-//        createVisibilityStatement(20166030l);
-//        createVisibilityStatement(865017l);
-//        createVisibilityStatement(1071003l);
-//        createVisibilityStatement(1299059l);
-//        createVisibilityStatement(866026l);
-//        createVisibilityStatement(1105009l);
-//        createVisibilityStatement(883021l);
-//        createVisibilityStatement(884022l);
-//        createVisibilityStatement(870030l);
-//        createVisibilityStatement(1313001l);
-//        createVisibilityStatement(884021l);
-//        createVisibilityStatement(865018l);
-//        createVisibilityStatement(886019l);
-//        createVisibilityStatement(1279031l);
+        createVisibilityStatement(885015l);
+        createVisibilityStatement(20196003l);
+        createVisibilityStatement(1059001l);
+        createVisibilityStatement(881016l);
+        createVisibilityStatement(881017l);
+        createVisibilityStatement(835208l);
+        createVisibilityStatement(20166030l);
+        createVisibilityStatement(865017l);
+        createVisibilityStatement(1071003l);
+        createVisibilityStatement(1299059l);
+        createVisibilityStatement(866026l);
+        createVisibilityStatement(1105009l);
+        createVisibilityStatement(883021l);
+        createVisibilityStatement(884022l);
+        createVisibilityStatement(870030l);
+        createVisibilityStatement(1313001l);
+        createVisibilityStatement(884021l);
+        createVisibilityStatement(865018l);
+        createVisibilityStatement(886019l);
+        createVisibilityStatement(1279031l);
 
 
     }

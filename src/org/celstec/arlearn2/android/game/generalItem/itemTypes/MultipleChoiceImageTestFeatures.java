@@ -2,7 +2,6 @@ package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
 import android.view.View;
 import android.webkit.WebView;
-import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
@@ -36,6 +35,7 @@ import java.util.List;
  */
 public class MultipleChoiceImageTestFeatures extends SingleChoiceImageTestFeatures {
     private ArrayList<MultipleChoiceAnswerItem> selected = new ArrayList<MultipleChoiceAnswerItem>();
+
 
     @Override
     protected int getImageResource() {

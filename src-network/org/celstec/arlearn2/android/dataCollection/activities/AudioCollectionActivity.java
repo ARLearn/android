@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -57,6 +58,8 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
     public  abstract int getAudioRecordingLevel2();
     public  abstract int getAudioRecordingLevel3();
     public  abstract int getAudioRecordingLevel4();
+    public abstract Drawable getPlayBackground();
+    public abstract Drawable getPauseBackground();
 
     public  abstract int getStartRecordingButton();
     public  abstract int getStopRecordingButton();
@@ -106,7 +109,7 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
                     }
                 }
         );
-        playPauseButton = (ImageButton)findViewById(getPlayPauseButton());
+        playPauseButton = (ImageView)findViewById(getPlayPauseButton());
         playPauseButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -240,7 +243,7 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
 
 
     private MediaPlayer mediaPlayer;
-    private ImageButton playPauseButton;
+    private ImageView playPauseButton;
     private SeekBar seekbar;
     private int status = PAUSE;
     private final static int PAUSE = 0;
@@ -271,11 +274,13 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
     }
     public void playPauseButton() {
         if (status == PAUSE) {
-            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+//            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+            playPauseButton.setImageDrawable(getPauseBackground());
 
             status = PLAYING;
             mediaPlayer.start();
-            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+//            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+            playPauseButton.setImageDrawable(getPauseBackground());
             finalTime = mediaPlayer.getDuration();
             startTime = mediaPlayer.getCurrentPosition();
             if(oneTimeOnly == 0){
@@ -288,13 +293,14 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     status = PAUSE;
-                    playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+//                    playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+                    playPauseButton.setImageDrawable(getPlayBackground());
 
                 }
             });
         } else {
-            playPauseButton.setImageResource(android.R.drawable.ic_media_play);
-
+//            playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+            playPauseButton.setImageDrawable(getPlayBackground());
             status = PAUSE;
             mediaPlayer.pause();
         }

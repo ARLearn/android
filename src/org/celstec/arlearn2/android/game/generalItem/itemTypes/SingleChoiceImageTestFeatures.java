@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import android.view.View.OnClickListener;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
     protected int COLUMNS = 3;
     private HashMap<String, GameFileLocalObject> gameFiles = new HashMap<String, GameFileLocalObject>();
     protected HashMap<MultipleChoiceAnswerItem, View> answerViewMapping = new HashMap<MultipleChoiceAnswerItem, View>();
+    private AudioItemFeatures audioItemFeatures;
 
     @Override
     protected int getImageResource() {
@@ -63,12 +66,20 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
         return false;
     }
 
+    public void onResumeActivity(){
+        super.onResumeActivity();
+        audioItemFeatures.onResumeActivity(false);
+    }
+
+
+
     public SingleChoiceImageTestFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         super(activity, generalItemLocalObject);
         for (GameFileLocalObject gamefile : generalItemLocalObject.getGeneralItemFiles()) {
             gameFiles.put(gamefile.getPath(), gamefile);
         }
         initUi();
+        audioItemFeatures = new AudioItemFeatures(activity, generalItemLocalObject, false);
     }
 
     private void initUi() {
@@ -175,9 +186,12 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
             @Override
             public void onClick(View v) {
                 toggleSelectedView(im);
-//                playSound(answerId + ":a");
+                if (audioItemFeatures.isPlaying()) audioItemFeatures.playPause();
+//                audioItemFeatures.onResumeActivity(false);
 
-//                submitVoteButton.setEnabled(true);
+                Uri audioUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + ":a").getLocalUri();
+                playUri(audioUri);
+
                 submitVoteButton.setVisibility(View.VISIBLE);
                 for (MultipleChoiceAnswerItem mcai : getMultipleChoiceAnswers()) {
                     if (mcai.getId().equals(answerId)) {
@@ -187,19 +201,30 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
             }
         };
     }
+    private MediaPlayer mediaPlayer;
+
+    public void playUri(Uri audioUri) {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+        }
+        mediaPlayer.reset();
+        try {
+
+            mediaPlayer.setDataSource(activity, audioUri);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void toggleSelectedView(View newSelection) {
         if (selectedView != null) {
             unsetSelection(selectedView);
         }
-//            ImageView tileImage = (ImageView) selectedView.findViewById(R.id.tileImage);
-//            tileImage.getDrawable().clearColorFilter();
-//            selectedView.findViewById(R.id.overlay).setVisibility(View.GONE);
 
         setSelection(newSelection);
-//        ImageView tileImage = (ImageView) im.findViewById(R.id.tileImage);
-//        tileImage.getDrawable().setColorFilter(DrawableUtil.adjustAlpha(DrawableUtil.styleUtil.getPrimaryColor(), 0.4f), PorterDuff.Mode.MULTIPLY);
-//        im.findViewById(R.id.overlay).setVisibility(View.VISIBLE);
         selectedView = newSelection;
     }
 
@@ -217,9 +242,12 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
     @Override
     public void onPauseActivity() {
         super.onPauseActivity();
+        audioItemFeatures.onPauseActivity();
         if (selected != null){
             unsetSelection(answerViewMapping.get(selected));
 
         }
     }
+
+
 }

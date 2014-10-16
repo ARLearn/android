@@ -64,6 +64,8 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
     private final static int PAUSE = 0;
     private final static int PLAYING = 1;
 
+//    private boolean isTracking = true;
+
 
     @Override
     protected int getImageResource() {
@@ -71,7 +73,10 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
     }
 
     public AudioItemFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
-        super(activity, generalItemLocalObject);
+        this(activity, generalItemLocalObject, true);
+    }
+    public AudioItemFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject, boolean dataCollection) {
+        super(activity, generalItemLocalObject, dataCollection);
 //        GameFileLocalObject.getGameFileLocalObject(generalItemLocalObject.getGameId(), "/generalItems/"+generalItemLocalObject.getId()+"/audio");
         if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
 
@@ -113,7 +118,15 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
     }
 
     public void onResumeActivity(){
-        super.onResumeActivity();
+        onResumeActivity(true);
+    }
+
+    public boolean isPlaying(){
+        return status == PLAYING;
+    }
+    public void onResumeActivity(boolean superCheck){
+        if (superCheck) super.onResumeActivity();
+        playPauseButton.setImageDrawable(playDrawable);
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
         }
@@ -122,7 +135,6 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         status = PAUSE;
         try {
             if (audioFile != null) {
-//                File file = new File(MediaFolders.getIncommingFilesDir().getPath() + "/" + generalItemLocalObject.getGameId() + audioFile.getPath());
                 Uri uri = audioFile.getLocalUri();
                 mediaPlayer.setDataSource(activity, uri);
                 mediaPlayer.prepare();
@@ -139,11 +151,9 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
     public void playPause(){
         if (status == PAUSE) {
-
             status = PLAYING;
             mediaPlayer.start();
             playPauseButton.setImageDrawable(pauseDrawable);
-//            playPauseButton.setImageResource(R.drawable.btn_pause);
             finalTime = mediaPlayer.getDuration();
             startTime = mediaPlayer.getCurrentPosition();
             if(oneTimeOnly == 0){
@@ -158,14 +168,10 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
                     status = PAUSE;
                     playbackCompleted();
                     playPauseButton.setImageDrawable(playDrawable);
-//                    playPauseButton.setImageResource(R.drawable.btn_play);
-
                 }
             });
         } else {
             playPauseButton.setImageDrawable(playDrawable);
-//            playPauseButton.setImageResource(R.drawable.btn_play);
-
             status = PAUSE;
             mediaPlayer.pause();
         }
@@ -176,7 +182,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         public void run() {
             startTime = mediaPlayer.getCurrentPosition();
 
-            seekbar.setProgress((int)startTime);
+             seekbar.setProgress((int)startTime);
             myHandler.postDelayed(this, 100);
         }
     };
@@ -217,11 +223,6 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         action.setGeneralItemId(generalItemLocalObject.getId());
 
         ActionsDelegator.getInstance().createAction(action);
-//        if (completeAction != null) {
-//            completeAction.setTime(System.currentTimeMillis());
-//            ActionsDelegator.getInstance().publishAction((Context) ctx, completeAction);
-//        }
-//        setStatus(STOPPED);
     }
 
 }

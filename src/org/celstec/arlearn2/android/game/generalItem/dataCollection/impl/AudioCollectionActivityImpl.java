@@ -3,15 +3,13 @@ package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import android.widget.*;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
 import org.celstec.arlearn2.android.views.DrawableUtil;
@@ -38,6 +36,8 @@ import org.celstec.arlearn2.android.views.StyleUtil;
  * ****************************************************************************
  */
 public class AudioCollectionActivityImpl extends AudioCollectionActivity{
+    private Drawable playDrawable;
+    private Drawable pauseDrawable;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,13 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
         ((TextView)findViewById(R.id.stopRecording)).setTextColor(styleUtil.getTextLight());
         ((TextView)findViewById(R.id.dataCollectionSubmit)).setTextColor(styleUtil.getTextLight());
         ((TextView)findViewById(R.id.cancelId)).setTextColor(styleUtil.getTextLight());
-        ((ImageButton)findViewById(R.id.playPauseButton)).setBackgroundColor(styleUtil.getPrimaryColor());
+        pauseDrawable = getResources().getDrawable(R.drawable.btn_pause_black);
+        playDrawable = getResources().getDrawable(R.drawable.btn_play_black);
+        ColorMatrixColorFilter filter = DrawableUtil.getBlackWhiteFilter(DrawableUtil.styleUtil.getPrimaryColor());
+        pauseDrawable.setColorFilter(filter);
+        playDrawable.setColorFilter(filter);
+
+        ((ImageView)findViewById(R.id.playPauseButton)).setImageDrawable(playDrawable);
 
 
         ((SeekBar)findViewById(R.id.seekbar)).setThumb(DrawableUtil.getPrimaryColorOvalSeekbar());
@@ -93,6 +99,16 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     @Override
     public int getAudioRecordingLevel4() {
         return R.drawable.game_data_collection_input_recording_level4;
+    }
+
+    @Override
+    public Drawable getPlayBackground() {
+        return playDrawable;
+    }
+
+    @Override
+    public Drawable getPauseBackground() {
+        return pauseDrawable;
     }
 
     @Override
