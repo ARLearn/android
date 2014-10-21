@@ -63,6 +63,8 @@
             style="@style/ARLearn.Game.GeneralItemActivity.RichTextView">
     </WebView>
 
+
+
     <TableLayout
             android:layout_width="fill_parent"
             android:id="@+id/multipleChoiceImageTable"
@@ -81,6 +83,25 @@
             android:visibility="gone"
             />
 
+    <!--<VideoView-->
+            <!--android:id="@+id/videoView"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:visibility="visible"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--/>-->
+
+    <!--<RelativeLayout-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="50dip">-->
+
+        <org.celstec.arlearn2.android.views.MyVideoView android:id="@+id/videoView"
+                                                        android:layout_gravity="center_horizontal"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"/>
+
+
+    <!--</RelativeLayout>-->
 
     <LinearLayout
             android:id="@+id/mediaBar"

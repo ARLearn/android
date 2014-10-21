@@ -128,6 +128,9 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
         });
         TableLayout tableView = (TableLayout) activity.findViewById(R.id.multipleChoiceImageTable);
         tableView.setVisibility(View.VISIBLE);
+//        for (int i = 0; i< tableView.getChildCount(); i++) {
+            tableView.removeAllViews();
+//        }
         TableRow row = null;
 
         for (int i = 0; i < getMultipleChoiceAnswers().size(); i++) {

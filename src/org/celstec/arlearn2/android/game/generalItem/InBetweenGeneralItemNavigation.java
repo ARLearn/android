@@ -127,7 +127,7 @@ public class InBetweenGeneralItemNavigation {
         }
     }
 
-    private void navigateNext(){
+    public void navigateNext(){
         if (nextGeneralItemLocalObject != null) {
             activity.finish();
             launchGeneralItemActivity(nextGeneralItemLocalObject);

@@ -41,7 +41,10 @@ public class StyleUtil implements Serializable{
     private int textInactive;
     private int buttonColor;
 
+    private int theme;
+
     public StyleUtil(Context context, int schema) {
+        this.theme = schema;
         TypedArray ta = context.obtainStyledAttributes(schema, new int[]{
                 R.attr.primaryColor,
                 R.attr.buttonAlternativeColor,
@@ -65,6 +68,10 @@ public class StyleUtil implements Serializable{
         buttonColor = ta.getColor(6, Color.BLACK);
         textInactive = ta.getColor(7, Color.BLACK);
 
+    }
+
+    public int getTheme() {
+        return theme;
     }
 
     public int getPrimaryColor() {

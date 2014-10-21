@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.dataCollection;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,10 +9,10 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
+import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity;
 import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
 
-import java.util.HashSet;
 import java.util.Vector;
 
 /**
@@ -72,6 +73,8 @@ public class DataCollectionResultController {
         } else {
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
         }
+        (row.findViewById(R.id.messageText)).setOnClickListener(createRowClickerListener(result, responseLocalObject));
+
         row.findViewById(R.id.trashIcon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +93,22 @@ public class DataCollectionResultController {
         resultsLinearLayout.addView(row);
         results.add(result);
         result.setView(row);
+    }
+
+    public View.OnClickListener createRowClickerListener(final DataCollectionResult result, final ResponseLocalObject responseLocalObject){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (result.getType()){
+                    case ResponseLocalObject.AUDIO_TYPE:
+                        Intent audioRecording = new Intent(activity, AudioResultActivity.class);
+                        audioRecording.putExtra(ResponseLocalObject.class.getName(), responseLocalObject.getId());
+                        activity.startActivity(audioRecording);
+                        break;
+                }
+
+            }
+        };
     }
 
     public void setAdapter(LazyListAdapter adapter) {

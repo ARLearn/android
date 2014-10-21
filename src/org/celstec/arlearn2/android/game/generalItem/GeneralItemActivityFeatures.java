@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
@@ -114,6 +115,7 @@ public abstract class GeneralItemActivityFeatures {
         dataCollectionResultController.notifyDataSetChanged();
 
 
+
         dataCollectionViewController = new DataCollectionViewController(activity){
 
             @Override
@@ -196,6 +198,7 @@ public abstract class GeneralItemActivityFeatures {
         activity.findViewById(R.id.textButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
         activity.findViewById(R.id.numberButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
 
+        ((GradientDrawable)activity.findViewById(R.id.button).getBackground()).setColor(DrawableUtil.styleUtil.getPrimaryColor());
         TextView titleView = (TextView) this.activity.findViewById(R.id.titleId);
         titleView.setText(generalItemLocalObject.getTitle());
 

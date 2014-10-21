@@ -27,7 +27,7 @@ import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 public abstract class DataCollectionViewController {
     private GeneralItemActivity activity;
 
-    public DataCollectionViewController(GeneralItemActivity activity) {
+    public DataCollectionViewController(final GeneralItemActivity activity) {
         this.activity = activity;
         activity.findViewById(R.id.audioButtonIcon).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +63,12 @@ public abstract class DataCollectionViewController {
                 onNumberClick();
             }
         });
+        activity.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.getInBetweenGeneralItemNavigation().navigateNext();
+            }
+        });
     }
 
     public void hideDataCollection() {
@@ -73,7 +79,15 @@ public abstract class DataCollectionViewController {
         activity.findViewById(R.id.dataCollection).setVisibility(View.VISIBLE);
     }
 
+    private boolean dataCollectionTasks[] = new boolean[5];
+
     public void setVisibilities(boolean audio, boolean picture, boolean video, boolean numbers, boolean text) {
+        dataCollectionTasks[0] = audio;
+        dataCollectionTasks[1] = picture;
+        dataCollectionTasks[2] = video;
+        dataCollectionTasks[3] = numbers;
+        dataCollectionTasks[4] = text;
+
         if (audio) {
             activity.findViewById(R.id.audioButtonIcon).setVisibility(View.VISIBLE);
             activity.findViewById(R.id.audioButtonCheckIcon).setVisibility(View.GONE);
@@ -138,6 +152,10 @@ public abstract class DataCollectionViewController {
     public abstract void onNumberClick();
 
     public void showChecks(LazyListAdapter lazyListAdapter){
+        if (dataCollectionTasks[0]||dataCollectionTasks[1]||dataCollectionTasks[2]||dataCollectionTasks[3]||dataCollectionTasks[4])
+        if (lazyListAdapter.hasAllCompleted(dataCollectionTasks)){
+            activity.findViewById(R.id.button).setVisibility(View.VISIBLE);
+        }
         if (lazyListAdapter.hasAudioResult()) {
             activity.findViewById(R.id.audioButtonCheckIcon).setVisibility(View.VISIBLE);
         }

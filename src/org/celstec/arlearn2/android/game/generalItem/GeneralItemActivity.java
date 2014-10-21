@@ -126,5 +126,7 @@ public class GeneralItemActivity extends Activity {
         this.gameActivityFeatures = gameActivityFeatures;
     }
 
-
+    public InBetweenGeneralItemNavigation getInBetweenGeneralItemNavigation() {
+        return inBetweenGeneralItemNavigation;
+    }
 }

@@ -97,4 +97,18 @@ public class LazyListAdapter {
         return false;
     }
 
+    public boolean hasAllCompleted(boolean[] dataCollectionTasks) {
+        for (ResponseLocalObject responseLocalObject: lazyList) {
+            if (responseLocalObject.isAudio()) dataCollectionTasks[0] = false;
+            if (responseLocalObject.isPicture()) dataCollectionTasks[1] = false;
+            if (responseLocalObject.isVideo()) dataCollectionTasks[2] = false;
+            if (responseLocalObject.isValue()) dataCollectionTasks[3] = false;
+            if (responseLocalObject.isText()) dataCollectionTasks[4] = false;
+        }
+        return !dataCollectionTasks[0]
+                &&!dataCollectionTasks[1]
+                &&!dataCollectionTasks[2]
+                &&!dataCollectionTasks[3]
+                &&!dataCollectionTasks[4];
+    }
 }
