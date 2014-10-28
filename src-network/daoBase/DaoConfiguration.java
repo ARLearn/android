@@ -59,6 +59,10 @@ public class DaoConfiguration {
         return session.getGameLocalObjectDao();
     }
 
+    public StoreGameLocalObjectDao getStoreGameLocalObjectDao() {
+        return session.getStoreGameLocalObjectDao();
+    }
+
     public InquiryLocalObjectDao getInquiryLocalObjectDao(){
         return session.getInquiryLocalObjectDao();
     }

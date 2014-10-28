@@ -28,6 +28,7 @@ public class ARlearnDaoGenerator {
 
     private static Entity account;
     private static Entity game;
+    private static Entity storeGame;
     private static Entity gameContributors;
     private static Entity gameFiles;
     private static Entity generalItem;
@@ -58,6 +59,7 @@ public class ARlearnDaoGenerator {
         schema.enableKeepSectionsByDefault();
         account = createAccount(schema);
         game = createGame(schema);
+        storeGame = createStoreGame(schema);
         gameContributors = createGameContributor(schema);
         dependency = createDependency(schema);
         generalItem = createGeneralItem(schema);
@@ -268,6 +270,22 @@ public class ARlearnDaoGenerator {
         return game;
     }
 
+    private static Entity createStoreGame(Schema schema) {
+        Entity game = schema.addEntity("StoreGameLocalObject");
+        game.addIdProperty();
+        game.addStringProperty("title").notNull();
+        game.addStringProperty("licenseCode");
+        game.addStringProperty("description");
+        game.addStringProperty("bean");
+        game.addBooleanProperty("mapAvailable");
+        game.addBooleanProperty("deleted");
+        game.addLongProperty("lastModificationDate");
+        game.addByteArrayProperty("icon");
+        game.addDoubleProperty("lat");
+        game.addDoubleProperty("lng");
+        return game;
+    }
+
     private static Entity createGameContributor(Schema schema) {
         Entity gameContributor = schema.addEntity("GameContributorLocalObject");
         gameContributor.addIdProperty();
@@ -464,7 +482,7 @@ public class ARlearnDaoGenerator {
         toMany.setName("games");
 
         Property gameId = gameCategory.addLongProperty("gameId").getProperty();
-        gameCategory.addToOne(game, gameId);
+        gameCategory.addToOne(storeGame, gameId);
         return gameCategory;
 
     }

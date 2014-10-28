@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.messageViews.map.OSMOverlayItem;
 import org.celstec.arlearn2.android.game.messageViews.map.OsmGeneralItemizedIconOverlay;
@@ -48,7 +49,7 @@ public class GameMap extends Activity {
     private MyLocationNewOverlay myLocation;
 
     private MapView mv;
-    private IMapController control;
+//    private IMapController control;
 
     private OsmGeneralItemizedIconOverlay itemsOverlay;
 
@@ -63,15 +64,18 @@ public class GameMap extends Activity {
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
 
+
+
+
+//        mv.setTileSource(TileSourceFactory.MAPNIK);
+//
+//        mv.setClickable(true);
+//        mv.setBuiltInZoomControls(true);
+//
+//        mv.getController().setZoom(5);
+//        mv.setBuiltInZoomControls(false);
+//        control = mv.getController();
         mv = (MapView) findViewById(R.id.map);
-        mv.setTileSource(TileSourceFactory.MAPNIK);
-
-        mv.setClickable(true);
-        mv.setBuiltInZoomControls(true);
-
-        mv.getController().setZoom(5);
-        mv.setBuiltInZoomControls(false);
-        control = mv.getController();
         myLocation = new MyLocationNewOverlay(this, mv) {
 
             @Override
@@ -87,6 +91,8 @@ public class GameMap extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        mv = (MapView) findViewById(R.id.map);
+        ARL.mapContext.applyContext(mv);
         itemsOverlay = new OsmGeneralItemizedIconOverlay(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
         mv.getOverlays().add(itemsOverlay);
         mv.invalidate();
@@ -96,6 +102,7 @@ public class GameMap extends Activity {
     protected void onPause() {
         super.onPause();
         if (itemsOverlay != null) itemsOverlay.close();
+        ARL.mapContext.saveContext(mv);
 
     }
 

@@ -70,7 +70,7 @@
             >
 
         <org.celstec.arlearn2.android.views.SquareLinearLayout
-                android:id="@+id/scan"
+                android:id="@+id/topGames"
                 android:orientation="vertical"
                 style="@style/ARLearn.Store">
 

@@ -123,6 +123,8 @@ public class InBetweenGeneralItemNavigation {
     private void navigatePrev(){
         if (previousGeneralItemLocalObject != null) {
             activity.finish();
+            activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
             launchGeneralItemActivity(previousGeneralItemLocalObject);
         }
     }
@@ -130,6 +132,8 @@ public class InBetweenGeneralItemNavigation {
     public void navigateNext(){
         if (nextGeneralItemLocalObject != null) {
             activity.finish();
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
             launchGeneralItemActivity(nextGeneralItemLocalObject);
         }
     }

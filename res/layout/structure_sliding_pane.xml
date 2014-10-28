@@ -9,41 +9,28 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1" >
-        <android.support.v4.widget.SlidingPaneLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/sliding_pane_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <!--<android.support.v4.widget.SlidingPaneLayout-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:id="@+id/sliding_pane_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-            <RelativeLayout android:id="@+id/left_pane"
-                            style="@style/ARLearn.SlidingPane"
-                            >
+            <!--<RelativeLayout android:id="@+id/left_pane"-->
+                            <!--style="@style/ARLearn.SlidingPane"-->
+                            <!-->-->
 
-                <TextView
-                        style="@style/ARLearn.SlidingPane.Text"
-                        android:text="About me"
-                        />
+                <!--<TextView-->
+                        <!--style="@style/ARLearn.SlidingPane.Text"-->
+                        <!--android:text="About me"-->
+                        <!--/>-->
 
-                <Button
-                        android:id="@+id/logoutButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="logout"/>
-                <!--<ScrollView-->
+                <!--<Button-->
+                        <!--android:id="@+id/logoutButton"-->
+                        <!--android:layout_width="wrap_content"-->
                         <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_width="match_parent">-->
-                    <!--<LinearLayout-->
-                        <!--android:id="@+id/container"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:orientation="vertical"-->
-                        <!--android:layout_margin="10dp">-->
-
-
-                    <!--</LinearLayout>-->
-                <!--</ScrollView>-->
-            </RelativeLayout>
-            <!-- Main content will be here -->
+                        <!--android:text="logout"/>-->
+            <!--</RelativeLayout>-->
+            <!--&lt;!&ndash; Main content will be here &ndash;&gt;-->
 
             <LinearLayout
                     android:id="@+id/right_pane"
@@ -52,7 +39,7 @@
                     android:layout_weight="1" >
 
             </LinearLayout>
-        </android.support.v4.widget.SlidingPaneLayout>
+        <!--</android.support.v4.widget.SlidingPaneLayout>-->
 
     </LinearLayout>
 

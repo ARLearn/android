@@ -74,9 +74,10 @@ public final class GameDelegator extends AbstractDelegator{
     Public API
      */
 
-    public void syncGameWithoutToken(Long gameId) {
-        ARL.eventBus.post(new SyncGameNoToken(gameId));
-    }
+
+//    public void syncGameWithoutToken(Long gameId) {
+//        ARL.eventBus.post(new SyncGameNoToken(gameId));
+//    }
 
     public void syncGameFiles(Long gameId) { //TODO check if this method is still needed
         ARL.eventBus.post(new SyncGameFiles(gameId));
@@ -93,9 +94,7 @@ public final class GameDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SearchGames(query));
     }
 
-    public void search(Double lat, Double lng, Long distance) {
-        ARL.eventBus.post(new LocationSearchGames(lat, lng, distance));
-    }
+
 
     public GameLocalObject asyncGame(long gameId, boolean withToken) {
         String token = returnTokenIfOnline();
@@ -147,9 +146,9 @@ public final class GameDelegator extends AbstractDelegator{
    Implementation
     */
 
-    private void onEventAsync(SyncGameNoToken g) {
-        asyncGame(g.getGameId(), false);
-    }
+//    private void onEventAsync(SyncGameNoToken g) {
+//        asyncGame(g.getGameId(), false);
+//    }
 
     private void onEventAsync(GameDownloadManager g) {
         asyncDownloadGame(g);
@@ -158,17 +157,6 @@ public final class GameDelegator extends AbstractDelegator{
     private void onEventAsync(SearchGames sg) {
         if (ARL.isOnline()) {
             GamesList result = GameClient.getGameClient().search(null, sg.query);
-            ARL.eventBus.post(new SearchResultList(result));
-        }
-    }
-
-    private void onEventAsync(LocationSearchGames sg) {
-        String token = returnTokenIfOnline();
-        if (token != null) {
-            GamesList result = GameClient.getGameClient().search(token, sg.getLat(), sg.getLng(), sg.getDistance());
-            for (Game gameResult: result.getGames()) {
-                process(gameResult);
-            }
             ARL.eventBus.post(new SearchResultList(result));
         }
     }
@@ -349,21 +337,21 @@ public final class GameDelegator extends AbstractDelegator{
         }
     }
 
-    private class SyncGameNoToken {
-        private long gameId;
-
-        private SyncGameNoToken(long gameId) {
-            this.gameId = gameId;
-        }
-
-        public long getGameId() {
-            return gameId;
-        }
-
-        public void setGameId(long gameId) {
-            this.gameId = gameId;
-        }
-    }
+//    private class SyncGameNoToken {
+//        private long gameId;
+//
+//        private SyncGameNoToken(long gameId) {
+//            this.gameId = gameId;
+//        }
+//
+//        public long getGameId() {
+//            return gameId;
+//        }
+//
+//        public void setGameId(long gameId) {
+//            this.gameId = gameId;
+//        }
+//    }
 
 //    private class DownloadGame {
 //        private long gameId;
@@ -485,40 +473,6 @@ public final class GameDelegator extends AbstractDelegator{
             this.gameId = gameId;
         }
     }
-    private class LocationSearchGames {
-        private Double lat;
-        private Double lng;
-        private Long distance;
 
-        private LocationSearchGames(Double lat, Double lng, Long distance) {
-            this.lat = lat;
-            this.lng = lng;
-            this.distance = distance;
-        }
-
-        public Double getLat() {
-            return lat;
-        }
-
-        public void setLat(Double lat) {
-            this.lat = lat;
-        }
-
-        public Double getLng() {
-            return lng;
-        }
-
-        public void setLng(Double lng) {
-            this.lng = lng;
-        }
-
-        public Long getDistance() {
-            return distance;
-        }
-
-        public void setDistance(Long distance) {
-            this.distance = distance;
-        }
-    }
 
 }

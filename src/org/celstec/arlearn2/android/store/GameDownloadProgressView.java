@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.android.store;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
@@ -39,10 +40,10 @@ public class GameDownloadProgressView extends Dialog {
 //    private int progress = 0;
 //    private int bytesDownloaded = 0;
     private DownloadViewManager downloadViewManager;
-    private GameFragment gameFragment;
+    private DownloadCompleteInterface gameFragment;
 
-    public GameDownloadProgressView(GameFragment gf, GameDownloadManager gameDownloadManager) {
-        super(gf.getActivity(), R.style.ARLearn_notificationDialog);
+    public GameDownloadProgressView(Context ctx, DownloadCompleteInterface gf, GameDownloadManager gameDownloadManager) {
+        super(ctx, R.style.ARLearn_notificationDialog);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         this.gameDownloadManager = gameDownloadManager;
     this.gameFragment = gf;
@@ -139,4 +140,8 @@ public class GameDownloadProgressView extends Dialog {
 //
 //
 //    }
+
+    interface DownloadCompleteInterface {
+        public void downloadComplete();
+    }
 }

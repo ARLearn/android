@@ -18,10 +18,7 @@ import org.celstec.arlearn2.android.listadapter.ListAdapter;
 import org.celstec.arlearn2.android.viewWrappers.GameRowBig;
 import org.celstec.arlearn2.android.viewWrappers.GameRowSmall;
 import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.dao.gen.AccountLocalObject;
-import org.celstec.dao.gen.GameContributorLocalObject;
-import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.GameLocalObjectDao;
+import org.celstec.dao.gen.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +76,7 @@ public class SearchResultsLazyListAdapter extends ListAdapter<Game> {
     public void bindView(View view, Context context, Game item) {
         GameRowSmall big = new GameRowSmall((LinearLayout) view);
         big.setGameTitle(item.getTitle());
-        GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(item.getGameId());
+        StoreGameLocalObject gameLocalObject = DaoConfiguration.getInstance().getStoreGameLocalObjectDao().load(item.getGameId());
         if (gameLocalObject != null) {
             byte[] data = gameLocalObject.getIcon();
             if (data != null && data.length!=0) {

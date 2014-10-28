@@ -1,9 +1,12 @@
 package org.celstec.arlearn2.android.listadapter.impl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.Query;
@@ -12,10 +15,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.listadapter.LazyListAdapter;
-import org.celstec.dao.gen.GameContributorLocalObject;
-import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.GameLocalObjectDao;
-import org.celstec.dao.gen.RunLocalObject;
+import org.celstec.dao.gen.*;
 
 /**
  * ****************************************************************************
@@ -37,14 +37,14 @@ import org.celstec.dao.gen.RunLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class CategoryGamesLazyListAdapter extends LazyListAdapter<GameLocalObject> {
+public class CategoryGamesLazyListAdapter extends LazyListAdapter<StoreGameLocalObject> {
 
 //    private QueryBuilder qb;
     private Query query;
 
     public CategoryGamesLazyListAdapter(Context context, long category) {
         super(context);
-        GameLocalObjectDao dao = DaoConfiguration.getInstance().getGameLocalObjectDao();
+        StoreGameLocalObjectDao dao = DaoConfiguration.getInstance().getStoreGameLocalObjectDao();
 //        qb = dao.queryBuilder().orderAsc(GameLocalObjectDao.Properties.Title);
         query = dao.queryRawCreate(
                 ", GAME_CATEGORY_LOCAL_OBJECT G WHERE G.CATEGORY_ID=? AND T._ID=G.GAME_ID", ""+category);
@@ -65,32 +65,31 @@ public class CategoryGamesLazyListAdapter extends LazyListAdapter<GameLocalObjec
     }
 
     @Override
-    public View newView(Context context, GameLocalObject item, ViewGroup parent) {
+    public View newView(Context context, StoreGameLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return inflater.inflate(R.layout.store_game_list_entry_small, parent, false);
 
     }
+
     @Override
-    public void bindView(View view, Context context,  GameLocalObject item) {
+    public void bindView(View view, Context context,  StoreGameLocalObject item) {
         TextView firstLineView =(TextView) view.findViewById(R.id.gameTitleId);
         firstLineView.setText(item.getTitle());
-//        TextView secondLineView =(TextView) view.findViewById(R.id.gameDescriptionId);
-//        String description = item.getDescription()==null?"":item.getDescription();
-//        for (RunLocalObject run: item.getRuns()) {
-//            description+= " run :"+run.getTitle();
-//        }
-//        for (GameContributorLocalObject owner: item.getContributors()){
-//            description += " owner "+owner.getType()+":"+owner.getAccountLocalObject().getName();
-//        }
-//        secondLineView.setText(description + " id " +item.getId() );
+        if (item != null) {
+            byte[] data = item.getIcon();
+            if (data != null && data.length!=0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bitmap);
+            }
+        }
     }
 
 
     @Override
     public long getItemId(int position) {
         if (dataValid && lazyList != null) {
-            GameLocalObject item = lazyList.get(position);
+            StoreGameLocalObject item = lazyList.get(position);
             if (item != null) {
                 return item.getId();
             } else {

@@ -11,6 +11,7 @@ import de.greenrobot.dao.internal.DaoConfig;
 
 import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.StoreGameLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
 import org.celstec.dao.gen.DependencyLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -30,6 +31,7 @@ import org.celstec.dao.gen.FriendsLocalObject;
 
 import org.celstec.dao.gen.AccountLocalObjectDao;
 import org.celstec.dao.gen.GameLocalObjectDao;
+import org.celstec.dao.gen.StoreGameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
@@ -58,6 +60,7 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig accountLocalObjectDaoConfig;
     private final DaoConfig gameLocalObjectDaoConfig;
+    private final DaoConfig storeGameLocalObjectDaoConfig;
     private final DaoConfig gameContributorLocalObjectDaoConfig;
     private final DaoConfig dependencyLocalObjectDaoConfig;
     private final DaoConfig generalItemLocalObjectDaoConfig;
@@ -77,6 +80,7 @@ public class DaoSession extends AbstractDaoSession {
 
     private final AccountLocalObjectDao accountLocalObjectDao;
     private final GameLocalObjectDao gameLocalObjectDao;
+    private final StoreGameLocalObjectDao storeGameLocalObjectDao;
     private final GameContributorLocalObjectDao gameContributorLocalObjectDao;
     private final DependencyLocalObjectDao dependencyLocalObjectDao;
     private final GeneralItemLocalObjectDao generalItemLocalObjectDao;
@@ -103,6 +107,9 @@ public class DaoSession extends AbstractDaoSession {
 
         gameLocalObjectDaoConfig = daoConfigMap.get(GameLocalObjectDao.class).clone();
         gameLocalObjectDaoConfig.initIdentityScope(type);
+
+        storeGameLocalObjectDaoConfig = daoConfigMap.get(StoreGameLocalObjectDao.class).clone();
+        storeGameLocalObjectDaoConfig.initIdentityScope(type);
 
         gameContributorLocalObjectDaoConfig = daoConfigMap.get(GameContributorLocalObjectDao.class).clone();
         gameContributorLocalObjectDaoConfig.initIdentityScope(type);
@@ -154,6 +161,7 @@ public class DaoSession extends AbstractDaoSession {
 
         accountLocalObjectDao = new AccountLocalObjectDao(accountLocalObjectDaoConfig, this);
         gameLocalObjectDao = new GameLocalObjectDao(gameLocalObjectDaoConfig, this);
+        storeGameLocalObjectDao = new StoreGameLocalObjectDao(storeGameLocalObjectDaoConfig, this);
         gameContributorLocalObjectDao = new GameContributorLocalObjectDao(gameContributorLocalObjectDaoConfig, this);
         dependencyLocalObjectDao = new DependencyLocalObjectDao(dependencyLocalObjectDaoConfig, this);
         generalItemLocalObjectDao = new GeneralItemLocalObjectDao(generalItemLocalObjectDaoConfig, this);
@@ -173,6 +181,7 @@ public class DaoSession extends AbstractDaoSession {
 
         registerDao(AccountLocalObject.class, accountLocalObjectDao);
         registerDao(GameLocalObject.class, gameLocalObjectDao);
+        registerDao(StoreGameLocalObject.class, storeGameLocalObjectDao);
         registerDao(GameContributorLocalObject.class, gameContributorLocalObjectDao);
         registerDao(DependencyLocalObject.class, dependencyLocalObjectDao);
         registerDao(GeneralItemLocalObject.class, generalItemLocalObjectDao);
@@ -194,6 +203,7 @@ public class DaoSession extends AbstractDaoSession {
     public void clear() {
         accountLocalObjectDaoConfig.getIdentityScope().clear();
         gameLocalObjectDaoConfig.getIdentityScope().clear();
+        storeGameLocalObjectDaoConfig.getIdentityScope().clear();
         gameContributorLocalObjectDaoConfig.getIdentityScope().clear();
         dependencyLocalObjectDaoConfig.getIdentityScope().clear();
         generalItemLocalObjectDaoConfig.getIdentityScope().clear();
@@ -218,6 +228,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public GameLocalObjectDao getGameLocalObjectDao() {
         return gameLocalObjectDao;
+    }
+
+    public StoreGameLocalObjectDao getStoreGameLocalObjectDao() {
+        return storeGameLocalObjectDao;
     }
 
     public GameContributorLocalObjectDao getGameContributorLocalObjectDao() {

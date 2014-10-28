@@ -51,6 +51,7 @@ public class ARL {
     public static StoreDelegator store;
     public static ThreadsDelegator threads;
     public static MessagesDelegator messages;
+    public static MapContext mapContext;
     public static EventBus eventBus = new EventBus();
     public static DaoConfiguration dao;
     public static Context ctx;
@@ -58,7 +59,7 @@ public class ARL {
     public static void init(Context ctx) {
         ARL.ctx = ctx;
         dao= DaoConfiguration.getInstance(ctx);
-
+        mapContext = new MapContext(ctx);
         properties = PropertiesAdapter.getInstance(ctx);
         config = new ConfigAdapter(ctx).getProperties();
         GenericClient.urlPrefix = config.getProperty("arlearn_server");

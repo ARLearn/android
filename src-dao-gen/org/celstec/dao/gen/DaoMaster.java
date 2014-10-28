@@ -10,6 +10,7 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import org.celstec.dao.gen.AccountLocalObjectDao;
 import org.celstec.dao.gen.GameLocalObjectDao;
+import org.celstec.dao.gen.StoreGameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
@@ -38,6 +39,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         AccountLocalObjectDao.createTable(db, ifNotExists);
         GameLocalObjectDao.createTable(db, ifNotExists);
+        StoreGameLocalObjectDao.createTable(db, ifNotExists);
         GameContributorLocalObjectDao.createTable(db, ifNotExists);
         DependencyLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemLocalObjectDao.createTable(db, ifNotExists);
@@ -60,6 +62,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         AccountLocalObjectDao.dropTable(db, ifExists);
         GameLocalObjectDao.dropTable(db, ifExists);
+        StoreGameLocalObjectDao.dropTable(db, ifExists);
         GameContributorLocalObjectDao.dropTable(db, ifExists);
         DependencyLocalObjectDao.dropTable(db, ifExists);
         GeneralItemLocalObjectDao.dropTable(db, ifExists);
@@ -109,6 +112,7 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(AccountLocalObjectDao.class);
         registerDaoClass(GameLocalObjectDao.class);
+        registerDaoClass(StoreGameLocalObjectDao.class);
         registerDaoClass(GameContributorLocalObjectDao.class);
         registerDaoClass(DependencyLocalObjectDao.class);
         registerDaoClass(GeneralItemLocalObjectDao.class);

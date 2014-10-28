@@ -12,6 +12,7 @@ import org.celstec.arlearn2.android.db.Constants;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.util.AppengineFileUploader;
 import org.celstec.arlearn2.android.util.FileDownloader;
+import org.celstec.arlearn2.android.util.GPSUtils;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.run.ResponseList;
 import org.celstec.arlearn2.client.ResponseClient;
@@ -92,14 +93,15 @@ public class ResponseDelegator extends AbstractDelegator{
     }
 
     private void setLocationDetails(ResponseLocalObject response) {
-        LocationManager locationManager = (LocationManager) ARL.ctx.getSystemService(ARL.ctx.LOCATION_SERVICE);
-
-        String locationProviderNetwork = LocationManager.NETWORK_PROVIDER;
-        String locationProviderGPS = LocationManager.GPS_PROVIDER;
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProviderGPS);
-        if (lastKnownLocation == null) {
-            lastKnownLocation =locationManager.getLastKnownLocation(locationProviderNetwork);
-        }
+//        LocationManager locationManager = (LocationManager) ARL.ctx.getSystemService(ARL.ctx.LOCATION_SERVICE);
+//
+//        String locationProviderNetwork = LocationManager.NETWORK_PROVIDER;
+//        String locationProviderGPS = LocationManager.GPS_PROVIDER;
+//        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProviderGPS);
+//        if (lastKnownLocation == null) {
+//            lastKnownLocation =locationManager.getLastKnownLocation(locationProviderNetwork);
+//        }
+        Location lastKnownLocation = GPSUtils.getLastKnownLocation();
         if (lastKnownLocation != null) {
             response.setLat(lastKnownLocation.getLatitude());
             response.setLng(lastKnownLocation.getLongitude());

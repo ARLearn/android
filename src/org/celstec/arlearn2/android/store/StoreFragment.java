@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.store;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ public class StoreFragment extends SherlockFragment {
     private View categoryButton;
 
     private View nearMeButton;
-    private View button4;
+    private View topGamesButton;
 
     private LayoutInflater inflater;
     private View v;
@@ -82,6 +83,9 @@ public class StoreFragment extends SherlockFragment {
 
         nearMeButton = v.findViewById(R.id.nearme);
         nearMeButton.setOnClickListener(new NearMeButton());
+
+        topGamesButton = v.findViewById(R.id.topGames);
+        topGamesButton.setOnClickListener(new TopGamesButton());
 
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
         ARL.store.downloadFeaturedGames();
@@ -155,10 +159,29 @@ public class StoreFragment extends SherlockFragment {
     private class NearMeButton implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+//            FragmentManager fm = getActivity().getSupportFragmentManager();
+//            Bundle args = new Bundle();
+//
+//            NearMeFragment frag = new NearMeFragment();
+//            frag.setArguments(args);
+//            FragmentTransaction ft = fm.beginTransaction();
+//
+//            ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+
+            Intent gameIntent = new Intent(getActivity(), NearMeActivity.class);
+//            gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
+//            gameIntent.putExtra(RunLocalObject.class.getName(), runId);
+            getActivity().startActivity(gameIntent);
+        }
+    }
+
+    private class TopGamesButton implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Bundle args = new Bundle();
 
-            NearMeFragment frag = new NearMeFragment();
+            TopGamesFragment frag = new TopGamesFragment();
             frag.setArguments(args);
             FragmentTransaction ft = fm.beginTransaction();
 

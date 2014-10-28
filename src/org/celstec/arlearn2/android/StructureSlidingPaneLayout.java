@@ -64,19 +64,23 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
                 gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
             }
             if (uri.toString().startsWith("http://streetlearn.appspot.com/oai/resolve/")) {
-                gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
+                String gameIdAsString = uri.toString().substring(uri.toString().lastIndexOf("/") + 1);
+                if (gameIdAsString.contains("?")) {
+                    gameIdAsString = gameIdAsString.substring(0, gameIdAsString.indexOf("?"));
+                }
+                gameToLoad = Long.parseLong(gameIdAsString);
             }
         } catch (NullPointerException e){
 
         }
         setContentView(R.layout.structure_sliding_pane);
-        Button logout = (Button) this.findViewById(R.id.logoutButton);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARL.accounts.disAuthenticate();
-            }
-        });
+//        Button logout = (Button) this.findViewById(R.id.logoutButton);
+//        logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARL.accounts.disAuthenticate();
+//            }
+//        });
         getSupportActionBar().setIcon(R.drawable.ic_ab_menu);
 
         // Action bar
@@ -112,24 +116,26 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
         }
     }
 
-    private class SliderListener extends SlidingPaneLayout.SimplePanelSlideListener {
-        @Override
-        public void onPanelOpened(View panel) {
-            mActionBar.onPanelOpened();
-        }
+//    private class SliderListener extends SlidingPaneLayout.SimplePanelSlideListener {
+//        @Override
+//        public void onPanelOpened(View panel) {
+//            mActionBar.onPanelOpened();
+//        }
+//
+//        @Override
+//        public void onPanelClosed(View panel) {
+//            mActionBar.onPanelClosed();
+//        }
+//    }
 
-        @Override
-        public void onPanelClosed(View panel) {
-            mActionBar.onPanelClosed();
-        }
-    }
-    private class FirstLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {
-        @Override
-        public void onGlobalLayout() {
-            mActionBar.onFirstLayout();
-            mSlidingLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        }
-    }
+
+//    private class FirstLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {
+//        @Override
+//        public void onGlobalLayout() {
+//            mActionBar.onFirstLayout();
+//            mSlidingLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//        }
+//    }
     /**
      * Function to handle home option menu on action bar. By now it only close or open the pane.
      * This function will be available in further fragments.

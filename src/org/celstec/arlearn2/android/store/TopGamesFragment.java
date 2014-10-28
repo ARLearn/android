@@ -1,7 +1,6 @@
 package org.celstec.arlearn2.android.store;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -10,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import daoBase.DaoConfiguration;
-import org.celstec.arlearn2.android.GameRunsFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.CategoryGamesLazyListAdapter;
+import org.celstec.arlearn2.android.listadapter.impl.SearchResultsLazyListAdapter;
 import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.StoreGameLocalObject;
 
 /**
@@ -40,43 +37,41 @@ import org.celstec.dao.gen.StoreGameLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class StoreGameListFragment extends SherlockListFragment implements ListItemClickInterface<StoreGameLocalObject> {
+public class TopGamesFragment extends SherlockListFragment implements ListItemClickInterface<Game> {
 
-    private CategoryGamesLazyListAdapter adapter;
+    private SearchResultsLazyListAdapter adapter;
 
-    private long categoryId;
-
-    public StoreGameListFragment(long categoryId) {
-        this.categoryId = categoryId;
-        ARL.store.syncGamesForCategory(categoryId);
+    public TopGamesFragment() {
+        ARL.store.syncTopGames();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ARL.games.syncGamesParticipate();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.store_category_gamelist, container, false);
-        adapter = new CategoryGamesLazyListAdapter(getActivity(), categoryId);
-        adapter.setOnListItemClickCallback(this);
-        ((TextView)v.findViewById(R.id.categoryItemText)).setText(DaoConfiguration.getInstance().getCategoryLocalObjectDao().load(categoryId).getCategory());
+        if (adapter == null) {
+            adapter = new SearchResultsLazyListAdapter(getActivity());
+            adapter.setOnListItemClickCallback(TopGamesFragment.this);
+        }
         setListAdapter(adapter);
+        ((TextView) v.findViewById(R.id.categoryItemText)).setText("Top Games");
+
         return v;
 
     }
 
     @Override
-    public void onListItemClick(View v, int position, StoreGameLocalObject game) {
+    public void onListItemClick(View v, int position, Game game) {
         if (game != null) {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Bundle args = new Bundle();
 
-            GameFragment frag = new GameFragment(game.getGameBean());
+            GameFragment frag = new GameFragment(game);
             frag.setArguments(args);
             FragmentTransaction ft = fm.beginTransaction();
 
@@ -85,7 +80,7 @@ public class StoreGameListFragment extends SherlockListFragment implements ListI
     }
 
     @Override
-    public boolean setOnLongClickListener(View v, int position, StoreGameLocalObject object) {
+    public boolean setOnLongClickListener(View v, int position, Game object) {
         return false;
     }
 
