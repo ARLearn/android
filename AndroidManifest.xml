@@ -112,7 +112,14 @@
 
          <activity
                  android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity"
-                 android:label="Audio result"dd 
+                 android:label="Audio result"
+                 android:theme="@style/ARLearn.schema1"
+                 >
+         </activity>
+
+         <activity
+                 android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity"
+                 android:label="Picture  result"
                  android:theme="@style/ARLearn.schema1"
                  >
          </activity>
