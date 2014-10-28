@@ -15,7 +15,7 @@
          <meta-data
                  android:name="com.google.android.maps.v2.API_KEY"
                  android:value="AIzaSyCTggsIytn8aJICgFVEnaMfCMztgfjUFqY"/> <!-- -keystore ~/.android/debug.keystore -->
-         <activity android:name=".StructureSlidingPaneLayout"
+         <activity android:name="org.celstec.arlearn2.android.StructureSlidingPaneLayout"
                    android:label="@string/app_name"
                    android:screenOrientation="portrait"
                    android:theme="@style/ARLearn">
@@ -40,17 +40,17 @@
              </intent-filter>
          </activity>
 
-         <activity android:name=".game.GameSplashScreen"
+         <activity android:name="org.celstec.arlearn2.android.game.GameSplashScreen"
                    android:screenOrientation="portrait"
                    android:theme="@style/ARLearn">
 
 
          </activity>
 
-         <activity android:name=".game.messageViews.GameMessages"
+         <activity android:name="org.celstec.arlearn2.android.game.messageViews.GameMessages"
                    android:screenOrientation="portrait"
                    android:theme="@style/ARLearn.schema1"/>
-         <activity android:name=".game.messageViews.GameMap"
+         <activity android:name="org.celstec.arlearn2.android.game.messageViews.GameMap"
                    android:screenOrientation="portrait"
                    android:theme="@style/ARLearn.schema1"/>
          <activity
@@ -61,7 +61,7 @@
              <!--<category android:name="android.intent.category.LAUNCHER"/>-->
              <!--</intent-filter>-->
          </activity>
-         <activity android:name=".game.generalItem.GeneralItemActivity"
+         <activity android:name="org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity"
                    android:screenOrientation="portrait"
                    android:theme="@style/ARLearn.schema2">
 
@@ -69,21 +69,21 @@
          </activity>
 
          <activity
-                 android:name=".game.generalItem.dataCollection.impl.TextInputCollectionActivityImpl"
+                 android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.TextInputCollectionActivityImpl"
                  android:label="text input"
                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
                  >
          </activity>
 
          <activity
-                 android:name=".game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl"
+                 android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl"
                  android:label="value input"
                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
                  >
          </activity>
 
          <activity
-                 android:name=".game.generalItem.dataCollection.impl.AudioCollectionActivityImpl"
+                 android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCollectionActivityImpl"
                  android:label="audio input"
 
                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -91,36 +91,36 @@
          </activity>
 
          <activity
-                 android:name=".store.RateGameActivity"
+                 android:name="org.celstec.arlearn2.android.store.RateGameActivity"
                  android:label="rate game"
                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
                  >
          </activity>
 
          <activity
-                 android:name=".store.NearMeActivity"
+                 android:name="org.celstec.arlearn2.android.store.NearMeActivity"
                  android:label="Games near me"
                  >
          </activity>
 
          <activity
-                 android:name=".store.GameActivity"
+                 android:name="org.celstec.arlearn2.android.store.GameActivity"
                  android:label="Game details"
                  android:theme="@style/ARLearn.schema1"
                  >
          </activity>
 
-         <activity android:name=".testAdapters.MyGames" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.AllAccounts" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.ContributingElements" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.MyRuns" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.GeneralItems" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.Dependencies" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.DataCollectionTestActivity" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.ThreadsActivity" android:label="@string/app_name"/>
-         <activity android:name=".testAdapters.MessagesActivity" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.MyGames" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.AllAccounts" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.ContributingElements" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.MyRuns" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.GeneralItems" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.Dependencies" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.DataCollectionTestActivity" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.ThreadsActivity" android:label="@string/app_name"/>
+         <activity android:name="org.celstec.arlearn2.android.testAdapters.MessagesActivity" android:label="@string/app_name"/>
 
-         <receiver android:name=".GCMWakefulReceiver" android:exported="true"
+         <receiver android:name="org.celstec.arlearn2.android.GCMWakefulReceiver" android:exported="true"
                    android:permission="com.google.android.c2dm.permission.SEND" >
              <intent-filter>
                  <action android:name="com.google.android.c2dm.intent.RECEIVE" />
