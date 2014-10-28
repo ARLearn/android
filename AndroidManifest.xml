@@ -110,6 +110,13 @@
                  >
          </activity>
 
+         <activity
+                 android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity"
+                 android:label="Audio result"dd 
+                 android:theme="@style/ARLearn.schema1"
+                 >
+         </activity>
+
          <activity android:name="org.celstec.arlearn2.android.testAdapters.MyGames" android:label="@string/app_name"/>
          <activity android:name="org.celstec.arlearn2.android.testAdapters.AllAccounts" android:label="@string/app_name"/>
          <activity android:name="org.celstec.arlearn2.android.testAdapters.ContributingElements" android:label="@string/app_name"/>
