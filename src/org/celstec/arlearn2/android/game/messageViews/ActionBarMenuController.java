@@ -41,7 +41,12 @@ public class ActionBarMenuController {
 
     public void inflateMenu(Menu menu) {
         MenuInflater inflater = activity.getMenuInflater();
-        inflater.inflate(R.menu.game_messages_actions, menu);
+        if (gameActivityFeatures.getGameLocalObject().getMapAvailable()== null ||!gameActivityFeatures.getGameLocalObject().getMapAvailable()) {
+            inflater.inflate(R.menu.game_no_messages, menu);
+        } else {
+            inflater.inflate(R.menu.game_messages_actions, menu);
+        }
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

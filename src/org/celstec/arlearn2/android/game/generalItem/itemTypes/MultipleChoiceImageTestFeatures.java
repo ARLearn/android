@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.net.Uri;
 import android.view.View;
 import android.webkit.WebView;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
@@ -88,12 +89,16 @@ public class MultipleChoiceImageTestFeatures extends SingleChoiceImageTestFeatur
 //                    new PlayAudioTask().execute(answerId + ":a");
 //
 //                }
-
+                if (!selected.contains(selectedItem)) {
+                    Uri audioUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + ":a").getLocalUri();
+                    playUri(audioUri);
+                }
                 toggleSelectedAnswer(selectedItem);
                 if (selected.isEmpty()){
                     submitVoteButton.setVisibility(View.GONE);
                 } else{
                     submitVoteButton.setVisibility(View.VISIBLE);
+
                 }
             }
         };

@@ -52,7 +52,7 @@ import java.util.List;
 public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
 
     protected int COLUMNS = 3;
-    private HashMap<String, GameFileLocalObject> gameFiles = new HashMap<String, GameFileLocalObject>();
+    protected HashMap<String, GameFileLocalObject> gameFiles = new HashMap<String, GameFileLocalObject>();
     protected HashMap<MultipleChoiceAnswerItem, View> answerViewMapping = new HashMap<MultipleChoiceAnswerItem, View>();
     private AudioItemFeatures audioItemFeatures;
 

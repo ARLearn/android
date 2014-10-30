@@ -3,6 +3,7 @@ package org.celstec.arlearn2.android.game.messageViews;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -68,6 +69,8 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         new DrawableUtil(gameActivityFeatures.getTheme(), this);
         setContentView(R.layout.game_list_messages);
         getActionBar().setIcon(R.drawable.ic_ab_back);
+        getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
         Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
         if (messagesHeader != null) {

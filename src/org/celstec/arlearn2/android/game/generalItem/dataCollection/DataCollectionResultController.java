@@ -10,6 +10,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity;
+import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity;
 import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
 
@@ -104,6 +105,11 @@ public class DataCollectionResultController {
                         Intent audioRecording = new Intent(activity, AudioResultActivity.class);
                         audioRecording.putExtra(ResponseLocalObject.class.getName(), responseLocalObject.getId());
                         activity.startActivity(audioRecording);
+                        break;
+                    case ResponseLocalObject.PICTURE_TYPE:
+                        Intent pictureRecording = new Intent(activity, PictureResultActivity.class);
+                        pictureRecording.putExtra(ResponseLocalObject.class.getName(), responseLocalObject.getId());
+                        activity.startActivity(pictureRecording);
                         break;
                 }
 

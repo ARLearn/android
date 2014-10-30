@@ -3,7 +3,9 @@ package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
@@ -39,9 +41,22 @@ public class PictureResultActivity extends Activity {
         super.onCreate(savedInstanceState);
         StyleUtil styleUtil = DrawableUtil.styleUtil;
         setTheme(styleUtil.getTheme());
+        getActionBar().hide();
         setContentView(R.layout.game_general_item_result_picture);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());
+        shapeDrawable.setColor(styleUtil.getBackgroundDark());
+
         responseLocalObject = DaoConfiguration.getInstance().getResponseLocalObjectDao().load(getIntent().getLongExtra(ResponseLocalObject.class.getName(), 0l));
         ((ImageView)findViewById(R.id.pictureView)).setImageURI(responseLocalObject.getUri());
+
+        findViewById(R.id.cancelId).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PictureResultActivity.this.finish();
+                    }
+                }
+        );
     }
 }

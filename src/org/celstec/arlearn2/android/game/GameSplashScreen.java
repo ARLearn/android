@@ -56,6 +56,7 @@ public class GameSplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
         getActionBar().setIcon(R.drawable.ic_ab_back);
+
         if (!ARL.isInit()) ARL.init(this);
         downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)){
 
