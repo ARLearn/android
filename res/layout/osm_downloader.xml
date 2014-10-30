@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical" >
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15px"
+            android:text="offline explanation"
+            android:textColor="@android:color/black" />
+
+    <LinearLayout
+            android:id="@+id/downloadedMapsList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="#00000000"
+            android:orientation="vertical" >
+
+    </LinearLayout>
+
+    <ProgressBar
+            android:id="@+id/progressbar_Horizontal"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:max="100" />
+
+    <Button
+            android:id="@+id/startprogress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="start downloading" />
+
+</LinearLayout>
