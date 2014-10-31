@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.*;
-import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.util.MediaFolders;
 
 
@@ -72,7 +71,7 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.ARLearn_schema1);
+
         setContentView(getGameGeneralitemAudioInput());
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ImageView view = (ImageView) findViewById(getAudioFeedbackView());
