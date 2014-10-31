@@ -2,9 +2,6 @@ package org.celstec.arlearn2.android.dataCollection;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import org.celstec.arlearn2.android.dataCollection.activities.TextInputCollectionActivity;
-import org.celstec.arlearn2.android.util.MediaFolders;
 
 /**
  * ****************************************************************************
@@ -19,7 +16,7 @@ import org.celstec.arlearn2.android.util.MediaFolders;
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * <p/>
+ * <p/>em
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * <p/>
