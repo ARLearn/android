@@ -222,26 +222,31 @@ public class ResponseDelegator extends AbstractDelegator{
     private void synchronizeResponsesWithServer(long runId) {
         String token = returnTokenIfOnline();
         if (token != null) {
-            ResponseList rl = ResponseClient.getResponseClient().getResponses(token, runId, getLastSyncDate(runId));
+            String resumptionToken = null;
             ResponseEvent responseEvent = null;
-            for (Response response : rl.getResponses()) {
-                ResponseLocalObject responseLocalObject = DaoConfiguration.getInstance().getResponseLocalObjectDao().loadDeep(response.getResponseId());
-                if (responseLocalObject == null) {
-                    responseLocalObject = new ResponseLocalObject(response);
-                    DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
-                    if (responseEvent == null) {
-                        responseEvent = new ResponseEvent(runId);
-                        if (responseLocalObject.getGeneralItemLocalObject() != null) responseLocalObject.getGeneralItemLocalObject().resetResponses();
-                    }
-
-                } else {
-                    if (response.getTimestamp() > responseLocalObject.getTimeStamp()) {
-                        responseLocalObject.setValuesFromBean(response);
+            do {
+                ResponseList rl = ResponseClient.getResponseClient().getResponses(token, runId, getLastSyncDate(runId), resumptionToken);
+                resumptionToken = rl.getResumptionToken();
+                for (Response response : rl.getResponses()) {
+                    ResponseLocalObject responseLocalObject = DaoConfiguration.getInstance().getResponseLocalObjectDao().loadDeep(response.getResponseId());
+                    if (responseLocalObject == null) {
+                        responseLocalObject = new ResponseLocalObject(response);
                         DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
-                    }
-                }
+                        if (responseEvent == null) {
+                            responseEvent = new ResponseEvent(runId);
+                            if (responseLocalObject.getGeneralItemLocalObject() != null)
+                                responseLocalObject.getGeneralItemLocalObject().resetResponses();
+                        }
 
-            }
+                    } else {
+                        if (response.getTimestamp() > responseLocalObject.getTimeStamp()) {
+                            responseLocalObject.setValuesFromBean(response);
+                            DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
+                        }
+                    }
+
+                }
+            } while (resumptionToken!= null);
             if (responseEvent != null) {
                 DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId).resetResponses();
                 ARL.eventBus.post(responseEvent);
