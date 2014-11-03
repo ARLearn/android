@@ -116,7 +116,7 @@ public class ResponseDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncResponses(runId));
     }
 
-    private void onEventAsync(SyncResponses syncResponses) {
+    private synchronized void onEventAsync(SyncResponses syncResponses) {
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         long serverTime = ARL.time.getServerTime();
         Log.i(SYNC_TAG, "Syncing responses");
