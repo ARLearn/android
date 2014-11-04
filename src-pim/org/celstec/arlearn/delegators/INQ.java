@@ -29,6 +29,7 @@ public class INQ extends ARL {
 
     public static InquiryDelegator inquiry;
     public static BadgesDelegator badges;
+    public static QuestionDelegator questions;
     public static DataCollectionTaskDelegator dataCollection;
     public static FriendsDelegator friendsDelegator;
 
@@ -36,6 +37,7 @@ public class INQ extends ARL {
         ARL.init(ctx);
         inquiry = InquiryDelegator.getInstance();
         badges = BadgesDelegator.getInstance();
+        questions = QuestionDelegator.getInstance();
         dataCollection = DataCollectionTaskDelegator.getInstance();
         friendsDelegator = FriendsDelegator.getInstance();
     }
