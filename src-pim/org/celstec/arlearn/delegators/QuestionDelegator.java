@@ -6,6 +6,7 @@ import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AbstractDelegator;
 import org.celstec.arlearn2.client.InquiryClient;
 import org.celstec.dao.gen.InquiryLocalObject;
+import org.celstec.dao.gen.InquiryQuestionLocalObject;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -55,7 +56,7 @@ public class QuestionDelegator extends AbstractDelegator {
         Log.i(SYNC_TAG, "Syncing questions for inquiry "+sge.inquiryLocalObject.getTitle()+ " "+sge.inquiryLocalObject.getId());
         String token =returnTokenIfOnline();
         if (token != null) {
-            String questions = InquiryClient.getInquiryClient().userInquiries(token);
+            String questions = InquiryClient.getInquiryClient().questions(token, sge.getInquiryLocalObject().getId());
             if (questions == null) return;
             JSONObject json = null;
             try {
@@ -65,6 +66,11 @@ public class QuestionDelegator extends AbstractDelegator {
                     JSONObject inqJsonObject = array.getJSONObject(i);
                     String question = inqJsonObject.getString("question");
                     Log.i(SYNC_TAG, "Question found " + question);
+                    InquiryQuestionLocalObject inquiryQuestionLocalObject = new InquiryQuestionLocalObject();
+                    inquiryQuestionLocalObject.setDescription(inqJsonObject.getString("description"));
+                    inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("question"));
+                    inquiryQuestionLocalObject.setIdentifier(inqJsonObject.getString("url"));
+                    DaoConfiguration.getInstance().getInquiryQuestionLocalObjectDao().insertOrReplace(inquiryQuestionLocalObject);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -51,7 +51,7 @@ public class DataCollectionResultController {
 
     public void addResult(DataCollectionResult result, final ResponseLocalObject responseLocalObject) {
         final View row = activity.getLayoutInflater().inflate(R.layout.game_general_item_dc_result_entry, null);
-        row.findViewById(R.id.dcTypeIcon).setBackground(DrawableUtil.getPrimaryColorOvalWithState());
+        row.findViewById(R.id.dcTypeIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
         switch (result.getType()) {
             case ResponseLocalObject.PICTURE_TYPE:
                 ((ImageView) row.findViewById(R.id.dcTypeIcon)).setImageResource(R.drawable.game_data_collection_image);

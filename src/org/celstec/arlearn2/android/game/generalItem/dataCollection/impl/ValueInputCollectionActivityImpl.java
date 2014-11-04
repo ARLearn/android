@@ -2,8 +2,13 @@ package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.views.StyleUtil;
 
 /**
@@ -31,7 +36,31 @@ public class ValueInputCollectionActivityImpl extends ValueInputCollectionActivi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.functionPad)).getBackground());
-        shapeDrawable.setColor(new StyleUtil(this, R.style.ARLearn_schema1).getPrimaryColor());
+        shapeDrawable.setColor(ARL.getDrawableUtil(R.style.ARLearn_schema1, this).getStyleUtil().getPrimaryColor());
+        ((GradientDrawable) (findViewById(getDataCollectionSubmit())).getBackground()).setColor(ARL.drawableUtil.styleUtil.getButtonAlternativeColor());
+
+
+        setButtonBackground(R.id.button0);
+        setButtonBackground(R.id.button1);
+        setButtonBackground(R.id.button2);
+        setButtonBackground(R.id.button3);
+        setButtonBackground(R.id.button4);
+        setButtonBackground(R.id.button5);
+        setButtonBackground(R.id.button6);
+        setButtonBackground(R.id.button7);
+        setButtonBackground(R.id.button8);
+        setButtonBackground(R.id.button9);
+        setButtonBackground(R.id.buttonBack);
+        setButtonBackground(R.id.buttonDot);
+    }
+
+    private void setButtonBackground(int buttonId){
+        findViewById(buttonId).setBackgroundDrawable(ARL.getDrawableUtil(R.style.ARLearn_schema1, this).getPrimaryColorLightOvalWithState());
+        ((Button)findViewById(buttonId)).setTextColor(ARL.getDrawableUtil(R.style.ARLearn_schema1, this).getTextColorLightWithState());
+        View v = findViewById(buttonId);
+        int height = ARL.drawableUtil.dipToPixels(50);
+//        int height = v.getHeight();
+//        v.setLayoutParams(new RelativeLayout.LayoutParams(height, height));
     }
 
     @Override

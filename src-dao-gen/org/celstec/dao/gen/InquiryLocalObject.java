@@ -33,6 +33,7 @@ public class InquiryLocalObject {
     private Long runLocalObject__resolvedKey;
 
     private List<BadgeLocalObject> badges;
+    private List<InquiryQuestionLocalObject> questions;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -182,6 +183,28 @@ public class InquiryLocalObject {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetBadges() {
         badges = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<InquiryQuestionLocalObject> getQuestions() {
+        if (questions == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            InquiryQuestionLocalObjectDao targetDao = daoSession.getInquiryQuestionLocalObjectDao();
+            List<InquiryQuestionLocalObject> questionsNew = targetDao._queryInquiryLocalObject_Questions(id);
+            synchronized (this) {
+                if(questions == null) {
+                    questions = questionsNew;
+                }
+            }
+        }
+        return questions;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetQuestions() {
+        questions = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

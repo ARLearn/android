@@ -178,7 +178,8 @@ public abstract class GeneralItemActivityFeatures {
     }
 
     public void setMetadata(){
-        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
+//        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
+        DrawableUtil drawableUtil = ARL.getDrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
         Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
         TypedArray ta =  activity.obtainStyledAttributes(activity.getGameActivityFeatures().getTheme(), new int[]{R.attr.primaryColor});
         ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
@@ -186,19 +187,19 @@ public abstract class GeneralItemActivityFeatures {
         ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageDrawable(iconDrawable);
         //((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageResource(getImageResource());
 
-        activity.findViewById(R.id.audioButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
-        activity.findViewById(R.id.pictureButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
-        activity.findViewById(R.id.videoButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
-        activity.findViewById(R.id.textButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
-        activity.findViewById(R.id.numberButtonIcon).setBackgroundDrawable(DrawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.audioButtonIcon).setBackgroundDrawable(drawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.pictureButtonIcon).setBackgroundDrawable(drawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.videoButtonIcon).setBackgroundDrawable(drawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.textButtonIcon).setBackgroundDrawable(drawableUtil.getPrimaryColorOvalWithState());
+        activity.findViewById(R.id.numberButtonIcon).setBackgroundDrawable(drawableUtil.getPrimaryColorOvalWithState());
 
-        activity.findViewById(R.id.audioButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
-        activity.findViewById(R.id.pictureButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
-        activity.findViewById(R.id.videoButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
-        activity.findViewById(R.id.textButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
-        activity.findViewById(R.id.numberButtonCheckIcon).setBackgroundDrawable(DrawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.audioButtonCheckIcon).setBackgroundDrawable(drawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.pictureButtonCheckIcon).setBackgroundDrawable(drawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.videoButtonCheckIcon).setBackgroundDrawable(drawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.textButtonCheckIcon).setBackgroundDrawable(drawableUtil.getButtonAlternativeColorOval());
+        activity.findViewById(R.id.numberButtonCheckIcon).setBackgroundDrawable(drawableUtil.getButtonAlternativeColorOval());
 
-        ((GradientDrawable)activity.findViewById(R.id.button).getBackground()).setColor(DrawableUtil.styleUtil.getPrimaryColor());
+        ((GradientDrawable)activity.findViewById(R.id.button).getBackground()).setColor(drawableUtil.styleUtil.getPrimaryColor());
         TextView titleView = (TextView) this.activity.findViewById(R.id.titleId);
         titleView.setText(generalItemLocalObject.getTitle());
 

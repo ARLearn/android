@@ -23,8 +23,8 @@ public class GameCategoryLocalObject {
     /** Used for active entity operations. */
     private transient GameCategoryLocalObjectDao myDao;
 
-    private GameLocalObject gameLocalObject;
-    private Long gameLocalObject__resolvedKey;
+    private StoreGameLocalObject storeGameLocalObject;
+    private Long storeGameLocalObject__resolvedKey;
 
 
     // KEEP FIELDS - put your custom fields here
@@ -83,27 +83,27 @@ public class GameCategoryLocalObject {
     }
 
     /** To-one relationship, resolved on first access. */
-    public GameLocalObject getGameLocalObject() {
+    public StoreGameLocalObject getStoreGameLocalObject() {
         Long __key = this.gameId;
-        if (gameLocalObject__resolvedKey == null || !gameLocalObject__resolvedKey.equals(__key)) {
+        if (storeGameLocalObject__resolvedKey == null || !storeGameLocalObject__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            GameLocalObjectDao targetDao = daoSession.getGameLocalObjectDao();
-            GameLocalObject gameLocalObjectNew = targetDao.load(__key);
+            StoreGameLocalObjectDao targetDao = daoSession.getStoreGameLocalObjectDao();
+            StoreGameLocalObject storeGameLocalObjectNew = targetDao.load(__key);
             synchronized (this) {
-                gameLocalObject = gameLocalObjectNew;
-            	gameLocalObject__resolvedKey = __key;
+                storeGameLocalObject = storeGameLocalObjectNew;
+            	storeGameLocalObject__resolvedKey = __key;
             }
         }
-        return gameLocalObject;
+        return storeGameLocalObject;
     }
 
-    public void setGameLocalObject(GameLocalObject gameLocalObject) {
+    public void setStoreGameLocalObject(StoreGameLocalObject storeGameLocalObject) {
         synchronized (this) {
-            this.gameLocalObject = gameLocalObject;
-            gameId = gameLocalObject == null ? null : gameLocalObject.getId();
-            gameLocalObject__resolvedKey = gameId;
+            this.storeGameLocalObject = storeGameLocalObject;
+            gameId = storeGameLocalObject == null ? null : storeGameLocalObject.getId();
+            storeGameLocalObject__resolvedKey = gameId;
         }
     }
 

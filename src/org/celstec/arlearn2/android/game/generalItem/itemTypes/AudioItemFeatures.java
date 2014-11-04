@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
@@ -78,7 +79,8 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
     public AudioItemFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject, boolean dataCollection) {
         super(activity, generalItemLocalObject, dataCollection);
 //        GameFileLocalObject.getGameFileLocalObject(generalItemLocalObject.getGameId(), "/generalItems/"+generalItemLocalObject.getId()+"/audio");
-        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
+        ARL.getDrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
+//        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
 
         List<GameFileLocalObject> files = generalItemLocalObject.getGeneralItemFiles();
         if (!generalItemLocalObject.getGeneralItemFiles().isEmpty()) {

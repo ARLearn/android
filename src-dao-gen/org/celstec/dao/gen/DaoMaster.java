@@ -24,6 +24,7 @@ import org.celstec.dao.gen.ThreadLocalObjectDao;
 import org.celstec.dao.gen.MessageLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObjectDao;
 import org.celstec.dao.gen.BadgeLocalObjectDao;
+import org.celstec.dao.gen.InquiryQuestionLocalObjectDao;
 import org.celstec.dao.gen.CategoryLocalObjectDao;
 import org.celstec.dao.gen.GameCategoryLocalObjectDao;
 import org.celstec.dao.gen.FriendsLocalObjectDao;
@@ -53,6 +54,7 @@ public class DaoMaster extends AbstractDaoMaster {
         MessageLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemVisibilityLocalObjectDao.createTable(db, ifNotExists);
         BadgeLocalObjectDao.createTable(db, ifNotExists);
+        InquiryQuestionLocalObjectDao.createTable(db, ifNotExists);
         CategoryLocalObjectDao.createTable(db, ifNotExists);
         GameCategoryLocalObjectDao.createTable(db, ifNotExists);
         FriendsLocalObjectDao.createTable(db, ifNotExists);
@@ -76,6 +78,7 @@ public class DaoMaster extends AbstractDaoMaster {
         MessageLocalObjectDao.dropTable(db, ifExists);
         GeneralItemVisibilityLocalObjectDao.dropTable(db, ifExists);
         BadgeLocalObjectDao.dropTable(db, ifExists);
+        InquiryQuestionLocalObjectDao.dropTable(db, ifExists);
         CategoryLocalObjectDao.dropTable(db, ifExists);
         GameCategoryLocalObjectDao.dropTable(db, ifExists);
         FriendsLocalObjectDao.dropTable(db, ifExists);
@@ -126,6 +129,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(MessageLocalObjectDao.class);
         registerDaoClass(GeneralItemVisibilityLocalObjectDao.class);
         registerDaoClass(BadgeLocalObjectDao.class);
+        registerDaoClass(InquiryQuestionLocalObjectDao.class);
         registerDaoClass(CategoryLocalObjectDao.class);
         registerDaoClass(GameCategoryLocalObjectDao.class);
         registerDaoClass(FriendsLocalObjectDao.class);

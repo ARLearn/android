@@ -160,7 +160,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
             answerViewMapping.put(getMultipleChoiceAnswers().get(i), child);
             child.setOnClickListener(createImageViewClickerListener(answerId, child));
             child.findViewById(R.id.overlay).setVisibility(View.GONE);
-            child.findViewById(R.id.overlay).setBackground(DrawableUtil.getPrimaryColorOval());
+            child.findViewById(R.id.overlay).setBackgroundDrawable(DrawableUtil.getPrimaryColorOval());
         }
         tableView.addView(row);
     }

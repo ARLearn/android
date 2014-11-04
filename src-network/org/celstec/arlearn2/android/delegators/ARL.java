@@ -10,6 +10,8 @@ import org.celstec.arlearn2.android.db.ConfigAdapter;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
 import org.celstec.arlearn2.android.gcm.GCMRegistration;
+import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.arlearn2.client.GenericClient;
 import org.celstec.dao.gen.AccountLocalObject;
 
@@ -55,6 +57,7 @@ public class ARL {
     public static EventBus eventBus = new EventBus();
     public static DaoConfiguration dao;
     public static Context ctx;
+    public static DrawableUtil drawableUtil;
 
     public static void init(Context ctx) {
         ARL.ctx = ctx;
@@ -75,9 +78,15 @@ public class ARL {
         threads = ThreadsDelegator.getInstance();
         messages = MessagesDelegator.getInstance();
         generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
-
         new GCMRegisterTask().execute((Activity) ctx);
 
+    }
+
+    public static DrawableUtil getDrawableUtil(int defaultSchema, Context context) {
+        if (drawableUtil == null) {
+            drawableUtil = new DrawableUtil(defaultSchema, context);
+        }
+        return drawableUtil;
     }
 
     public static boolean isInit() {

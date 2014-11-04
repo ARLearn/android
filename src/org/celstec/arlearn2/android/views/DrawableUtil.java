@@ -52,18 +52,30 @@ public class DrawableUtil {
         styleUtil = new StyleUtil(ctx, theme);
     }
 
-    public static Drawable getGameMessageEntry() {
+    public Drawable getGameMessageEntry() {
         StateListDrawable stateListDrawable = new StateListDrawable();
         stateListDrawable.addState(new int[]{-android.R.attr.state_pressed},  new ColorDrawable(styleUtil.getPrimaryColorLight()));
         stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(styleUtil.getPrimaryColor()));
         return stateListDrawable;
     }
 
-    public static Drawable getGameMessageEntryRead() {
+    public Drawable getGameMessageEntryRead() {
         StateListDrawable stateListDrawable = new StateListDrawable();
         stateListDrawable.addState(new int[]{-android.R.attr.state_pressed},  new ColorDrawable(styleUtil.getBackgroundColor()));
         stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(styleUtil.getBackgroundDark()));
         return stateListDrawable;
+    }
+
+    public StyleUtil getStyleUtil(){
+        return styleUtil;
+    }
+
+    public static ColorStateList getTextColorLightWithState() {
+        int[] colors = new int[] {
+                styleUtil.getTextLight(),
+                styleUtil.getPrimaryColor()
+        };
+        return new android.content.res.ColorStateList(states, colors);
     }
 
     public static ColorStateList getGameMessageTextRead() {
@@ -116,6 +128,21 @@ public class DrawableUtil {
 
         ShapeDrawable ovalUnPressed = new ShapeDrawable(new OvalShape());
         ovalUnPressed.getPaint().setColor(styleUtil.getPrimaryColor());
+        ovalUnPressed.setPadding(13,13,13,13);
+
+
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{-android.R.attr.state_pressed},  ovalUnPressed);
+        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, ovalPressed);
+        return stateListDrawable;
+    }
+
+    public static Drawable getPrimaryColorLightOvalWithState() {
+        ShapeDrawable ovalPressed = new ShapeDrawable(new OvalShape());
+        ovalPressed.getPaint().setColor(styleUtil.getPrimaryColorHighlight());
+
+        ShapeDrawable ovalUnPressed = new ShapeDrawable(new OvalShape());
+        ovalUnPressed.getPaint().setColor(styleUtil.getPrimaryColorLight());
         ovalUnPressed.setPadding(13,13,13,13);
 
 

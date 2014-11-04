@@ -166,9 +166,9 @@ public class GameCategoryLocalObjectDao extends AbstractDao<GameCategoryLocalObj
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getGameLocalObjectDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getStoreGameLocalObjectDao().getAllColumns());
             builder.append(" FROM GAME_CATEGORY_LOCAL_OBJECT T");
-            builder.append(" LEFT JOIN GAME_LOCAL_OBJECT T0 ON T.'GAME_ID'=T0.'_id'");
+            builder.append(" LEFT JOIN STORE_GAME_LOCAL_OBJECT T0 ON T.'GAME_ID'=T0.'_id'");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -179,8 +179,8 @@ public class GameCategoryLocalObjectDao extends AbstractDao<GameCategoryLocalObj
         GameCategoryLocalObject entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        GameLocalObject gameLocalObject = loadCurrentOther(daoSession.getGameLocalObjectDao(), cursor, offset);
-        entity.setGameLocalObject(gameLocalObject);
+        StoreGameLocalObject storeGameLocalObject = loadCurrentOther(daoSession.getStoreGameLocalObjectDao(), cursor, offset);
+        entity.setStoreGameLocalObject(storeGameLocalObject);
 
         return entity;    
     }

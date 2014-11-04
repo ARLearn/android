@@ -47,6 +47,7 @@ public class ARlearnDaoGenerator {
     private static Entity message;
     private static Entity inquiry;
     private static Entity badge;
+    private static Entity question;
     private static Entity friends;
 
     private static Entity category;
@@ -75,6 +76,7 @@ public class ARlearnDaoGenerator {
         message = createMessage(schema);
         generalItemVisibility = createGeneralItemVisibility(schema);
         badge = createBadges(schema);
+        question = createQuestions(schema);
 
         category = createCategory(schema);
         gameCategory = createGameCategory(schema);
@@ -145,6 +147,22 @@ public class ARlearnDaoGenerator {
         inqToBadges.setName("badges");
 
         return badge;
+    }
+
+    private static Entity createQuestions(Schema schema) {
+        Entity question = schema.addEntity("InquiryQuestionLocalObject");
+        question.addStringProperty("identifier").primaryKey();
+        question.addStringProperty("title");
+        question.addStringProperty("description");
+
+        Property inquiryId = question.addLongProperty("inquiryId").getProperty();
+        question.addToOne(inquiry, inquiryId);
+
+
+        ToMany inqToBadges = inquiry.addToMany(question, inquiryId);
+        inqToBadges.setName("questions");
+
+        return question;
     }
 
 

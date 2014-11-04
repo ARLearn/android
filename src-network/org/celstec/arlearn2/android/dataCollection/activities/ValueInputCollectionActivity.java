@@ -96,6 +96,11 @@ public abstract class ValueInputCollectionActivity extends Activity {
                 textValue += value;
             }
             ((TextView)findViewById(getTextView())).setText(textValue);
+            if (textValue.trim().equals("")){
+                findViewById(getDataCollectionSubmit()).setVisibility(View.GONE);
+            } else{
+                findViewById(getDataCollectionSubmit()).setVisibility(View.VISIBLE);
+            }
         }
     }
 }

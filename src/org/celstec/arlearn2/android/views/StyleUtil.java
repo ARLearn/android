@@ -41,6 +41,8 @@ public class StyleUtil implements Serializable{
     private int textInactive;
     private int buttonColor;
 
+    private int primaryColorHighlight;
+
     private int theme;
 
     public StyleUtil(Context context, int schema) {
@@ -53,7 +55,8 @@ public class StyleUtil implements Serializable{
                 R.attr.backgroundColor,
                 R.attr.backgroundColorDark,
                 R.attr.buttonColor,
-                R.attr.textInactive
+                R.attr.textInactive,
+                R.attr.primaryColorHighlight
 
         });
         primaryColor = ta.getColor(0, Color.BLACK);
@@ -67,6 +70,8 @@ public class StyleUtil implements Serializable{
 
         buttonColor = ta.getColor(6, Color.BLACK);
         textInactive = ta.getColor(7, Color.BLACK);
+
+        primaryColorHighlight = ta.getColor(8, Color.BLACK);
 
     }
 
@@ -104,5 +109,9 @@ public class StyleUtil implements Serializable{
 
     public int getButtonColor() {
         return buttonColor;
+    }
+
+    public int getPrimaryColorHighlight() {
+        return primaryColorHighlight;
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
 import org.celstec.arlearn2.android.views.DrawableUtil;
@@ -88,7 +89,7 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
         if (item.getGeneralItemLocalObject().isRead(runId)) {
             view.findViewById(R.id.messageEntryLinearLayoutRead).setVisibility(View.VISIBLE);
             view.findViewById(R.id.messageEntryLinearLayoutUnRead).setVisibility(View.GONE);
-            view.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
+            view.setBackgroundDrawable(ARL.drawableUtil.getGameMessageEntryRead());
             ((TextView) view.findViewById(R.id.messageTextRead)).setTextColor(DrawableUtil.getGameMessageTextRead());
             (view.findViewById(R.id.messageIconRead)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
 
@@ -114,7 +115,7 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
         } else {
             view.findViewById(R.id.messageEntryLinearLayoutUnRead).setVisibility(View.VISIBLE);
             view.findViewById(R.id.messageEntryLinearLayoutRead).setVisibility(View.GONE);
-            view.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
+            view.setBackgroundDrawable(ARL.drawableUtil.getGameMessageEntry());
             ((TextView) view.findViewById(R.id.messageTextUnRead)).setTextColor(DrawableUtil.getGameMessageText());
             (view.findViewById(R.id.messageIconUnRead)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
             int dip = DrawableUtil.dipToPixels(8);

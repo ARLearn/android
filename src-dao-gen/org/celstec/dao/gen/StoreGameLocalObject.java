@@ -6,10 +6,7 @@ package org.celstec.dao.gen;
 import org.celstec.arlearn2.beans.deserializer.json.JsonBeanDeserializer;
 import org.celstec.arlearn2.beans.game.Game;
 import org.codehaus.jettison.json.JSONException;
-
 // KEEP INCLUDES END
-
-
 /**
  * Entity mapped to table STORE_GAME_LOCAL_OBJECT.
  */
