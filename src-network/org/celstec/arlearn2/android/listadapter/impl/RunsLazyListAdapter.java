@@ -81,7 +81,10 @@ public class RunsLazyListAdapter extends LazyListAdapter<RunLocalObject> {
     }
     @Override
     public void bindView(View view, Context context,  RunLocalObject item) {
-        TextView firstLineView =(TextView) view.findViewById(R.id.messageText);
+        TextView firstLineView =(TextView) view.findViewById(R.id.messageTextRead);
+        if (firstLineView == null) {
+            firstLineView =(TextView) view.findViewById(R.id.messageTextUnRead);
+        }
         firstLineView.setText(item.getTitle());
     }
 

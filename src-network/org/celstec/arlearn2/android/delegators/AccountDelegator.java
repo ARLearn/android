@@ -194,21 +194,23 @@ public class AccountDelegator extends AbstractDelegator{
         DaoConfiguration daoConfiguration= DaoConfiguration.getInstance();
         try {
             QueryBuilder<AccountLocalObject> qb =daoConfiguration.getSession().queryBuilder(AccountLocalObject.class);
-            qb.where(AccountLocalObjectDao.Properties.Name.eq("Jose"));
+            qb.where(AccountLocalObjectDao.Properties.FullId.eq(accountType+":"+accountLocalId));
             List<AccountLocalObject> accounts = qb.list();
             for (AccountLocalObject ac : accounts) {
                 return ac;
             }
+
         }catch (NullPointerException e) {
 
         }
+        AccountLocalObject account = ARL.accounts.asyncAccountLocalObject(accountType+":"+accountLocalId);
 
-        AccountLocalObject account = new AccountLocalObject();
-        account.setLocalId(accountLocalId);
-        account.setAccountType(accountType);
-        account.setName(accountLocalId);
+//        AccountLocalObject account = new AccountLocalObject();
+//        account.setLocalId(accountLocalId);
+//        account.setAccountType(accountType);
+//        account.setName(accountLocalId);
 
-        DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(account);
+//        DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(account);
         return account;
     }
 }
