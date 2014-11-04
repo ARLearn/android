@@ -16,10 +16,7 @@ import org.celstec.arlearn2.android.util.GPSUtils;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.run.ResponseList;
 import org.celstec.arlearn2.client.ResponseClient;
-import org.celstec.dao.gen.GeneralItemLocalObject;
-import org.celstec.dao.gen.GeneralItemMediaLocalObject;
-import org.celstec.dao.gen.ResponseLocalObject;
-import org.celstec.dao.gen.ResponseLocalObjectDao;
+import org.celstec.dao.gen.*;
 import org.celstec.arlearn2.beans.run.Response;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -230,7 +227,15 @@ public class ResponseDelegator extends AbstractDelegator{
                 for (Response response : rl.getResponses()) {
                     ResponseLocalObject responseLocalObject = DaoConfiguration.getInstance().getResponseLocalObjectDao().loadDeep(response.getResponseId());
                     if (responseLocalObject == null) {
+//                        responseLocalObject = new ResponseLocalObject(response);
+                        AccountLocalObject account = ARL.accounts.createOrRetrieveAccount(Integer.parseInt(response.getUserEmail().split(":")[0]), response.getUserEmail().split(":")[1]);
+
                         responseLocalObject = new ResponseLocalObject(response);
+
+                        if (account != null){
+                            responseLocalObject.setAccountLocalObject(account);
+                        }
+
                         DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
                         if (responseEvent == null) {
                             responseEvent = new ResponseEvent(runId);

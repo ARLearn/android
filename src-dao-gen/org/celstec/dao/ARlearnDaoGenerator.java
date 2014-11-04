@@ -151,7 +151,7 @@ public class ARlearnDaoGenerator {
 
     private static Entity createQuestions(Schema schema) {
         Entity question = schema.addEntity("InquiryQuestionLocalObject");
-        question.addIdProperty();
+//        question.addLongProperty("id").autoincrement();
         question.addStringProperty("identifier").primaryKey();
         question.addStringProperty("title");
         question.addStringProperty("description");

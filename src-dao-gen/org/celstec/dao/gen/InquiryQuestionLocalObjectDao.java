@@ -19,7 +19,7 @@ import org.celstec.dao.gen.InquiryQuestionLocalObject;
 /** 
  * DAO for table INQUIRY_QUESTION_LOCAL_OBJECT.
 */
-public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLocalObject, Void> {
+public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLocalObject, String> {
 
     public static final String TABLENAME = "INQUIRY_QUESTION_LOCAL_OBJECT";
 
@@ -28,11 +28,10 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Identifier = new Property(1, String.class, "identifier", true, "IDENTIFIER");
-        public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
-        public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
-        public final static Property InquiryId = new Property(4, Long.class, "inquiryId", false, "INQUIRY_ID");
+        public final static Property Identifier = new Property(0, String.class, "identifier", true, "IDENTIFIER");
+        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
+        public final static Property Description = new Property(2, String.class, "description", false, "DESCRIPTION");
+        public final static Property InquiryId = new Property(3, Long.class, "inquiryId", false, "INQUIRY_ID");
     };
 
     private DaoSession daoSession;
@@ -52,11 +51,10 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'INQUIRY_QUESTION_LOCAL_OBJECT' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'IDENTIFIER' TEXT PRIMARY KEY NOT NULL ," + // 1: identifier
-                "'TITLE' TEXT," + // 2: title
-                "'DESCRIPTION' TEXT," + // 3: description
-                "'INQUIRY_ID' INTEGER);"); // 4: inquiryId
+                "'IDENTIFIER' TEXT PRIMARY KEY NOT NULL ," + // 0: identifier
+                "'TITLE' TEXT," + // 1: title
+                "'DESCRIPTION' TEXT," + // 2: description
+                "'INQUIRY_ID' INTEGER);"); // 3: inquiryId
     }
 
     /** Drops the underlying database table. */
@@ -70,29 +68,24 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
     protected void bindValues(SQLiteStatement stmt, InquiryQuestionLocalObject entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
         String identifier = entity.getIdentifier();
         if (identifier != null) {
-            stmt.bindString(2, identifier);
+            stmt.bindString(1, identifier);
         }
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(3, title);
+            stmt.bindString(2, title);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(4, description);
+            stmt.bindString(3, description);
         }
  
         Long inquiryId = entity.getInquiryId();
         if (inquiryId != null) {
-            stmt.bindLong(5, inquiryId);
+            stmt.bindLong(4, inquiryId);
         }
     }
 
@@ -104,19 +97,18 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public InquiryQuestionLocalObject readEntity(Cursor cursor, int offset) {
         InquiryQuestionLocalObject entity = new InquiryQuestionLocalObject( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // identifier
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // description
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // inquiryId
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // identifier
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // description
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // inquiryId
         );
         return entity;
     }
@@ -124,24 +116,26 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, InquiryQuestionLocalObject entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setIdentifier(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setDescription(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setInquiryId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setIdentifier(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setDescription(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setInquiryId(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(InquiryQuestionLocalObject entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected String updateKeyAfterInsert(InquiryQuestionLocalObject entity, long rowId) {
+        return entity.getIdentifier();
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(InquiryQuestionLocalObject entity) {
-        return null;
+    public String getKey(InquiryQuestionLocalObject entity) {
+        if(entity != null) {
+            return entity.getIdentifier();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

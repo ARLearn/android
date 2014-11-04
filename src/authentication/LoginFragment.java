@@ -82,11 +82,14 @@ public class LoginFragment  extends SherlockFragment {
                     frag = new WebViewFacebook();
                     break;
                 case Account.TWITTER:
-                    frag = new WebViewTwitter();
+                    frag = new WebViewEco();
+//                    frag = new WebViewTwitter();
                     break;
                 case Account.LINKEDIN:
                     frag = new WebViewLinkedin();
                     break;
+                case Account.ECO:
+                    frag = new WebViewEco();
                 default:
                     break;
             }
