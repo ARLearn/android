@@ -57,8 +57,8 @@ public abstract class AbstractGeneralItemsLazyListAdapter extends LazyListAdapte
     public AbstractGeneralItemsLazyListAdapter(Context context, long gameId, boolean deleted) {
         super(context);
         GeneralItemLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao();
-        qb = dao.queryBuilder()
-                .where(qb.and(GeneralItemLocalObjectDao.Properties.GameId.eq(gameId),
+        qb = dao.queryBuilder();
+        qb = qb.where(qb.and(GeneralItemLocalObjectDao.Properties.GameId.eq(gameId),
                         GeneralItemLocalObjectDao.Properties.Deleted.eq(deleted)))
                 .orderAsc(GeneralItemLocalObjectDao.Properties.LastModificationDate);
         ARL.eventBus.register(this);
