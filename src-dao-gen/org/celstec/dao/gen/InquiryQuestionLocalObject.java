@@ -12,6 +12,7 @@ import de.greenrobot.dao.DaoException;
  */
 public class InquiryQuestionLocalObject {
 
+    private Long id;
     private String identifier;
     private String title;
     private String description;
@@ -33,11 +34,13 @@ public class InquiryQuestionLocalObject {
     public InquiryQuestionLocalObject() {
     }
 
-    public InquiryQuestionLocalObject(String identifier) {
+    public InquiryQuestionLocalObject(Long id, String identifier) {
+        this.id = id;
         this.identifier = identifier;
     }
 
-    public InquiryQuestionLocalObject(String identifier, String title, String description, Long inquiryId) {
+    public InquiryQuestionLocalObject(Long id, String identifier, String title, String description, Long inquiryId) {
+        this.id = id;
         this.identifier = identifier;
         this.title = title;
         this.description = description;
@@ -48,6 +51,14 @@ public class InquiryQuestionLocalObject {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getInquiryQuestionLocalObjectDao() : null;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getIdentifier() {

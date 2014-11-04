@@ -7,6 +7,7 @@ import org.celstec.arlearn2.android.delegators.AbstractDelegator;
 import org.celstec.arlearn2.client.InquiryClient;
 import org.celstec.dao.gen.InquiryLocalObject;
 import org.celstec.dao.gen.InquiryQuestionLocalObject;
+import org.celstec.events.QuestionEvent;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -59,6 +60,7 @@ public class QuestionDelegator extends AbstractDelegator {
             String questions = InquiryClient.getInquiryClient().questions(token, sge.getInquiryLocalObject().getId());
             if (questions == null) return;
             JSONObject json = null;
+            QuestionEvent event = null;
             try {
                 json = new JSONObject(questions);
                 JSONArray array = json.getJSONArray("result");
@@ -71,10 +73,13 @@ public class QuestionDelegator extends AbstractDelegator {
                     inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("question"));
                     inquiryQuestionLocalObject.setIdentifier(inqJsonObject.getString("url"));
                     DaoConfiguration.getInstance().getInquiryQuestionLocalObjectDao().insertOrReplace(inquiryQuestionLocalObject);
+                    event = new QuestionEvent();
+                    event.setInquiryId(sge.getInquiryLocalObject().getId());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            if (event != null) ARL.eventBus.post(event);
         }
     }
 
