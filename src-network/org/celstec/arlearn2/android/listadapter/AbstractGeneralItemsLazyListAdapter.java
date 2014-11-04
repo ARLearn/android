@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import daoBase.DaoConfiguration;
+import de.greenrobot.dao.Property;
 import de.greenrobot.dao.query.QueryBuilder;
 
 import org.celstec.arlearn2.android.delegators.ARL;
@@ -61,6 +62,23 @@ public abstract class AbstractGeneralItemsLazyListAdapter extends LazyListAdapte
         qb = qb.where(qb.and(GeneralItemLocalObjectDao.Properties.GameId.eq(gameId),
                         GeneralItemLocalObjectDao.Properties.Deleted.eq(deleted)))
                 .orderAsc(GeneralItemLocalObjectDao.Properties.LastModificationDate);
+        ARL.eventBus.register(this);
+        setLazyList(qb.listLazy());
+    }
+
+    public AbstractGeneralItemsLazyListAdapter(Context context, long gameId, boolean deleted, Property sorting, boolean ascending) {
+        super(context);
+        if (sorting == null) sorting = GeneralItemLocalObjectDao.Properties.LastModificationDate;
+        GeneralItemLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao();
+        qb = dao.queryBuilder();
+        qb = qb.where(qb.and(GeneralItemLocalObjectDao.Properties.GameId.eq(gameId),
+                GeneralItemLocalObjectDao.Properties.Deleted.eq(deleted)));
+        if (ascending){
+            qb.orderAsc(sorting);
+        }else{
+            qb.orderDesc(sorting);
+        }
+
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());
     }
