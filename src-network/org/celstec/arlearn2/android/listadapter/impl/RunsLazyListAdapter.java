@@ -76,15 +76,15 @@ public class RunsLazyListAdapter extends LazyListAdapter<RunLocalObject> {
     public View newView(Context context, RunLocalObject item, ViewGroup parent) {
         if (item == null) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.game_message_entry, parent, false);
+        return inflater.inflate(R.layout.game_list_runs_entry, parent, false);
 
     }
     @Override
     public void bindView(View view, Context context,  RunLocalObject item) {
-        TextView firstLineView =(TextView) view.findViewById(R.id.messageTextRead);
-        if (firstLineView == null) {
-            firstLineView =(TextView) view.findViewById(R.id.messageTextUnRead);
-        }
+        TextView firstLineView =(TextView) view.findViewById(R.id.messageText);
+//        if (firstLineView == null) {
+//            firstLineView =(TextView) view.findViewById(R.id.messageTextUnRead);
+//        }
         firstLineView.setText(item.getTitle());
     }
 
