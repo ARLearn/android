@@ -115,7 +115,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
         activity.findViewById(R.id.multipleChoice).setVisibility(View.GONE);
         submitVoteButton = (TextView) activity.findViewById(R.id.button);
 //        activity.findViewById(R.id.button).setVisibility(View.VISIBLE);
-        submitVoteButton.setText("Submit");
+        submitVoteButton.setText("Verstuur");
 
 
         ((GradientDrawable) submitVoteButton.getBackground()).setColor(DrawableUtil.styleUtil.getPrimaryColor());
@@ -238,9 +238,11 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
     }
 
     protected void setSelection(View selectedView) {
-        ImageView tileImage = (ImageView) selectedView.findViewById(R.id.tileImage);
-        tileImage.getDrawable().setColorFilter(DrawableUtil.adjustAlpha(DrawableUtil.styleUtil.getPrimaryColor(), 0.4f), PorterDuff.Mode.MULTIPLY);
-        selectedView.findViewById(R.id.overlay).setVisibility(View.VISIBLE);
+        if (selectedView != null) {
+            ImageView tileImage = (ImageView) selectedView.findViewById(R.id.tileImage);
+            tileImage.getDrawable().setColorFilter(DrawableUtil.adjustAlpha(DrawableUtil.styleUtil.getPrimaryColor(), 0.4f), PorterDuff.Mode.MULTIPLY);
+            selectedView.findViewById(R.id.overlay).setVisibility(View.VISIBLE);
+        }
     }
     @Override
     public void onPauseActivity() {

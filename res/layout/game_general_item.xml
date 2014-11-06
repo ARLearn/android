@@ -78,7 +78,7 @@
     <TextView
             android:id="@+id/button"
             style="@style/ARLearn.Game.Button"
-            android:text="Continue"
+            android:text="Doorgaan"
             android:layout_marginBottom="10dip"
             android:visibility="gone"
             />
