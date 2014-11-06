@@ -66,11 +66,11 @@ public class QuestionDelegator extends AbstractDelegator {
                 JSONArray array = json.getJSONArray("result");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject inqJsonObject = array.getJSONObject(i);
-                    String question = inqJsonObject.getString("question");
-                    Log.i(SYNC_TAG, "Question found " + question);
+//                    String question = inqJsonObject.getString("question");
+//                    Log.i(SYNC_TAG, "Question found " + question);
                     InquiryQuestionLocalObject inquiryQuestionLocalObject = new InquiryQuestionLocalObject();
                     inquiryQuestionLocalObject.setDescription(inqJsonObject.getString("description"));
-                    inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("question"));
+                    inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("title"));
                     inquiryQuestionLocalObject.setIdentifier(inqJsonObject.getString("url"));
                     DaoConfiguration.getInstance().getInquiryQuestionLocalObjectDao().insertOrReplace(inquiryQuestionLocalObject);
                     event = new QuestionEvent();
