@@ -43,6 +43,15 @@ public abstract class AbstractQuestionsLazyListAdapter extends LazyListAdapter<I
         setLazyList(qb.listLazy());
     }
 
+    public AbstractQuestionsLazyListAdapter(Context context, Long inquiryId) {
+        super(context);
+        InquiryQuestionLocalObjectDao dao = DaoConfiguration.getInstance().getSession().getInquiryQuestionLocalObjectDao();
+        qb = dao.queryBuilder()
+                .where(InquiryQuestionLocalObjectDao.Properties.InquiryId.eq(inquiryId))
+                .orderAsc(InquiryQuestionLocalObjectDao.Properties.Identifier);
+        ARL.eventBus.register(this);
+        setLazyList(qb.listLazy());
+    }
 
     public void onEventMainThread(QuestionEvent event) {
         if (lazyList != null) lazyList.close();
