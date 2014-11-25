@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ELENA</string>
+    <string name="app_name">ARLearn</string>
 
     <string name="login_facebook">Login with Facebook</string>
     <string name="login_google">Login with Google</string>
@@ -39,5 +39,7 @@
     <string name="wireless">Open wireless settings</string>
     <string name="operatingOffline">Operating in offline mode</string>
     <string name="contentMissingNoInternet">Some game content has not been downloaded.</string>
+
+    <string name="submit" >Submit</string>
 
 </resources>

@@ -27,9 +27,11 @@ import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import net.sourceforge.zbar.Config;
+import org.celstec.arlearn2.android.UserGameIntentAnalyser;
 import org.celstec.arlearn2.android.store.GameFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.run.Run;
 
 /**
  * ****************************************************************************
@@ -57,7 +59,7 @@ public class ScannerFragment  extends SherlockFragment {
     private Handler autoFocusHandler;
 
     TextView scanText;
-    private BarcodeAnalyzer analyzer = new BarcodeAnalyzer() {
+    private UserGameIntentAnalyser analyzer = new UserGameIntentAnalyser() {
         @Override
         public void scannedGame(Game game) {
             GameFragment frag = new GameFragment(game);
@@ -65,8 +67,11 @@ public class ScannerFragment  extends SherlockFragment {
         }
 
         @Override
-        public void scannedRun(long runId) {
-
+        public void scannedRun(Run run) {
+            GameFragment frag = new GameFragment(run.getGame());
+            frag.setRun(run);
+            launchFragment(frag);
+            System.out.println(run);
         }
 
         @Override

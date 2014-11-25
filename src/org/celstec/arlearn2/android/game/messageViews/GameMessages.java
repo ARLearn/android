@@ -61,8 +61,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        ARL.init(this);
 
         gameActivityFeatures = new GameActivityFeatures(this);
         setTheme(gameActivityFeatures.getTheme());
@@ -180,5 +179,13 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 //            gameActivityFeatures.showStrokenNotification();
             gameActivityFeatures.showAlertViewNotification();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        gameActivityFeatures.onSaveInstanceState(outState);
+
+
     }
 }

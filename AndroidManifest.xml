@@ -37,6 +37,11 @@
                          android:scheme="http"
                          android:pathPrefix="/oai/">
                  </data>
+                 <data
+                         android:host="streetlearn.appspot.com"
+                         android:scheme="http"
+                         android:pathPrefix="/game/">
+                 </data>
              </intent-filter>
          </activity>
 

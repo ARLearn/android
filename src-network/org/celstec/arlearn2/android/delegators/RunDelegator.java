@@ -62,9 +62,17 @@ public class RunDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncRun(runId));
     }
 
+    public void selfRegister(long runId) {
+        ARL.eventBus.post(new SelfRegister(runId));
+    }
+
 //    public void syncRun(GameLocalObject game) {
 //        SyncRun sr = new SyncRun(game);
 //    }
+
+    public void onEventAsync(SelfRegister selfRegister) {
+        selfRegisterForRun(selfRegister.getRunId());
+    }
 
     /*
     Implementation
@@ -96,12 +104,24 @@ public class RunDelegator extends AbstractDelegator{
         if (token != null) {
             Log.i(SYNC_TAG, "Sync run : " + runId);
             Run run =RunClient.getRunClient().getRun(runId, token);
-            if (run.getError() == null) {
-                RunList rl = new RunList();
-                rl.addRun(run);
-                process(rl);
-            }
+            asyncRun(run);
         }
+    }
+
+    public void asyncRun(Run run) {
+        if (run.getError() == null) {
+            RunList rl = new RunList();
+            rl.addRun(run);
+            process(rl);
+        }
+    }
+
+    public Run asyncRunBean(long runId) {
+//        String token = returnTokenIfOnline();
+        if (ARL.isOnline()) {
+            return RunClient.getRunClient().getRun(runId, null);
+        }
+        return null;
     }
 
 //    private void asyncGame(long gameId) {
@@ -159,6 +179,12 @@ public class RunDelegator extends AbstractDelegator{
 
     }
 
+    private void selfRegisterForRun(long runId) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            asyncRun(RunClient.getRunClient().selfRegister(token, runId));
+        }
+    }
 
 
     private class SyncRunsEventParticipate {
@@ -197,6 +223,22 @@ public class RunDelegator extends AbstractDelegator{
 
         public void setGameId(Long gameId) {
             this.gameId = gameId;
+        }
+    }
+
+    private class SelfRegister{
+        private Long runId;
+
+        private SelfRegister(Long runId) {
+            this.runId = runId;
+        }
+
+        public Long getRunId() {
+            return runId;
+        }
+
+        public void setRunId(Long runId) {
+            this.runId = runId;
         }
     }
 }

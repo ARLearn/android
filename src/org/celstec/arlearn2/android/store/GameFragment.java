@@ -22,9 +22,13 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
+import org.celstec.arlearn2.android.delegators.RunDelegator;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.events.GameEvent;
+import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.run.Run;
+import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.StoreGameLocalObject;
 
 import java.text.DateFormat;
@@ -52,6 +56,7 @@ import java.text.DateFormat;
 public class GameFragment extends SherlockFragment implements GameDownloadProgressView.DownloadCompleteInterface{
 
     private long gameId;
+    private Run run;
     private View gameView;
 
 
@@ -89,6 +94,14 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    public Run getRun() {
+        return run;
+    }
+
+    public void setRun(Run run) {
+        this.run = run;
     }
 
     @Override
@@ -163,16 +176,24 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
                 if (ARL.accounts.isAuthenticated()) {
                     progressView.show();
                 } else {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    Bundle args = new Bundle();
-                    Fragment frag = new LoginFragment();
-
-                    frag.setArguments(args);
-                    fm.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
-                            .replace(R.id.right_pane, frag).addToBackStack(null).commit();
+                   startLoginActivity();
                 }
 
+            }
+        });
+
+        TextView openButton = (TextView) gameView.findViewById(R.id.openId);
+        openButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                if (ARL.accounts.isAuthenticated()) {
+                    GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+                    if (!gameLocalObject.getRuns().isEmpty())
+                        GameSplashScreen.startActivity(getActivity(), gameLocalObject.getId(), gameLocalObject.getRuns().get(0).getId());
+                } else {
+                    startLoginActivity();
+                }
             }
         });
 
@@ -180,6 +201,17 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
         gameView.findViewById(R.id.gamePane).setVisibility(View.INVISIBLE);
         drawGameContent(gameView);
         return gameView;
+    }
+
+    private void startLoginActivity() {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        Bundle args = new Bundle();
+        Fragment frag = new LoginFragment();
+
+        frag.setArguments(args);
+        fm.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.right_pane, frag).addToBackStack(null).commit();
     }
 
     public void onEventMainThread(GameEvent event) {
@@ -199,6 +231,10 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     public void downloadComplete() {
         gameView.findViewById(R.id.downloadId).setVisibility(View.GONE);
         gameView.findViewById(R.id.openId).setVisibility(View.VISIBLE);
+
+        if (run != null) {
+           ARL.runs.selfRegister(run.getRunId());
+        }
 
     }
 

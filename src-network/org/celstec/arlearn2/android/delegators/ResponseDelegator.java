@@ -21,9 +21,7 @@ import org.celstec.arlearn2.beans.run.Response;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
@@ -188,6 +186,9 @@ public class ResponseDelegator extends AbstractDelegator{
                 InputStream is = null;
                 try {
                     is = ARL.getContext().getContentResolver().openInputStream(uri);
+//                    File fileInput = new File(uri.toString().replace("file:///storage/emulated/0/arlearn2/outgoing/","/storage/emulated/legacy/arlearn2/outgoing/"));
+//                    is = ARL.getContext().getAssets().openFd(uri.toString()).createInputStream();
+//                    is = new FileInputStream(fileInput);
                     if (uploader.publishData(uploadUrl, is, response.getContentType(), uri.getLastPathSegment())) {
                         response.setIsSynchronized(true);
                     } else {
@@ -206,6 +207,8 @@ public class ResponseDelegator extends AbstractDelegator{
                     response.getGeneralItemLocalObject().resetResponses();
 
                 } catch (FileNotFoundException e) {
+                    Log.e("ARLearn", e.getMessage(), e);
+                } catch (IOException e) {
                     Log.e("ARLearn", e.getMessage(), e);
                 }
 

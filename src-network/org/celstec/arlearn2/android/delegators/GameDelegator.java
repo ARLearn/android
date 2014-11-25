@@ -118,9 +118,8 @@ public final class GameDelegator extends AbstractDelegator{
     }
 
     public Game asyncGameBean(long gameId) {
-        String token = returnTokenIfOnline();
-        if (token != null) {
-            return GameClient.getGameClient().getGame(token, gameId);
+        if (ARL.isOnline()) {
+            return GameClient.getGameClient().getGame(null, gameId);
         }
         return null;
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -18,6 +19,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.store.GameFragment;
 import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.run.Run;
 
 /**
  * ****************************************************************************
@@ -48,8 +50,59 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
 
     private ActionBarHelper mActionBar;
     private SherlockFragment frag;
-    private long gameToLoad = 0l;
+//    private long gameToLoad = 0l;
+    Uri dataUri;
+    UserGameIntentAnalyser gameIntentAnalyser = new UserGameIntentAnalyser() {
+        @Override
+        public void scannedGame(Game game) {
+//            FragmentManager fm = getSupportFragmentManager();
+//            Bundle args = new Bundle();
+//            FragmentTransaction ft = fm.beginTransaction();
+//
+////            game.setGameId(gameIntentAnalyser.getGameId());
+////            GameFragment gf = new GameFragment(game);
+////            if (gameIntentAnalyser.hasRunToLoad()){
+////                gf.setRunId(gameIntentAnalyser.getRunId());
+////            }
+//            ft.replace(R.id.right_pane, gf).addToBackStack(null).commit();
 
+
+//            FragmentManager fm = getSupportFragmentManager();
+//            Bundle args = new Bundle();
+//            frag = new GameFragment(game);
+//            frag.setArguments(args);
+//            FragmentTransaction ft = fm.beginTransaction();
+//            ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+
+            GameFragment frag = new GameFragment(game);
+            launchFragment(frag);
+            StructureSlidingPaneLayout.this.frag = frag;
+        }
+
+        @Override
+        public void scannedRun(Run run) {
+            GameFragment frag = new GameFragment(run.getGame());
+            frag.setRun(run);
+            launchFragment(frag);
+            System.out.println(run);
+            StructureSlidingPaneLayout.this.frag = frag;
+        }
+
+        @Override
+        public void scannedLoginToken(String loginToken) {
+
+        }
+    };
+
+    private void launchFragment(Fragment frag) {
+        FragmentManager fm = getSupportFragmentManager();
+        Bundle args = new Bundle();
+
+        frag.setArguments(args);
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+    }
     /**
      * Called when the activity is first created.
      */
@@ -59,17 +112,18 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
         try {
             Intent i = getIntent();
 
-            Uri uri = i.getData();
-            if (uri.toString().startsWith("http://streetlearn.appspot.com/game/")) {
-                gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
-            }
-            if (uri.toString().startsWith("http://streetlearn.appspot.com/oai/resolve/")) {
-                String gameIdAsString = uri.toString().substring(uri.toString().lastIndexOf("/") + 1);
-                if (gameIdAsString.contains("?")) {
-                    gameIdAsString = gameIdAsString.substring(0, gameIdAsString.indexOf("?"));
-                }
-                gameToLoad = Long.parseLong(gameIdAsString);
-            }
+            dataUri = i.getData();
+
+//            if (uri.toString().startsWith("http://streetlearn.appspot.com/game/")) {
+//                gameToLoad = Long.parseLong(uri.toString().substring(uri.toString().lastIndexOf("/") + 1));
+//            }
+//            if (uri.toString().startsWith("http://streetlearn.appspot.com/oai/resolve/")) {
+//                String gameIdAsString = uri.toString().substring(uri.toString().lastIndexOf("/") + 1);
+//                if (gameIdAsString.contains("?")) {
+//                    gameIdAsString = gameIdAsString.substring(0, gameIdAsString.indexOf("?"));
+//                }
+//                gameToLoad = Long.parseLong(gameIdAsString);
+//            }
         } catch (NullPointerException e){
 
         }
@@ -97,22 +151,31 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
 
     private void restoreFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null){
-            FragmentManager fm = getSupportFragmentManager();
-            Bundle args = new Bundle();
 
-            frag = new MainMenu();
-            frag.setArguments(args);
-            FragmentTransaction ft = fm.beginTransaction();
 
-            if (gameToLoad != 0l) {
-                ft.replace(R.id.right_pane, frag).addToBackStack(null);
-                Game game = new Game();
-                game.setGameId(gameToLoad);
-                GameFragment gf = new GameFragment(game);
-                ft.replace(R.id.right_pane, gf).addToBackStack(null).commit();
-            } else {
+            if (!gameIntentAnalyser.analyze(dataUri)){
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle args = new Bundle();
+                frag = new MainMenu();
+                frag.setArguments(args);
+                FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
             }
+
+
+//            if (gameIntentAnalyser.hasGameToLoad()){
+////            if (gameToLoad != 0l) {
+//                ft.replace(R.id.right_pane, frag).addToBackStack(null);
+//                Game game = new Game();
+//                game.setGameId(gameIntentAnalyser.getGameId());
+//                GameFragment gf = new GameFragment(game);
+//                if (gameIntentAnalyser.hasRunToLoad()){
+//                    gf.setRunId(gameIntentAnalyser.getRunId());
+//                }
+//                ft.replace(R.id.right_pane, gf).addToBackStack(null).commit();
+//            } else {
+//
+//            }
         }
     }
 

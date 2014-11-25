@@ -74,6 +74,8 @@ public class GameDownloadManager {
     }
 
     public void asyncDownloadGame() {
+        ARL.games.asyncGame(gameId,true);
+
         GeneralItemList list = ARL.generalItems.asyncRetrieveItems(gameId);
         if (list.getError() == null) {
             generalItemList = list.getGeneralItems();

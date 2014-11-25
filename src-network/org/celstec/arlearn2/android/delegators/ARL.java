@@ -11,7 +11,7 @@ import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
 import org.celstec.arlearn2.android.gcm.GCMRegistration;
 import org.celstec.arlearn2.android.views.DrawableUtil;
-import org.celstec.arlearn2.android.views.StyleUtil;
+//import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.arlearn2.client.GenericClient;
 import org.celstec.dao.gen.AccountLocalObject;
 
@@ -57,28 +57,34 @@ public class ARL {
     public static EventBus eventBus = new EventBus();
     public static DaoConfiguration dao;
     public static Context ctx;
+
+
+
     public static DrawableUtil drawableUtil;
 
     public static void init(Context ctx) {
-        ARL.ctx = ctx;
-        dao= DaoConfiguration.getInstance(ctx);
-        mapContext = new MapContext(ctx);
-        properties = PropertiesAdapter.getInstance(ctx);
-        config = new ConfigAdapter(ctx).getProperties();
-        GenericClient.urlPrefix = config.getProperty("arlearn_server");
-        games = GameDelegator.getInstance();
-        generalItems = GeneralItemDelegator.getInstance();
-        runs = RunDelegator.getInstance();
-        accounts = AccountDelegator.getInstance();
-        time = TimeDelegator.getInstance(ctx);
-        fileReferences = GiFileReferenceDelegator.getInstance();
-        actions = ActionsDelegator.getInstance();
-        responses = ResponseDelegator.getInstance();
-        store = StoreDelegator.getInstance();
-        threads = ThreadsDelegator.getInstance();
-        messages = MessagesDelegator.getInstance();
-        generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
-        new GCMRegisterTask().execute((Activity) ctx);
+        if (!ARL.isInit()) {
+            System.out.println("Im here");
+            ARL.ctx = ctx;
+            dao = DaoConfiguration.getInstance(ctx);
+            mapContext = new MapContext(ctx);
+            properties = PropertiesAdapter.getInstance(ctx);
+            config = new ConfigAdapter(ctx).getProperties();
+            GenericClient.urlPrefix = config.getProperty("arlearn_server");
+            games = GameDelegator.getInstance();
+            generalItems = GeneralItemDelegator.getInstance();
+            runs = RunDelegator.getInstance();
+            accounts = AccountDelegator.getInstance();
+            time = TimeDelegator.getInstance(ctx);
+            fileReferences = GiFileReferenceDelegator.getInstance();
+            actions = ActionsDelegator.getInstance();
+            responses = ResponseDelegator.getInstance();
+            store = StoreDelegator.getInstance();
+            threads = ThreadsDelegator.getInstance();
+            messages = MessagesDelegator.getInstance();
+            generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
+            new GCMRegisterTask().execute((Activity) ctx);
+        }
 
     }
 

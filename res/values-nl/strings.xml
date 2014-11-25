@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_facebook">Login met Facebook</string>
+    <string name="login_google">Login met Google</string>
+    <string name="login_twitter">Login met Twitter</string>
+    <string name="login_linked_in">Login met LinkedIn</string>
+
+    <string name="login_to_continue">Login om door te gaan</string>
+    <string name="login_from_my_games_text">Om toegang te krijgen to je spellen moet je eerst inloggen. \n Kies een van onderstaande opties.</string>
+
+    <string name="myGames">Mijn Spellen</string>
+    <string name="library">Bibliotheek</string>
+    <string name="scan">Scan</string>
+    <string name="nearMe">In de buurt</string>
+
+    <string name="searchText">Zoek</string>
+    <string name="category">Categorie</string>
+    <string name="topGames">Top spellen</string>
+
+    <string name="nolicense">Geen licentie</string>
+    <string name="ccby">Naamsvermelding</string>
+    <string name="bynd">Naamsvermelding-GeenAfgeleideWerken</string>
+    <string name="bysa">Naamsvermelding-GelijkDelen</string>
+    <string name="bync">Naamsvermelding-NietCommercieel </string>
+    <string name="byncsa">Naamsvermelding-NietCommercieel-GelijkDelen </string>
+    <string name="byncnd">Naamsvermelding-NietCommercieel-GeenAfgeleideWerken</string>
+
+    <string name="unabletosyncgame">Synchroniseren spel mislukt</string>
+
+    <!--Notifications-->
+    <string name="readMessage">Lees Boodschap</string>
+    <string name="closeMessage">Sluit Boodschap</string>
+
+    <!--Network-->
+    <string name="noInternet">Geen internet connectie</string>
+    <string name="cancel">Cancel</string>
+    <string name="wireless">Open instellingen draadloos internet</string>
+    <string name="operatingOffline">Speel in offline modus</string>
+    <string name="contentMissingNoInternet">Sommige spelbestanden konden niet gedownload worden.</string>
+
+    <string name="submit" >Verstuur</string>
+
+</resources>

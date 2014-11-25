@@ -37,7 +37,6 @@ import org.celstec.arlearn2.android.store.StoreFragment;
  */
 public class MainMenu extends SherlockFragment {
     private static final String TAG = "MainMenu";
-    private String authToken = "ya29.1.AADtN_V345QcK9W1bqSBWH98rK1pb2fl9KDsfvzhtDlOBkERiDXuuvRMlT9_6zg";
 
     private View button1;
     private View storeButton;
@@ -49,13 +48,7 @@ public class MainMenu extends SherlockFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
         INQ.init(getActivity());
-//        ARL.properties.setAuthToken(authToken);
-//        ARL.properties.setFullId("2:116757187626671489073");
-
         ARL.accounts.syncMyAccountDetails();
-
-
-
     }
 
     @Override
@@ -74,23 +67,22 @@ public class MainMenu extends SherlockFragment {
         button3 =  v.findViewById(R.id.scan);
         button4 =  v.findViewById(R.id.nearme);
 
-        button1.setOnClickListener(new ClickButton1());
-        storeButton.setOnClickListener(new ClickButton2());
-        button3.setOnClickListener(new ClickButton3());
+        button1.setOnClickListener(new GamesButton());
+        storeButton.setOnClickListener(new StoreButton());
+        button3.setOnClickListener(new ScanButton());
         button4.setOnClickListener(new ClickButton4());
 
         return v;
     }
 
 
-    private class ClickButton1 implements View.OnClickListener {
+    private class GamesButton implements View.OnClickListener {
         @Override
         public void onClick(View view) {
 
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Bundle args = new Bundle();
             Fragment frag;
-//
             if (ARL.accounts.isAuthenticated()){
                 frag = new MyGamesFragment();
             } else {
@@ -107,19 +99,11 @@ public class MainMenu extends SherlockFragment {
 
     }
 
-    private class ClickButton2 implements View.OnClickListener {
+    private class StoreButton implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.e(TAG, "Click Store" );
-//            startActivity(new Intent(MainMenu.this.getActivity(), StoreActivity.class));
-
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                Bundle args = new Bundle();
-
-//                StoreFragment frag = new StoreFragment();
-//                frag.setArguments(args);
-//                fm.beginTransaction().replace(R.id.right_pane, frag).addToBackStack(null).commit();
-
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+             Bundle args = new Bundle();
             StoreFragment frag = new StoreFragment();
             frag.setArguments(args);
             fm.beginTransaction()
@@ -129,7 +113,7 @@ public class MainMenu extends SherlockFragment {
         }
     }
 
-    private class ClickButton3 implements View.OnClickListener {
+    private class ScanButton implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             FragmentManager fm = getActivity().getSupportFragmentManager();

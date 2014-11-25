@@ -2,12 +2,8 @@ package org.celstec.arlearn2.android.dataCollection;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import daoBase.DaoConfiguration;
-import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.util.MediaFolders;
-import org.celstec.dao.gen.ResponseLocalObject;
 
 import java.io.File;
 
@@ -47,6 +43,10 @@ public class PictureManager extends DataCollectionManager {
         bitmapFile = MediaFolders.createOutgoingJpgFile();
         cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
         ctx.startActivityForResult(cameraIntent, PICTURE_RESULT);
+
+//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        bitmapFile = MediaFolders.createOutgoingJpgFile();
+//        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -56,20 +56,29 @@ public class PictureManager extends DataCollectionManager {
             String filePath = null;
             if (data != null) {
                 uri = data.getData();
-                filePath = data.getData().getPath();
+                filePath = data.getExtras().getString("picture_file_path");
+                uri = Uri.fromFile(new File(filePath));
+//                filePath = data.getData().getPath();
             } else {
+
                 uri = Uri.fromFile(bitmapFile);
                 filePath = bitmapFile.getAbsolutePath();
             }
+
             response.setUriAsString(uri.toString());
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
+//            Bitmap a = BitmapUtils.decodeSampledBitmapFromPath(uri.toString(), 200, 200);
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inJustDecodeBounds = true;
+//
+//            BitmapFactory.decodeFile(filePath, options);
+//            response.setContentType("image/jpeg");
+//            response.setWidth(options.outWidth);
+//            response.setHeight(options.outHeight);
 
-            BitmapFactory.decodeFile(filePath, options);
-            response.setContentType(options.outMimeType);
-            response.setWidth(options.outWidth);
-            response.setHeight(options.outHeight);
+            response.setContentType("image/jpeg");
+            response.setWidth(1024);
+            response.setHeight(720);
 
             saveResponseForSyncing();
         } else if (resultCode == Activity.RESULT_CANCELED) {

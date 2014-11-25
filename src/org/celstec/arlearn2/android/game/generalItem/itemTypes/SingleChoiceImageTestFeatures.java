@@ -115,7 +115,8 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
         activity.findViewById(R.id.multipleChoice).setVisibility(View.GONE);
         submitVoteButton = (TextView) activity.findViewById(R.id.button);
 //        activity.findViewById(R.id.button).setVisibility(View.VISIBLE);
-        submitVoteButton.setText("Verstuur");
+        submitVoteButton.setText(activity.getString(R.string.submit));
+
 
 
         ((GradientDrawable) submitVoteButton.getBackground()).setColor(DrawableUtil.styleUtil.getPrimaryColor());

@@ -123,4 +123,8 @@ public class GameActivityFeatures {
         return R.style.ARLearn_schema1;
 
     }
+
+    public void onSaveInstanceState(Bundle outState) {
+//        outState.putString("message", "This is my message to be reloaded");
+    }
 }
