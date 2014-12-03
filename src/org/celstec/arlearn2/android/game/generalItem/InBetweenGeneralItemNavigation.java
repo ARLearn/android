@@ -91,7 +91,8 @@ public class InBetweenGeneralItemNavigation {
 
         }
         ((TextView)(activity.findViewById(R.id.messageCounter))).setText(
-                "Bericht "+ counter+ " van " + total
+                activity.getString(R.string.message).replace("xxx", counter+"").replace("yyy", ""+total)
+//                "Bericht "+ counter+ " van " + total
         );
         if (previousGeneralItemLocalObject == null) {
             (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_inactive);

@@ -1,15 +1,18 @@
 package org.celstec.arlearn2.android.game;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.internal.DaoConfig;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AccountDelegator;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
-import org.celstec.dao.gen.AccountLocalObject;
-import org.celstec.dao.gen.AccountLocalObjectDao;
-import org.celstec.dao.gen.DaoSession;
-import org.celstec.dao.gen.RunLocalObject;
+import org.celstec.dao.gen.*;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -35,6 +38,7 @@ public class InitWhiteLabelDatabase {
 
     private Long gameId;
     private Long runId;
+    List<Long> gameIdsLong;
 
     private Context context;
 
@@ -42,9 +46,34 @@ public class InitWhiteLabelDatabase {
         this.context = context;
     }
 
+    public static List<Long> getGameIds(){
+        String gameIds = ARL.config.getProperty("white_label_gameId");
+        List<String> list = new ArrayList<String>(Arrays.asList(gameIds.split(",")));
+        List<Long> gameIdsLong= new ArrayList<Long>(list.size());
+        for (String gameId: list){
+            gameIdsLong.add(Long.parseLong(gameId));
+        }
+        return gameIdsLong;
+    }
+
     public void init(){
-        gameId = Long.parseLong(ARL.config.getProperty("white_label_gameId"));
-        runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
+        String gameIds = ARL.config.getProperty("white_label_gameId");
+//        if (gameIds.contains(",")){
+            List<String> list = new ArrayList<String>(Arrays.asList(gameIds.split(",")));
+            gameIdsLong = new ArrayList<Long>(list.size());
+            for (String gameId: list){
+                gameIdsLong.add(Long.parseLong(gameId));
+            }
+
+
+//        } else {
+//            gameId = Long.parseLong(gameIds);
+//        }
+        if (ARL.config.getProperty("white_label_runId") != null){
+            runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
+        } else {
+            runId = 0l;
+        }
         if (ARL.config.getBooleanProperty("white_label_online")){
 
         } else {
@@ -52,26 +81,61 @@ public class InitWhiteLabelDatabase {
             loadGameFiles();
             loadRunScript();
             createDefaultAccount();
+            createMaps();
         }
 
 
     }
 
+    private void createMaps() {
+        if (ARL.config.getProperty("white_label_map_file")!= null) {
+            AssetManager assetManager = context.getAssets();
+            String filename = ARL.config.getProperty("white_label_map_file");
+            try {
+                InputStream in = assetManager.open(filename);
+                File outFile = new File("/mnt/sdcard/osmdroid/", filename);
+                OutputStream out = new FileOutputStream(outFile);
+                copyFile(in, out);
+                in.close();
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
+    }
+
     private void loadGameScript() {
-        GameDelegator.getInstance().loadGameFromFile(context, gameId);
+        if (gameId != null) {
+            GameDelegator.getInstance().loadGameFromFile(context, gameId);
+        } else {
+            for (Long gameIdLong:gameIdsLong) {
+                GameDelegator.getInstance().loadGameFromFile(context, gameIdLong);
+            }
+        }
     }
 
     private void loadGameFiles(){
-        GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
+        for (long gameId: gameIdsLong) {
+            GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
+        }
     }
 
     private void loadRunScript() {
-            if (DaoConfiguration.getInstance().getRunLocalObjectDao().loadAll().size()==0){
-                RunLocalObject runLocalObject = new RunLocalObject();
-                runLocalObject.setGameId(gameId);
-                runLocalObject.setTitle("Default");
-                DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
-            }
+        for (GameLocalObject gameLocalObject:DaoConfiguration.getInstance().getGameLocalObjectDao().loadAll()){
+            RunLocalObject runLocalObject = new RunLocalObject();
+            runLocalObject.setGameId(gameLocalObject.getId());
+            runLocalObject.setTitle("Default");
+            DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
+        }
 
     }
 

@@ -39,6 +39,7 @@ public class LoginFragment  extends SherlockFragment {
     private View facebookButton;
     private View linkedInButton;
     private View twitterButton;
+    private View ecoButton;
 
     @Override
     public void onResume() {
@@ -54,10 +55,12 @@ public class LoginFragment  extends SherlockFragment {
         facebookButton = v.findViewById(R.id.facebookButton);
         linkedInButton= v.findViewById(R.id.linkedinButton);
         twitterButton = v.findViewById(R.id.twitterButton);
+        ecoButton =  v.findViewById(R.id.ecoButton);
         googleButton.setOnClickListener(new ButtonClickListener(Account.GOOGLE));
         facebookButton.setOnClickListener(new ButtonClickListener(Account.FACEBOOK));
         linkedInButton.setOnClickListener(new ButtonClickListener(Account.LINKEDIN));
         twitterButton.setOnClickListener(new ButtonClickListener(Account.TWITTER));
+        ecoButton.setOnClickListener(new ButtonClickListener(Account.ECO));
         return v;
     }
 
@@ -82,8 +85,7 @@ public class LoginFragment  extends SherlockFragment {
                     frag = new WebViewFacebook();
                     break;
                 case Account.TWITTER:
-                    frag = new WebViewEco();
-//                    frag = new WebViewTwitter();
+                    frag = new WebViewTwitter();
                     break;
                 case Account.LINKEDIN:
                     frag = new WebViewLinkedin();

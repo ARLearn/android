@@ -1,7 +1,6 @@
 package org.celstec.arlearn2.android.listadapter.impl;
 
 import android.content.Context;
-import android.graphics.drawable.StateListDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
-import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 

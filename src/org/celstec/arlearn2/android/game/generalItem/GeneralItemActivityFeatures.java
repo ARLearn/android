@@ -12,9 +12,6 @@ import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.*;
-import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
-import org.celstec.arlearn2.android.dataCollection.activities.TextInputCollectionActivity;
-import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollectionResultController;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.DataCollectionViewController;
@@ -23,9 +20,7 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCo
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.TextInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
-import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
-import org.celstec.arlearn2.android.views.DrawableUtil;
-import org.celstec.arlearn2.android.views.StyleUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.beans.generalItem.*;
 import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -64,6 +59,7 @@ public abstract class GeneralItemActivityFeatures {
     private TextInputManager textInputManager;
     private ValueInputManager valueInputManager;
     private AudioInputManager audioInputManager;
+    private VideoManager videoInputManager;
 
 
     public static GeneralItemActivityFeatures getGeneralItemActivityFeatures(final GeneralItemActivity activity){
@@ -139,7 +135,11 @@ public abstract class GeneralItemActivityFeatures {
 
             @Override
             public void onVideoClick() {
-                dataCollectionViewController.checkVideo();
+                videoInputManager = new VideoManager(activity);
+                videoInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
+                videoInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
+                videoInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
+                videoInputManager.takeDataSample(null);
             }
 
             @Override
@@ -214,6 +214,7 @@ public abstract class GeneralItemActivityFeatures {
                 audioInputManager.onActivityResult(requestCode, resultCode, data);
                 break;
             case DataCollectionManager.VIDEO_RESULT:
+                videoInputManager.onActivityResult(requestCode, resultCode, data);
                 break;
             case DataCollectionManager.TEXT_RESULT:
                 textInputManager.onActivityResult(requestCode, resultCode, data);

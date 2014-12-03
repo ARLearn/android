@@ -7,13 +7,12 @@
 
         >
 
-    <ImageView
+    <org.celstec.arlearn2.android.views.SplashScreenView
             android:id="@+id/main_backgroundImage"
             android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
-    android:scaleType="centerCrop"
-
+    android:scaleType="matrix"
     android:src="@drawable/game_splash_screen" />
 
     <LinearLayout
@@ -35,7 +34,7 @@
                 android:gravity="center"
                 android:layout_marginTop="20dip"
 
-                android:text="Download Status"
+                android:text="@string/downloadStatus"
                 android:textColor="@color/white"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         <TextView
@@ -44,7 +43,7 @@
                 android:gravity="center"
                 android:layout_marginTop="20dip"
 
-                android:text="Game Messages"
+                android:text="@string/gameMessages"
                 android:textColor="@color/white"
                 />
         <ProgressBar
@@ -60,7 +59,7 @@
                 android:gravity="center"
                 android:layout_marginTop="20dip"
 
-                android:text="Game Content"
+                android:text="@string/gameContent"
                 android:textColor="@color/white"
                 />
         <ProgressBar

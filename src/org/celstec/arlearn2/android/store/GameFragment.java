@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.StoreGameLocalObject;
 
 import java.text.DateFormat;
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -58,7 +60,22 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     private long gameId;
     private Run run;
     private View gameView;
+    private static HashMap<String, Integer> languageMapping = new HashMap<String, Integer>();
 
+
+    static {
+        languageMapping.put("en", R.string.en);
+        languageMapping.put("nl", R.string.nl);
+        languageMapping.put("es", R.string.es);
+        languageMapping.put("de", R.string.de);
+        languageMapping.put("fr", R.string.fr);
+        languageMapping.put("it", R.string.it);
+        languageMapping.put("pt", R.string.pt);
+        languageMapping.put("bg", R.string.bg);
+        languageMapping.put("el", R.string.el);
+        languageMapping.put("pl", R.string.pl);
+        languageMapping.put("ru", R.string.ru);
+    }
 
     private GameDownloadProgressView progressView ;
     private GameDownloadManager gameDownloadManager;
@@ -115,6 +132,11 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     private void drawGameContent(View v) {
         StoreGameLocalObject localObject = DaoConfiguration.getInstance().getStoreGameLocalObjectDao().load(gameId);
         if (localObject != null) {
+            if (DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId)== null) {
+                showDownloadButton();
+            } else {
+                showOpenButton();
+            }
             v.findViewById(R.id.gamePane).setVisibility(View.VISIBLE);
             if (pd != null && pd.isShowing()) {
                 pd.dismiss();
@@ -126,8 +148,11 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
             }
             ((TextView) v.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
 
-            if (localObject.getDescription() != null)
-            ((WebView) v.findViewById(R.id.gameStoreDescriptionId)).loadData(localObject.getDescription(), "text/html", "utf-8");
+            if (localObject.getDescription() != null){
+                WebView mWebView = ((WebView) v.findViewById(R.id.gameStoreDescriptionId));
+                mWebView.loadDataWithBaseURL(null, localObject.getDescription(), "text/html", "utf-8", null);
+            }
+
 
             int resID = 0;
             String licenseCode = localObject.getLicenseCode();
@@ -149,6 +174,11 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
                 resID = R.string.nolicense;
             }
             ((TextView) v.findViewById(R.id.licenseId)).setText(getString(resID));
+            String langKey = localObject.getGameBean().getLanguage();
+            if (langKey != null && languageMapping.containsKey(langKey)) {
+                Integer language = languageMapping.get(langKey);
+                ((TextView) v.findViewById(R.id.languageId)).setText(getString(language));
+            }
 
             DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(v.getContext());
             ((TextView) v.findViewById(R.id.dateId)).setText(dateFormat.format(localObject.getLastModificationDate()));
@@ -197,7 +227,7 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
             }
         });
 
-        pd = ProgressDialog.show(getActivity(), "Loading", "Wait", true);
+        pd = ProgressDialog.show(getActivity(), getString(R.string.loading), getString(R.string.wait), true);
         gameView.findViewById(R.id.gamePane).setVisibility(View.INVISIBLE);
         drawGameContent(gameView);
         return gameView;
@@ -236,6 +266,16 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
            ARL.runs.selfRegister(run.getRunId());
         }
 
+    }
+
+    private void showOpenButton(){
+        gameView.findViewById(R.id.downloadId).setVisibility(View.GONE);
+        gameView.findViewById(R.id.openId).setVisibility(View.VISIBLE);
+    }
+
+    private void showDownloadButton(){
+        gameView.findViewById(R.id.downloadId).setVisibility(View.VISIBLE);
+        gameView.findViewById(R.id.openId).setVisibility(View.GONE);
     }
 
 }

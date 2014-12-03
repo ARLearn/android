@@ -18,7 +18,7 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_gravity="center_horizontal"
-                  android:text="Record audio"
+                  android:text="@string/recordAudio"
                   android:textSize="30dp"/>
 
 
@@ -102,7 +102,7 @@
         <TextView
                 android:id="@+id/startRecording"
                 style="@style/ARLearn.Game.Button"
-                android:text="Start Recording"/>
+                android:text="@string/startRecording"/>
 
 
 
@@ -110,13 +110,13 @@
                 android:id="@+id/stopRecording"
                 style="@style/ARLearn.Game.Button.StopRecording"
                 android:visibility="gone"
-                android:text="Stop Recording"/>
+                android:text="@string/stopRecording"/>
 
         <TextView
                 android:id="@+id/dataCollectionSubmit"
                 android:visibility="gone"
                 style="@style/ARLearn.Game.Button"
-                android:text="Submit"/>
+                android:text="@string/submit"/>
 
         <TextView
                 android:id="@+id/cancelId"
@@ -129,7 +129,7 @@
 
                 android:paddingBottom="20dip"
                 android:layout_gravity="center_horizontal"
-                android:text="Cancel"/>
+                android:text="@string/cancel"/>
     </LinearLayout>
 
 

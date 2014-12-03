@@ -4,9 +4,10 @@
     <string name="login_google">Login met Google</string>
     <string name="login_twitter">Login met Twitter</string>
     <string name="login_linked_in">Login met LinkedIn</string>
+    <string name="login_eco">Login met ECO</string>
 
     <string name="login_to_continue">Login om door te gaan</string>
-    <string name="login_from_my_games_text">Om toegang te krijgen to je spellen moet je eerst inloggen. \n Kies een van onderstaande opties.</string>
+    <string name="login_from_my_games_text">Om toegang te krijgen tot je spellen moet je eerst inloggen. \nKies één van de onderstaande opties.</string>
 
     <string name="myGames">Mijn Spellen</string>
     <string name="library">Bibliotheek</string>
@@ -25,7 +26,29 @@
     <string name="byncsa">Naamsvermelding-NietCommercieel-GelijkDelen </string>
     <string name="byncnd">Naamsvermelding-NietCommercieel-GeenAfgeleideWerken</string>
 
+    <string name="en">Engels</string>
+    <string name="nl">Nederlands</string>
+    <string name="es">Spaans</string>
+    <string name="de">Duits</string>
+    <string name="fr">Frans</string>
+    <string name="it">Italiaans</string>
+    <string name="pt">Portugees</string>
+    <string name="bg">Bulgaars</string>
+    <string name="el">Grieks</string>
+    <string name="pl">Pools</string>
+    <string name="ru">Russisch</string>
+
     <string name="unabletosyncgame">Synchroniseren spel mislukt</string>
+    <string name="loading">Laden</string>
+    <string name="wait">Wacht</string>
+
+    <string name="download">Download</string>
+    <string name="open">Open</string>
+    <!--Game Splash Screen-->
+
+    <string name="downloadStatus">Download Status</string>
+    <string name="gameMessages">Spel boodschappen</string>
+    <string name="gameContent">Spel bestanden</string>
 
     <!--Notifications-->
     <string name="readMessage">Lees Boodschap</string>
@@ -33,11 +56,28 @@
 
     <!--Network-->
     <string name="noInternet">Geen internet connectie</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Annuleer</string>
     <string name="wireless">Open instellingen draadloos internet</string>
     <string name="operatingOffline">Speel in offline modus</string>
     <string name="contentMissingNoInternet">Sommige spelbestanden konden niet gedownload worden.</string>
 
     <string name="submit" >Verstuur</string>
+
+    <!--Data collection-->
+    <string name="removeData" >Verwijder data?</string>
+    <string name="yes" >Ja</string>
+    <string name="recordAudio" >Audio opname</string>
+    <string name="startRecording" >Start opname</string>
+    <string name="stopRecording" >Stop opname</string>
+    <string name="provideYourText" >Voer tekst in</string>
+    <string name="typeYourTextHere" >Typ je tekst hier in...</string>
+
+    <!--Game Stroken-->
+    <string name="newMessage" >Nieuw bericht!</string>
+    <string name="Watch" >Bekijk</string>
+
+    <!--General Item-->
+    <string name="messages" >Berichten</string>
+    <string name="message" >Bericht xxx van yyy</string>
 
 </resources>

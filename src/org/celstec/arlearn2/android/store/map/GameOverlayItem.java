@@ -5,9 +5,7 @@ import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.dao.gen.StoreGameLocalObject;
-import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
 /**

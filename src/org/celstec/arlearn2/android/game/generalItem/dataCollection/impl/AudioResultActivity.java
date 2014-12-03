@@ -13,13 +13,12 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.arlearn2.android.util.StyleUtilInterface;
 import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
-import org.celstec.dao.gen.ResponseLocalObjectDao;
 
 import java.io.IOException;
 
@@ -56,7 +55,7 @@ public class AudioResultActivity extends Activity implements SeekBar.OnSeekBarCh
     private ResponseLocalObject responseLocalObject;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StyleUtil styleUtil = DrawableUtil.styleUtil;
+        StyleUtilInterface styleUtil = DrawableUtil.styleUtil;
         setTheme(styleUtil.getTheme());
         setContentView(R.layout.game_general_item_dc_play_audio);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

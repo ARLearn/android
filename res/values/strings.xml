@@ -6,6 +6,7 @@
     <string name="login_google">Login with Google</string>
     <string name="login_twitter">Login with Twitter</string>
     <string name="login_linked_in">Login with LinkedIn</string>
+    <string name="login_eco">Login with ECO</string>
 
     <string name="login_to_continue">Login to continue</string>
     <string name="login_from_my_games_text">To access My Games you have to first login. \nPlease choose one of the login types.</string>
@@ -27,7 +28,30 @@
     <string name="byncsa">Attribution-NonCommercial-ShareAlike</string>
     <string name="byncnd">Attribution-NonCommercial-NoDerivs</string>
 
+    <string name="en">English</string>
+    <string name="nl">Dutch</string>
+    <string name="es">Spanish</string>
+    <string name="de">German</string>
+    <string name="fr">French</string>
+    <string name="it">Italian</string>
+    <string name="pt">Portuguese</string>
+    <string name="bg">Bulgarian</string>
+    <string name="el">Greek</string>
+    <string name="pl">Polish</string>
+    <string name="ru">Russian</string>
+
     <string name="unabletosyncgame">Unable to sync game</string>
+    <string name="loading">Loading</string>
+    <string name="wait">Wait</string>
+
+    <string name="download">Download</string>
+    <string name="open">Open</string>
+
+    <!--Game Splash Screen-->
+
+    <string name="downloadStatus">Download Status</string>
+    <string name="gameMessages">Game Messages</string>
+    <string name="gameContent">Game Content</string>
 
     <!--Notifications-->
     <string name="readMessage">Read Message</string>
@@ -39,7 +63,23 @@
     <string name="wireless">Open wireless settings</string>
     <string name="operatingOffline">Operating in offline mode</string>
     <string name="contentMissingNoInternet">Some game content has not been downloaded.</string>
-
     <string name="submit" >Submit</string>
+
+    <!--Data collection-->
+    <string name="removeData" >Remove data?</string>
+    <string name="yes" >Yes</string>
+    <string name="recordAudio" >Record audio</string>
+    <string name="startRecording" >Start recording</string>
+    <string name="stopRecording" >Stop recording</string>
+    <string name="provideYourText" >Provide your text</string><!--en todo-->
+    <string name="typeYourTextHere" >Type your text here...</string> <!--en todo-->
+
+    <!--Game Stroken-->
+    <string name="newMessage" >New message!</string>
+    <string name="Watch" >Watch</string>
+
+    <!--General Item-->
+    <string name="messages" >Messages</string>
+    <string name="message" >Message xxx of yyy</string>
 
 </resources>

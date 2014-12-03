@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.arlearn2.android.util.StyleUtilInterface;
 import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
 
@@ -39,7 +39,7 @@ public class PictureResultActivity extends Activity {
     private ResponseLocalObject responseLocalObject;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StyleUtil styleUtil = DrawableUtil.styleUtil;
+        StyleUtilInterface styleUtil = DrawableUtil.styleUtil;
         setTheme(styleUtil.getTheme());
         getActionBar().hide();
         setContentView(R.layout.game_general_item_result_picture);

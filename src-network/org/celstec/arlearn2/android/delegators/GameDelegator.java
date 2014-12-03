@@ -310,7 +310,7 @@ public final class GameDelegator extends AbstractDelegator{
     public void retrieveGameFilesFromFile(Context context, Long gameId){
         AssetManager assetManager = context.getAssets();
         try {
-            InputStream inputStream = assetManager.open("gameContent.json");
+            InputStream inputStream = assetManager.open("game."+gameId+".Content.json");
 
             GameFilePackageParser gameFiles= new GameFilePackageParser(inputStream);
             for (GameFile gameFile: gameFiles.getGameFiles().getGameFiles()) {

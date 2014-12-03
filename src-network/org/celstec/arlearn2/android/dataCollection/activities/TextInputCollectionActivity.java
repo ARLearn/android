@@ -3,6 +3,10 @@ package org.celstec.arlearn2.android.dataCollection.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.KeyListener;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -28,11 +32,12 @@ import android.widget.EditText;
  */
 public abstract class TextInputCollectionActivity extends Activity {
 
-    String textValue = "";
 
     public abstract int getGameGeneralItemDcTextInput();
     public abstract int getDataCollectionText();
     public abstract int getDataCollectionSubmit();
+    public  abstract  int getCancelButton();
+    public  abstract int getSubmitButton();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +45,54 @@ public abstract class TextInputCollectionActivity extends Activity {
         findViewById(getDataCollectionSubmit()).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text = ((EditText) findViewById(getDataCollectionText())).getText().toString();
-                Bundle conData = new Bundle();
-                conData.putString("textValue", text);
-                Intent intent = new Intent();
-                intent.putExtras(conData);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+                submitText();
+
             }
         });
+
+        findViewById(getCancelButton()).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        TextInputCollectionActivity.this.finish();
+                    }
+                }
+        );
+
+        ((EditText)findViewById(getDataCollectionText())).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (((EditText) findViewById(getDataCollectionText())).getText().toString().trim().equals("")){
+                    findViewById(getDataCollectionSubmit()).setVisibility(View.GONE);
+                } else {
+                    findViewById(getDataCollectionSubmit()).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+    }
+
+    public void submitText() {
+
+        String text = ((EditText) findViewById(getDataCollectionText())).getText().toString();
+        Bundle conData = new Bundle();
+        conData.putString("textValue", text);
+        Intent intent = new Intent();
+        intent.putExtras(conData);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
 
     }
 }

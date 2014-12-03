@@ -1,18 +1,14 @@
 package org.celstec.arlearn2.android.game.generalItem.dataCollection.impl;
 
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.widget.*;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
-import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.arlearn2.android.util.StyleUtilInterface;
 import org.celstec.arlearn2.android.views.StyleUtil;
 
 /**
@@ -41,7 +37,7 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StyleUtil styleUtil = DrawableUtil.styleUtil;
+        StyleUtilInterface styleUtil = DrawableUtil.styleUtil;
 
         GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());
         shapeDrawable.setColor(styleUtil.getBackgroundDark());

@@ -27,7 +27,7 @@
             android:layout_centerVertical="true"
 
 
-            android:text="Nieuw bericht!"
+            android:text="@string/newMessage"
             android:textColor="@color/white"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
 
 
-            android:text="bekijk"
+            android:text="@string/Watch"
             android:textColor="@color/white"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_alignParentRight="true"

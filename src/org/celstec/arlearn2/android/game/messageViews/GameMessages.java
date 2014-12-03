@@ -2,21 +2,14 @@ package org.celstec.arlearn2.android.game.messageViews;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.RectShape;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import daoBase.DaoConfiguration;
-import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
@@ -24,14 +17,10 @@ import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
-import org.celstec.arlearn2.android.views.DrawableUtil;
-import org.celstec.arlearn2.android.views.StyleUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.GameFileLocalObject;
-import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
-
-import java.util.List;
 
 /**
  * ****************************************************************************

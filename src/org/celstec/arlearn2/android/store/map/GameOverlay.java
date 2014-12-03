@@ -2,19 +2,12 @@ package org.celstec.arlearn2.android.store.map;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.RectF;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.SearchResultList;
 import org.celstec.arlearn2.android.store.NearMeActivity;
 import org.celstec.arlearn2.android.store.NearMeFragment;
-import org.celstec.arlearn2.android.views.DrawableUtil;
 import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.dao.gen.StoreGameLocalObject;
-import org.celstec.dao.gen.StoreGameLocalObjectDao;
-import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 
 import java.util.ArrayList;

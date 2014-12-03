@@ -30,8 +30,7 @@
 
             <ImageView
                     android:id="@+id/icon"
-
-
+                    android:contentDescription="icon of this game"
                     android:layout_width="90dip"
                     android:layout_height="90dip"
                     android:layout_marginRight="6dip"
@@ -53,7 +52,10 @@
                         android:textColor="@color/purple"
                         android:singleLine="true"
                         android:gravity="center_vertical"
-                        android:text="Record game"/>
+                        android:text="Record game "
+                        android:lines="2"
+                        android:inputType="textMultiLine|textNoSuggestions|none"
+                        android:maxLines="3"/>
 
                 <TextView
                         android:id="@+id/gameCategoryId"
@@ -63,7 +65,8 @@
                         android:textColor="@color/purple"
                         android:textSize="10dp"
                         android:gravity="center_vertical"
-                        android:text="Music"/>
+                        android:layout_marginBottom="5dip"
+                        android:text="Education"/>
 
 
                 <TextView
@@ -75,7 +78,7 @@
                         android:layout_weight="1"
                         android:textSize="10dp"
                         android:gravity="center_vertical"
-                        android:text="Download"/>
+                        android:text="@string/download"/>
                 <TextView
                         android:id="@+id/openId"
                         style="@style/ARLearn.StoreGameRowBigDownload"
@@ -86,7 +89,7 @@
                         android:textSize="10dp"
                         android:gravity="center_vertical"
                         android:visibility="gone"
-                        android:text="Open"/>
+                        android:text="@string/open"/>
 
             </LinearLayout>
 
@@ -156,7 +159,7 @@
                     android:singleLine="true"
                     android:layout_alignParentRight="true"
                     android:padding="5dp"
-                    android:text="Nederlands"/>
+                    android:text="@string/en"/>
         </RelativeLayout>
 
         <ScrollView
@@ -211,7 +214,7 @@
                     android:singleLine="true"
                     android:layout_alignParentLeft="true"
                     android:padding="5dp"
-                    android:text="CC xyz"/>
+                    android:text="@string/nolicense"/>
 
             <TextView
                     android:id="@+id/dateId"
@@ -223,7 +226,7 @@
                     android:singleLine="true"
                     android:layout_alignParentRight="true"
                     android:padding="5dp"
-                    android:text="Release Datum"/>
+                    android:text="@string/nolicense"/>
         </RelativeLayout>
 
 

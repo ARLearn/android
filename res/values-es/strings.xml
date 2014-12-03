@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ARLearn</string>
+
+    <string name="login_facebook">Entrar con Facebook</string>
+    <string name="login_google">Entrar con Google</string>
+    <string name="login_twitter">Entrar con Twitter</string>
+    <string name="login_linked_in">Entrar con LinkedIn</string>
+    <string name="login_eco">Entrar con ECO</string>
+
+    <string name="login_to_continue">Inicie sesión para continuar</string>
+    <string name="login_from_my_games_text">Para acceder a Mis Juegos debe iniciar sesión primero. \nPor favor elija un tipo de cuenta para acceder.</string>
+
+    <string name="myGames">Mis juegos</string>
+    <string name="library">Biblioteca</string>
+    <string name="scan">Escanear</string>
+    <string name="nearMe">Cerca de mi</string>
+
+    <string name="searchText">Buscar</string>
+    <string name="category">Categoria</string>
+    <string name="topGames">Mejores juegos</string>
+
+    <string name="nolicense">Sin licencia</string>
+    <string name="ccby">Atribución (CC BY)</string>
+    <string name="bynd">Atribución-NoDerivadas (CC BY-ND)</string>
+    <string name="bysa">Atribución-CompartirIgual (CC BY-SA)</string>
+    <string name="bync">Atribución-NoComercial (CC BY-NC)</string>
+    <string name="byncsa">Atribución-NoComercial-CompartirIgual (CC BY-NC-SA)</string>
+    <string name="byncnd">Atribución-NoComercial-NoDerivadas (CC BY-NC-ND)</string>
+
+    <string name="en">Inglés</string>
+    <string name="nl">Holandés</string>
+    <string name="es">Español</string>
+    <string name="de">Alemán</string>
+    <string name="fr">Francés</string>
+    <string name="it">Italiano</string>
+    <string name="pt">Portugués</string>
+    <string name="bg">Búlgaro</string>
+    <string name="el">Griego</string>
+    <string name="pl">Polaco</string>
+    <string name="ru">Ruso</string>
+
+    <string name="unabletosyncgame">No se ha podido sincronizar el juego</string>
+    <string name="loading">Cargando</string>
+    <string name="wait">Espere</string>
+
+    <string name="download">Descargar</string>
+    <string name="open">Abrir</string>
+
+    <!--Game Splash Screen-->
+
+    <string name="downloadStatus">Estado de la descarga</string>
+    <string name="gameMessages">Mensajes del juego</string>
+    <string name="gameContent">Contenido del juego</string>
+
+    <!--Notifications-->
+    <string name="readMessage">Leer mensaje</string>
+    <string name="closeMessage">Cerrar mensaje</string>
+
+    <!--Network-->
+    <string name="noInternet">No hay conexión a internet.</string>
+    <string name="cancel">Cancelar</string>
+    <string name="wireless">Abrir opciones de wi-fi</string>
+    <string name="operatingOffline">Operando en modo \'sin conexión\'</string>
+    <string name="contentMissingNoInternet">Parte del contenido del juego no ha sido descargado.</string>
+    <string name="submit" >Enviar</string>
+
+    <!--Data collection-->
+    <string name="removeData" >Eliminar contenido?</string>
+    <string name="yes" >Si</string>
+    <string name="recordAudio" >Grabar audio</string>
+    <string name="startRecording" >Comenzar grabación</string>
+    <string name="stopRecording" >Parar grabación</string>
+
+
+    <!--Game Stroken-->
+    <string name="newMessage" >Nuevo mensaje!</string>
+    <string name="Watch" >Visualizar</string>
+
+    <!--General Item-->
+    <string name="messages" >Mensajes</string>
+    <string name="message" >Mensaje xxx de yyy</string>
+
+</resources>

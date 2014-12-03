@@ -1,17 +1,18 @@
-package org.celstec.arlearn2.android.views;
+package org.celstec.arlearn2.android.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.graphics.drawable.*;
 import android.graphics.drawable.shapes.OvalShape;
-import android.graphics.drawable.shapes.RectShape;
 import android.util.TypedValue;
 import android.view.Gravity;
-import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.views.StyleUtil;
+
+import java.lang.reflect.InvocationTargetException;
+import java.net.URLClassLoader;
 
 /**
  * ****************************************************************************
@@ -34,7 +35,7 @@ import org.celstec.arlearn2.android.R;
  * ****************************************************************************
  */
 public class DrawableUtil {
-    public static StyleUtil styleUtil;
+    public static StyleUtilInterface styleUtil;
     private static Context ctx;
 
     public static boolean isInit() {
@@ -49,7 +50,26 @@ public class DrawableUtil {
     public DrawableUtil(int theme, Context ctx) {
 
         DrawableUtil.ctx = ctx;
-        styleUtil = new StyleUtil(ctx, theme);
+//        ClassLoader cl = new URLClassLoader();
+
+        try {
+
+            Class cls =  Class.forName("org.celstec.arlearn2.android.views.StyleUtil");//cl.loadClass("org.celstec.arlearn2.android.views.StyleUtil");
+            styleUtil = (StyleUtilInterface) cls.getDeclaredConstructor(Context.class, Integer.class).newInstance(ctx, theme);
+
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+//        styleUtil = new StyleUtil(ctx, theme);
     }
 
     public Drawable getGameMessageEntry() {
@@ -66,7 +86,7 @@ public class DrawableUtil {
         return stateListDrawable;
     }
 
-    public StyleUtil getStyleUtil(){
+    public StyleUtilInterface getStyleUtil(){
         return styleUtil;
     }
 

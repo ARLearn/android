@@ -1,5 +1,7 @@
 package org.celstec.arlearn2.android.game.generalItem.dataCollection;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +13,7 @@ import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity;
-import org.celstec.arlearn2.android.views.DrawableUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
 
 import java.util.Vector;
@@ -75,25 +77,50 @@ public class DataCollectionResultController {
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
         }
         (row.findViewById(R.id.messageText)).setOnClickListener(createRowClickerListener(result, responseLocalObject));
-
-        row.findViewById(R.id.trashIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (responseLocalObject.getIsSynchronized() == false) {
-                    DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(responseLocalObject);
-                } else {
-                    responseLocalObject.setRevoked(true);
-                    responseLocalObject.setNextSynchronisationTime(0l);
-                    responseLocalObject.setIsSynchronized(false);
-                    DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
-                    row.setVisibility(View.GONE);
-                    ResponseDelegator.getInstance().syncResponses(responseLocalObject.getRunId());
-                }
-            }
-        });
+        (row.findViewById(R.id.trashIcon)).setOnClickListener(createDeleteRowClickListener(responseLocalObject, row));
+//        row.findViewById(R.id.trashIcon).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
         resultsLinearLayout.addView(row);
         results.add(result);
         result.setView(row);
+    }
+
+    public View.OnClickListener createDeleteRowClickListener(final ResponseLocalObject responseLocalObject, final View row) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage(R.string.removeData)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                row.setVisibility(View.GONE);
+                                if (responseLocalObject.getIsSynchronized() == false) {
+                                    DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(responseLocalObject);
+                                } else {
+                                    responseLocalObject.setRevoked(true);
+                                    responseLocalObject.setNextSynchronisationTime(0l);
+                                    responseLocalObject.setIsSynchronized(false);
+                                    DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
+                                    row.setVisibility(View.GONE);
+                                    ResponseDelegator.getInstance().syncResponses(responseLocalObject.getRunId());
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                builder.create().show();
+
+
+            }
+        };
     }
 
     public View.OnClickListener createRowClickerListener(final DataCollectionResult result, final ResponseLocalObject responseLocalObject){

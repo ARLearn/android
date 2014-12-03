@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.util.StyleUtilInterface;
 
 import java.io.Serializable;
 
@@ -27,7 +28,7 @@ import java.io.Serializable;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class StyleUtil implements Serializable{
+public class StyleUtil implements Serializable, StyleUtilInterface {
 
     private int primaryColor;
     private int primaryColorLight;
@@ -45,7 +46,7 @@ public class StyleUtil implements Serializable{
 
     private int theme;
 
-    public StyleUtil(Context context, int schema) {
+    public StyleUtil(Context context, Integer schema) {
         this.theme = schema;
         TypedArray ta = context.obtainStyledAttributes(schema, new int[]{
                 R.attr.primaryColor,

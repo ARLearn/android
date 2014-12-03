@@ -12,9 +12,7 @@ import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.android.game.notification.NotificationAction;
-import org.celstec.arlearn2.android.views.DrawableUtil;
-import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.arlearn2.beans.generalItem.GeneralItem;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
@@ -50,7 +48,7 @@ public class GeneralItemActivity extends Activity {
         setTheme(gameActivityFeatures.getTheme());
         setContentView(R.layout.game_general_item);
         getActionBar().setIcon(R.drawable.ic_ab_back);
-        getActionBar().setTitle("Berichten");
+        getActionBar().setTitle(getString(R.string.messages));
         getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
 
 

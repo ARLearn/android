@@ -45,12 +45,6 @@ public class NarratorItemFeatures extends GeneralItemActivityFeatures{
 
     public NarratorItemFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         this(activity, generalItemLocalObject, true);
-//        OpenQuestion openQuestion = ((NarratorItem) generalItemBean).getOpenQuestion();
-//        if (openQuestion != null){
-//            dataCollectionViewController.setVisibilities(openQuestion.isWithAudio(),openQuestion.isWithPicture(),openQuestion.isWithVideo(),openQuestion.isWithValue(), openQuestion.isWithText());
-//        } else {
-//            dataCollectionViewController.hideDataCollection();
-//        }
     }
 
     public NarratorItemFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject, boolean dataCollection) {

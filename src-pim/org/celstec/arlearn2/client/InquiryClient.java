@@ -158,6 +158,37 @@ public class InquiryClient extends GenericClient{
         }
     }
 
+
+    public String createQuestions(String token, long inquiryId, String name, String description, AccountLocalObject account) {
+        String provider = providerIdToElggName(account.getAccountType());
+        try {
+            String postBody = "method=add.question" +
+                    "&name=" + URLEncoder.encode(name, "UTF8") +
+                    "&description=" + URLEncoder.encode(description, "UTF8") +
+                    "&container_guid=" + inquiryId +
+                    "&provider=" + provider +
+                    "&user_uid=" +  account.getLocalId() +
+                    "&api_key="+INQ.config.getProperty("elgg_api_key");
+
+            HttpResponse response = conn.executePOST(getUrlPrefix()
+                    , token, "application/json", postBody, "application/x-www-form-urlencoded");
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            Log.e("ARLearn", "return after creating inquiry " + json.toString());
+//
+//        String url = getUrlPrefix();
+//        url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&inquiryId="+inquiryId+"&method=inquiry.questions";
+//        HttpResponse response = conn.executeGET(url, token, "application/json");
+
+            return EntityUtils.toString(response.getEntity());
+
+        } catch (Exception e) {
+            if (e instanceof ARLearnException) throw (ARLearnException) e;
+
+        }
+        return "error";
+    }
+
+
     public class Hypothesis {
         private String title;
         private String description;

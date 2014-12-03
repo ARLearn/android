@@ -9,13 +9,9 @@ import de.greenrobot.event.EventBus;
 import org.celstec.arlearn2.android.db.ConfigAdapter;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
-import org.celstec.arlearn2.android.gcm.GCMRegistration;
-import org.celstec.arlearn2.android.views.DrawableUtil;
 //import org.celstec.arlearn2.android.views.StyleUtil;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.client.GenericClient;
-import org.celstec.dao.gen.AccountLocalObject;
-
-import java.util.Properties;
 
 /**
  * ****************************************************************************
