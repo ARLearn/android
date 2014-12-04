@@ -70,7 +70,7 @@ public class QuestionDelegator extends AbstractDelegator {
 //                    Log.i(SYNC_TAG, "Question found " + question);
                     InquiryQuestionLocalObject inquiryQuestionLocalObject = new InquiryQuestionLocalObject();
                     inquiryQuestionLocalObject.setDescription(inqJsonObject.getString("description"));
-                    inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("title"));
+                    inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("question"));
                     if (inqJsonObject.has("tags")) inquiryQuestionLocalObject.setTags(inqJsonObject.getString("tags"));
                     inquiryQuestionLocalObject.setIdentifier(inqJsonObject.getString("url"));
                     inquiryQuestionLocalObject.setInquiryId(sge.inquiryLocalObject.getId());
