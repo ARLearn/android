@@ -159,7 +159,7 @@ public class InquiryClient extends GenericClient{
     }
 
 
-    public String createQuestions(String token, long inquiryId, String name, String description, AccountLocalObject account) {
+    public String createQuestions(String token, long inquiryId, String name, String description, AccountLocalObject account, String tags) {
         String provider = providerIdToElggName(account.getAccountType());
         try {
             String postBody = "method=add.question" +
@@ -168,6 +168,7 @@ public class InquiryClient extends GenericClient{
                     "&container_guid=" + inquiryId +
                     "&provider=" + provider +
                     "&user_uid=" +  account.getLocalId() +
+                    "&tags="+ URLEncoder.encode(tags, "UTF8")+
                     "&api_key="+INQ.config.getProperty("elgg_api_key");
 
             HttpResponse response = conn.executePOST(getUrlPrefix()
