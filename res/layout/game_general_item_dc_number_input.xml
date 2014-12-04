@@ -15,7 +15,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
-              android:text="instruction text"
+              android:text="@string/provideValue"
               android:textSize="30dp"
               android:padding="15dip"/>
 
@@ -179,7 +179,7 @@
             android:id="@+id/dataCollectionSubmit"
             android:visibility="gone"
             style="@style/ARLearn.Game.Button"
-            android:text="Submit"/>
+            android:text="@string/submit"/>
 
     <TextView
             android:id="@+id/cancelId"

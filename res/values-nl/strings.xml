@@ -15,6 +15,7 @@
     <string name="nearMe">In de buurt</string>
 
     <string name="searchText">Zoek</string>
+    <string name="searchFullTextHint">Naam, onderwerp, locatie, ...</string>
     <string name="category">Categorie</string>
     <string name="topGames">Top spellen</string>
 
@@ -44,6 +45,9 @@
 
     <string name="download">Download</string>
     <string name="open">Open</string>
+
+    <string name="myGames">Mijn Spellen</string>
+
     <!--Game Splash Screen-->
 
     <string name="downloadStatus">Download Status</string>
@@ -71,6 +75,7 @@
     <string name="stopRecording" >Stop opname</string>
     <string name="provideYourText" >Voer tekst in</string>
     <string name="typeYourTextHere" >Typ je tekst hier in...</string>
+    <string name="provideValue" >Voer een waarde in</string>
 
     <!--Game Stroken-->
     <string name="newMessage" >Nieuw bericht!</string>
@@ -79,5 +84,6 @@
     <!--General Item-->
     <string name="messages" >Berichten</string>
     <string name="message" >Bericht xxx van yyy</string>
-
+    <string name="continueMessage" >Doorgaan</string>
+    <string name="provideInput" >Voer in</string>
 </resources>

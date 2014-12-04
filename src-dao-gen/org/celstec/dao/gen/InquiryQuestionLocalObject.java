@@ -15,6 +15,7 @@ public class InquiryQuestionLocalObject {
     private String identifier;
     private String title;
     private String description;
+    private String tags;
     private Long inquiryId;
 
     /** Used to resolve relations */
@@ -37,10 +38,11 @@ public class InquiryQuestionLocalObject {
         this.identifier = identifier;
     }
 
-    public InquiryQuestionLocalObject(String identifier, String title, String description, Long inquiryId) {
+    public InquiryQuestionLocalObject(String identifier, String title, String description, String tags, Long inquiryId) {
         this.identifier = identifier;
         this.title = title;
         this.description = description;
+        this.tags = tags;
         this.inquiryId = inquiryId;
     }
 
@@ -72,6 +74,14 @@ public class InquiryQuestionLocalObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public Long getInquiryId() {

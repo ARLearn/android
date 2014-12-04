@@ -47,8 +47,9 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
     public static QueryBuilder<GeneralItemVisibilityLocalObject> getQueryBuilder(long runId, long gameId){
         GeneralItemVisibilityLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao();
         QueryBuilder<GeneralItemVisibilityLocalObject> qb =dao.queryBuilder();
-        qb.where(new WhereCondition.StringCondition("status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"))
-                .orderDesc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
+        qb.where(new WhereCondition.StringCondition(
+                "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"
+        )).orderDesc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
         return qb;
     }
 

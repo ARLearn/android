@@ -154,7 +154,10 @@ public class DataCollectionResultController {
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
             //if (responseLocalObject !=null && !displayedIds.contains(responseLocalObject.getId())) {
             if (responseLocalObject !=null ) {
-                DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp());
+                if (responseLocalObject.getType() == null) {
+                    System.out.println("break here");
+                }
+                DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp()); //TODO apparently gettype can become null
                 if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
                     result.setDataAsString(responseLocalObject.getValue());
                 }

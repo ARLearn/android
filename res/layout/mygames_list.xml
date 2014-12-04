@@ -10,7 +10,7 @@
 
 
     <TextView
-            android:text="My Games"
+            android:text="@string/myGames"
             android:textSize="25dp"
             style="@style/ARLearn.ListHeaderText"/>
     <LinearLayout

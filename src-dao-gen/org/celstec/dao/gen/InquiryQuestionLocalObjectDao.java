@@ -31,7 +31,8 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
         public final static Property Identifier = new Property(0, String.class, "identifier", true, "IDENTIFIER");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property Description = new Property(2, String.class, "description", false, "DESCRIPTION");
-        public final static Property InquiryId = new Property(3, Long.class, "inquiryId", false, "INQUIRY_ID");
+        public final static Property Tags = new Property(3, String.class, "tags", false, "TAGS");
+        public final static Property InquiryId = new Property(4, Long.class, "inquiryId", false, "INQUIRY_ID");
     };
 
     private DaoSession daoSession;
@@ -54,7 +55,8 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
                 "'IDENTIFIER' TEXT PRIMARY KEY NOT NULL ," + // 0: identifier
                 "'TITLE' TEXT," + // 1: title
                 "'DESCRIPTION' TEXT," + // 2: description
-                "'INQUIRY_ID' INTEGER);"); // 3: inquiryId
+                "'TAGS' TEXT," + // 3: tags
+                "'INQUIRY_ID' INTEGER);"); // 4: inquiryId
     }
 
     /** Drops the underlying database table. */
@@ -83,9 +85,14 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
             stmt.bindString(3, description);
         }
  
+        String tags = entity.getTags();
+        if (tags != null) {
+            stmt.bindString(4, tags);
+        }
+ 
         Long inquiryId = entity.getInquiryId();
         if (inquiryId != null) {
-            stmt.bindLong(4, inquiryId);
+            stmt.bindLong(5, inquiryId);
         }
     }
 
@@ -108,7 +115,8 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // identifier
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // description
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // inquiryId
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // tags
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // inquiryId
         );
         return entity;
     }
@@ -119,7 +127,8 @@ public class InquiryQuestionLocalObjectDao extends AbstractDao<InquiryQuestionLo
         entity.setIdentifier(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setDescription(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setInquiryId(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setTags(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setInquiryId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */

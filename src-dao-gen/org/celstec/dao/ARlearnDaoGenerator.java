@@ -155,7 +155,7 @@ public class ARlearnDaoGenerator {
         question.addStringProperty("identifier").primaryKey();
         question.addStringProperty("title");
         question.addStringProperty("description");
-
+        question.addStringProperty("tags");
         Property inquiryId = question.addLongProperty("inquiryId").getProperty();
         question.addToOne(inquiry, inquiryId);
 
@@ -173,6 +173,7 @@ public class ARlearnDaoGenerator {
         inquiry.addIdProperty();
         inquiry.addStringProperty("title");
         inquiry.addStringProperty("description");
+
         inquiry.addStringProperty("hypothesisTitle");
         inquiry.addStringProperty("hypothesisDescription");
         inquiry.addStringProperty("reflection");

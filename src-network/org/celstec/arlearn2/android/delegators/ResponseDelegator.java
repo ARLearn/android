@@ -235,11 +235,13 @@ public class ResponseDelegator extends AbstractDelegator{
 
                         responseLocalObject = new ResponseLocalObject(response);
 
+
                         if (account != null){
                             responseLocalObject.setAccountLocalObject(account);
                         }
 
-                        DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
+                        if (responseLocalObject.getType() != null)
+                                DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
                         if (responseEvent == null) {
                             responseEvent = new ResponseEvent(runId);
                             if (responseLocalObject.getGeneralItemLocalObject() != null)
@@ -249,7 +251,8 @@ public class ResponseDelegator extends AbstractDelegator{
                     } else {
                         if (response.getTimestamp() > responseLocalObject.getTimeStamp()) {
                             responseLocalObject.setValuesFromBean(response);
-                            DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
+                            if (responseLocalObject.getType() != null)
+                                DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
                         }
                     }
 

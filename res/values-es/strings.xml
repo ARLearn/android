@@ -17,6 +17,7 @@
     <string name="nearMe">Cerca de mi</string>
 
     <string name="searchText">Buscar</string>
+    <string name="searchFullTextHint">Nombre, tema, lugar ...</string>
     <string name="category">Categoria</string>
     <string name="topGames">Mejores juegos</string>
 
@@ -47,6 +48,8 @@
     <string name="download">Descargar</string>
     <string name="open">Abrir</string>
 
+    <string name="myGames">Mis juegos</string>
+
     <!--Game Splash Screen-->
 
     <string name="downloadStatus">Estado de la descarga</string>
@@ -71,7 +74,9 @@
     <string name="recordAudio" >Grabar audio</string>
     <string name="startRecording" >Comenzar grabación</string>
     <string name="stopRecording" >Parar grabación</string>
-
+    <string name="provideYourText" >Introduzca su texto</string><!--en todo-->
+    <string name="typeYourTextHere" >Escriba aquí...</string> <!--en todo-->
+    <string name="provideValue" >Inserte valor</string>
 
     <!--Game Stroken-->
     <string name="newMessage" >Nuevo mensaje!</string>
@@ -80,5 +85,8 @@
     <!--General Item-->
     <string name="messages" >Mensajes</string>
     <string name="message" >Mensaje xxx de yyy</string>
+    <string name="continueMessage" >Continuar</string>
+    <string name="provideValue" ></string>
+
 
 </resources>

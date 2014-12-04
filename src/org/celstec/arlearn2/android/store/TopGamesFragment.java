@@ -59,7 +59,7 @@ public class TopGamesFragment extends SherlockListFragment implements ListItemCl
             adapter.setOnListItemClickCallback(TopGamesFragment.this);
         }
         setListAdapter(adapter);
-        ((TextView) v.findViewById(R.id.categoryItemText)).setText("Top Games");
+        ((TextView) v.findViewById(R.id.categoryItemText)).setText(getString(R.string.topGames));
 
         return v;
 

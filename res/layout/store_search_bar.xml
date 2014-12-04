@@ -11,7 +11,7 @@
     <TextView
             style="@style/ARLearn.ListHeaderText"
             android:id="@+id/gameText"
-            android:text="Search"
+            android:text="@string/searchText"
             />
 
     <LinearLayout
@@ -32,7 +32,7 @@
                 android:textColor="#33485f"
                 android:id="@+id/searchText"
                 android:layout_marginRight="10dip"
-                android:hint="Name, topic, location ..."
+                android:hint="@string/searchFullTextHint"
 
                 android:layout_weight="2.43"/>
 
