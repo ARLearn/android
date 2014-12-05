@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.ValueInputCollectionActivity;
 import org.celstec.arlearn2.android.delegators.ARL;
@@ -35,6 +36,9 @@ public class ValueInputCollectionActivityImpl extends ValueInputCollectionActivi
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String message = getIntent().getStringExtra("message");
+        if (message != null) ((TextView) findViewById(getHeaderTextView())).setText(message);
+
         GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.functionPad)).getBackground());
         shapeDrawable.setColor(ARL.getDrawableUtil(R.style.ARLearn_schema1, this).getStyleUtil().getPrimaryColor());
         ((GradientDrawable) (findViewById(getDataCollectionSubmit())).getBackground()).setColor(ARL.drawableUtil.styleUtil.getButtonAlternativeColor());
@@ -76,6 +80,11 @@ public class ValueInputCollectionActivityImpl extends ValueInputCollectionActivi
     @Override
     public int getDataCollectionSubmit() {
         return R.id.dataCollectionSubmit;
+    }
+
+    @Override
+    public int getCancelButton() {
+        return R.id.cancelId;
     }
 
     @Override
@@ -140,4 +149,9 @@ public class ValueInputCollectionActivityImpl extends ValueInputCollectionActivi
     public int getButtonBack() {
         return R.id.buttonBack;
     }
+
+    public  int getHeaderTextView(){
+        return R.id.text;
+    }
+
 }

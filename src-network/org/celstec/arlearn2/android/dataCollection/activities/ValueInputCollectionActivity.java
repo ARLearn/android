@@ -31,8 +31,10 @@ public abstract class ValueInputCollectionActivity extends Activity {
 
     String textValue = "";
     public abstract  int getTextView();
+    public abstract  int getHeaderTextView();
     public abstract  int getGameGeneralItemDcNumberInput();
     public abstract  int getDataCollectionSubmit();
+    public  abstract  int getCancelButton();
     public abstract  int getButton0();
     public abstract  int getButton1();
     public abstract  int getButton2();
@@ -62,6 +64,17 @@ public abstract class ValueInputCollectionActivity extends Activity {
                 }
             }
         });
+
+        findViewById(getCancelButton()).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        ValueInputCollectionActivity.this.finish();
+                    }
+                }
+        );
+
         findViewById(getButton0()).setOnClickListener(new ButtonListener(0));
         findViewById(getButton1()).setOnClickListener(new ButtonListener(1));
         findViewById(getButton2()).setOnClickListener(new ButtonListener(2));

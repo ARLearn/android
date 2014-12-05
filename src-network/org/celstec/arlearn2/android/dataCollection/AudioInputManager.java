@@ -45,6 +45,14 @@ public class AudioInputManager extends DataCollectionManager {
     }
 
     @Override
+    public void takeDataSample(Class className, String message) {
+        Intent textInputIntent = new Intent(ctx, className);
+        textInputIntent.putExtra("message", message);
+
+        ctx.startActivityForResult(textInputIntent, AUDIO_RESULT);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             String filePath = data.getExtras().get("filePath").toString();

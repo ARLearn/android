@@ -35,7 +35,13 @@ public class ValueInputManager extends DataCollectionManager {
     }
     @Override
     public void takeDataSample(Class className) {
+        takeDataSample(className, null);
+    }
+
+    @Override
+    public void takeDataSample(Class className, String message) {
         Intent textInputIntent = new Intent(ctx, className);
+        if (message != null) textInputIntent.putExtra("message", message);
         ctx.startActivityForResult(textInputIntent, VALUE_RESULT);
     }
 

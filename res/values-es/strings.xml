@@ -69,6 +69,7 @@
     <string name="submit" >Enviar</string>
 
     <!--Data collection-->
+    <string name="author" >Autor</string>
     <string name="removeData" >Eliminar contenido?</string>
     <string name="yes" >Si</string>
     <string name="recordAudio" >Grabar audio</string>

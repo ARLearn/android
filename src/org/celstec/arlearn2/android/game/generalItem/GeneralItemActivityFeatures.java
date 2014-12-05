@@ -101,7 +101,7 @@ public abstract class GeneralItemActivityFeatures {
 
     protected abstract int  getImageResource();
 
-    public GeneralItemActivityFeatures(final GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
+    public GeneralItemActivityFeatures(final GeneralItemActivity activity, final GeneralItemLocalObject generalItemLocalObject) {
         this.activity = activity;
         this.generalItemLocalObject = generalItemLocalObject;
         this.generalItemBean = generalItemLocalObject.getGeneralItemBean();
@@ -148,8 +148,8 @@ public abstract class GeneralItemActivityFeatures {
                 textInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 textInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 textInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
-
-                textInputManager.takeDataSample(TextInputCollectionActivityImpl.class);
+                String message = ((NarratorItem)generalItemLocalObject.getGeneralItemBean()).getOpenQuestion().getTextDescription();
+                textInputManager.takeDataSample(TextInputCollectionActivityImpl.class, message);
             }
 
             @Override
@@ -158,8 +158,8 @@ public abstract class GeneralItemActivityFeatures {
                 valueInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 valueInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 valueInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
-
-                valueInputManager.takeDataSample(ValueInputCollectionActivityImpl.class);
+                String message = ((NarratorItem)generalItemLocalObject.getGeneralItemBean()).getOpenQuestion().getValueDescription();
+                valueInputManager.takeDataSample(ValueInputCollectionActivityImpl.class, message);
             }
 
         };

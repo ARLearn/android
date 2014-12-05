@@ -68,6 +68,7 @@
     <string name="submit" >Verstuur</string>
 
     <!--Data collection-->
+    <string name="author" >Auteur</string>
     <string name="removeData" >Verwijder data?</string>
     <string name="yes" >Ja</string>
     <string name="recordAudio" >Audio opname</string>

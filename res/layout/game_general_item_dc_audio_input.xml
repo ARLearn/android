@@ -9,8 +9,7 @@
               android:layout_height="match_parent" >
 
     <LinearLayout android:id="@+id/content"
-
-                 style="@style/ARLearn.Game.DataCollection"
+                  style="@style/ARLearn.Game.DataCollection"
             >
 
         <TextView android:id="@+id/text"

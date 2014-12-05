@@ -49,6 +49,8 @@ public  abstract class DataCollectionManager {
 
     public abstract void takeDataSample(Class className);
 
+    public abstract void takeDataSample(Class className, String message);
+
     public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
 
     public void setRunId(long runId){

@@ -31,10 +31,15 @@ public class TextInputManager extends DataCollectionManager {
         response.setTextType();
 
     }
-
     @Override
     public void takeDataSample(Class className) {
+        takeDataSample(className, null);
+    }
+
+    @Override
+    public void takeDataSample(Class className, String message) {
         Intent textInputIntent = new Intent(ctx, className);
+        if (message != null) textInputIntent.putExtra("message", message);
 
 //        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
         ctx.startActivityForResult(textInputIntent, TEXT_RESULT);

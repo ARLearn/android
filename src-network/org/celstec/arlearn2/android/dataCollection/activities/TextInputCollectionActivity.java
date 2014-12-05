@@ -9,6 +9,7 @@ import android.text.method.KeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * ****************************************************************************
@@ -38,6 +39,7 @@ public abstract class TextInputCollectionActivity extends Activity {
     public abstract int getDataCollectionSubmit();
     public  abstract  int getCancelButton();
     public  abstract int getSubmitButton();
+    public  abstract int getHeaderTextView();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,8 @@ public abstract class TextInputCollectionActivity extends Activity {
                     }
                 }
         );
+        String message = getIntent().getStringExtra("message");
+        if (message != null)((TextView) findViewById(getHeaderTextView())).setText(message);
 
         ((EditText)findViewById(getDataCollectionText())).addTextChangedListener(new TextWatcher() {
             @Override

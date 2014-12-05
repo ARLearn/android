@@ -13,9 +13,12 @@ import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity;
+import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.VideoResultActivity;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.ResponseLocalObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -138,6 +141,11 @@ public class DataCollectionResultController {
                         pictureRecording.putExtra(ResponseLocalObject.class.getName(), responseLocalObject.getId());
                         activity.startActivity(pictureRecording);
                         break;
+                    case ResponseLocalObject.VIDEO_TYPE:
+                        Intent videoRecording = new Intent(activity, VideoResultActivity.class);
+                        videoRecording.putExtra(ResponseLocalObject.class.getName(), responseLocalObject.getId());
+                        activity.startActivity(videoRecording);
+                        break;
                 }
 
             }
@@ -153,18 +161,33 @@ public class DataCollectionResultController {
         resultsLinearLayout.removeAllViews();
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
             //if (responseLocalObject !=null && !displayedIds.contains(responseLocalObject.getId())) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat();
             if (responseLocalObject !=null ) {
                 if (responseLocalObject.getType() == null) {
                     System.out.println("break here");
+                } else {
+                    DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp()); //TODO apparently gettype can become null
+                    String author  = "";
+                    if (responseLocalObject.getAccountLocalObject()!=null){
+                        author = activity.getString(R.string.author)+": "+responseLocalObject.getAccountLocalObject().getName() +"\n";
+                    }
+
+                    if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
+                        result.setDataAsString(author+responseLocalObject.getValue());
+                    }
+                    if (responseLocalObject.getType() == ResponseLocalObject.VALUE_TYPE) {
+                        result.setDataAsString(author+responseLocalObject.getValue());
+                    }
+                    if (responseLocalObject.getType() == ResponseLocalObject.VIDEO_TYPE) {
+                        String message = author+ dateFormat.format(new Date(responseLocalObject.getTimeStamp()));
+                        result.setDataAsString(message);
+                    }
+                    if (responseLocalObject.getType() == ResponseLocalObject.AUDIO_TYPE) {
+                        String message = author+ dateFormat.format(new Date(responseLocalObject.getTimeStamp()));
+                        result.setDataAsString(message);
+                    }
+                    addResult(result, responseLocalObject);
                 }
-                DataCollectionResult result = new DataCollectionResult(responseLocalObject.getType(), "" + responseLocalObject.getTimeStamp()); //TODO apparently gettype can become null
-                if (responseLocalObject.getType() == ResponseLocalObject.TEXT_TYPE) {
-                    result.setDataAsString(responseLocalObject.getValue());
-                }
-                if (responseLocalObject.getType() == ResponseLocalObject.VALUE_TYPE) {
-                    result.setDataAsString(responseLocalObject.getValue());
-                }
-                addResult(result, responseLocalObject);
 //                displayedIds.add(responseLocalObject.getId());
             }
         }

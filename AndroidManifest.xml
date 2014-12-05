@@ -134,14 +134,21 @@
          <activity
                  android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity"
                  android:label="Audio result"
-                 android:theme="@style/ARLearn.schema1"
+                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                  >
          </activity>
 
          <activity
                  android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity"
                  android:label="Picture  result"
-                 android:theme="@style/ARLearn.schema1"
+                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                 >
+         </activity>
+
+         <activity
+                 android:name="org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.VideoResultActivity"
+                 android:label="Video  result"
+                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                  >
          </activity>
 

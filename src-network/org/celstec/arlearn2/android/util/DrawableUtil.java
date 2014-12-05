@@ -9,7 +9,6 @@ import android.graphics.drawable.*;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.TypedValue;
 import android.view.Gravity;
-import org.celstec.arlearn2.android.views.StyleUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLClassLoader;

@@ -36,10 +36,14 @@ public class PictureManager extends DataCollectionManager {
         super(ctx);
         response.setPictureType();
     }
-
     public void takeDataSample(Class className) {
+        takeDataSample(className, null);
+    }
+    public void takeDataSample(Class className, String message) {
 
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        if (message != null) cameraIntent.putExtra("message", message);
+
         bitmapFile = MediaFolders.createOutgoingJpgFile();
         cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(bitmapFile));
         ctx.startActivityForResult(cameraIntent, PICTURE_RESULT);
