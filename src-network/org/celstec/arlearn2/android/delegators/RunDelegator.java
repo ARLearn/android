@@ -78,7 +78,7 @@ public class RunDelegator extends AbstractDelegator{
     Implementation
      */
 
-    private void onEventAsync(SyncRunsEventParticipate sge) {
+    public void onEventAsync(SyncRunsEventParticipate sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
             RunList rl =RunClient.getRunClient().getRunsParticipate(token, lastSyncDateParticipate);
@@ -90,7 +90,7 @@ public class RunDelegator extends AbstractDelegator{
         }
     }
 
-    private void onEventAsync(SyncRun syncRun) {
+    public void onEventAsync(SyncRun syncRun) {
         if (syncRun.getRunId()!=null) {
             asyncRun(syncRun.runId);
         } else if (syncRun.getGameId() != null) {

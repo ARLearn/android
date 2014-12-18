@@ -59,7 +59,9 @@ public class AudioResultActivity extends Activity implements SeekBar.OnSeekBarCh
         setTheme(styleUtil.getTheme());
         setContentView(R.layout.game_general_item_dc_play_audio);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getActionBar().hide();
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActionBar().hide();
+        }
         GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());
         shapeDrawable.setColor(styleUtil.getBackgroundDark());
 

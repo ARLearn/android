@@ -70,7 +70,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
     Implementation
      */
 
-    private void onEventAsync(CreateGeneralItem sgi) {
+    public void onEventAsync(CreateGeneralItem sgi) {
         String token = returnTokenIfOnline();
         if (token != null) {
             GeneralItem item = GeneralItemClient.getGeneralItemClient().postGeneralItem(token, sgi.getGi());
@@ -96,7 +96,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
             }
     }
 
-    private void onEventAsync(SyncGeneralItems sgi) {
+    public void onEventAsync(SyncGeneralItems sgi) {
         String token = returnTokenIfOnline();
         if (token != null) {
             long gameId = sgi.getGame().getId();

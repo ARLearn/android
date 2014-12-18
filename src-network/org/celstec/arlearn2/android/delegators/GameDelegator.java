@@ -145,22 +145,22 @@ public final class GameDelegator extends AbstractDelegator{
    Implementation
     */
 
-//    private void onEventAsync(SyncGameNoToken g) {
+//    public void onEventAsync(SyncGameNoToken g) {
 //        asyncGame(g.getGameId(), false);
 //    }
 
-    private void onEventAsync(GameDownloadManager g) {
+    public void onEventAsync(GameDownloadManager g) {
         asyncDownloadGame(g);
     }
 
-    private void onEventAsync(SearchGames sg) {
+    public void onEventAsync(SearchGames sg) {
         if (ARL.isOnline()) {
             GamesList result = GameClient.getGameClient().search(null, sg.query);
             ARL.eventBus.post(new SearchResultList(result));
         }
     }
 
-    private void onEventAsync(SyncGamesEventParticipate sge) {
+    public void onEventAsync(SyncGamesEventParticipate sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
                 GamesList gl = GameClient.getGameClient().getGamesParticipate(token, lastSyncDateParticipate);
@@ -172,7 +172,7 @@ public final class GameDelegator extends AbstractDelegator{
         }
     }
 
-    private void onEventAsync(SyncGamesEvent sge) {
+    public void onEventAsync(SyncGamesEvent sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
                 GamesList gl = GameClient.getGameClient().getGamesParticipate(token, lastSyncDate);
@@ -183,7 +183,7 @@ public final class GameDelegator extends AbstractDelegator{
         }
     }
 
-    private void onEventAsync(SyncGameContributors syncGameContributors) {
+    public void onEventAsync(SyncGameContributors syncGameContributors) {
         syncGameContributors.sync();
     }
 
@@ -240,7 +240,7 @@ public final class GameDelegator extends AbstractDelegator{
         DaoConfiguration.getInstance().getGameLocalObjectDao().deleteAll();
     }
 
-    private void onEventAsync(SyncGameFiles gameFiles) {
+    public void onEventAsync(SyncGameFiles gameFiles) {
         asyncRetrieveGameFiles(gameFiles.getGameId());
     }
 

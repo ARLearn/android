@@ -86,7 +86,8 @@ public class SearchFragment  extends SherlockListFragment implements ListItemCli
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Bundle args = new Bundle();
 
-            GameFragment frag = new GameFragment(game);
+            GameFragment frag = new GameFragment();
+            args.putLong("gameId", game.getGameId());
             frag.setArguments(args);
             FragmentTransaction ft = fm.beginTransaction();
 

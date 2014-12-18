@@ -55,33 +55,23 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
     UserGameIntentAnalyser gameIntentAnalyser = new UserGameIntentAnalyser() {
         @Override
         public void scannedGame(Game game) {
-//            FragmentManager fm = getSupportFragmentManager();
-//            Bundle args = new Bundle();
-//            FragmentTransaction ft = fm.beginTransaction();
-//
-////            game.setGameId(gameIntentAnalyser.getGameId());
-////            GameFragment gf = new GameFragment(game);
-////            if (gameIntentAnalyser.hasRunToLoad()){
-////                gf.setRunId(gameIntentAnalyser.getRunId());
-////            }
-//            ft.replace(R.id.right_pane, gf).addToBackStack(null).commit();
 
 
-//            FragmentManager fm = getSupportFragmentManager();
-//            Bundle args = new Bundle();
-//            frag = new GameFragment(game);
-//            frag.setArguments(args);
-//            FragmentTransaction ft = fm.beginTransaction();
-//            ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
-
-            GameFragment frag = new GameFragment(game);
+            GameFragment frag = new GameFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("gameId", game.getGameId());
+            frag.setArguments(bundle);
             launchFragment(frag);
             StructureSlidingPaneLayout.this.frag = frag;
         }
 
         @Override
         public void scannedRun(Run run) {
-            GameFragment frag = new GameFragment(run.getGame());
+            GameFragment frag = new GameFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("gameId", run.getGame().getGameId());
+            frag.setArguments(bundle);
+
             frag.setRun(run);
             launchFragment(frag);
             System.out.println(run);
@@ -109,6 +99,9 @@ public class StructureSlidingPaneLayout extends SherlockFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!ARL.isInit()) {
+            ARL.init(this);
+        }
         try {
             Intent i = getIntent();
 

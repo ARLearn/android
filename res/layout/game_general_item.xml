@@ -75,33 +75,34 @@
             >
     </TableLayout>
 
+
+    <LinearLayout
+            android:id="@+id/multipleChoice"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundColor"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="visible"
+            >
+    </LinearLayout>
+
+
     <TextView
             android:id="@+id/button"
             style="@style/ARLearn.Game.Button"
             android:text="@string/continueMessage"
+            android:layout_marginTop="10dip"
             android:layout_marginBottom="10dip"
             android:visibility="gone"
             />
 
-    <!--<VideoView-->
-            <!--android:id="@+id/videoView"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:visibility="visible"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--/>-->
-
-    <!--<RelativeLayout-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="50dip">-->
 
         <org.celstec.arlearn2.android.views.MyVideoView android:id="@+id/videoView"
                                                         android:layout_gravity="center_horizontal"
                    android:layout_width="fill_parent"
                    android:layout_height="wrap_content"/>
 
-
-    <!--</RelativeLayout>-->
 
     <LinearLayout
             android:id="@+id/mediaBar"
@@ -132,18 +133,6 @@
                 />
     </LinearLayout>
 
-
-    <LinearLayout
-            android:id="@+id/multipleChoice"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/backgroundColor"
-            android:orientation="vertical"
-            android:padding="7dip"
-            android:gravity="center"
-            android:visibility="gone"
-            >
-    </LinearLayout>
 
 
 

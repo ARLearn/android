@@ -81,12 +81,20 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     private GameDownloadManager gameDownloadManager;
     ProgressDialog pd;
 
-    public GameFragment(Game game) {
-        this.gameId = game.getGameId();
-        ARL.store.syncStoreGame(game.getGameId());
+    public GameFragment() {
 
     }
+//    public GameFragment(Game game) {
+//        this.gameId = game.getGameId();
+//
+//    }
 
+    @Override
+    public void setArguments(Bundle args) {
+        super.setArguments(args);
+        this.gameId = args.getLong("gameId");
+        ARL.store.syncStoreGame(gameId);
+    }
 
     @Override
     public void onResume() {

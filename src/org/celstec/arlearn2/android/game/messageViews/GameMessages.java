@@ -58,9 +58,10 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         ARL.getDrawableUtil(gameActivityFeatures.getTheme(), this);
 //        new DrawableUtil(gameActivityFeatures.getTheme(), this);
         setContentView(R.layout.game_list_messages);
-        getActionBar().setIcon(R.drawable.ic_ab_back);
-        getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
-
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActionBar().setIcon(R.drawable.ic_ab_back);
+            getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+        }
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
         Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
         if (messagesHeader != null) {

@@ -49,6 +49,10 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
     protected HashMap<String, GameFileLocalObject> gameFiles = new HashMap<String, GameFileLocalObject>();
     protected HashMap<MultipleChoiceAnswerItem, View> answerViewMapping = new HashMap<MultipleChoiceAnswerItem, View>();
     private AudioItemFeatures audioItemFeatures;
+    protected TextView submitVoteButton;
+    protected View selectedView;
+    protected GradientDrawable drawable;
+    private MultipleChoiceAnswerItem selected = null;
 
     @Override
     protected int getImageResource() {
@@ -160,10 +164,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
         tableView.addView(row);
     }
 
-    protected TextView submitVoteButton;
-    protected View selectedView;
-    protected GradientDrawable drawable;
-    private MultipleChoiceAnswerItem selected = null;
+
 
     protected void submitButtonClick() {
         if (selected != null) {

@@ -55,7 +55,9 @@ public class GameActivity extends Activity implements GameDownloadProgressView.D
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.ARLearn_schema2);
-        getActionBar().setIcon(R.drawable.ic_ab_back);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActionBar().setIcon(R.drawable.ic_ab_back);
+        }
 
         setContentView(R.layout.store_game_overview);
         gameId = getIntent().getLongExtra(StoreGameLocalObject.class.getName(), 0l);

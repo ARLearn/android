@@ -251,7 +251,8 @@ public class ActionLocalObject {
         if (bean.getGeneralItemType() !=null) setGeneralItemType(bean.getGeneralItemType());
         if (bean.getRunId() != null) setRunId(bean.getRunId());
         if (bean.getTime() != null) setTime(bean.getTime());
-        if (bean.getUserEmail() != null) setAccount(AccountDelegator.getInstance().getAccount(bean.getUserEmail()).getId());
+        if (bean.getUserEmail() != null
+                && AccountDelegator.getInstance().getAccount(bean.getUserEmail())!= null) setAccount(AccountDelegator.getInstance().getAccount(bean.getUserEmail()).getId());
     }
 
     public Action getActionBean() {

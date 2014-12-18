@@ -48,8 +48,6 @@
     <string name="download">Descargar</string>
     <string name="open">Abrir</string>
 
-    <string name="myGames">Mis juegos</string>
-
     <!--Game Splash Screen-->
 
     <string name="downloadStatus">Estado de la descarga</string>
@@ -87,7 +85,6 @@
     <string name="messages" >Mensajes</string>
     <string name="message" >Mensaje xxx de yyy</string>
     <string name="continueMessage" >Continuar</string>
-    <string name="provideValue" ></string>
 
-
+    <string name="provideInput" >Introduce un dato</string>
 </resources>

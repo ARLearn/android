@@ -75,6 +75,7 @@ public class ResponseDelegator extends AbstractDelegator{
         response.setValue(responseValue);
         response.setRunId(runId);
         response.setGeneralItem(generalItemLocalObject.getId());
+        response.setMultipleChoiceAnswerType();
         setLocationDetails(response);
         DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
         DaoConfiguration.getInstance().getRunLocalObjectDao().load(response.getRunId()).resetResponses();
@@ -111,7 +112,7 @@ public class ResponseDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncResponses(runId));
     }
 
-    private synchronized void onEventAsync(SyncResponses syncResponses) {
+    public synchronized void onEventAsync(SyncResponses syncResponses) {
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         long serverTime = ARL.time.getServerTime();
         Log.i(SYNC_TAG, "Syncing responses");

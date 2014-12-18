@@ -103,7 +103,7 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
     Implementation
      */
 
-    private void onEventAsync(SyncGeneralItemVisibilities syncGeneralItemVisibilities) {
+    public void onEventAsync(SyncGeneralItemVisibilities syncGeneralItemVisibilities) {
         String token = returnTokenIfOnline();
         if (token != null) {
             long lastSyncDate = 0l;

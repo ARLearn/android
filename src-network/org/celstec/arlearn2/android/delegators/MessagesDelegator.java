@@ -66,7 +66,7 @@ public class MessagesDelegator extends AbstractDelegator {
     Implementation
     */
 
-    private void onEventAsync(SyncMessages syncMessages) {
+    public void onEventAsync(SyncMessages syncMessages) {
         String token = returnTokenIfOnline();
         if (token != null) {
 
@@ -112,7 +112,7 @@ public class MessagesDelegator extends AbstractDelegator {
 
 
 
-    private void onEventAsync(PostMessagesToServer syncMessages) {
+    public void onEventAsync(PostMessagesToServer syncMessages) {
         String token = returnTokenIfOnline();
         if (token != null) {
 

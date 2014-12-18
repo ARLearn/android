@@ -55,7 +55,9 @@ public class GameSplashScreen extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
-        getActionBar().setIcon(R.drawable.ic_ab_back);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActionBar().setIcon(R.drawable.ic_ab_back);
+        }
 
         if (!ARL.isInit()) ARL.init(this);
         downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)){
@@ -150,11 +152,11 @@ public class GameSplashScreen extends Activity {
 
     }
 
-    private void onEventAsync(NetworkTest networkTest) {
+    public void onEventAsync(NetworkTest networkTest) {
         networkTest.executeTest();
     }
 
-    private void onEventMainThread(NetworkTest.NetworkResult result) {
+    public void onEventMainThread(NetworkTest.NetworkResult result) {
         if (result.isResult()) {
             syncGameContent();
         } else {

@@ -85,6 +85,14 @@ public class DrawableUtil {
         return stateListDrawable;
     }
 
+    public Drawable getButtonAlternativeColorDrawable() {
+        return new ColorDrawable(styleUtil.getButtonAlternativeColor());
+//        StateListDrawable stateListDrawable = new StateListDrawable();
+//        stateListDrawable.addState(new int[]{-android.R.attr.state_pressed},  new ColorDrawable(styleUtil.getPrimaryColorLight()));
+//        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(styleUtil.getPrimaryColor()));
+//        return stateListDrawable;
+    }
+
     public StyleUtilInterface getStyleUtil(){
         return styleUtil;
     }

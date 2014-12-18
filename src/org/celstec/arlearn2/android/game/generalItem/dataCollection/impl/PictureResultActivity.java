@@ -41,7 +41,9 @@ public class PictureResultActivity extends Activity {
         super.onCreate(savedInstanceState);
         StyleUtilInterface styleUtil = DrawableUtil.styleUtil;
         setTheme(styleUtil.getTheme());
-        getActionBar().hide();
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActionBar().hide();
+        }
         setContentView(R.layout.game_general_item_result_picture);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         GradientDrawable shapeDrawable = (GradientDrawable) ((findViewById(R.id.content)).getBackground());

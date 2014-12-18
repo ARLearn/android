@@ -54,7 +54,9 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+        }
     }
 
     @Override

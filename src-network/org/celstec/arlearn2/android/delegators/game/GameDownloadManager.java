@@ -60,11 +60,11 @@ public class GameDownloadManager {
         this.gameId = gameId;
     }
 
-    private void onEventAsync(GeneralItemEvent sgi) {
+    public void onEventAsync(GeneralItemEvent sgi) {
         if (gameDownloadEventListener != null) gameDownloadEventListener.newMessage();
     }
 
-    private void onEventAsync(FileDownloadStatus fds) {
+    public void onEventAsync(FileDownloadStatus fds) {
         if (gameDownloadEventListener != null) {
             if (fds.getStatus() == FileDownloadStatus.FINISHED) {
                 gameDownloadEventListener.addContentDownloadedInBytes(fds.bytesDownloaded);

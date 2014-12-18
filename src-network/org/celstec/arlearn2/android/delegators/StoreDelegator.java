@@ -1,6 +1,6 @@
 package org.celstec.arlearn2.android.delegators;
 
-import com.google.android.gms.games.GamesClient;
+
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.download.FileByteDownloader;
 import org.celstec.arlearn2.android.events.*;
@@ -87,7 +87,7 @@ public class StoreDelegator extends AbstractDelegator{
    Implementation
     */
 
-    private void onEventAsync(DownloadFeaturedGames downloadFeaturedGames) {
+    public void onEventAsync(DownloadFeaturedGames downloadFeaturedGames) {
         if (ARL.isOnline()) {
             GamesList gl =StoreClient.getStoreClient().getFeaturedGames(Locale.getDefault().getDisplayLanguage());
             for  (Game game: gl.getGames()) {
@@ -102,13 +102,13 @@ public class StoreDelegator extends AbstractDelegator{
         }
     }
 
-    private void onEventAsync(SyncTopGames syncTopGames) {
+    public void onEventAsync(SyncTopGames syncTopGames) {
         if (ARL.isOnline()) {
             GamesList result = StoreClient.getStoreClient().getTopGames(syncTopGames.getLang());
             ARL.eventBus.post(new SearchResultList(result));
         }
     }
-    private void onEventAsync(SyncCategories syncResponses) {
+    public void onEventAsync(SyncCategories syncResponses) {
 //        String token = returnTokenIfOnline();
         if (ARL.isOnline()) {
             CategoryList list = StoreClient.getStoreClient().getCategoriesByLang(null, ARL.getContext().getResources().getConfiguration().locale.getLanguage());
@@ -131,7 +131,7 @@ public class StoreDelegator extends AbstractDelegator{
         }
     }
 
-    private void onEventAsync(SyncGames syncGames) {
+    public void onEventAsync(SyncGames syncGames) {
 //        String token = returnTokenIfOnline();
         if (ARL.isOnline()) {
             for (GameCategory gameCategory: StoreClient.getStoreClient().getGameIdsForCategory(null, syncGames.getCategoryId()).getGameCategoryList()){
@@ -161,11 +161,11 @@ public class StoreDelegator extends AbstractDelegator{
     }
 
 
-    private void onEventAsync(SyncStoreGame g) {
+    public void onEventAsync(SyncStoreGame g) {
         asyncStoreGame(g.getGameId());
     }
 
-    private void onEventAsync(LocationSearchGames sg) {
+    public void onEventAsync(LocationSearchGames sg) {
 
         if (ARL.isOnline()) {
             GamesList result = GameClient.getGameClient().search(null, sg.getLat(), sg.getLng(), sg.getDistance());

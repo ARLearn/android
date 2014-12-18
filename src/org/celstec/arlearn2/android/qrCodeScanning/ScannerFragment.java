@@ -62,13 +62,21 @@ public class ScannerFragment  extends SherlockFragment {
     private UserGameIntentAnalyser analyzer = new UserGameIntentAnalyser() {
         @Override
         public void scannedGame(Game game) {
-            GameFragment frag = new GameFragment(game);
+            GameFragment frag = new GameFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("gameId", game.getGameId());
+            frag.setArguments(bundle);
+
             launchFragment(frag);
         }
 
         @Override
         public void scannedRun(Run run) {
-            GameFragment frag = new GameFragment(run.getGame());
+            GameFragment frag = new GameFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("gameId", run.getGame().getGameId());
+            frag.setArguments(bundle);
+
             frag.setRun(run);
             launchFragment(frag);
             System.out.println(run);
@@ -140,7 +148,9 @@ public class ScannerFragment  extends SherlockFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
+        }
     }
 
     public void onPause() {

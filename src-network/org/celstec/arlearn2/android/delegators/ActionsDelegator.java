@@ -131,7 +131,7 @@ public class ActionsDelegator extends AbstractDelegator {
    Implementation
    */
 
-    private void onEventAsync(CreateAction createAction) {
+    public void onEventAsync(CreateAction createAction) {
         ActionLocalObject actionLocalObject = new ActionLocalObject();
         actionLocalObject.setTime(createAction.getAction().getTime());
         actionLocalObject.setAccount(createAction.account);
@@ -149,7 +149,7 @@ public class ActionsDelegator extends AbstractDelegator {
 
     }
 
-    private synchronized void onEventAsync(UploadActions uploadActions) {
+    public synchronized void onEventAsync(UploadActions uploadActions) {
         String token = returnTokenIfOnline();
         if (token != null) {
 
@@ -165,7 +165,7 @@ public class ActionsDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(DownloadActions downloadActions) {
+    public void onEventAsync(DownloadActions downloadActions) {
         String token = returnTokenIfOnline();
         if (token != null) {
             ActionList list = ActionClient.getActionClient().getRunActions(token, downloadActions.getRunId(), 0l, null);

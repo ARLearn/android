@@ -123,4 +123,6 @@ public class MultipleChoiceImageTestFeatures extends SingleChoiceImageTestFeatur
             unsetSelection(answerViewMapping.get(item));
         }
     }
+
+
 }

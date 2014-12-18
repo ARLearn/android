@@ -25,6 +25,7 @@
             android:layout_toRightOf="@id/dcTypeIcon"
             android:layout_height="wrap_content"
             android:text="Example application"
+            android:textColor="?attr/textLight"
             android:layout_centerVertical="true"
             android:textSize="16sp" />
 

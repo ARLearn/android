@@ -53,7 +53,7 @@ public class QuestionDelegator extends AbstractDelegator {
 
     }
 
-    private void onEventAsync(SyncQuestionsTask sge) {
+    public void onEventAsync(SyncQuestionsTask sge) {
         Log.i(SYNC_TAG, "Syncing questions for inquiry "+sge.inquiryLocalObject.getTitle()+ " "+sge.inquiryLocalObject.getId());
         String token =returnTokenIfOnline();
         if (token != null) {

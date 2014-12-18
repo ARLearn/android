@@ -77,7 +77,7 @@ public class AccountDelegator extends AbstractDelegator{
     }
 
 
-    private void onEventAsync(SyncMyAccount sma) {
+    public void onEventAsync(SyncMyAccount sma) {
         String token = returnTokenIfOnline();
         if (token != null) {
             Account account = AccountClient.getAccountClient().accountDetails(token);
@@ -109,7 +109,7 @@ public class AccountDelegator extends AbstractDelegator{
         return resultList.get(0);
     }
 
-    private void onEventAsync(SyncAccount sa) {
+    public void onEventAsync(SyncAccount sa) {
         String token = returnTokenIfOnline();
         if (token != null) {
             Account account = CollaborationClient.getAccountClient().getContact(token, sa.getFullId());

@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dip"
+                android:id="@+id/selectRow"
+        >
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    <ImageView
+            android:id="@+id/selectIcon"
 
-</LinearLayout>
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/game_data_collection_background_circle"
+            android:padding="4dip"
+            android:src="@drawable/ic_ss_checked" />
+
+
+
+    <TextView
+            android:id="@+id/choiceOption"
+            android:layout_marginLeft="5dip"
+            android:layout_width="match_parent"
+            android:layout_toRightOf="@id/selectIcon"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textSize="16sp" />
+
+
+</RelativeLayout>

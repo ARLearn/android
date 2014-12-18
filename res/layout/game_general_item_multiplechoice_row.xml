@@ -2,39 +2,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dip"
+                android:padding="7dip"
+                android:layout_margin="10dip"
+                android:id="@+id/selectRow"
+                android:minHeight="40dip"
 
         >
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="40dip"
+            android:layout_width="wrap_content">
+    </LinearLayout>
 
     <ImageView
-            android:id="@+id/dcTypeIcon"
+            android:id="@+id/selectIcon"
 
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/game_data_collection_background_circle"
+
             android:padding="4dip"
-            android:src="@drawable/game_data_collection_audio" />
+            android:src="@drawable/ic_ss_checked" />
 
 
 
     <TextView
             android:id="@+id/choiceOption"
-            android:layout_marginLeft="5dip"
+            android:layout_marginLeft="45dip"
             android:layout_width="match_parent"
-            android:layout_toRightOf="@id/dcTypeIcon"
+            android:layout_alignParentLeft="true"
+
             android:layout_height="wrap_content"
-            android:text="Example application"
+            android:text="test"
+            android:gravity="center"
             android:layout_centerVertical="true"
+            android:textColor="?attr/textLight"
             android:textSize="16sp" />
 
-    <ImageView
-            android:id="@+id/trashIcon"
-
-            android:layout_width="40dip"
-            android:layout_height="40dip"
-            android:layout_alignParentRight="true"
-            android:padding="4dip"
-            android:src="@drawable/game_data_collection_input_trash" />
 
 </RelativeLayout>

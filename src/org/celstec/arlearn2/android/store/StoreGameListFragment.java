@@ -76,7 +76,8 @@ public class StoreGameListFragment extends SherlockListFragment implements ListI
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Bundle args = new Bundle();
 
-            GameFragment frag = new GameFragment(game.getGameBean());
+            GameFragment frag = new GameFragment();
+            args.putLong("gameId", game.getGameBean().getGameId());
             frag.setArguments(args);
             FragmentTransaction ft = fm.beginTransaction();
 

@@ -46,7 +46,7 @@ public class ThreadsDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncThreads(runId));
     }
 
-    private void onEventAsync(SyncThreads st) {
+    public void onEventAsync(SyncThreads st) {
         String token = returnTokenIfOnline();
         if (token != null) {
             ThreadList tl = ThreadsClient.getThreadsClient().getThreads(token, st.getRunId());

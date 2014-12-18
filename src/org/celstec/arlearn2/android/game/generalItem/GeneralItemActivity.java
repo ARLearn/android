@@ -47,10 +47,11 @@ public class GeneralItemActivity extends Activity {
         gameActivityFeatures = new GameActivityFeatures(this);
         setTheme(gameActivityFeatures.getTheme());
         setContentView(R.layout.game_general_item);
-        getActionBar().setIcon(R.drawable.ic_ab_back);
-        getActionBar().setTitle(getString(R.string.messages));
-        getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
-
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActionBar().setIcon(R.drawable.ic_ab_back);
+            getActionBar().setTitle(getString(R.string.messages));
+            getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+        }
 
         generalItemActivityFeatures = GeneralItemActivityFeatures.getGeneralItemActivityFeatures(this);
         ARL.actions.issueAction(ActionsDelegator.READ,

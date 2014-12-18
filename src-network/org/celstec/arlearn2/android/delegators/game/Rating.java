@@ -35,7 +35,7 @@ public class Rating extends AbstractDelegator{
         ARL.eventBus.post(new StarRequest(rating, gameId));
     }
 
-    private void onEventAsync(StarRequest starRequest) {
+    public void onEventAsync(StarRequest starRequest) {
         String token = returnTokenIfOnline();
         if (token != null) {
             GameClient.getGameClient().rateGame(token, starRequest.getGameId(), starRequest.getRating());

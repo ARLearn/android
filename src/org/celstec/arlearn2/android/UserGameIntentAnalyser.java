@@ -1,7 +1,7 @@
 package org.celstec.arlearn2.android;
 
 import android.net.Uri;
-import org.celstec.arlearn2.android.delegators.ARL;
+import android.os.StrictMode;import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.arlearn2.beans.run.Run;
 
@@ -83,6 +83,9 @@ public abstract class UserGameIntentAnalyser {
                 }
                 long runId = Long.parseLong(data);
 //                    System.out.println(gameId);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+                StrictMode.setThreadPolicy(policy);
                 Run runBean = ARL.runs.asyncRunBean(runId);
                 if (runBean !=null) {
                     scannedRun(runBean);

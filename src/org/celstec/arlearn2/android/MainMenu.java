@@ -1,6 +1,6 @@
 package org.celstec.arlearn2.android;
 
-import android.os.Bundle;
+import android.os.Build;import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -54,7 +54,9 @@ public class MainMenu extends SherlockFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setIcon(R.drawable.ic_ab_menu);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            getActivity().getActionBar().setIcon(R.drawable.ic_ab_menu);
+        }
     }
 
     @Override

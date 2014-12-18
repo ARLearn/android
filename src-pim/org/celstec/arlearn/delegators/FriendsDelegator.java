@@ -84,7 +84,7 @@ public class FriendsDelegator extends AbstractDelegator {
 
     }
 
-    private void onEventAsync(SyncFriends syncFriends){
+    public void onEventAsync(SyncFriends syncFriends){
         String token = returnTokenIfOnline();
         if (token != null) {
             JSONObject json = FriendsClient.getFriendsClient().syncFriends(token, syncFriends.getProviderId(), syncFriends.getUserId());
@@ -144,7 +144,7 @@ public class FriendsDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(InviteFriend invite){
+    public void onEventAsync(InviteFriend invite){
         String token = returnTokenIfOnline();
         if (token != null) {
             FriendInviteResultEvent result = FriendsClient.getFriendsClient().addFriend(token, invite.getMyProviderId(), invite.getMyUserId(),invite.getFriendProviderId(), invite.getFriendUserId());
@@ -152,7 +152,7 @@ public class FriendsDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(RemoveFriend invite){
+    public void onEventAsync(RemoveFriend invite){
         String token = returnTokenIfOnline();
         if (token != null) {
             FriendRemoveResultEvent result = FriendsClient.getFriendsClient().removeFriend(token, invite.getMyProviderId(), invite.getMyUserId(), invite.getFriendProviderId(), invite.getFriendUserId());
@@ -160,7 +160,7 @@ public class FriendsDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(ReceivedFriendRequests invite){
+    public void onEventAsync(ReceivedFriendRequests invite){
         String token = returnTokenIfOnline();
         if (token != null) {
             ReceivedFriendEvent result = FriendsClient.getFriendsClient().receivedFriendRequests(token, invite.getMyProviderId(), invite.getMyUserId());
@@ -168,7 +168,7 @@ public class FriendsDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(SentFriendRequests invite){
+    public void onEventAsync(SentFriendRequests invite){
         String token = returnTokenIfOnline();
         if (token != null) {
             SentFriendRequestsEvent result = FriendsClient.getFriendsClient().sentFriendRequests(token, invite.getMyProviderId(), invite.getMyUserId());
@@ -176,7 +176,7 @@ public class FriendsDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(AllSiteUsers invite){
+    public void onEventAsync(AllSiteUsers invite){
         String token = returnTokenIfOnline();
         if (token != null) {
             ElggUsersEvent result = FriendsClient.getFriendsClient().siteUsers(token);

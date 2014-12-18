@@ -80,7 +80,7 @@ public class InquiryDelegator extends AbstractDelegator {
         ARL.eventBus.post(new SyncInquiriesHypothesis(inquiryId));
     }
 
-    private void onEventAsync(SyncInquiries sge) {
+    public void onEventAsync(SyncInquiries sge) {
 //        uploadInquiries();
         downloadInquiries();
     }
@@ -138,7 +138,7 @@ public class InquiryDelegator extends AbstractDelegator {
     }
 
 
-    private void onEventAsync(SyncDataCollectionTasks dcTask) {
+    public void onEventAsync(SyncDataCollectionTasks dcTask) {
         if (dcTask.getInquiry() == null) {
             dcTask.setInquiry(getCurrentInquiry());
         }
@@ -162,7 +162,7 @@ public class InquiryDelegator extends AbstractDelegator {
         }
     }
 
-    private void onEventAsync(SyncInquiriesHypothesis syncInquiriesHypothesis) {
+    public void onEventAsync(SyncInquiriesHypothesis syncInquiriesHypothesis) {
         String token = returnTokenIfOnline();
         if (token != null) {
             InquiryClient.Hypothesis hypothesis = InquiryClient.getInquiryClient().getInquiryHypothesis(token, syncInquiriesHypothesis.inquiryId);

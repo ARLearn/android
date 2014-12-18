@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ARLearn</string>
+
     <string name="login_facebook">Login met Facebook</string>
     <string name="login_google">Login met Google</string>
     <string name="login_twitter">Login met Twitter</string>
@@ -46,7 +48,6 @@
     <string name="download">Download</string>
     <string name="open">Open</string>
 
-    <string name="myGames">Mijn Spellen</string>
 
     <!--Game Splash Screen-->
 

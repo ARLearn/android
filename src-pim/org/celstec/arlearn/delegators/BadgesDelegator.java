@@ -65,7 +65,7 @@ public class BadgesDelegator {
     }
 
 
-    private void onEventAsync(SyncBadges syncBadges) {
+    public void onEventAsync(SyncBadges syncBadges) {
         String badges = BadgesClient.getBadgesClient().getUserBadges(syncBadges.getWespotId());
 
         AccountLocalObject account = ARL.accounts.createOrRetrieveAccount(syncBadges.getAccountType(), syncBadges.getAccountLocalId());

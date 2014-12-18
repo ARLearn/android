@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
-import org.celstec.arlearn2.android.delegators.ResponseDelegator;
+import org.celstec.arlearn2.android.delegators.ARL;import org.celstec.arlearn2.android.delegators.ResponseDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioResultActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity;
@@ -80,13 +80,12 @@ public class DataCollectionResultController {
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
         }
         (row.findViewById(R.id.messageText)).setOnClickListener(createRowClickerListener(result, responseLocalObject));
-        (row.findViewById(R.id.trashIcon)).setOnClickListener(createDeleteRowClickListener(responseLocalObject, row));
-//        row.findViewById(R.id.trashIcon).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        if (responseLocalObject.getAccountLocalObject() != ARL.accounts.getLoggedInAccount()){
+            row.findViewById(R.id.trashIcon).setVisibility(View.GONE);
+        } else {
+            (row.findViewById(R.id.trashIcon)).setOnClickListener(createDeleteRowClickListener(responseLocalObject, row));
+        }
+
         resultsLinearLayout.addView(row);
         results.add(result);
         result.setView(row);

@@ -112,7 +112,7 @@ public class GiFileReferenceDelegator extends AbstractDelegator{
         syncGeneralItemMediaFiles(giDao.getId());
     }
 
-    private synchronized void onEventAsync(SyncGeneralItemMediaFiles sgi) {
+    public synchronized void onEventAsync(SyncGeneralItemMediaFiles sgi) {
         Log.e("ARLearn", "in - "+sgi.getGeneralItem().getTitle());
         String token = returnTokenIfOnline();
         if (token != null) {
