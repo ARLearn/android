@@ -2,6 +2,10 @@ package org.celstec.arlearn2.android.gcm.handlers;
 
 import android.content.Context;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
+import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
+import org.celstec.arlearn2.beans.game.Game;
+
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -23,14 +27,15 @@ import org.celstec.arlearn2.android.delegators.GameDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GCMGameHandler extends GCMHandler{
+public class GCMGameHandler implements NotificationListenerInterface {
 
-    protected GCMGameHandler(Context ctx){
-        super(ctx);
-    }
     @Override
-    public void handle() {
+    public boolean acceptNotificationType(String notificationType) {
+        return Game.class.getName().equals(notificationType);
+    }
+
+    @Override
+    public void handleNotification(HashMap<String,String> map) {
         GameDelegator.getInstance().syncGamesParticipate();
     }
-
 }

@@ -1,9 +1,4 @@
-package org.celstec.arlearn2.android.gcm.handlers;
-
-import android.content.Context;
-import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
-import org.celstec.arlearn2.beans.run.Action;
+package org.celstec.arlearn2.android.gcm;
 
 import java.util.HashMap;
 
@@ -27,17 +22,14 @@ import java.util.HashMap;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GCMActionHandler implements NotificationListenerInterface {
-
+public class NotTestListener implements NotificationListenerInterface {
     @Override
     public boolean acceptNotificationType(String notificationType) {
-        return Action.class.getName().equals(notificationType);
+        return false;
     }
 
     @Override
-    public void handleNotification(HashMap<String, String> map) {
-        ARL.actions.syncActions(Long.parseLong(map.get("runId")));
+    public void handleNotification(HashMap<String,String> map) {
 
     }
-
 }

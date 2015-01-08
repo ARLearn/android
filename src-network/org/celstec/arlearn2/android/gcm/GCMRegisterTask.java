@@ -39,7 +39,7 @@ import java.io.IOException;
 public class GCMRegisterTask extends AsyncTask<Activity, Long, Void> {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     static final String TAG = "GCM";
-    public static final String SENDER_ID = "594104153413";
+//    public static final String SENDER_ID = "594104153413";
 
     @Override
     protected Void doInBackground(Activity... c) {
@@ -48,7 +48,7 @@ public class GCMRegisterTask extends AsyncTask<Activity, Long, Void> {
             try {
                 String registrationId = ARL.properties.getGCMKey();
                 if (registrationId == null) {
-                    registrationId = gcm.register(SENDER_ID);
+                    registrationId = gcm.register(ARL.config.getProperty("gcm_senderId"));
                     ARL.properties.storeGCMKey(registrationId);
                 }
 
@@ -65,8 +65,9 @@ public class GCMRegisterTask extends AsyncTask<Activity, Long, Void> {
     private void sendRegistrationToBackend(Context context, String deviceId, String registrationId) {
         GCMDeviceDescription desc = new GCMDeviceDescription();
         desc.setAccount(PropertiesAdapter.getInstance(context).getFullId());
-        desc.setDeviceUniqueIdentifier(deviceId);
+        desc.setDeviceUniqueIdentifier(deviceId+context.getPackageName());
         desc.setRegistrationId(registrationId);
+        desc.setPackageIdentifier(context.getPackageName());
         NotificationClient.getOauthClient().gcm(PropertiesAdapter.getInstance(context).getAuthToken(), desc);
     }
 

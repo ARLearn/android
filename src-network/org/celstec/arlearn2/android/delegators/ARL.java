@@ -10,8 +10,12 @@ import org.celstec.arlearn2.android.db.ConfigAdapter;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
 //import org.celstec.arlearn2.android.views.StyleUtil;
+import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.client.GenericClient;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ****************************************************************************
@@ -53,6 +57,7 @@ public class ARL {
     public static EventBus eventBus = new EventBus();
     public static DaoConfiguration dao;
     public static Context ctx;
+    public static NotificationListenerInterface[] notificationListenerInterfaces;
 
 
 
@@ -79,9 +84,13 @@ public class ARL {
             threads = ThreadsDelegator.getInstance();
             messages = MessagesDelegator.getInstance();
             generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
-            new GCMRegisterTask().execute((Activity) ctx);
+            initNotificationListeners();
         }
 
+    }
+
+    public static void accountSynchronisationComplete(){
+        new GCMRegisterTask().execute((Activity) ARL.ctx);
     }
 
     public static DrawableUtil getDrawableUtil(int defaultSchema, Context context) {
@@ -110,5 +119,22 @@ public class ARL {
     }
 
 
+    private static void initNotificationListeners(){
+        try {
+            List<String> classNameList = Arrays.asList(config.getProperty("notificationListeners").split(";"));
+            notificationListenerInterfaces = new NotificationListenerInterface[classNameList.size()];
+            int i = 0;
+            for (String className :classNameList) {
+                notificationListenerInterfaces[i++] = (NotificationListenerInterface) Class.forName(className).newInstance();
+            }
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

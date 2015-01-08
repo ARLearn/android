@@ -3,9 +3,9 @@ package org.celstec.arlearn2.android;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import org.celstec.arlearn2.android.gcm.handlers.GCMHandler;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
 
 import java.util.HashMap;
 
@@ -41,29 +41,24 @@ public class GCMIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        String messageType = gcm.getMessageType(intent);
-        Log.e(TAG, "messageType " + messageType);
+//        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+//        String messageType = gcm.getMessageType(intent);
 
+        HashMap<String, String> map = new HashMap<String, String>();
         for (String key: intent.getExtras().keySet()) {
-            Log.e(TAG, "key: " + key);
-            if ("type".equals(key) || "gameId".equals(key))  Log.e(TAG, "value: " + intent.getExtras().getString(key));
-
+            if (intent.getExtras().get(key) instanceof String) map.put(key, intent.getExtras().getString(key));
+            if (intent.getExtras().get(key) instanceof Integer) map.put(key, ""+intent.getExtras().getInt(key));
+            if (intent.getExtras().get(key) instanceof Long) map.put(key, ""+intent.getExtras().getInt(key));
         }
 
-        HashMap map = new HashMap<String, String>();
-        for (String key: intent.getExtras().keySet()) {
 
-            if ("type".equals(key) || "gameId".equals(key)) map.put(key, intent.getExtras().getString(key));
-            if ("type".equals(key) || "runId".equals(key)) map.put(key, intent.getExtras().getString(key));
-
+        for (NotificationListenerInterface listener: ARL.notificationListenerInterfaces) {
+            if (listener.acceptNotificationType(map.get("type"))) {
+                listener.handleNotification(map);
+            }
         }
 
-        GCMHandler handler = GCMHandler.createHandler(this, map);
-        if (handler != null) handler.handle();
 
-        Log.e(TAG, "Received: " + extras.toString());
         GCMWakefulReceiver.completeWakefulIntent(intent);
 
     }

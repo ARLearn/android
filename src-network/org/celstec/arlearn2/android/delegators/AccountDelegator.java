@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.delegators;
 
+import android.app.Activity;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.QueryBuilder;
 import org.apache.http.HttpEntity;
@@ -8,6 +9,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.celstec.arlearn2.android.db.Constants;
 import org.celstec.arlearn2.android.events.MyAccount;
+import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
 import org.celstec.arlearn2.beans.account.Account;
 import org.celstec.arlearn2.client.AccountClient;
 import org.celstec.arlearn2.client.CollaborationClient;
@@ -58,6 +60,7 @@ public class AccountDelegator extends AbstractDelegator{
         long accountId = ARL.properties.getAccount();
         if (accountId != 0) {
             loggedInAccount = DaoConfiguration.getInstance().getAccountLocalObjectDao().load(accountId);
+            ARL.accountSynchronisationComplete();
         }
         if (loggedInAccount == null) {
             ARL.eventBus.post(new SyncMyAccount());
@@ -87,6 +90,7 @@ public class AccountDelegator extends AbstractDelegator{
                 DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(loggedInAccount);
                 ARL.properties.setAccount(loggedInAccount.getId());
                 ARL.properties.setFullId(loggedInAccount.getFullId());
+                ARL.accountSynchronisationComplete();
             }
         }
     }

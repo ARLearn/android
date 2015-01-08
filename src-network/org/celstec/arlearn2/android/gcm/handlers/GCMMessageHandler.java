@@ -3,6 +3,11 @@ package org.celstec.arlearn2.android.gcm.handlers;
 import android.content.Context;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
+import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
+import org.celstec.arlearn2.beans.notification.MessageNotification;
+import org.celstec.arlearn2.beans.run.Message;
+
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -24,16 +29,16 @@ import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GCMMessageHandler extends GCMHandler{
-    private long threadId;
+public class GCMMessageHandler  implements NotificationListenerInterface {
 
-    public GCMMessageHandler(Context ctx, long threadId) {
-        super(ctx);
-        this.threadId = threadId;
+    @Override
+    public boolean acceptNotificationType(String notificationType) {
+        return MessageNotification.class.getName().equals(notificationType);
     }
 
     @Override
-    public void handle() {
-        ARL.messages.syncMessages(threadId);
+    public void handleNotification(HashMap<String, String> map) {
+        ARL.messages.syncMessages(Long.parseLong(map.get("threadId")));
+
     }
 }

@@ -1,8 +1,11 @@
 package org.celstec.arlearn2.android.gcm.handlers;
 
-import android.content.Context;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.delegators.GameDelegator;
+import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
+import org.celstec.arlearn2.beans.run.Run;
+import org.celstec.arlearn2.beans.run.User;
+
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -24,13 +27,15 @@ import org.celstec.arlearn2.android.delegators.GameDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GCMRunHandler extends GCMHandler{
+public class GCMRunHandler  implements NotificationListenerInterface {
 
-    protected GCMRunHandler(Context ctx){
-        super(ctx);
-    }
     @Override
-    public void handle() {
+    public boolean acceptNotificationType(String notificationType) {
+        return Run.class.getName().equals(notificationType) || User.class.getName().equals(notificationType);
+    }
+
+    @Override
+    public void handleNotification(HashMap<String,String> map) {
         ARL.runs.syncRunsParticipate();
     }
 

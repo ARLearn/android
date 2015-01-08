@@ -1,7 +1,13 @@
 package org.celstec.arlearn2.android.gcm.handlers;
 
 import android.content.Context;
+import org.celstec.arlearn2.android.delegators.GameDelegator;
 import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
+import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
+import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.notification.GeneralItemModification;
+
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -23,16 +29,16 @@ import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GCMGeneralItemHandler extends GCMHandler{
+public class GCMGeneralItemHandler  implements NotificationListenerInterface {
 
-    private long gameId;
-
-    protected GCMGeneralItemHandler(Context ctx, long gameId){
-        super(ctx);
-        this.gameId = gameId;
-    }
     @Override
-    public void handle() {
-        GeneralItemDelegator.getInstance().syncGeneralItems(gameId);
+    public boolean acceptNotificationType(String notificationType) {
+        return GeneralItemModification.class.getName().equals(notificationType);
     }
+
+    @Override
+    public void handleNotification(HashMap<String,String> map) {
+        GeneralItemDelegator.getInstance().syncGeneralItems(Long.parseLong(map.get("gameId")));
+    }
+
 }
