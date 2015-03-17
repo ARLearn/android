@@ -23,3 +23,11 @@ build/*
 ./assets/config.properties
 assets/config.properties
 ./project.properties
+./arlearn.android.properties
+./arlearn.android.xml
+./gradle/*
+./gradlew
+./gradlew.bat
+./manifest-merger-release-report.txt
+./module_arlearn.android.xml
+
