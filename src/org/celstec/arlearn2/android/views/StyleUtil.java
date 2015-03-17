@@ -48,31 +48,20 @@ public class StyleUtil implements Serializable, StyleUtilInterface {
 
     public StyleUtil(Context context, Integer schema) {
         this.theme = schema;
-        TypedArray ta = context.obtainStyledAttributes(schema, new int[]{
-                R.attr.primaryColor,
-                R.attr.buttonAlternativeColor,
-                R.attr.textLight,
-                R.attr.primaryColorLight,
-                R.attr.backgroundColor,
-                R.attr.backgroundColorDark,
-                R.attr.buttonColor,
-                R.attr.textInactive,
-                R.attr.primaryColorHighlight
 
-        });
-        primaryColor = ta.getColor(0, Color.BLACK);
-        buttonAlternativeColor = ta.getColor(1, Color.BLACK);
+        primaryColor = context.obtainStyledAttributes(schema, new int[]{R.attr.primaryColor}).getColor(0, Color.BLACK);
+        buttonAlternativeColor = context.obtainStyledAttributes(schema, new int[]{R.attr.buttonAlternativeColor}).getColor(0, Color.BLACK);
 
-        textLight = ta.getColor(2, Color.BLACK);
-        primaryColorLight = ta.getColor(3, Color.BLACK);
+        textLight = context.obtainStyledAttributes(schema, new int[]{R.attr.textLight}).getColor(0, Color.BLACK);
+        primaryColorLight = context.obtainStyledAttributes(schema, new int[]{R.attr.primaryColorLight}).getColor(0, Color.BLACK);
 
-        backgroundColor = ta.getColor(4, Color.BLACK);
-        backgroundDark = ta.getColor(5, Color.BLACK);
+        backgroundColor = context.obtainStyledAttributes(schema, new int[]{R.attr.backgroundColor}).getColor(0, Color.BLACK);
+        backgroundDark = context.obtainStyledAttributes(schema, new int[]{R.attr.backgroundColorDark}).getColor(0, Color.BLACK);
 
-        buttonColor = ta.getColor(6, Color.BLACK);
-        textInactive = ta.getColor(7, Color.BLACK);
+        buttonColor = context.obtainStyledAttributes(schema, new int[]{R.attr.buttonColor}).getColor(0, Color.BLACK);
+        textInactive = context.obtainStyledAttributes(schema, new int[]{R.attr.textInactive}).getColor(0, Color.BLACK);
 
-        primaryColorHighlight = ta.getColor(8, Color.BLACK);
+        primaryColorHighlight = context.obtainStyledAttributes(schema, new int[]{R.attr.primaryColorHighlight}).getColor(0, Color.BLACK);
 
     }
 

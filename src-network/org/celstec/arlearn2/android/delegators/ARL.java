@@ -1,6 +1,5 @@
 package org.celstec.arlearn2.android.delegators;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -62,10 +61,10 @@ public class ARL {
 
 
     public static DrawableUtil drawableUtil;
+    public static int drawableUtilScheme = 0;
 
     public static void init(Context ctx) {
         if (!ARL.isInit()) {
-            System.out.println("Im here");
             ARL.ctx = ctx;
             dao = DaoConfiguration.getInstance(ctx);
             mapContext = new MapContext(ctx);
@@ -90,11 +89,12 @@ public class ARL {
     }
 
     public static void accountSynchronisationComplete(){
-        new GCMRegisterTask().execute((Activity) ARL.ctx);
+        new GCMRegisterTask().execute(ARL.ctx);
     }
 
     public static DrawableUtil getDrawableUtil(int defaultSchema, Context context) {
-        if (drawableUtil == null) {
+        if (drawableUtil == null || drawableUtilScheme != defaultSchema) {
+            drawableUtilScheme = defaultSchema;
             drawableUtil = new DrawableUtil(defaultSchema, context);
         }
         return drawableUtil;

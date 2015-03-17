@@ -7,13 +7,30 @@
 
         >
 
-    <org.celstec.arlearn2.android.views.SplashScreenView
+    <WebView
+            android:id="@+id/splashWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+    </WebView>
+
+    <!--<org.celstec.arlearn2.android.views.SplashScreenView-->
+            <!--android:id="@+id/main_backgroundImage"-->
+            <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:scaleType="matrix"-->
+    <!--android:src="@drawable/game_splash_screen" />-->
+
+
+    <ImageView
             android:id="@+id/main_backgroundImage"
             android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentTop="true"
-    android:scaleType="matrix"
-    android:src="@drawable/game_splash_screen" />
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_splash_screen" />
 
     <LinearLayout
             android:id="@+id/downloadStatus"

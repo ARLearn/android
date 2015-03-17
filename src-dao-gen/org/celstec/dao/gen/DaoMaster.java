@@ -25,6 +25,7 @@ import org.celstec.dao.gen.MessageLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObjectDao;
 import org.celstec.dao.gen.BadgeLocalObjectDao;
 import org.celstec.dao.gen.InquiryQuestionLocalObjectDao;
+import org.celstec.dao.gen.InquiryQuestionAnswerLocalObjectDao;
 import org.celstec.dao.gen.CategoryLocalObjectDao;
 import org.celstec.dao.gen.GameCategoryLocalObjectDao;
 import org.celstec.dao.gen.FriendsLocalObjectDao;
@@ -34,7 +35,7 @@ import org.celstec.dao.gen.FriendsLocalObjectDao;
  * Master of DAO (schema version 1): knows all DAOs.
 */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 46;
+    public static final int SCHEMA_VERSION = 48;
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
@@ -55,6 +56,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GeneralItemVisibilityLocalObjectDao.createTable(db, ifNotExists);
         BadgeLocalObjectDao.createTable(db, ifNotExists);
         InquiryQuestionLocalObjectDao.createTable(db, ifNotExists);
+        InquiryQuestionAnswerLocalObjectDao.createTable(db, ifNotExists);
         CategoryLocalObjectDao.createTable(db, ifNotExists);
         GameCategoryLocalObjectDao.createTable(db, ifNotExists);
         FriendsLocalObjectDao.createTable(db, ifNotExists);
@@ -79,6 +81,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GeneralItemVisibilityLocalObjectDao.dropTable(db, ifExists);
         BadgeLocalObjectDao.dropTable(db, ifExists);
         InquiryQuestionLocalObjectDao.dropTable(db, ifExists);
+        InquiryQuestionAnswerLocalObjectDao.dropTable(db, ifExists);
         CategoryLocalObjectDao.dropTable(db, ifExists);
         GameCategoryLocalObjectDao.dropTable(db, ifExists);
         FriendsLocalObjectDao.dropTable(db, ifExists);
@@ -130,6 +133,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(GeneralItemVisibilityLocalObjectDao.class);
         registerDaoClass(BadgeLocalObjectDao.class);
         registerDaoClass(InquiryQuestionLocalObjectDao.class);
+        registerDaoClass(InquiryQuestionAnswerLocalObjectDao.class);
         registerDaoClass(CategoryLocalObjectDao.class);
         registerDaoClass(GameCategoryLocalObjectDao.class);
         registerDaoClass(FriendsLocalObjectDao.class);

@@ -63,6 +63,7 @@ public class ActionsDelegator extends AbstractDelegator {
             default:
                 break;
         }
+        System.out.println("test account "+ARL.accounts.getLoggedInAccount());
         if (actionDoesNotExist(runId, actionBean.getAction(), generalItemId, generalItemType, ARL.accounts.getLoggedInAccount())) {
             actionBean.setGeneralItemType(generalItemType);
             actionBean.setGeneralItemId(generalItemId);
@@ -84,6 +85,7 @@ public class ActionsDelegator extends AbstractDelegator {
     private boolean actionDoesNotExist(Long runId, String action, Long generalItemId, String generalItemType, AccountLocalObject account) {
         ActionLocalObjectDao dao = DaoConfiguration.getInstance().getActionLocalObjectDao();
         QueryBuilder<ActionLocalObject> queryBuilder = dao.queryBuilder();
+
         queryBuilder.where(
                 queryBuilder.and(
                         ActionLocalObjectDao.Properties.RunId.eq(runId),

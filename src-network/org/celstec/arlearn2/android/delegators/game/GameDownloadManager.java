@@ -77,12 +77,13 @@ public class GameDownloadManager {
         ARL.games.asyncGame(gameId,true);
 
         GeneralItemList list = ARL.generalItems.asyncRetrieveItems(gameId);
-        if (list.getError() == null) {
+        if (list != null && list.getError() == null) {
             generalItemList = list.getGeneralItems();
             if (gameDownloadEventListener != null)
                 gameDownloadEventListener.setAmountOfMessages(this.generalItemList.size());
+            ARL.generalItems.storeItemsInDatabase(list, gameId);
+
         }
-        ARL.generalItems.storeItemsInDatabase(list, gameId);
 
         GameFileList filesList = ARL.games.asyncRetrieveGameFiles(gameId);
 
@@ -95,7 +96,7 @@ public class GameDownloadManager {
 
     }
 
-    private void onEventMainThread(Dismiss dismiss) {
+    public void onEventMainThread(Dismiss dismiss) {
         gameDownloadEventListener.onDismiss();
     }
 

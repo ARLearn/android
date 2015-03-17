@@ -1,4 +1,4 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.game;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockListFragment;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
@@ -42,8 +43,13 @@ public class GameRunsFragment extends SherlockListFragment implements ListItemCl
     public GameRunsFragment() {
     }
 
-    public GameRunsFragment(GameLocalObject gameLocalObject) {
-        this.game = gameLocalObject;
+//    public GameRunsFragment(GameLocalObject gameLocalObject) {
+//        this.game = gameLocalObject;
+//    }
+
+
+    public void setGame(GameLocalObject game) {
+        this.game = game;
     }
 
     @Override

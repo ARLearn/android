@@ -136,5 +136,9 @@ public class DaoConfiguration {
         return session.getFriendsLocalObjectDao();
     }
 
+    public InquiryQuestionAnswerLocalObjectDao getInquiryQuestionAnswerLocalObjectDao(){
+        return session.getInquiryQuestionAnswerLocalObjectDao();
+    }
+
 
 }

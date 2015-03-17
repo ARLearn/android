@@ -86,11 +86,13 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
         linearLayout.setVisibility(View.VISIBLE);
         boolean first = true;
         for (MultipleChoiceAnswerItem answerItem: answers){
-            SingleChoiceRow singleChoiceRow = createRow(answerItem, linearLayout, first);
-            first = false;
-            singleChoiceRow.unSelect();
-            choiceMap.put(answerItem.getId(), singleChoiceRow);
-            multipleChoiceAnswerItemHashMap.put(answerItem.getId(), answerItem);
+            if (!choiceMap.containsKey(answerItem.getId())) {
+                SingleChoiceRow singleChoiceRow = createRow(answerItem, linearLayout, first);
+                first = false;
+                singleChoiceRow.unSelect();
+                choiceMap.put(answerItem.getId(), singleChoiceRow);
+                multipleChoiceAnswerItemHashMap.put(answerItem.getId(), answerItem);
+            }
         }
         ((TextView) activity.findViewById(R.id.button)).setText(activity.getString(R.string.submit));
         ((TextView) activity.findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {

@@ -66,7 +66,8 @@ public abstract class DataCollectionViewController {
         activity.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.getInBetweenGeneralItemNavigation().navigateNext();
+                if (activity.getInBetweenGeneralItemNavigation()!=null)
+                    activity.getInBetweenGeneralItemNavigation().navigateNext();
             }
         });
     }
@@ -154,7 +155,9 @@ public abstract class DataCollectionViewController {
     public void showChecks(LazyListAdapter lazyListAdapter){
         if (dataCollectionTasks[0]||dataCollectionTasks[1]||dataCollectionTasks[2]||dataCollectionTasks[3]||dataCollectionTasks[4])
         if (lazyListAdapter.hasAllCompleted(dataCollectionTasks)){
-            activity.findViewById(R.id.button).setVisibility(View.VISIBLE);
+            if (activity.getInBetweenGeneralItemNavigation().hasNext()) {
+                activity.findViewById(R.id.button).setVisibility(View.VISIBLE);
+            }
         }
         if (lazyListAdapter.hasAudioResult()) {
             activity.findViewById(R.id.audioButtonCheckIcon).setVisibility(View.VISIBLE);

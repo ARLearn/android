@@ -14,7 +14,7 @@
     <string name="myGames">Mijn Spellen</string>
     <string name="library">Bibliotheek</string>
     <string name="scan">Scan</string>
-    <string name="nearMe">In de buurt</string>
+    <string name="settings">Instellingen</string>
 
     <string name="searchText">Zoek</string>
     <string name="searchFullTextHint">Naam, onderwerp, locatie, ...</string>
@@ -88,4 +88,5 @@
     <string name="message" >Bericht xxx van yyy</string>
     <string name="continueMessage" >Doorgaan</string>
     <string name="provideInput" >Voer in</string>
+    <string name="logout" >Afmelden</string>
 </resources>

@@ -46,12 +46,26 @@ import java.net.URL;
  */
 public class WhiteLabelDownloadScript {
 
-    public static void main(String[] args) throws Exception {
-        String authToken = args[0];
-        Long gameId = Long.parseLong(args[1]);
-        String baseDir = args[2];
-        String rawDir = args[3];
+    private static String authToken;
+    private static String baseDir;
+    private static String rawDir;
 
+    public static void main(String[] args) throws Exception {
+        authToken = args[0];
+
+        baseDir = args[2];
+        rawDir = args[3];
+
+//        Long gameId = Long.parseLong(args[1]);
+        for (String gameIdAsString: args[1].split(",")){
+            System.out.println("----Downloading game "+gameIdAsString);
+            downloadGame(Long.parseLong(gameIdAsString));
+        }
+
+
+    }
+
+    public static void downloadGame(Long gameId) throws Exception {
         String game = downloadUrl("download/game?gameId=" + gameId + "&auth=" + authToken + "&type=game", baseDir+"/game."+gameId+".json", null);
         System.out.println("saving game package");
         String contentJsonPath = baseDir+"/game."+gameId+".Content.json";
@@ -71,7 +85,6 @@ public class WhiteLabelDownloadScript {
         br.write(gameFileList.toString());
         br.flush();
         br.close();
-
     }
 
     public static String mapPathToFileName(long gameId, String partialPath) {
@@ -87,6 +100,8 @@ public class WhiteLabelDownloadScript {
             fileName = fullPath.substring(fullPath.indexOf(""+gameId));
             fileName = fileName.substring(fileName.indexOf("/")+1);
         }
+        if (partialPath.contains("gameMessagesHeader")) return fileName.toLowerCase()+"_"+gameId;
+        if (partialPath.contains("gamethumbnail")) return fileName.toLowerCase()+"_"+gameId;
         return fileName.toLowerCase();
     }
 

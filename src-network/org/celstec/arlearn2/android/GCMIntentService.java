@@ -41,8 +41,9 @@ public class GCMIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-//        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-//        String messageType = gcm.getMessageType(intent);
+        ARL.init(this);
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+        String messageType = gcm.getMessageType(intent);
 
         HashMap<String, String> map = new HashMap<String, String>();
         for (String key: intent.getExtras().keySet()) {

@@ -57,9 +57,12 @@ public class InBetweenGeneralItemNavigation {
                 navigatePrev();
             }
         };
-        activity.findViewById(R.id.generalItemActivity).setOnTouchListener(swipeListener);
-        activity.findViewById(R.id.descriptionId).setOnTouchListener(swipeListener);
+        if (generalItemActivityFeatures.showNavigationBar()) {
 
+            activity.findViewById(R.id.generalItemActivity).setOnTouchListener(swipeListener);
+            if (activity.findViewById(R.id.descriptionId) != null)
+                activity.findViewById(R.id.descriptionId).setOnTouchListener(swipeListener);
+        }
 
     }
 
@@ -90,43 +93,50 @@ public class InBetweenGeneralItemNavigation {
             }
 
         }
-        ((TextView)(activity.findViewById(R.id.messageCounter))).setText(
-                activity.getString(R.string.message).replace("xxx", counter+"").replace("yyy", ""+total)
+        if (generalItemActivityFeatures.showNavigationBar()) {
+
+            ((TextView) (activity.findViewById(R.id.messageCounter))).setText(
+                    activity.getString(R.string.message).replace("xxx", counter + "").replace("yyy", "" + total)
 //                "Bericht "+ counter+ " van " + total
-        );
-        if (previousGeneralItemLocalObject == null) {
-            (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_inactive);
-        } else {
-            (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_upstate);
-        }
-        if (nextGeneralItemLocalObject == null) {
-            (activity.findViewById(R.id.nextButton)).setBackgroundResource(R.drawable.game_general_item_next_message_inactive);
-        } else {
-            (activity.findViewById(R.id.nextButton)).setBackgroundResource(R.drawable.game_general_item_next_message_upstate);
+            );
+            if (previousGeneralItemLocalObject == null) {
+                (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_inactive);
+            } else {
+                (activity.findViewById(R.id.previousButton)).setBackgroundResource(R.drawable.game_general_item_previous_message_upstate);
+            }
+            if (nextGeneralItemLocalObject == null) {
+                (activity.findViewById(R.id.nextButton)).setBackgroundResource(R.drawable.game_general_item_next_message_inactive);
+            } else {
+                (activity.findViewById(R.id.nextButton)).setBackgroundResource(R.drawable.game_general_item_next_message_upstate);
+            }
         }
     }
 
     private void setNextPrevButtons(){
-        activity.findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               navigateNext();
-            }
-        });
-        activity.findViewById(R.id.previousButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               navigatePrev();
-            }
-        });
+        if (generalItemActivityFeatures.showNavigationBar()) {
+            activity.findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    navigateNext();
+                }
+            });
+            activity.findViewById(R.id.previousButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    navigatePrev();
+                }
+            });
+        }
     }
 
     private void navigatePrev(){
-        if (previousGeneralItemLocalObject != null) {
-            activity.finish();
-            activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        if (generalItemActivityFeatures.showNavigationBar()) {
+            if (previousGeneralItemLocalObject != null) {
+                activity.finish();
+                activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-            launchGeneralItemActivity(previousGeneralItemLocalObject);
+                launchGeneralItemActivity(previousGeneralItemLocalObject);
+            }
         }
     }
 
@@ -144,5 +154,9 @@ public class InBetweenGeneralItemNavigation {
         gameActivityFeatures.addMetadataToIntent(intent);
         intent.putExtra(GeneralItemLocalObject.class.getName(), localObject.getId());
         activity.startActivity(intent);
+    }
+
+    public boolean hasNext() {
+        return nextGeneralItemLocalObject !=null;
     }
 }

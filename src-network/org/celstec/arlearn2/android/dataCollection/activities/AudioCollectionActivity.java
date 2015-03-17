@@ -149,8 +149,11 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            recording = MediaFolders.createOutgoingAmrFile();
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.VORBIS);
+//            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+
+            recording = MediaFolders.createOutgoingOggFile();
             mRecorder.setOutputFile(recording.toString());
             try {
                 mRecorder.prepare();
@@ -233,6 +236,7 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
             System.out.println(recording.toString());
             Bundle conData = new Bundle();
             conData.putString("filePath", recording.getAbsolutePath());
+            conData.putString("mimetype", "audio/ogg");
             Intent intent = new Intent();
             intent.putExtras(conData);
             setResult(Activity.RESULT_OK, intent);

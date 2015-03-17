@@ -2,15 +2,20 @@ package org.celstec.arlearn2.android.game.messageViews;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.messageViews.map.OSMOverlayItem;
 import org.celstec.arlearn2.android.game.messageViews.map.OsmGeneralItemizedIconOverlay;
+import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -56,27 +61,25 @@ public class GameMap extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameActivityFeatures = new GameActivityFeatures(this);
-
-        setTheme(R.style.ARLearn_schema2);
+        setTheme(gameActivityFeatures.getTheme());
         setContentView(R.layout.game_mapview);
+        ARL.getDrawableUtil(gameActivityFeatures.getTheme(), this);
         if (android.os.Build.VERSION.SDK_INT >= 11) {
-            getActionBar().setIcon(R.drawable.ic_ab_back);
+            getActionBar().setHomeButtonEnabled(true);
+            getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
         }
 
         gameActivityFeatures = new GameActivityFeatures(this);
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
 
 
+        Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
+        if (messagesHeader != null) {
+            ((ImageView)findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
+        }
 
 
-//        mv.setTileSource(TileSourceFactory.MAPNIK);
 //
-//        mv.setClickable(true);
-//        mv.setBuiltInZoomControls(true);
-//
-//        mv.getController().setZoom(5);
-//        mv.setBuiltInZoomControls(false);
-//        control = mv.getController();
         mv = (MapView) findViewById(R.id.map);
         myLocation = new MyLocationNewOverlay(this, mv) {
 

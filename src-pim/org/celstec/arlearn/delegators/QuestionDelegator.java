@@ -72,7 +72,7 @@ public class QuestionDelegator extends AbstractDelegator {
                     inquiryQuestionLocalObject.setDescription(inqJsonObject.getString("description"));
                     inquiryQuestionLocalObject.setTitle(inqJsonObject.getString("question"));
                     if (inqJsonObject.has("tags")) inquiryQuestionLocalObject.setTags(inqJsonObject.getString("tags"));
-                    inquiryQuestionLocalObject.setIdentifier(inqJsonObject.getString("url"));
+                    inquiryQuestionLocalObject.setIdentifier(inqJsonObject.getString("questionId"));
                     inquiryQuestionLocalObject.setInquiryId(sge.inquiryLocalObject.getId());
                     DaoConfiguration.getInstance().getInquiryQuestionLocalObjectDao().insertOrReplace(inquiryQuestionLocalObject);
                     event = new QuestionEvent();

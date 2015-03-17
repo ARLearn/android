@@ -68,7 +68,8 @@ public class PictureManager extends DataCollectionManager {
                 uri = Uri.fromFile(bitmapFile);
                 filePath = bitmapFile.getAbsolutePath();
             }
-
+            String type = ctx.getContentResolver().getType(uri);
+            response.setContentType(type);
             response.setUriAsString(uri.toString());
 
 //            Bitmap a = BitmapUtils.decodeSampledBitmapFromPath(uri.toString(), 200, 200);

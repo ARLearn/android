@@ -44,8 +44,17 @@ public class ActionBarMenuController {
         if (gameActivityFeatures.getGameLocalObject().getMapAvailable()== null ||!gameActivityFeatures.getGameLocalObject().getMapAvailable()) {
             inflater.inflate(R.menu.game_no_messages, menu);
         } else {
-            inflater.inflate(R.menu.game_messages_actions, menu);
+            if (activity instanceof GameMessages) {
+                inflater.inflate(R.menu.game_messages_actions, menu);
+
+
+            } else {
+//                inflater.inflate(R.menu.game_messages_actions, menu);
+                                inflater.inflate(R.menu.game_map_actions, menu);
+            }
+
         }
+
 
     }
 

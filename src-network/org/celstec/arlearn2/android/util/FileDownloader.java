@@ -105,6 +105,7 @@ public class FileDownloader {
                 if ((startTime + 1500) < System.currentTimeMillis()) {
                     startTime = System.currentTimeMillis();
                     statusEvent.setBytesDownloaded(byteCounter);
+                    byteCounter = 0;
                     ARL.eventBus.postSticky(statusEvent);
                 }
             }

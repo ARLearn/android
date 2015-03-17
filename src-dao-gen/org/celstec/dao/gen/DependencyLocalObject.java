@@ -430,6 +430,9 @@ public class DependencyLocalObject {
     private long actionSatisfiedAt(RunLocalObject run) {
         long minSatisfiedAt = Long.MAX_VALUE;
         if (getGeneralItemId() != null) {
+            if (getGeneralItemLocalObject() == null) {
+                System.out.println("exception");
+            } else
             for (ActionLocalObject action :getGeneralItemLocalObject().getActions()){
                 if (action == null) {
                     System.out.println(action);

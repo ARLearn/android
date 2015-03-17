@@ -126,7 +126,6 @@ public class MessagesDelegator extends AbstractDelegator {
                 messageLocalObject.setId(returnMessage.getMessageId());
                 messageLocalObject.setSynced(true);
                 DaoConfiguration.getInstance().getMessageLocalObject().insertOrReplace(messageLocalObject);
-                System.out.println(returnMessage);
             }
         }
 

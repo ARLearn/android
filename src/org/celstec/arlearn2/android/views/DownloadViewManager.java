@@ -27,7 +27,7 @@ import org.celstec.arlearn2.android.delegators.game.GameDownloadEventInterface;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public abstract class DownloadViewManager implements GameDownloadEventInterface {
+public class DownloadViewManager implements GameDownloadEventInterface {
     ProgressBar messagesProgressBar;
     ProgressBar contentProgressBar;
     private View downloadStatus;
@@ -37,7 +37,7 @@ public abstract class DownloadViewManager implements GameDownloadEventInterface 
 
     public DownloadViewManager(View ctx) {
         downloadStatus = ctx.findViewById(R.id.downloadStatus);
-        downloadStatus.setVisibility(View.GONE);
+//        downloadStatus.setVisibility(View.GONE);
         messagesProgressBar = ((ProgressBar)ctx.findViewById(R.id.messageProgressBar));
         contentProgressBar = ((ProgressBar)ctx.findViewById(R.id.contentProgressBar));
     }
@@ -89,5 +89,8 @@ public abstract class DownloadViewManager implements GameDownloadEventInterface 
         }
     }
 
-    public abstract void onDismiss();
+
+    public void onDismiss() {
+        setGone();
+    }
 }

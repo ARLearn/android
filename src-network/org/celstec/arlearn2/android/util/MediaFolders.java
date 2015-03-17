@@ -70,6 +70,16 @@ public class MediaFolders {
         }
     }
 
+    public static File createOutgoingOggFile(){
+        File outFolder = getOutgoingFilesDir();
+        try {
+            return File.createTempFile("recording", ".ogg", outFolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void createFileFoldersRecursively(File file) {
         if (file.isDirectory()) {
             if (!file.getParentFile().exists()) createFileFoldersRecursively(file.getParentFile());

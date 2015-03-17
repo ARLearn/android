@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center|bottom"
+              android:background="@android:color/transparent"
+
+        >
+
+
+    <org.celstec.arlearn2.android.views.AnimatedGifView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+        />
+
+    <ImageView
+            android:layout_width="150dip"
+            android:layout_height="150dip"
+            android:id="@+id/continue_button"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/btn_next_large"/>
+
+    <LinearLayout
+            android:id="@+id/mediaBar"
+
+            android:layout_gravity="bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+        <ImageView
+                android:id="@+id/playPauseButton"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_alignTop="@+id/imageButton3"
+
+                android:layout_toRightOf="@+id/imageButton3"
+
+                android:layout_margin="10dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_next_large" />
+        <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:progressDrawable="@drawable/game_general_item_seekbar_progress_theme1"
+                android:thumb="@drawable/game_general_item_seekbar_thumb_theme1"
+                />
+    </LinearLayout>
+
+</FrameLayout>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioRe
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.PictureResultActivity;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.VideoResultActivity;
 import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.dao.gen.ResponseLocalObject;
 
 import java.text.SimpleDateFormat;
@@ -75,6 +77,11 @@ public class DataCollectionResultController {
                 break;
         }
         if (result.getDataAsString() != null) {
+//            WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
+//            webView.setBackgroundColor(0x00000000);
+////        webView.loadData(((NarratorItem) generalItemBean).getRichText(), "text/html", "utf-8");
+//            webView.loadDataWithBaseURL("file:///android_res/raw/", result.getDataAsString(), "text/html", "UTF-8", null);
+
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getDataAsString());
         } else {
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
@@ -157,6 +164,7 @@ public class DataCollectionResultController {
 
     public void notifyDataSetChanged(){
         adapter.updateList();
+        if (resultsLinearLayout == null) return;
         resultsLinearLayout.removeAllViews();
         for (ResponseLocalObject responseLocalObject: adapter.lazyList) {
             //if (responseLocalObject !=null && !displayedIds.contains(responseLocalObject.getId())) {

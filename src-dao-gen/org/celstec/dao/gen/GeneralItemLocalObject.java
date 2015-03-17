@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.arlearn2.beans.deserializer.json.JsonBeanDeserializer;
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 // KEEP INCLUDES END
 /**
  * Entity mapped to table GENERAL_ITEM_LOCAL_OBJECT.
@@ -366,6 +367,46 @@ public class GeneralItemLocalObject {
             return false;
         }
         return runsToRead.get(runId);
+    }
+
+    public JSONObject getJSONBean(){
+        JSONObject jsonObject = null;
+        try {
+            return new JSONObject(getBean());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Boolean isPicture() throws JSONException {
+        JSONObject jsonObject = getJSONBean();
+        if (!jsonObject.has("withPicture")) return false;
+        return (Boolean) jsonObject.get("withPicture");
+    }
+
+    public boolean isVideo() throws JSONException {
+        JSONObject jsonObject = getJSONBean();
+        if (!jsonObject.has("withVideo")) return false;
+        return (Boolean) jsonObject.get("withVideo");
+    }
+
+    public boolean isAudio() throws JSONException {
+        JSONObject jsonObject = getJSONBean();
+        if (!jsonObject.has("withAudio")) return false;
+        return (Boolean) jsonObject.get("withAudio");
+    }
+
+    public boolean isText() throws JSONException {
+        JSONObject jsonObject = getJSONBean();
+        if (!jsonObject.has("withText")) return false;
+        return (Boolean) jsonObject.get("withText");
+    }
+
+    public boolean isValue() throws JSONException {
+        JSONObject jsonObject = getJSONBean();
+        if (!jsonObject.has("withValue")) return false;
+        return (Boolean) jsonObject.get("withValue");
     }
     // KEEP METHODS END
 

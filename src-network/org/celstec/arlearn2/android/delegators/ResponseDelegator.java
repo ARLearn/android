@@ -18,6 +18,7 @@ import org.celstec.arlearn2.beans.run.ResponseList;
 import org.celstec.arlearn2.client.ResponseClient;
 import org.celstec.dao.gen.*;
 import org.celstec.arlearn2.beans.run.Response;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -65,6 +66,25 @@ public class ResponseDelegator extends AbstractDelegator{
         }
 
     }
+
+    public void createSortQuestionResponse(GeneralItemLocalObject generalItemLocalObject, long runId,  String[] ids, boolean correct) {
+        try {
+            JSONArray array = new JSONArray();
+            for (String id: ids){
+                array.put(id);
+            }
+
+            JSONObject responseValueJson = new JSONObject();
+            responseValueJson.put("isCorrect", correct);
+            responseValueJson.put("answer", array.toString());
+            createResponse(generalItemLocalObject,  runId,responseValueJson.toString());
+            System.out.println("response "+responseValueJson);
+        } catch (JSONException e) {
+            Log.e("exception", e.getMessage(), e);
+        }
+
+    }
+
 
     public void createResponse(GeneralItemLocalObject generalItemLocalObject, long runId, String responseValue) {
         ResponseLocalObject response = new ResponseLocalObject();
@@ -207,9 +227,9 @@ public class ResponseDelegator extends AbstractDelegator{
                     ARL.eventBus.post(new ResponseEvent(response.getRunId()));
                     response.getGeneralItemLocalObject().resetResponses();
 
-                } catch (FileNotFoundException e) {
-                    Log.e("ARLearn", e.getMessage(), e);
-                } catch (IOException e) {
+//                } catch (FileNotFoundException e) {
+//                    Log.e("ARLearn", e.getMessage(), e);
+                } catch (Exception e) {
                     Log.e("ARLearn", e.getMessage(), e);
                 }
 

@@ -58,7 +58,8 @@ public class GamePackageParser {
 
     public Game getGameLocalObject(){
         try {
-            return (Game) JsonBeanDeserializer.deserialize(gamePackageJson.getJSONObject("game"));
+            System.out.println(gamePackageJson);
+                return (Game) JsonBeanDeserializer.deserialize(gamePackageJson.getJSONObject("game"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

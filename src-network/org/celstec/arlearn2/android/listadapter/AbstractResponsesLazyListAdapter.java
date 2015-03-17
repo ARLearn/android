@@ -35,7 +35,9 @@ public abstract class AbstractResponsesLazyListAdapter extends LazyListAdapter<R
     public AbstractResponsesLazyListAdapter(Context context) {
         super(context);
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
-        qb = dao.queryBuilder().orderAsc(ResponseLocalObjectDao.Properties.TimeStamp);
+        qb = dao.queryBuilder()
+                .orderAsc(ResponseLocalObjectDao.Properties.TimeStamp)
+                .where(ResponseLocalObjectDao.Properties.Revoked.eq(false));
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());
     }
@@ -43,9 +45,15 @@ public abstract class AbstractResponsesLazyListAdapter extends LazyListAdapter<R
     public AbstractResponsesLazyListAdapter(Context context, long generalItemId) {
         super(context);
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
-        qb = dao.queryBuilder()
-                .orderAsc(ResponseLocalObjectDao.Properties.TimeStamp)
-                .where(ResponseLocalObjectDao.Properties.GeneralItem.eq(generalItemId));
+        qb = dao.queryBuilder();
+        qb.orderAsc(ResponseLocalObjectDao.Properties.TimeStamp)
+                .where(
+                        qb.and(
+                                ResponseLocalObjectDao.Properties.GeneralItem.eq(generalItemId)
+                        ,
+                                ResponseLocalObjectDao.Properties.Revoked.eq(false)
+                        )
+                        );
         ARL.eventBus.register(this);
         setLazyList(qb.listLazy());
     }

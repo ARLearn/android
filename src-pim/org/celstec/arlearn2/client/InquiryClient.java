@@ -4,6 +4,7 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
@@ -75,7 +76,7 @@ public class InquiryClient extends GenericClient{
 
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            return EntityUtils.toString(response.getEntity());
+            return EntityUtils.toString(response.getEntity(),HTTP.UTF_8);
 
         } catch (Exception e) {
             if (e instanceof ARLearnException) throw (ARLearnException) e;
@@ -89,11 +90,24 @@ public class InquiryClient extends GenericClient{
         url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&inquiryId="+inquiryId+"&method=inquiry.questions";
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            return EntityUtils.toString(response.getEntity());
+            return EntityUtils.toString(response.getEntity(),HTTP.UTF_8);
 
         } catch (Exception e) {
             if (e instanceof ARLearnException) throw (ARLearnException) e;
 
+        }
+        return "error";
+    }
+
+    public String answers(String token, long inquiryId) {
+        String url = getUrlPrefix();
+        url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&inquiryId="+inquiryId+"&method=inquiry.answers";
+        HttpResponse response = conn.executeGET(url, token, "application/json");
+        try {
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            return json.toString();
+        } catch (Exception e) {
+            if (e instanceof ARLearnException) throw (ARLearnException) e;
         }
         return "error";
     }
@@ -103,7 +117,7 @@ public class InquiryClient extends GenericClient{
         url+= "&api_key="+INQ.config.getProperty("elgg_api_key")+"&method=inquiry.arlearnrun&inquiryId="+inquiryId;
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             return json.getLong("result");
 
         } catch (Exception e) {
@@ -118,7 +132,7 @@ public class InquiryClient extends GenericClient{
                 "&method=inquiry.hypothesis&inquiryId="+inquiryId, token, "application/json");
         try {
 //            return EntityUtils.toString(response.getEntity());
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             if (json.has("result")) {
                 org.codehaus.jettison.json.JSONArray resultJson = json.getJSONArray("result");
                 if (resultJson.length()>0){
@@ -150,7 +164,7 @@ public class InquiryClient extends GenericClient{
 
             HttpResponse response = conn.executePOST(getUrlPrefix()
                     , token, "application/json", postBody, "application/x-www-form-urlencoded");
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(), HTTP.UTF_8));
             Log.e("ARLearn", "return after creating inquiry " + json.toString());
         } catch (Exception e) {
             if (e instanceof ARLearnException) throw (ARLearnException) e;
@@ -173,14 +187,14 @@ public class InquiryClient extends GenericClient{
 
             HttpResponse response = conn.executePOST(getUrlPrefix()
                     , token, "application/json", postBody, "application/x-www-form-urlencoded");
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             Log.e("ARLearn", "return after creating inquiry " + json.toString());
 //
 //        String url = getUrlPrefix();
 //        url += "&api_key="+INQ.config.getProperty("elgg_api_key")+"&inquiryId="+inquiryId+"&method=inquiry.questions";
 //        HttpResponse response = conn.executeGET(url, token, "application/json");
 
-            return EntityUtils.toString(response.getEntity());
+            return EntityUtils.toString(response.getEntity(),HTTP.UTF_8);
 
         } catch (Exception e) {
             if (e instanceof ARLearnException) throw (ARLearnException) e;

@@ -10,6 +10,14 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
+    <style name="ARLearn.schema3" parent="ARLearn.Theme3">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="ARLearn.schema4" parent="ARLearn.Theme4">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
 
     <style name="ARLearn" parent="Theme.Sherlock">
         <item name="android:actionBarStyle">@style/MyActionBar</item>

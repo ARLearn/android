@@ -11,38 +11,9 @@
               android:background="?attr/backgroundColorLight"
               android:layout_height="match_parent">
 
-    <LinearLayout
-            android:background="?attr/backgroundColor"
-            android:gravity="center_horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:padding="10dip">
+    <include layout="@layout/game_general_item_navigation_header"/>
 
-        <Button
 
-                android:id="@+id/previousButton"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_marginRight="20dip"
-                android:background="@drawable/game_general_item_previous_message_inactive" />
-
-        <TextView
-                android:id="@+id/messageCounter"
-                android:text="Bericht 1 van 77"
-                android:textColor="?attr/textLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-        <Button
-                android:id="@+id/nextButton"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_marginLeft="20dip"
-                android:background="@drawable/game_general_item_next_message_inactive" />
-
-    </LinearLayout>
 
     <ImageView
             android:id="@+id/generalItemIcon"

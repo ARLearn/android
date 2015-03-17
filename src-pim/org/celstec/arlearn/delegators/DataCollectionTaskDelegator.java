@@ -57,4 +57,20 @@ public class DataCollectionTaskDelegator  extends AbstractDelegator { //extends 
         ARL.generalItems.createGeneralItem(generalItem);
     }
 
+    public void createDataCollectionTask(long gameId, String name, String description, boolean picture, boolean audio, boolean text, boolean video, boolean value) {
+        NarratorItem generalItem = new NarratorItem();
+        generalItem.setGameId(gameId);
+        generalItem.setName(name);
+        generalItem.setDescription(description);
+        generalItem.setRichText(description);
+        generalItem.setOpenQuestion(new OpenQuestion());
+        generalItem.getOpenQuestion().setWithPicture(picture);
+        generalItem.getOpenQuestion().setWithAudio(audio);
+        generalItem.getOpenQuestion().setWithText(text);
+        generalItem.getOpenQuestion().setWithVideo(video);
+        generalItem.getOpenQuestion().setWithValue(value);
+
+        ARL.generalItems.createGeneralItem(generalItem);
+    }
+
 }

@@ -26,8 +26,10 @@ import org.celstec.arlearn2.android.delegators.GameDelegator;
 import org.celstec.arlearn2.android.delegators.RunDelegator;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.events.GameEvent;
+import org.celstec.arlearn2.android.events.RatingEvent;
 import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.arlearn2.beans.game.Rating;
 import org.celstec.arlearn2.beans.run.Run;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.StoreGameLocalObject;
@@ -61,7 +63,15 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     private Run run;
     private View gameView;
     private static HashMap<String, Integer> languageMapping = new HashMap<String, Integer>();
+    private GameDownloadProgressView progressView ;
+    private GameDownloadManager gameDownloadManager;
+    ProgressDialog pd;
 
+    private ImageView star1;
+    private ImageView star2;
+    private ImageView star3;
+    private ImageView star4;
+    private ImageView star5;
 
     static {
         languageMapping.put("en", R.string.en);
@@ -77,17 +87,10 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
         languageMapping.put("ru", R.string.ru);
     }
 
-    private GameDownloadProgressView progressView ;
-    private GameDownloadManager gameDownloadManager;
-    ProgressDialog pd;
 
     public GameFragment() {
 
     }
-//    public GameFragment(Game game) {
-//        this.gameId = game.getGameId();
-//
-//    }
 
     @Override
     public void setArguments(Bundle args) {
@@ -190,6 +193,15 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
 
             DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(v.getContext());
             ((TextView) v.findViewById(R.id.dateId)).setText(dateFormat.format(localObject.getLastModificationDate()));
+
+            star1 = (ImageView) v.findViewById(R.id.star1);
+            star2 = (ImageView) v.findViewById(R.id.star2);
+            star3 = (ImageView) v.findViewById(R.id.star3);
+            star4 = (ImageView) v.findViewById(R.id.star4);
+            star5 = (ImageView) v.findViewById(R.id.star5);
+
+
+            ARL.games.downloadRating(gameId);
         }
     }
 
@@ -266,6 +278,21 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
         }
     }
 
+    public void onEventMainThread(Rating ratingEvent) {
+        long amount = 0;
+        if (ratingEvent != null) {
+            amount = ratingEvent.getAmount();
+            for (int i =0 ; i<6; i++) {
+                if (i <=ratingEvent.getRating()) {
+                    setStar(i);
+                } else {
+                    unsetStar(i);
+                }
+            }
+        }
+        ((TextView)gameView.findViewById(R.id.amountId)).setText("("+amount+")");
+    }
+
     public void downloadComplete() {
         gameView.findViewById(R.id.downloadId).setVisibility(View.GONE);
         gameView.findViewById(R.id.openId).setVisibility(View.VISIBLE);
@@ -286,4 +313,45 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
         gameView.findViewById(R.id.openId).setVisibility(View.GONE);
     }
 
+    public void setStar(int i) {
+        switch (i) {
+            case 1:
+                star1.setImageResource(R.drawable.ic_star);
+                break;
+            case 2:
+                star2.setImageResource(R.drawable.ic_star);
+                break;
+            case 3:
+                star3.setImageResource(R.drawable.ic_star);
+                break;
+            case 4:
+                star4.setImageResource(R.drawable.ic_star);
+                break;
+            case 5:
+                star5.setImageResource(R.drawable.ic_star);
+                break;
+        }
+
+    }
+
+    public void unsetStar(int i) {
+        switch (i) {
+            case 1:
+                star1.setImageResource(R.drawable.ic_star_grey);
+                break;
+            case 2:
+                star2.setImageResource(R.drawable.ic_star_grey);
+                break;
+            case 3:
+                star3.setImageResource(R.drawable.ic_star_grey);
+                break;
+            case 4:
+                star4.setImageResource(R.drawable.ic_star_grey);
+                break;
+            case 5:
+                star5.setImageResource(R.drawable.ic_star_grey);
+                break;
+        }
+
+    }
 }

@@ -12,6 +12,7 @@
     <TextView
             android:text="@string/myGames"
             android:textSize="25dp"
+            android:id="@+id/myGamesText"
             style="@style/ARLearn.ListHeaderText"/>
     <LinearLayout
             android:orientation="horizontal"

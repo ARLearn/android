@@ -1,5 +1,6 @@
 package org.celstec.dao.gen;
 
+import java.util.List;
 import org.celstec.dao.gen.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -27,6 +28,7 @@ public class InquiryQuestionLocalObject {
     private InquiryLocalObject inquiryLocalObject;
     private Long inquiryLocalObject__resolvedKey;
 
+    private List<InquiryQuestionAnswerLocalObject> answers;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -115,6 +117,28 @@ public class InquiryQuestionLocalObject {
             inquiryId = inquiryLocalObject == null ? null : inquiryLocalObject.getId();
             inquiryLocalObject__resolvedKey = inquiryId;
         }
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<InquiryQuestionAnswerLocalObject> getAnswers() {
+        if (answers == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            InquiryQuestionAnswerLocalObjectDao targetDao = daoSession.getInquiryQuestionAnswerLocalObjectDao();
+            List<InquiryQuestionAnswerLocalObject> answersNew = targetDao._queryInquiryQuestionLocalObject_Answers(identifier);
+            synchronized (this) {
+                if(answers == null) {
+                    answers = answersNew;
+                }
+            }
+        }
+        return answers;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetAnswers() {
+        answers = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

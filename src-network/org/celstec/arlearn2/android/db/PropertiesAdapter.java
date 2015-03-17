@@ -283,12 +283,12 @@ public class PropertiesAdapter {
 
     public void storeGCMKey(String key) {
         SharedPreferences.Editor editor = getDefaultPrefs().edit();
-        editor.putString("GCM_REG_KEY:"+ getAppVersion(),key);
+        editor.putString("GCM_REG_KEY_1:"+ getAppVersion(),key);
         editor.commit();
     }
 
     public String getGCMKey() {
-        return getDefaultPrefs().getString("GCM_REG_KEY:"+ getAppVersion(), null);
+        return getDefaultPrefs().getString("GCM_REG_KEY_1:"+ getAppVersion(), null);
     }
 
 

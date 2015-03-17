@@ -1,6 +1,6 @@
 package org.celstec.arlearn2.android;
 
-import android.os.Build;import android.os.Bundle;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -12,7 +12,9 @@ import authentication.LoginFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.game.MyGamesFragment;
 import org.celstec.arlearn2.android.qrCodeScanning.ScannerFragment;
+import org.celstec.arlearn2.android.settings.SettingsFragment;
 import org.celstec.arlearn2.android.store.StoreFragment;
 
 /**
@@ -67,12 +69,12 @@ public class MainMenu extends SherlockFragment {
         button1 = v.findViewById(R.id.games);
         storeButton =  v.findViewById(R.id.store);
         button3 =  v.findViewById(R.id.scan);
-        button4 =  v.findViewById(R.id.nearme);
+        button4 =  v.findViewById(R.id.settings);
 
         button1.setOnClickListener(new GamesButton());
         storeButton.setOnClickListener(new StoreButton());
         button3.setOnClickListener(new ScanButton());
-        button4.setOnClickListener(new ClickButton4());
+        button4.setOnClickListener(new SettingsButton());
 
         return v;
     }
@@ -130,10 +132,17 @@ public class MainMenu extends SherlockFragment {
         }
     }
 
-    private class ClickButton4 implements View.OnClickListener {
+    private class SettingsButton implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.e(TAG, "Click Nearby" );
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Bundle args = new Bundle();
+            SettingsFragment frag = new SettingsFragment();
+            frag.setArguments(args);
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.right_pane, frag).addToBackStack(null).commit();
+
         }
     }
 }

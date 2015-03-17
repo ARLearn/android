@@ -46,7 +46,7 @@ public class MapContext {
     public void applyContext(MapView mapView) {
         mapView.getController().setZoom(zoom);
         mapView.getController().animateTo(ARL.mapContext.getLocation());
-        mapView.setMaxZoomLevel(17);
+        mapView.setMaxZoomLevel(19);
 
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 

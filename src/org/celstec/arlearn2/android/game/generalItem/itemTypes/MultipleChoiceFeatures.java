@@ -127,6 +127,7 @@ public class MultipleChoiceFeatures extends SingleChoiceFeatures {
                 }
             }
             createAnswerResultAction(correct);
+            createAnswerGivenAction();
             activity.finish();
 
         }

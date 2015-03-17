@@ -9,6 +9,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.util.MediaFolders;
 
@@ -88,7 +89,9 @@ public class VideoManager extends DataCollectionManager {
                 try {
                     retriever.setDataSource(ctx, uri);
                     bmp = retriever.getFrameAtTime();
-
+                    MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    String type = ctx.getContentResolver().getType(uri);
+                    response.setContentType(type);
                     response.setHeight(bmp.getHeight());
                     response.setWidth(bmp.getWidth());
                 } catch (RuntimeException ex) {
@@ -101,6 +104,7 @@ public class VideoManager extends DataCollectionManager {
                     }
                 }
             }
+
             saveResponseForSyncing();
         } else if (resultCode == Activity.RESULT_CANCELED) {
             // User cancelled the image capture

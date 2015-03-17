@@ -1,6 +1,11 @@
 package org.celstec.arlearn2.android.game.messageViews.map;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.text.TextPaint;
 import android.view.MotionEvent;
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.QueryBuilder;
@@ -10,6 +15,7 @@ import org.celstec.arlearn2.android.game.messageViews.GameMap;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -83,4 +89,5 @@ public class OsmGeneralItemizedIconOverlay extends ItemizedIconOverlay<OverlayIt
         ctx.openGeneralItem(getItem(index));
         return true;
     }
+
 }

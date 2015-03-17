@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
@@ -42,14 +43,28 @@ public class GeneralItemActivity extends Activity {
     InBetweenGeneralItemNavigation inBetweenGeneralItemNavigation;
 
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (gameActivityFeatures != null)
+            gameActivityFeatures.saveState(savedInstanceState);
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ARL.init(this);
+        System.out.println("in oncreaate");
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY); //TODO make conditional
         gameActivityFeatures = new GameActivityFeatures(this);
+
         setTheme(gameActivityFeatures.getTheme());
-        setContentView(R.layout.game_general_item);
+        setContentView(GeneralItemActivityFeatures.getContentView(this));
+
+
         if (android.os.Build.VERSION.SDK_INT >= 11) {
-            getActionBar().setIcon(R.drawable.ic_ab_back);
+
             getActionBar().setTitle(getString(R.string.messages));
+            getActionBar().setHomeButtonEnabled(true);
             getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
         }
 
@@ -58,13 +73,14 @@ public class GeneralItemActivity extends Activity {
                 gameActivityFeatures.getRunId(),
                 generalItemActivityFeatures.generalItemLocalObject.getId(),
                 generalItemActivityFeatures.generalItemLocalObject.getGeneralItemBean().getType());
-        inBetweenGeneralItemNavigation = new InBetweenGeneralItemNavigation(this, gameActivityFeatures, generalItemActivityFeatures);
+//        if (generalItemActivityFeatures.showNavigationBar())
+            inBetweenGeneralItemNavigation = new InBetweenGeneralItemNavigation(this, gameActivityFeatures, generalItemActivityFeatures);
     }
 
     public void onEventMainThread(final GeneralItemEvent event) {
         System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
         generalItemActivityFeatures.updateGeneralItem();
-        inBetweenGeneralItemNavigation.updateMessagesHeader();
+        if (inBetweenGeneralItemNavigation!=null) inBetweenGeneralItemNavigation.updateMessagesHeader();
         if (event.isBecameVisible()) gameActivityFeatures.showStrokenNotification(new NotificationAction() {
             @Override
             public void onOpen() {
@@ -110,6 +126,7 @@ public class GeneralItemActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("in onActivityResult");
         if (generalItemActivityFeatures != null)
             generalItemActivityFeatures.onActivityResult(requestCode, resultCode, data);
         generalItemActivityFeatures.updateResponses();

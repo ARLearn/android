@@ -82,7 +82,7 @@ public class AccountDelegator extends AbstractDelegator{
 
     public void onEventAsync(SyncMyAccount sma) {
         String token = returnTokenIfOnline();
-        if (token != null) {
+        if (token != null && !"".equals(token)) {
             Account account = AccountClient.getAccountClient().accountDetails(token);
             loggedInAccount = syncAccount(account);
             if (loggedInAccount!=null) {

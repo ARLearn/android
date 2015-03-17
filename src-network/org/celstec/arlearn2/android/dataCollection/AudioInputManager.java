@@ -57,6 +57,7 @@ public class AudioInputManager extends DataCollectionManager {
         if (resultCode == Activity.RESULT_OK) {
             String filePath = data.getExtras().get("filePath").toString();
             File audioFile = new File(filePath);
+            response.setContentType(data.getExtras().get("mimetype").toString());
             response.setUriAsString(Uri.fromFile(audioFile).toString());
 //            response.setValue(text);
             saveResponseForSyncing();

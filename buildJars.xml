@@ -7,7 +7,7 @@
         <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
         <fileset dir="../arlearn.thirdparty/google-play-services_lib/libs" includes="**/*.jar" />
         <fileset dir="${android_sdk}/extras/android/support/v13" includes="**/*.jar" />
-        <fileset dir="${android_sdk}/platforms/android-19/" includes="**/*.jar" />
+        <fileset dir="${android_sdk}/platforms/android-21/" includes="**/*.jar" />
     </path>
 
     <path id="classpathwithBase">
@@ -16,7 +16,7 @@
         <fileset dir="../arlearn.beans/build/jar/" includes="**/*.jar" />
         <fileset dir="../arlearn.network/build/jar/" includes="**/*.jar" />
         <fileset dir="./build/jar" includes="**/*.jar" />
-        <fileset dir="${android_sdk}/platforms/android-19/" includes="**/*.jar" />
+        <fileset dir="${android_sdk}/platforms/android-21/" includes="**/*.jar" />
     </path>
 
     <target name="clean base">
@@ -31,7 +31,7 @@
         <mkdir dir="build/base/classes" />
 
         <javac target="1.6" srcdir="src-dao-gen" verbose="true"
-               destdir="build/base/classes" classpathref="classpath" debug="off" excludes="org/celstec/dao/ARlearnDaoGenerator.java,org/celstec/arlearn2/android/listadapter/**">
+               destdir="build/base/classes" classpathref="classpath" debug="on" excludes="org/celstec/dao/ARlearnDaoGenerator.java,org/celstec/arlearn2/android/listadapter/**">
             <src path="src-network"></src>
         </javac>
         <javac target="1.6" srcdir="src-network" destdir="build/base/classes"

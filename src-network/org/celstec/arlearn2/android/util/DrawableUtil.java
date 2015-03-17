@@ -93,6 +93,19 @@ public class DrawableUtil {
 //        return stateListDrawable;
     }
 
+    public Drawable getBackgroundDarkGradient(){
+//        styleUtil.getBackgroundDark()
+        int color = styleUtil.getBackgroundDark();
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = (color >> 0) & 0xFF;
+        int alpha= 150;
+
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{Color.argb(alpha, r, g, b), styleUtil.getBackgroundDark()});
+//        gd.setStroke(10, Color.BLUE);
+        return gd;
+    }
+
     public StyleUtilInterface getStyleUtil(){
         return styleUtil;
     }

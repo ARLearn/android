@@ -94,18 +94,19 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
         seekbar.setOnSeekBarChangeListener(this);
         GameFileLocalObject gameFile = GameFileLocalObject.getGameFileLocalObject(generalItemLocalObject.getGameId(), "/generalItems/" + generalItemLocalObject.getId() + "/video");
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(activity, gameFile.getLocalUri());
-        videoView.setVideoURI(gameFile.getLocalUri());
-        Bitmap frameAtTime = retriever.getFrameAtTime();
-        videoView.setVideoSize(frameAtTime.getWidth(),frameAtTime.getHeight());
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                if (((VideoObject)generalItemLocalObject.getGeneralItemBean()).getAutoLaunch()) playPause();
+        if (gameFile != null) {
+            retriever.setDataSource(activity, gameFile.getLocalUri());
+            videoView.setVideoURI(gameFile.getLocalUri());
+            Bitmap frameAtTime = retriever.getFrameAtTime();
+            videoView.setVideoSize(frameAtTime.getWidth(), frameAtTime.getHeight());
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    if (((VideoObject) generalItemLocalObject.getGeneralItemBean()).getAutoLaunch()) playPause();
 
-            }
-        });
-
+                }
+            });
+        }
     }
 
     public void onPauseActivity(){

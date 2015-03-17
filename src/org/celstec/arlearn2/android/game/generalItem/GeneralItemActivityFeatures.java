@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.widget.ImageView;
@@ -86,14 +87,37 @@ public abstract class GeneralItemActivityFeatures {
             case GeneralItemMapper.MULTI_CHOICE_IMAGE:
                 result = new MultipleChoiceImageTestFeatures(activity, generalItemLocalObject);
                 break;
+            case GeneralItemMapper.SORT_QUESTION:
+                result = new SortQuestionFeatures(activity, generalItemLocalObject);
+                break;
             case GeneralItemMapper.AUDIO_OBJECT:
                 result =new AudioItemFeatures(activity, generalItemLocalObject);
+                break;
+            case GeneralItemMapper.PURE_AUDIO:
+                result =new PureAudioActivityFeatures(activity, generalItemLocalObject);
                 break;
             case GeneralItemMapper.VIDEO_OBJECT:
                 result =new VideoObjectFeatures(activity, generalItemLocalObject);
                 break;
         }
         result.setMetadata();
+        return result;
+    }
+    public static int getContentView(GeneralItemActivity activity) {
+        Long generalItemId = activity.getIntent().getLongExtra(GeneralItemLocalObject.class.getName(), 0l);
+        GeneralItemLocalObject generalItemLocalObject = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(generalItemId);
+        int result = R.layout.game_general_item;
+        switch (GeneralItemMapper.mapBeanToConstant(generalItemLocalObject.getGeneralItemBean())){
+
+            case GeneralItemMapper.PURE_AUDIO:
+                result = R.layout.game_general_item_pure_audio;
+                break;
+            case GeneralItemMapper.SCAN_TAG:
+                result = R.layout.game_general_item_scan;
+                break;
+            default:
+                result = R.layout.game_general_item;
+        }
         return result;
     }
 
@@ -105,6 +129,8 @@ public abstract class GeneralItemActivityFeatures {
         this.activity = activity;
         this.generalItemLocalObject = generalItemLocalObject;
         this.generalItemBean = generalItemLocalObject.getGeneralItemBean();
+        if (activity.findViewById(R.id.audioLayout) == null) return;
+
         dataCollectionResultController = new DataCollectionResultController(this.activity);
         lazyListAdapter = new LazyListAdapter(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId(), generalItemLocalObject.getId());
         dataCollectionResultController.setAdapter(lazyListAdapter);
@@ -174,17 +200,14 @@ public abstract class GeneralItemActivityFeatures {
     }
 
     public void onResumeActivity(){
-        dataCollectionViewController.showChecks(lazyListAdapter);
+        if (dataCollectionViewController !=null) dataCollectionViewController.showChecks(lazyListAdapter);
     }
 
     public void setMetadata(){
 //        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
         DrawableUtil drawableUtil = ARL.getDrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
-        Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
-        TypedArray ta =  activity.obtainStyledAttributes(activity.getGameActivityFeatures().getTheme(), new int[]{R.attr.primaryColor});
-        ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
-        iconDrawable.setColorFilter(filter);
-        ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageDrawable(iconDrawable);
+
+
         //((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageResource(getImageResource());
 
         activity.findViewById(R.id.audioButtonIcon).setBackgroundDrawable(drawableUtil.getPrimaryColorOvalWithState());
@@ -203,6 +226,17 @@ public abstract class GeneralItemActivityFeatures {
         TextView titleView = (TextView) this.activity.findViewById(R.id.titleId);
         titleView.setText(generalItemLocalObject.getTitle());
 
+
+        initiateIcon();
+
+    }
+
+    protected void initiateIcon(){
+        TypedArray ta =  activity.obtainStyledAttributes(activity.getGameActivityFeatures().getTheme(), new int[]{R.attr.primaryColor});
+        ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
+        Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
+        iconDrawable.setColorFilter(filter);
+        ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageDrawable(iconDrawable);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -243,4 +277,10 @@ public abstract class GeneralItemActivityFeatures {
         generalItemLocalObject =DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(generalItemLocalObject.getId());
         generalItemBean = generalItemLocalObject.getGeneralItemBean();
     }
+
+    public boolean showNavigationBar() {
+        return true;
+    }
+
+
 }

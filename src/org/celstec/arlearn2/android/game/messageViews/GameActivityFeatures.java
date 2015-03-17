@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.notification.AlertView;
@@ -52,6 +53,7 @@ public class GameActivityFeatures {
         Long runId = activity.getIntent().getLongExtra(RunLocalObject.class.getName(), 0l);
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        ARL.getDrawableUtil(getTheme(), activity);
         if (gameLocalObject == null) throw new NullPointerException("Game object is null");
         strokenView = new StrokenView(activity) {
             @Override
@@ -68,6 +70,11 @@ public class GameActivityFeatures {
 
 
         };
+    }
+
+    public void saveState(Bundle savedInstanceState) {
+        savedInstanceState.putLong(GameLocalObject.class.getName(), getGameId());
+        savedInstanceState.putLong(RunLocalObject.class.getName(), getRunId());
     }
 
     public long getGameId(){
@@ -119,12 +126,14 @@ public class GameActivityFeatures {
                 return R.style.ARLearn_schema1;
             case 2:
                 return R.style.ARLearn_schema2;
+            case 3:
+                return R.style.ARLearn_schema3;
+            case 4:
+                return R.style.ARLearn_schema4;
         }
         return R.style.ARLearn_schema1;
 
     }
 
-    public void onSaveInstanceState(Bundle outState) {
-//        outState.putString("message", "This is my message to be reloaded");
-    }
+
 }

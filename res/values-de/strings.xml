@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ARLearn</string>
+
+    <string name="login_facebook">Login with Facebook</string>
+    <string name="login_google">Login with Google</string>
+    <string name="login_twitter">Login with Twitter</string>
+    <string name="login_linked_in">Login with LinkedIn</string>
+    <string name="login_eco">Login with ECO</string>
+
+    <string name="login_to_continue">Login to continue</string>
+    <string name="login_from_my_games_text">Zugriff auf Meine Spiele erst nach Anmeldung. \nBitte ein Anmeldeverfahren wählen.</string>
+
+    <string name="myGames">Meine Spiele</string>
+    <string name="library">Bibliothek</string>
+    <string name="scan">Scan</string>
+    <string name="settings">Einstellungen</string>
+
+    <string name="searchText">Suche</string>
+    <string name="searchFullTextHint">Name, Thema, Ort ...</string>
+    <string name="category">Kategorie</string>
+    <string name="topGames">Top-Spiele</string>
+
+    <string name="nolicense">Keine Lizenz</string>
+    <string name="ccby">Namensnennung</string>
+    <string name="bynd">Namensnennung-Keine Bearbeitung</string>
+    <string name="bysa">Namensnennung-Weitergabe unter gleichen</string>
+    <string name="bync">Namensnennung-Nicht kommerziell</string>
+    <string name="byncsa">Namensnennung-Nicht kommerziell-Weitergabe unter gleichen Bedingungen</string>
+    <string name="byncnd">Namensnennung-Nicht kommerziell-Keine Bearbeitung</string>
+
+    <string name="en">Englisch</string>
+    <string name="nl">Holländisch</string>
+    <string name="es">Spanisch</string>
+    <string name="de">Deutsch</string>
+    <string name="fr">Französisch</string>
+    <string name="it">Italienisch</string>
+    <string name="pt">Portugiesisch</string>
+    <string name="bg">Bulgarisch</string>
+    <string name="el">Griechisch</string>
+    <string name="pl">Polish</string>
+    <string name="ru">Russisch</string>
+
+    <string name="unabletosyncgame">Unable to sync game</string>
+    <string name="loading">Laden</string>
+    <string name="wait">Warten Sie</string>
+
+    <string name="download">Herunterladen</string>
+    <string name="open">Öffnen</string>
+
+    <!--Game Splash Screen-->
+
+    <string name="downloadStatus">Download Status</string>
+    <string name="gameMessages">Spiel Nachrichten</string>
+    <string name="gameContent">Spielinhalte</string>
+
+    <!--Notifications-->
+    <string name="readMessage">Nachricht lesen</string>
+    <string name="closeMessage">Nachricht schließen</string>
+
+    <!--Network-->
+    <string name="noInternet">Keine Verbindung zum Internet.</string>
+    <string name="cancel">Annullieren</string>
+    <string name="wireless">Open wireless settings</string>
+    <string name="operatingOffline">Öffnen Sie die WLAN-Einstellungen</string>
+    <string name="contentMissingNoInternet">Einige Spielinhalt wurde nicht geladen.</string>
+    <string name="submit" >Einreichen</string>
+
+    <!--Data collection-->
+    <string name="author" >Autor</string>
+    <string name="removeData" >Daten entfernen?</string>
+    <string name="yes" >Ja</string>
+    <string name="recordAudio" >Record audio</string>
+    <string name="startRecording" >Start recording</string>
+    <string name="stopRecording" >Stop recording</string>
+    <string name="provideYourText" >Provide your text</string>
+    <string name="typeYourTextHere" >Type your text here...</string>
+    <string name="provideValue" >Provide a value</string>
+
+    <!--Game Stroken-->
+    <string name="newMessage" >New message!</string>
+    <string name="Watch" >Watch</string>
+
+    <!--General Item-->
+    <string name="messages" >Nachrichten</string>
+    <string name="message" >Message xxx of yyy</string>
+    <string name="continueMessage" >Continue</string>
+    <string name="provideInput" >Provide input</string>
+    <string name="logout">Log out</string>
+
+</resources>

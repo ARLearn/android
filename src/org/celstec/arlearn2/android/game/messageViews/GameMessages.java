@@ -1,6 +1,8 @@
 package org.celstec.arlearn2.android.game.messageViews;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,9 +20,7 @@ import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
 import org.celstec.arlearn2.android.util.DrawableUtil;
-import org.celstec.dao.gen.GameFileLocalObject;
-import org.celstec.dao.gen.GeneralItemLocalObject;
-import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
+import org.celstec.dao.gen.*;
 
 /**
  * ****************************************************************************
@@ -51,17 +51,16 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARL.init(this);
-
+        ARL.accounts.syncMyAccountDetails();
         gameActivityFeatures = new GameActivityFeatures(this);
         setTheme(gameActivityFeatures.getTheme());
-//        if (DrawableUtil.isInit()) new DrawableUtil(gameActivityFeatures.getTheme(), this);
         ARL.getDrawableUtil(gameActivityFeatures.getTheme(), this);
-//        new DrawableUtil(gameActivityFeatures.getTheme(), this);
         setContentView(R.layout.game_list_messages);
         if (android.os.Build.VERSION.SDK_INT >= 11) {
-            getActionBar().setIcon(R.drawable.ic_ab_back);
             getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+            getActionBar().setHomeButtonEnabled(true);
         }
+
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
         Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
         if (messagesHeader != null) {
@@ -174,8 +173,13 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        gameActivityFeatures.onSaveInstanceState(outState);
+        gameActivityFeatures.saveState(outState);
+    }
 
-
+    public static void startActivity(Context ctx, long gameId, long runId){
+            Intent gameIntent = new Intent(ctx, GameMessages.class);
+            gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
+            gameIntent.putExtra(RunLocalObject.class.getName(), runId);
+            ctx.startActivity(gameIntent);
     }
 }

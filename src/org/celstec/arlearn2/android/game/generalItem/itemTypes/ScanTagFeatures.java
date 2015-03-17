@@ -1,9 +1,19 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.hardware.Camera;
+import android.os.Handler;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import com.google.android.gms.internal.qr;
+import net.sourceforge.zbar.*;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.android.qrCodeScanning.CameraPreview;
+import org.celstec.arlearn2.android.qrCodeScanning.QRScanner;
+import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
@@ -26,12 +36,15 @@ import org.celstec.dao.gen.GeneralItemLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class ScanTagFeatures extends GeneralItemActivityFeatures {
+public class ScanTagFeatures extends GeneralItemActivityFeatures implements QRScanner.ScanResultInterface {
 
+    QRScanner qrScanner;
+    boolean init = false;
     @Override
     protected int getImageResource() {
         return GeneralItemMapper.mapConstantToDrawable(GeneralItemMapper.SCAN_TAG);
     }
+
     @Override
     protected boolean showDataCollection() {
         return false;
@@ -39,5 +52,33 @@ public class ScanTagFeatures extends GeneralItemActivityFeatures {
 
     public ScanTagFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         super(activity, generalItemLocalObject);
+    }
+
+    public void setMetadata(){
+        if (!init) {
+            initiateIcon();
+            FrameLayout preview = (FrameLayout) activity.findViewById(R.id.cameraPreview);
+            qrScanner = new QRScanner(activity, this, preview);
+            init = true;
+        }
+//        scanText = (TextView)v.findViewById(R.id.scanText);
+    }
+
+    @Override
+    public void onPauseActivity(){
+        if (qrScanner != null) qrScanner.releaseCamera();
+    }
+
+    @Override
+    public void data(String data) {
+        System.out.println("scanned "+data);
+        Action action = new Action();
+        action.setAction(data);
+        action.setRunId(activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+
+        ActionsDelegator.getInstance().createAction(action);
+        activity.finish();
     }
 }

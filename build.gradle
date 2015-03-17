@@ -1,15 +1,17 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
 apply plugin: 'com.android.application'
 
-repositories{
+repositories {
     mavenCentral()
+    mavenLocal()
 }
 configurations {
     compile.exclude module: 'stax'
@@ -18,23 +20,22 @@ configurations {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile "com.google.android.gms:play-services:6.5.+"
-    compile "com.actionbarsherlock:actionbarsherlock:4.4.0@aar"
-    compile "com.android.support:support-v4:18.0.+"
-    compile "de.greenrobot:greendao:1.3.7"
-    compile "de.greenrobot:greendao-generator:1.3.1"
-//    compile "org.slf4j:slf4j-api:1.7.1"
+    compile 'com.google.android.gms:play-services:6.5.+'
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.android.support:support-v4:18.0.+'
+    compile 'de.greenrobot:greendao:1.3.7'
+    compile 'de.greenrobot:greendao-generator:1.3.1'
+    //    compile "org.slf4j:slf4j-api:1.7.1"
     compile 'org.osmdroid:osmdroid-android:4.2'
     compile 'org.slf4j:slf4j-simple:1.6.1'
     compile 'org.codehaus.jettison:jettison:1.3'
     compile 'de.greenrobot:eventbus:2.4.0'
-    compile "commons-io:commons-io:+"
-
+    compile 'commons-io:commons-io:+'
 }
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.0"
+    buildToolsVersion '21.1.0'
     lintOptions {
         abortOnError false
     }
@@ -60,6 +61,32 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE'
     }
+
+
+
+    productFlavors {
+        handover {
+            applicationId "org.celstec.arlearn2.android.handover"
+
+        }
+
+        android {
+            applicationId "org.celstec.arlearn2.android"
+        }
+
+        eco  {
+            applicationId "org.celstec.arlearn2.android.eco"
+        }
+
+        obamediawijsheid  {
+            applicationId "org.celstec.arlearn2.android.oba.mediawijsheid"
+        }
+
+        florence  {
+            applicationId "org.celstec.arlearn2.android.florence"
+        }
+    }
+
 }
 
 sourceSets {

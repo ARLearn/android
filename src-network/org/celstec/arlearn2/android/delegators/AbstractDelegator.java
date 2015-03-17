@@ -34,6 +34,9 @@ public abstract class AbstractDelegator {
             if (token != null && ARL.isOnline()) {
                 return token;
             }
+            if (ARL.isOnline() && ARL.config.getBooleanProperty("white_label_online_sync")){
+                return "";
+            }
         }
         return null;
     }

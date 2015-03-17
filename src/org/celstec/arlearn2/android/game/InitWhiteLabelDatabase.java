@@ -1,12 +1,18 @@
 package org.celstec.arlearn2.android.game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.view.View;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.internal.DaoConfig;
+import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AccountDelegator;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
+import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
+import org.celstec.arlearn2.android.delegators.game.GameDownloadManager2;
+import org.celstec.arlearn2.android.views.DownloadViewManager;
 import org.celstec.dao.gen.*;
 
 import java.io.*;
@@ -38,9 +44,16 @@ public class InitWhiteLabelDatabase {
 
     private Long gameId;
     private Long runId;
-    List<Long> gameIdsLong;
+    protected List<Long> gameIdsLong;
 
-    private Context context;
+    protected Context context;
+
+    public static InitWhiteLabelDatabase getWhiteLabelDatabaseIniter(Context ctx) {
+        if (ARL.config.getBooleanProperty("white_label_online_sync")) {
+            return new InitWhiteLabelDatabaseOnlineSync(ctx);
+        }
+        return new InitWhiteLabelDatabase(ctx);
+    }
 
     public InitWhiteLabelDatabase(Context context) {
         this.context = context;
@@ -56,35 +69,41 @@ public class InitWhiteLabelDatabase {
         return gameIdsLong;
     }
 
-    public void init(){
-        String gameIds = ARL.config.getProperty("white_label_gameId");
-//        if (gameIds.contains(",")){
+    public void init() {
+        ARL.eventBus.register(this);
+        ARL.eventBus.post(new AsyncStartInitDB());
+    }
+
+    public void onEventAsync(AsyncStartInitDB event) {
+        try {
+            String gameIds = ARL.config.getProperty("white_label_gameId");
             List<String> list = new ArrayList<String>(Arrays.asList(gameIds.split(",")));
             gameIdsLong = new ArrayList<Long>(list.size());
-            for (String gameId: list){
+            for (String gameId : list) {
                 gameIdsLong.add(Long.parseLong(gameId));
             }
+            if (ARL.config.getProperty("white_label_runId") != null) {
+                runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
+            } else {
+                runId = 0l;
+            }
+            if (ARL.config.getBooleanProperty("white_label_online")) {
 
+            } else {
+                loadGameScript();
+                loadGameFiles();
+                loadRunScript();
+                createDefaultAccount();
+                createMaps();
+                ARL.eventBus.post(new SyncReady(true));
+            }
 
-//        } else {
-//            gameId = Long.parseLong(gameIds);
-//        }
-        if (ARL.config.getProperty("white_label_runId") != null){
-            runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
-        } else {
-            runId = 0l;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ARL.eventBus.post(new SyncReady(false));
         }
-        if (ARL.config.getBooleanProperty("white_label_online")){
 
-        } else {
-            loadGameScript();
-            loadGameFiles();
-            loadRunScript();
-            createDefaultAccount();
-            createMaps();
-        }
-
-
+        ARL.eventBus.unregister(this);
     }
 
     private void createMaps() {
@@ -113,7 +132,7 @@ public class InitWhiteLabelDatabase {
         }
     }
 
-    private void loadGameScript() {
+    protected void loadGameScript() {
         if (gameId != null) {
             GameDelegator.getInstance().loadGameFromFile(context, gameId);
         } else {
@@ -123,10 +142,11 @@ public class InitWhiteLabelDatabase {
         }
     }
 
-    private void loadGameFiles(){
-        for (long gameId: gameIdsLong) {
-            GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
-        }
+    protected void loadGameFiles(){
+        System.out.println("load game files in superclass");
+            for (long gameId: gameIdsLong) {
+                GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
+            }
     }
 
     private void loadRunScript() {
@@ -134,6 +154,7 @@ public class InitWhiteLabelDatabase {
             RunLocalObject runLocalObject = new RunLocalObject();
             runLocalObject.setGameId(gameLocalObject.getId());
             runLocalObject.setTitle("Default");
+            runLocalObject.setDeleted(false);
             DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
         }
 
@@ -153,5 +174,25 @@ public class InitWhiteLabelDatabase {
         DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(defaultAccount);
         AccountDelegator.getInstance().setAccount(defaultAccount);
         ARL.properties.setAccount(defaultAccount.getId());
+    }
+
+    public class AsyncStartInitDB{
+
+    }
+
+    public class SyncReady{
+        private boolean success;
+
+        public SyncReady(boolean success) {
+            this.success = success;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
     }
 }

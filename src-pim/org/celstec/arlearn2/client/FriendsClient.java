@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.client;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.celstec.arlearn.delegators.INQ;
 import org.celstec.arlearn2.client.exception.ARLearnException;
@@ -59,7 +60,7 @@ public class FriendsClient extends InquiryClient{
 
                 HttpResponse response = conn.executePOST(url, token, "application/json", postBody, "application/x-www-form-urlencoded");
         try {
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(), HTTP.UTF_8));
             if (json.has("message")){
                 return new FriendInviteResultEvent(json.getInt("status"), json.getString("message"));
             }
@@ -86,7 +87,7 @@ public class FriendsClient extends InquiryClient{
 
         HttpResponse response = conn.executePOST(url, token, "application/json", postBody, "application/x-www-form-urlencoded");
         try {
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             if (json.has("message")) {
                 return new FriendRemoveResultEvent(json.getInt("status"), json.getString("message"));
             }
@@ -109,7 +110,7 @@ public class FriendsClient extends InquiryClient{
 
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             ReceivedFriendEvent result =new ReceivedFriendEvent(json.getInt("status"));
             if (json.has("result")) {
                 JSONArray array = json.getJSONArray("result");
@@ -140,7 +141,7 @@ public class FriendsClient extends InquiryClient{
 
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             SentFriendRequestsEvent result = new SentFriendRequestsEvent(json.getInt("status"));
             if (json.has("result")) {
                 JSONArray array = json.getJSONArray("result");
@@ -171,7 +172,7 @@ public class FriendsClient extends InquiryClient{
 
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            return new JSONObject(EntityUtils.toString(response.getEntity()));
+            return new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
 
         } catch (Exception e) {
             if (e instanceof ARLearnException) throw (ARLearnException) e;
@@ -187,7 +188,7 @@ public class FriendsClient extends InquiryClient{
 
         HttpResponse response = conn.executeGET(url, token, "application/json");
         try {
-            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
+            JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity(),HTTP.UTF_8));
             ElggUsersEvent result = new ElggUsersEvent(json.getInt("status"));
             if (json.has("result")) {
                 JSONArray array = json.getJSONArray("result");

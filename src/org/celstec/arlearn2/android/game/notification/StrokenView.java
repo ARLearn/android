@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 
 /**
  * ****************************************************************************
@@ -58,6 +60,7 @@ public abstract class StrokenView {
                 onClickView();
             }
         });
+        strokenView.findViewById(R.id.animStrokenView).setBackgroundColor(ARL.drawableUtil.getStyleUtil().getPrimaryColor());
     }
 
     public void slideIn() {

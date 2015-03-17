@@ -149,6 +149,16 @@
                         />
             </LinearLayout>
 
+            <TextView
+                    android:id="@+id/amountId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="@color/purple"
+                    android:singleLine="true"
+                    android:layout_toRightOf="@id/stars"
+                    android:padding="5dp"
+                    android:text="()"/>
 
             <TextView
                     android:id="@+id/languageId"

@@ -15,6 +15,7 @@ public class MessageLocalObject {
     private String body;
     private String author;
     private Boolean synced;
+    private Boolean read;
     private Long time;
     private String userIds;
     private long threadId;
@@ -30,12 +31,13 @@ public class MessageLocalObject {
         this.id = id;
     }
 
-    public MessageLocalObject(Long id, String subject, String body, String author, Boolean synced, Long time, String userIds, long threadId, long runId) {
+    public MessageLocalObject(Long id, String subject, String body, String author, Boolean synced, Boolean read, Long time, String userIds, long threadId, long runId) {
         this.id = id;
         this.subject = subject;
         this.body = body;
         this.author = author;
         this.synced = synced;
+        this.read = read;
         this.time = time;
         this.userIds = userIds;
         this.threadId = threadId;
@@ -80,6 +82,14 @@ public class MessageLocalObject {
 
     public void setSynced(Boolean synced) {
         this.synced = synced;
+    }
+
+    public Boolean getRead() {
+        return read;
+    }
+
+    public void setRead(Boolean read) {
+        this.read = read;
     }
 
     public Long getTime() {

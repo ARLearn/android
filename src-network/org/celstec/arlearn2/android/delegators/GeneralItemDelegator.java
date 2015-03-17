@@ -81,6 +81,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
     public GeneralItemList asyncRetrieveItems(long gameId){
         String token = returnTokenIfOnline();
         if (token != null) {
+            if ("".equals(token)) token = null;
             return GeneralItemClient.getGeneralItemClient().getGameGeneralItems(token, gameId, 0l);
         } else {
             System.out.println("token was null ");

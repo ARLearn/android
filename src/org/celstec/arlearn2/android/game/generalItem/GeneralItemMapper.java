@@ -35,9 +35,13 @@ public class GeneralItemMapper {
     public final static int MULTI_CHOICE_IMAGE = 6;
     public final static int SINGLE_CHOICE_IMAGE = 7;
     public final static int YOUTUBE = 8;
-    
+    public final static int PURE_AUDIO = 9;
+    public final static int SORT_QUESTION = 10;
+
     public static int mapBeanToConstant (GeneralItem giBean) {
-        if (giBean instanceof SingleChoiceImageTest) {
+        if (giBean instanceof SortQuestion) {
+            return SORT_QUESTION;
+        } else if (giBean instanceof SingleChoiceImageTest) {
             return SINGLE_CHOICE_IMAGE;
         } else if (giBean instanceof MultipleChoiceImageTest) {
             return MULTI_CHOICE_IMAGE;
@@ -45,6 +49,8 @@ public class GeneralItemMapper {
             return SINGLE_CHOICE;
         } else if (giBean instanceof MultipleChoiceTest) {
             return MULTI_CHOICE;
+        } else if (giBean instanceof PureAudio) {
+            return PURE_AUDIO;
         } else if (giBean instanceof AudioObject) {
             return AUDIO_OBJECT;
         } else if (giBean instanceof ScanTag) {
@@ -78,8 +84,54 @@ public class GeneralItemMapper {
             case GeneralItemMapper.MULTI_CHOICE_IMAGE:
                 result =R.drawable.game_general_item_type_mc;
                 break;
+            case GeneralItemMapper.SORT_QUESTION:
+                result =R.drawable.game_general_item_type_mc;
+                break;
             case GeneralItemMapper.AUDIO_OBJECT:
                 result =R.drawable.game_general_item_type_audio;
+                break;
+            case GeneralItemMapper.PURE_AUDIO:
+                result =R.drawable.game_general_item_type_audio;
+                break;
+            case GeneralItemMapper.VIDEO_OBJECT:
+                result =R.drawable.game_general_item_type_video;
+                break;
+            case GeneralItemMapper.YOUTUBE:
+                result =R.drawable.game_general_item_type_youtube;
+                break;
+        }
+        return result;
+    }
+
+    public static int mapConstantToDrawableMarker(int constant) {
+        int result = R.drawable.game_data_collection_audio;
+        switch (constant){
+            case GeneralItemMapper.NARRATOR_ITEM:
+                result =R.drawable.game_general_item_type_narrator;
+                break;
+            case GeneralItemMapper.SCAN_TAG:
+                result =R.drawable.game_general_item_type_scan;
+                break;
+            case GeneralItemMapper.SINGLE_CHOICE:
+                result =R.drawable.game_general_item_type_mc;
+                break;
+            case GeneralItemMapper.MULTI_CHOICE:
+                result =R.drawable.game_general_item_type_mc;
+                break;
+            case GeneralItemMapper.SINGLE_CHOICE_IMAGE:
+                result =R.drawable.game_general_item_type_mc;
+                break;
+            case GeneralItemMapper.MULTI_CHOICE_IMAGE:
+                result =R.drawable.game_general_item_type_mc;
+                break;
+            case GeneralItemMapper.SORT_QUESTION:
+                result =R.drawable.game_general_item_type_mc;
+                break;
+            case GeneralItemMapper.AUDIO_OBJECT:
+                result =R.drawable.game_general_item_marker_audio;
+                break;
+            case GeneralItemMapper.PURE_AUDIO:
+                result =R.drawable.game_general_item_marker_audio;
                 break;
             case GeneralItemMapper.VIDEO_OBJECT:
                 result =R.drawable.game_general_item_type_video;

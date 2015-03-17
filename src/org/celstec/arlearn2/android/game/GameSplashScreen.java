@@ -5,23 +5,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.delegators.GameDelegator;
-import org.celstec.arlearn2.android.delegators.GeneralItemDelegator;
-import org.celstec.arlearn2.android.delegators.game.GameDownloadEventInterface;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.arlearn2.android.views.DownloadViewManager;
-import org.celstec.arlearn2.beans.generalItem.GeneralItem;
-import org.celstec.dao.gen.GameFileLocalObject;
+import org.celstec.arlearn2.android.whitelabel.SplashScreen;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
@@ -52,98 +43,74 @@ public class GameSplashScreen extends Activity {
     private GameDownloadManager gameDownloadManager;
     private DownloadViewManager downloadViewManager;
 
+    DelayedGameLauncher delayedGameLauncher;
+    private boolean dataSynced = false;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-            getActionBar().setIcon(R.drawable.ic_ab_back);
-        }
-
         if (!ARL.isInit()) ARL.init(this);
-        downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)){
-
+        downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)) {
             @Override
             public void onDismiss() {
-                downloadViewManager.setGone();
-                startGeneralItemListActivity();
+                super.onDismiss();
+//                startGeneralItemListActivity();
+                dataSynced = true;
+            }
+        };
+
+
+        delayedGameLauncher = new DelayedGameLauncher(System.currentTimeMillis() + 3000) {
+
+            @Override
+            public void runNextActivity() {
+                Intent gameIntent = new Intent(GameSplashScreen.this, GameMessages.class);
+                gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
+                gameIntent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
+                ARL.actions.createAction(runLocalObject.getId(), "startRun");
+                ARL.actions.syncActions(runLocalObject.getId());
+                ARL.responses.syncResponses(runLocalObject.getId());
+                GameSplashScreen.this.startActivity(gameIntent);
+                GameSplashScreen.this.finish();
+            }
+
+            @Override
+            public boolean additionalCondition() {
+                return dataSynced;
             }
         };
     }
 
-    private void setSplashScreen() {
-        if (gameLocalObject == null) return;
-        Drawable splashScreen = GameFileLocalObject.getDrawable(this, gameLocalObject.getId(),"/gameSplashScreen");
-        if (splashScreen != null) {
-
-            ((ImageView)findViewById(R.id.main_backgroundImage)).setImageDrawable(splashScreen);
-        }
-//        findViewById(R.id.main_backgroundImage).setBackground();
-    }
-
-    private void startGeneralItemListActivity(){
-        Intent gameIntent = new Intent(this, GameMessages.class);
-        gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
-        gameIntent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
-        ARL.actions.createAction(runLocalObject.getId(), "startRun");
-        if (ARL.config.getBooleanProperty("white_label_online")){
-            ARL.actions.syncActions(runLocalObject.getId());
-            ARL.responses.syncResponses(runLocalObject.getId());
-        }
-
-
-        if (!ARL.config.getBooleanProperty("white_label")) {
-            ARL.actions.syncActions(runLocalObject.getId());
-            ARL.responses.syncResponses(runLocalObject.getId());
-            this.startActivity(gameIntent);
-            this.finish();
-        } else {
-            DelayedGameLauncher delayedGameLauncher = new DelayedGameLauncher(gameLocalObject.getId(), runLocalObject.getId(), this, 2000);
-
-//            delayedGameLauncher.run();
-        }
-    }
-
-    private void whiteLabelMetadata() {
-        Long gameId = Long.parseLong(ARL.config.getProperty("white_label_gameId"));
-        Long runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
-        ARL.accounts.syncMyAccountDetails();
-
-        gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
-
-        if (gameLocalObject == null) {
-            InitWhiteLabelDatabase initWhiteLabelDatabase = new InitWhiteLabelDatabase(this);
-            initWhiteLabelDatabase.init();
-
-
-            gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
-            setSplashScreen();
-        }
-        runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
-        if (runLocalObject == null) {
-            runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().loadAll().get(0);
-        }
-        ARL.generalItemVisibility.calculateVisibility(runId, gameId);
-        if (ARL.config.getBooleanProperty("white_label_online")) {
-            onlineTest();
-        } else {
-            startGeneralItemListActivity();
-        }
-    }
-
-
-    private void nativeArlearnMetadata(){
+    @Override
+    public void onResume() {
+        super.onResume();
+        ARL.eventBus.register(this);
         Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
         Long runId = getIntent().getLongExtra(RunLocalObject.class.getName(), 0l);
         gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         runLocalObject = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        SplashScreen.setSplashScreen(this, gameId);
         ARL.generalItemVisibility.calculateVisibility(runId, gameId);
         onlineTest();
+        gameDownloadManager.register();
+        ARL.eventBus.post(gameDownloadManager);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (gameDownloadManager != null) gameDownloadManager.unregister();
+        ARL.eventBus.unregister(this);
+    }
+
+
+//    private void startGeneralItemListActivity() {
+//
+//    }
 
     private void onlineTest() {
         gameDownloadManager = new GameDownloadManager(gameLocalObject.getId());
         gameDownloadManager.setDownloadEventListener(downloadViewManager);
-//        notOnline();
         if (ARL.isOnline()) {
             ARL.eventBus.post(new NetworkTest());
         } else {
@@ -164,20 +131,25 @@ public class GameSplashScreen extends Activity {
         }
     }
 
-    private void notOnline() {
-        if (DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameLocalObject.getId()).getLastSyncGeneralItemsDate() == null){
-            displayAlert(R.string.noInternet);
-            return;
-        }
-        if (!gameDownloadManager.contentIsDownloaded()) {
-//            System.out.println("error message, switch on network to sync first");
-            displayAlert(R.string.contentMissingNoInternet);
-        }
-        startGeneralItemListActivity();
-
+    private void syncGameContent() {
+        downloadViewManager.setVisible();
+        ARL.eventBus.post(gameDownloadManager);
+        ARL.generalItemVisibility.syncGeneralItemVisibilities(runLocalObject);
     }
 
-    private void displayAlert(int messageId) {
+    private void notOnline() {
+        if (DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameLocalObject.getId()).getLastSyncGeneralItemsDate() == null) {
+            displayAlert(R.string.noInternet, R.string.operatingOffline);
+            return;
+        } else if (!gameDownloadManager.contentIsDownloaded()) {
+            displayAlert(R.string.contentMissingNoInternet, R.string.operatingOffline);
+        }
+//        else {
+//            startGeneralItemListActivity();
+//        }
+    }
+
+    private void displayAlert(int messageId, int cancelMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(messageId)
                 .setPositiveButton(R.string.wireless, new DialogInterface.OnClickListener() {
@@ -187,62 +159,24 @@ public class GameSplashScreen extends Activity {
                         startActivity(intent);
                         dialog.cancel();
                         GameSplashScreen.this.finish();
+
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(cancelMessage, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         GameSplashScreen.this.finish();
+//                        startGeneralItemListActivity();
+                        dataSynced = true;
                     }
                 });
         builder.create();
         builder.show();
     }
 
-    private void syncGameContent() {
-        downloadViewManager.setVisible();
-        ARL.eventBus.post(gameDownloadManager);
-        ARL.generalItemVisibility.syncGeneralItemVisibilities(runLocalObject);
-
-        //TODO
-        //ARL.responses.syncResponses(runId);
-        //ARL.actions.sync
 
 
-    }
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ARL.eventBus.register(this);
-        if (ARL.config.getBooleanProperty("white_label")) {
-            whiteLabelMetadata();
-        } else {
-            nativeArlearnMetadata();
-            gameDownloadManager.register();
-        }
-        setSplashScreen();
-//        new DelayedGameLauncher(gameLocalObject.getId(), runLocalObject.getId(), this, 2000);
-
-        //TODO nullpointerexception
-//        Caused by: java.lang.NullPointerException
-//        at org.celstec.arlearn2.android.game.GameSplashScreen.onResume(GameSplashScreen.java:86)
-//        at android.app.Instrumentation.callActivityOnResume(Instrumentation.java:1185)
-//        at android.app.Activity.performResume(Activity.java:5182)
-//        at android.app.ActivityThread.performResumeActivity(ActivityThread.java:2732)
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (gameDownloadManager!=null) gameDownloadManager.unregister();
-        ARL.eventBus.unregister(this);
-    }
-
-
-    public static void startActivity(Context ctx, long gameId, long runId){
+    public static void startActivity(Context ctx, long gameId, long runId) {
         Intent gameIntent = new Intent(ctx, GameSplashScreen.class);
         gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
         gameIntent.putExtra(RunLocalObject.class.getName(), runId);

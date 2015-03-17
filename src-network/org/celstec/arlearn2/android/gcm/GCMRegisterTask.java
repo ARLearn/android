@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -36,14 +37,15 @@ import java.io.IOException;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GCMRegisterTask extends AsyncTask<Activity, Long, Void> {
+public class GCMRegisterTask extends AsyncTask<Context, Long, Void> {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     static final String TAG = "GCM";
 //    public static final String SENDER_ID = "594104153413";
 
     @Override
-    protected Void doInBackground(Activity... c) {
-        if (checkPlayServices(c[0])) {
+    protected Void doInBackground(Context... c) {
+        final Context activity = c[0];
+        if (checkPlayServices(activity)) {
             GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(c[0]);
             try {
                 String registrationId = ARL.properties.getGCMKey();
@@ -58,6 +60,15 @@ public class GCMRegisterTask extends AsyncTask<Activity, Long, Void> {
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage(),e);
             }
+        } else {
+            if (activity instanceof  Activity) {
+                ((Activity)activity).runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(activity, "Google Play services not installed...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
         }
         return null;
     }
@@ -71,7 +82,7 @@ public class GCMRegisterTask extends AsyncTask<Activity, Long, Void> {
         NotificationClient.getOauthClient().gcm(PropertiesAdapter.getInstance(context).getAuthToken(), desc);
     }
 
-    private boolean checkPlayServices(Activity ctx) {
+    private boolean checkPlayServices(Context ctx) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(ctx);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {

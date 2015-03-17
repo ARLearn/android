@@ -1,21 +1,16 @@
-package org.celstec.arlearn2.android;
+package org.celstec.arlearn2.android.game;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
-import org.celstec.arlearn2.android.listadapter.impl.SearchResultsLazyListAdapter;
-import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.dao.gen.GameLocalObject;
 
 /**
@@ -85,7 +80,8 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
             GameSplashScreen.startActivity(getActivity(), game.getId(), game.getRuns().get(0).getId());
             return;
         } else {
-            frag = new GameRunsFragment(game);
+            frag = new GameRunsFragment();
+            ((GameRunsFragment)frag).setGame(game);
         }
 
         frag.setArguments(args);

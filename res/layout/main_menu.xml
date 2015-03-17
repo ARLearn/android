@@ -87,19 +87,20 @@
         </org.celstec.arlearn2.android.views.SquareLinearLayout>
 
         <org.celstec.arlearn2.android.views.SquareLinearLayout
-                android:id="@+id/nearme"
+                android:id="@+id/settings"
                 android:orientation="vertical"
                 style="@style/ARLearn.NearBy">
 
             <ImageView
                     style="@style/ARLearn.HomePane.Icon"
-                    android:id="@+id/nearMeIcon"
-                    android:src="@drawable/ic_nearby"
-                    android:contentDescription="near me section"/>
+                    android:id="@+id/settingsIcon"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_settings_mainmenu"
+                    android:contentDescription="settings section"/>
 
             <TextView
                     style="@style/ARLearn.HomePane.Text"
-                    android:text="@string/nearMe"
+                    android:text="@string/settings"
                     />
 
 

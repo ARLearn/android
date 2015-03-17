@@ -27,31 +27,40 @@ import org.celstec.dao.gen.RunLocalObject;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class DelayedGameLauncher  implements  Runnable {
+public abstract class DelayedGameLauncher  implements  Runnable {
 
-    private Long gameId;
-    private Long runId;
-    private Activity ctx;
-//    private int delay;
+    private long timeForLaunchNextScreen;
     private Handler handler = new Handler();
 
 
-    public DelayedGameLauncher(Long gameId, Long runId, Activity ctx, int delay) {
-//        this.delay = delay;
-        this.gameId = gameId;
-        this.runId = runId;
-        this.ctx = ctx;
-        handler.postDelayed(this, delay);
+    public DelayedGameLauncher(long timeForLaunchNextScreen) {
+        this.timeForLaunchNextScreen =timeForLaunchNextScreen;
+        postPone();
     }
 
+    public void postPone() {
+        handler.postDelayed(this, 500);
+    }
 
     public void run() {
-        Intent gameIntent = new Intent(ctx, GameMessages.class);
-        gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
-        gameIntent.putExtra(RunLocalObject.class.getName(), runId);
-        ctx.startActivity(gameIntent);
-//        ctx.finish();
+        if (timeForLaunchNextScreen < System.currentTimeMillis() && additionalCondition()) {
+            runNextActivity();
+        } else {
+            postPone();
+        }
     }
+
+    public abstract void runNextActivity();
+
+    public abstract boolean additionalCondition();
+
+//    public void run() {
+//        Intent gameIntent = new Intent(ctx, GameMessages.class);
+//        gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
+//        gameIntent.putExtra(RunLocalObject.class.getName(), runId);
+//        ctx.startActivity(gameIntent);
+//        ctx.finish();
+//    }
 
 //    private void launchGame() {
 //

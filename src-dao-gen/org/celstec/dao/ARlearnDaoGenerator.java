@@ -48,6 +48,7 @@ public class ARlearnDaoGenerator {
     private static Entity inquiry;
     private static Entity badge;
     private static Entity question;
+    private static Entity questionAnswer;
     private static Entity friends;
 
     private static Entity category;
@@ -77,6 +78,7 @@ public class ARlearnDaoGenerator {
         generalItemVisibility = createGeneralItemVisibility(schema);
         badge = createBadges(schema);
         question = createQuestions(schema);
+        questionAnswer= createQuestionAnswer(schema);
 
         category = createCategory(schema);
         gameCategory = createGameCategory(schema);
@@ -119,6 +121,7 @@ public class ARlearnDaoGenerator {
         messageLocalObject.addStringProperty("body");
         messageLocalObject.addStringProperty("author");
         messageLocalObject.addBooleanProperty("synced");
+        messageLocalObject.addBooleanProperty("read");
         messageLocalObject.addLongProperty("time");
         messageLocalObject.addStringProperty("userIds");
 
@@ -164,6 +167,29 @@ public class ARlearnDaoGenerator {
         inqToBadges.setName("questions");
 
         return question;
+    }
+
+    private static Entity createQuestionAnswer(Schema schema) {
+        Entity answer = schema.addEntity("InquiryQuestionAnswerLocalObject");
+//        question.addLongProperty("id").autoincrement();
+        answer.addStringProperty("identifier").primaryKey();
+        answer.addStringProperty("question");
+        answer.addStringProperty("description");
+        answer.addStringProperty("answer");
+
+        Property inquiryId = answer.addLongProperty("inquiryId").getProperty();
+        answer.addToOne(inquiry, inquiryId);
+
+        ToMany inqToBadges = inquiry.addToMany(answer, inquiryId);
+        inqToBadges.setName("answers");
+
+        Property questionId = answer.addStringProperty("questionId").getProperty();
+        answer.addToOne(question, questionId);
+//
+        ToMany questionToAnswers = question.addToMany(answer, questionId);
+        questionToAnswers.setName("answers");
+
+        return answer;
     }
 
 

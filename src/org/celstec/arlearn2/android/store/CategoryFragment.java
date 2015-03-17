@@ -103,7 +103,8 @@ public class CategoryFragment extends SherlockFragment{
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Bundle args = new Bundle();
 
-            StoreGameListFragment frag = new StoreGameListFragment(categoryId);
+            StoreGameListFragment frag = new StoreGameListFragment();
+            frag.setCategoryId(categoryId);
 
             fm.beginTransaction().replace(R.id.right_pane, frag).addToBackStack(null).commit();
         }

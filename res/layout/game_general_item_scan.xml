@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/generalItemActivity"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="?attr/backgroundColor">
+    <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:background="?attr/backgroundColorLight"
+            android:layout_height="match_parent">
+
+    <include layout="@layout/game_general_item_navigation_header"/>
+
+    <ImageView
+            android:id="@+id/generalItemIcon"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            style="@style/ARLearn.Game.GeneralItemActivity.TopIcon"
+            />
+        <FrameLayout
+                android:id="@+id/cameraPreview"
+
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+
+                />
+    </LinearLayout>
+</LinearLayout>

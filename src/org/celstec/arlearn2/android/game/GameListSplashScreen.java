@@ -6,6 +6,7 @@ import android.os.Bundle;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.dao.gen.GameFileLocalObject;
 
 /**
  * ****************************************************************************
@@ -37,6 +38,7 @@ public class GameListSplashScreen extends Activity {
             InitWhiteLabelDatabase initWhiteLabelDatabase = new InitWhiteLabelDatabase(this);
             initWhiteLabelDatabase.init();
         }
+
         ARL.accounts.syncMyAccountDetails();
         Intent gameIntent = new Intent(this, MyGamesActivity.class);
         startActivity(gameIntent);

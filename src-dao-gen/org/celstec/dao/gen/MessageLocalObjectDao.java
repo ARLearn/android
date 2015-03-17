@@ -31,10 +31,11 @@ public class MessageLocalObjectDao extends AbstractDao<MessageLocalObject, Long>
         public final static Property Body = new Property(2, String.class, "body", false, "BODY");
         public final static Property Author = new Property(3, String.class, "author", false, "AUTHOR");
         public final static Property Synced = new Property(4, Boolean.class, "synced", false, "SYNCED");
-        public final static Property Time = new Property(5, Long.class, "time", false, "TIME");
-        public final static Property UserIds = new Property(6, String.class, "userIds", false, "USER_IDS");
-        public final static Property ThreadId = new Property(7, long.class, "threadId", false, "THREAD_ID");
-        public final static Property RunId = new Property(8, long.class, "runId", false, "RUN_ID");
+        public final static Property Read = new Property(5, Boolean.class, "read", false, "READ");
+        public final static Property Time = new Property(6, Long.class, "time", false, "TIME");
+        public final static Property UserIds = new Property(7, String.class, "userIds", false, "USER_IDS");
+        public final static Property ThreadId = new Property(8, long.class, "threadId", false, "THREAD_ID");
+        public final static Property RunId = new Property(9, long.class, "runId", false, "RUN_ID");
     };
 
     private Query<MessageLocalObject> threadLocalObject_MessagesQuery;
@@ -57,10 +58,11 @@ public class MessageLocalObjectDao extends AbstractDao<MessageLocalObject, Long>
                 "'BODY' TEXT," + // 2: body
                 "'AUTHOR' TEXT," + // 3: author
                 "'SYNCED' INTEGER," + // 4: synced
-                "'TIME' INTEGER," + // 5: time
-                "'USER_IDS' TEXT," + // 6: userIds
-                "'THREAD_ID' INTEGER NOT NULL ," + // 7: threadId
-                "'RUN_ID' INTEGER NOT NULL );"); // 8: runId
+                "'READ' INTEGER," + // 5: read
+                "'TIME' INTEGER," + // 6: time
+                "'USER_IDS' TEXT," + // 7: userIds
+                "'THREAD_ID' INTEGER NOT NULL ," + // 8: threadId
+                "'RUN_ID' INTEGER NOT NULL );"); // 9: runId
     }
 
     /** Drops the underlying database table. */
@@ -99,17 +101,22 @@ public class MessageLocalObjectDao extends AbstractDao<MessageLocalObject, Long>
             stmt.bindLong(5, synced ? 1l: 0l);
         }
  
+        Boolean read = entity.getRead();
+        if (read != null) {
+            stmt.bindLong(6, read ? 1l: 0l);
+        }
+ 
         Long time = entity.getTime();
         if (time != null) {
-            stmt.bindLong(6, time);
+            stmt.bindLong(7, time);
         }
  
         String userIds = entity.getUserIds();
         if (userIds != null) {
-            stmt.bindString(7, userIds);
+            stmt.bindString(8, userIds);
         }
-        stmt.bindLong(8, entity.getThreadId());
-        stmt.bindLong(9, entity.getRunId());
+        stmt.bindLong(9, entity.getThreadId());
+        stmt.bindLong(10, entity.getRunId());
     }
 
     /** @inheritdoc */
@@ -127,10 +134,11 @@ public class MessageLocalObjectDao extends AbstractDao<MessageLocalObject, Long>
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // body
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // author
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // synced
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // time
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // userIds
-            cursor.getLong(offset + 7), // threadId
-            cursor.getLong(offset + 8) // runId
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // read
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // time
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // userIds
+            cursor.getLong(offset + 8), // threadId
+            cursor.getLong(offset + 9) // runId
         );
         return entity;
     }
@@ -143,10 +151,11 @@ public class MessageLocalObjectDao extends AbstractDao<MessageLocalObject, Long>
         entity.setBody(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setAuthor(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSynced(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setTime(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setUserIds(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setThreadId(cursor.getLong(offset + 7));
-        entity.setRunId(cursor.getLong(offset + 8));
+        entity.setRead(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setTime(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setUserIds(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setThreadId(cursor.getLong(offset + 8));
+        entity.setRunId(cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */

@@ -26,6 +26,7 @@ import org.celstec.dao.gen.MessageLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 import org.celstec.dao.gen.BadgeLocalObject;
 import org.celstec.dao.gen.InquiryQuestionLocalObject;
+import org.celstec.dao.gen.InquiryQuestionAnswerLocalObject;
 import org.celstec.dao.gen.CategoryLocalObject;
 import org.celstec.dao.gen.GameCategoryLocalObject;
 import org.celstec.dao.gen.FriendsLocalObject;
@@ -47,6 +48,7 @@ import org.celstec.dao.gen.MessageLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObjectDao;
 import org.celstec.dao.gen.BadgeLocalObjectDao;
 import org.celstec.dao.gen.InquiryQuestionLocalObjectDao;
+import org.celstec.dao.gen.InquiryQuestionAnswerLocalObjectDao;
 import org.celstec.dao.gen.CategoryLocalObjectDao;
 import org.celstec.dao.gen.GameCategoryLocalObjectDao;
 import org.celstec.dao.gen.FriendsLocalObjectDao;
@@ -77,6 +79,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig generalItemVisibilityLocalObjectDaoConfig;
     private final DaoConfig badgeLocalObjectDaoConfig;
     private final DaoConfig inquiryQuestionLocalObjectDaoConfig;
+    private final DaoConfig inquiryQuestionAnswerLocalObjectDaoConfig;
     private final DaoConfig categoryLocalObjectDaoConfig;
     private final DaoConfig gameCategoryLocalObjectDaoConfig;
     private final DaoConfig friendsLocalObjectDaoConfig;
@@ -98,6 +101,7 @@ public class DaoSession extends AbstractDaoSession {
     private final GeneralItemVisibilityLocalObjectDao generalItemVisibilityLocalObjectDao;
     private final BadgeLocalObjectDao badgeLocalObjectDao;
     private final InquiryQuestionLocalObjectDao inquiryQuestionLocalObjectDao;
+    private final InquiryQuestionAnswerLocalObjectDao inquiryQuestionAnswerLocalObjectDao;
     private final CategoryLocalObjectDao categoryLocalObjectDao;
     private final GameCategoryLocalObjectDao gameCategoryLocalObjectDao;
     private final FriendsLocalObjectDao friendsLocalObjectDao;
@@ -157,6 +161,9 @@ public class DaoSession extends AbstractDaoSession {
         inquiryQuestionLocalObjectDaoConfig = daoConfigMap.get(InquiryQuestionLocalObjectDao.class).clone();
         inquiryQuestionLocalObjectDaoConfig.initIdentityScope(type);
 
+        inquiryQuestionAnswerLocalObjectDaoConfig = daoConfigMap.get(InquiryQuestionAnswerLocalObjectDao.class).clone();
+        inquiryQuestionAnswerLocalObjectDaoConfig.initIdentityScope(type);
+
         categoryLocalObjectDaoConfig = daoConfigMap.get(CategoryLocalObjectDao.class).clone();
         categoryLocalObjectDaoConfig.initIdentityScope(type);
 
@@ -183,6 +190,7 @@ public class DaoSession extends AbstractDaoSession {
         generalItemVisibilityLocalObjectDao = new GeneralItemVisibilityLocalObjectDao(generalItemVisibilityLocalObjectDaoConfig, this);
         badgeLocalObjectDao = new BadgeLocalObjectDao(badgeLocalObjectDaoConfig, this);
         inquiryQuestionLocalObjectDao = new InquiryQuestionLocalObjectDao(inquiryQuestionLocalObjectDaoConfig, this);
+        inquiryQuestionAnswerLocalObjectDao = new InquiryQuestionAnswerLocalObjectDao(inquiryQuestionAnswerLocalObjectDaoConfig, this);
         categoryLocalObjectDao = new CategoryLocalObjectDao(categoryLocalObjectDaoConfig, this);
         gameCategoryLocalObjectDao = new GameCategoryLocalObjectDao(gameCategoryLocalObjectDaoConfig, this);
         friendsLocalObjectDao = new FriendsLocalObjectDao(friendsLocalObjectDaoConfig, this);
@@ -204,6 +212,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(GeneralItemVisibilityLocalObject.class, generalItemVisibilityLocalObjectDao);
         registerDao(BadgeLocalObject.class, badgeLocalObjectDao);
         registerDao(InquiryQuestionLocalObject.class, inquiryQuestionLocalObjectDao);
+        registerDao(InquiryQuestionAnswerLocalObject.class, inquiryQuestionAnswerLocalObjectDao);
         registerDao(CategoryLocalObject.class, categoryLocalObjectDao);
         registerDao(GameCategoryLocalObject.class, gameCategoryLocalObjectDao);
         registerDao(FriendsLocalObject.class, friendsLocalObjectDao);
@@ -227,6 +236,7 @@ public class DaoSession extends AbstractDaoSession {
         generalItemVisibilityLocalObjectDaoConfig.getIdentityScope().clear();
         badgeLocalObjectDaoConfig.getIdentityScope().clear();
         inquiryQuestionLocalObjectDaoConfig.getIdentityScope().clear();
+        inquiryQuestionAnswerLocalObjectDaoConfig.getIdentityScope().clear();
         categoryLocalObjectDaoConfig.getIdentityScope().clear();
         gameCategoryLocalObjectDaoConfig.getIdentityScope().clear();
         friendsLocalObjectDaoConfig.getIdentityScope().clear();
@@ -298,6 +308,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public InquiryQuestionLocalObjectDao getInquiryQuestionLocalObjectDao() {
         return inquiryQuestionLocalObjectDao;
+    }
+
+    public InquiryQuestionAnswerLocalObjectDao getInquiryQuestionAnswerLocalObjectDao() {
+        return inquiryQuestionAnswerLocalObjectDao;
     }
 
     public CategoryLocalObjectDao getCategoryLocalObjectDao() {

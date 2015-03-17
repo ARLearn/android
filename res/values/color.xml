@@ -8,6 +8,9 @@
     <color name="dark_grey">#212e3d</color>
     <color name="white">#ffffff</color>
 
+    <color name="settingsBlue">#ff2183d5</color>
+    <color name="settingsBluePressed">#ff68a7d5</color>
+    <color name="settingsInactive">#ffb3b3b3</color>
     <!--Schema 1-->
     <color name="schema1_primary1">#33485f</color>
 

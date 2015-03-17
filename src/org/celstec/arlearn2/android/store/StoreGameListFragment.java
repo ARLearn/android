@@ -1,7 +1,6 @@
 package org.celstec.arlearn2.android.store;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -10,14 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import daoBase.DaoConfiguration;
-import org.celstec.arlearn2.android.GameRunsFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
-import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.CategoryGamesLazyListAdapter;
-import org.celstec.arlearn2.beans.game.Game;
-import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.StoreGameLocalObject;
 
 /**
@@ -46,9 +41,13 @@ public class StoreGameListFragment extends SherlockListFragment implements ListI
 
     private long categoryId;
 
-    public StoreGameListFragment(long categoryId) {
+    public StoreGameListFragment() {
         this.categoryId = categoryId;
         ARL.store.syncGamesForCategory(categoryId);
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override

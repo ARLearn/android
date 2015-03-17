@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.client.exception.ARLearnException;
@@ -54,7 +55,7 @@ public class BadgesClient extends GenericClient{
         HttpResponse response = httpClient.execute(request);
 //        HttpResponse response = conn.executeGET(getUrlPrefix().replace("***",account), "test", "application/json");
 
-            return EntityUtils.toString(response.getEntity());
+            return EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
 
         } catch (Exception e) {
             if (e instanceof ARLearnException) throw (ARLearnException) e;

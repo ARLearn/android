@@ -180,7 +180,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         public void run() {
             startTime = mediaPlayer.getCurrentPosition();
 
-             seekbar.setProgress((int)startTime);
+            if (!touching)  seekbar.setProgress((int)startTime);
             myHandler.postDelayed(this, 100);
         }
     };
@@ -190,13 +190,15 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
     }
 
+    private boolean touching = false;
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
+        touching = true;
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        touching = false;
         if (seekBar.getProgress() == finalTime){
             status = PAUSE;
             mediaPlayer.pause();
@@ -213,7 +215,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
 
 
-    private void playbackCompleted() {
+    protected void playbackCompleted() {
         Action action = new Action();
         action.setAction("complete");
         action.setRunId(activity.getGameActivityFeatures().getRunId());
