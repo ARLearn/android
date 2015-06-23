@@ -1,10 +1,12 @@
 package org.celstec.arlearn2.android.delegators;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import daoBase.DaoConfiguration;
 import de.greenrobot.event.EventBus;
+import org.celstec.arlearn2.android.broadcast.ProximityIntentReceiver;
 import org.celstec.arlearn2.android.db.ConfigAdapter;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
@@ -37,6 +39,7 @@ import java.util.List;
  * ****************************************************************************
  */
 public class ARL {
+    private static final String PROX_ALERT_INTENT = "org.celstec.arlearn.proximityAction";
 
     public static GameDelegator games;
     public static GeneralItemDelegator generalItems;
@@ -54,8 +57,10 @@ public class ARL {
     public static MessagesDelegator messages;
     public static MapContext mapContext;
     public static EventBus eventBus = new EventBus();
+    public static ProximityEventDelegator proximityEvents;
     public static DaoConfiguration dao;
     public static Context ctx;
+    public static VisibilityHandler visibilityHandler;
     public static NotificationListenerInterface[] notificationListenerInterfaces;
 
 
@@ -79,11 +84,15 @@ public class ARL {
             fileReferences = GiFileReferenceDelegator.getInstance();
             actions = ActionsDelegator.getInstance();
             responses = ResponseDelegator.getInstance();
+            proximityEvents = ProximityEventDelegator.getInstance();
             store = StoreDelegator.getInstance();
             threads = ThreadsDelegator.getInstance();
             messages = MessagesDelegator.getInstance();
             generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
+            visibilityHandler = VisibilityHandler.getInstance();
             initNotificationListeners();
+            initProxyAlertFilter();
+
         }
 
     }
@@ -135,6 +144,11 @@ public class ARL {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void initProxyAlertFilter() {
+        IntentFilter filter = new IntentFilter(PROX_ALERT_INTENT);
+        ARL.ctx.registerReceiver(new ProximityIntentReceiver(), filter);
     }
 
 }

@@ -136,6 +136,11 @@ public class DaoConfiguration {
         return session.getFriendsLocalObjectDao();
     }
 
+
+    public ProximityEventRegistryLocalObjectDao getProximityEventRegistryLocalObjectDao() {
+        return session.getProximityEventRegistryLocalObjectDao();
+    }
+
     public InquiryQuestionAnswerLocalObjectDao getInquiryQuestionAnswerLocalObjectDao(){
         return session.getInquiryQuestionAnswerLocalObjectDao();
     }

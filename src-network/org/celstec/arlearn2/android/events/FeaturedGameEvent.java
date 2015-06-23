@@ -1,6 +1,9 @@
 package org.celstec.arlearn2.android.events;
 
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.StoreGameLocalObject;
+
+import java.util.ArrayList;
 
 /**
  * ****************************************************************************
@@ -25,12 +28,13 @@ import org.celstec.dao.gen.GameLocalObject;
 public class FeaturedGameEvent {
 
     private long gameId;
+    private String category ;
     private long rank;
 
 
 
 //    private byte[] icon;
-    private GameLocalObject gameObject;
+    private StoreGameLocalObject gameObject;
 
     public FeaturedGameEvent(long gameId, long rank) {
         this.gameId = gameId;
@@ -61,11 +65,19 @@ public class FeaturedGameEvent {
 //        this.icon = icon;
 //    }
 
-    public void setGameObject(GameLocalObject gameObject) {
+    public void setGameObject(StoreGameLocalObject gameObject) {
         this.gameObject = gameObject;
     }
 
-    public GameLocalObject getGameObject() {
+    public StoreGameLocalObject getGameObject() {
         return gameObject;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

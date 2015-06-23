@@ -102,7 +102,7 @@ public class TestAdapters extends Activity {
             }
         });
         ARL.eventBus.register(this);
-        ARL.store.synCategories();
+        ARL.store.syncCategories();
         ARL.store.syncGamesForCategory(3l);
 
         ActionLocalObject alo = new ActionLocalObject();

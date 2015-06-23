@@ -113,6 +113,10 @@ public class GameActivityFeatures {
         return gameLocalObject;
     }
 
+    public RunLocalObject getRunLocalObject() {
+        return runLocalObject;
+    }
+
     public void addMetadataToIntent(Intent intent) {
         intent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
         intent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
@@ -121,6 +125,11 @@ public class GameActivityFeatures {
     public int getTheme() {
         if (gameLocalObject == null) return R.style.ARLearn_schema1;
         Game game = gameLocalObject.getGameBean();
+        return getTheme(game);
+
+    }
+
+    public static int getTheme(Game game) {
         switch (game.getTheme()){
             case 1:
                 return R.style.ARLearn_schema1;
@@ -130,10 +139,17 @@ public class GameActivityFeatures {
                 return R.style.ARLearn_schema3;
             case 4:
                 return R.style.ARLearn_schema4;
+            case 5:
+                return R.style.ARLearn_schema5;
         }
         return R.style.ARLearn_schema1;
-
     }
 
+    public void checkRunDeleted(Activity activity) {
+        runLocalObject.refresh();
+        if (getRunLocalObject().getDeleted()!= null &&getRunLocalObject().getDeleted()){
+            activity.finish();
+        }
 
+    }
 }

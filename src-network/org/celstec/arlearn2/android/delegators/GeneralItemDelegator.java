@@ -176,6 +176,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
         giDao.setDescription(giBean.getDescription());
         giDao.setBean(giBean.toString());
         giDao.setDeleted(giBean.getDeleted());
+        giDao.setType(giBean.getType());
         return giDao;
     }
 

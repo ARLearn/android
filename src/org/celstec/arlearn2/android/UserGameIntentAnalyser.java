@@ -1,7 +1,14 @@
 package org.celstec.arlearn2.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
-import android.os.StrictMode;import org.celstec.arlearn2.android.delegators.ARL;
+import android.os.StrictMode;
+import org.celstec.arlearn2.android.db.PropertiesAdapter;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.AccountDelegator;
+import org.celstec.arlearn2.android.game.notification.AlertView;
+import org.celstec.arlearn2.beans.AuthResponse;
 import org.celstec.arlearn2.beans.game.Game;
 import org.celstec.arlearn2.beans.run.Run;
 
@@ -37,8 +44,11 @@ public abstract class UserGameIntentAnalyser {
 
     public boolean analyze(String data) {
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
-            if (data.startsWith("http://streetlearn.appspot.com/game/")) {
+        StrictMode.setThreadPolicy(policy);
+
+        if (data.startsWith("http://streetlearn.appspot.com/game/")) {
                 data =data.replace("http://streetlearn.appspot.com/game/", "gameId/");
             }
             if (data.contains("gameId/")) {
@@ -68,6 +78,14 @@ public abstract class UserGameIntentAnalyser {
                     gameIdAsString = gameIdAsString.substring(0, gameIdAsString.indexOf("?"));
                 }
                 gameToLoad = Long.parseLong(gameIdAsString);
+            } else {
+                AuthResponse authResponse = AccountDelegator.getInstance().checkAnonymousLogin(data);
+                if (authResponse == null) {
+                    return false;
+                } else {
+                   scannedLoginToken(authResponse.getAuth());
+                    return true;
+                }
             }
 
         return false;

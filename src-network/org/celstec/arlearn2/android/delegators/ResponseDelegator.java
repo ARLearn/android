@@ -77,8 +77,8 @@ public class ResponseDelegator extends AbstractDelegator{
             JSONObject responseValueJson = new JSONObject();
             responseValueJson.put("isCorrect", correct);
             responseValueJson.put("answer", array.toString());
-            createResponse(generalItemLocalObject,  runId,responseValueJson.toString());
-            System.out.println("response "+responseValueJson);
+            createResponse(generalItemLocalObject, runId, responseValueJson.toString());
+            System.out.println("response " + responseValueJson);
         } catch (JSONException e) {
             Log.e("exception", e.getMessage(), e);
         }
@@ -130,6 +130,11 @@ public class ResponseDelegator extends AbstractDelegator{
 
     public void syncResponses(long runId) {
         ARL.eventBus.post(new SyncResponses(runId));
+    }
+
+    public void deleteResponses(Long runId){
+        ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
+        dao.queryBuilder().where(ResponseLocalObjectDao.Properties.RunId.eq(runId)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
     public synchronized void onEventAsync(SyncResponses syncResponses) {

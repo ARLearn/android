@@ -6,6 +6,8 @@ import java.util.Properties;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
+import org.celstec.arlearn2.android.R;
+
 /**
  * ****************************************************************************
  * Copyright (C) 2013 Open Universiteit Nederland
@@ -51,6 +53,8 @@ public class ConfigAdapter {
 
     public class PropertiesExt extends Properties {
 
+
+
         public boolean getBooleanProperty(String key) {
             String value = getProperty(key);
             if (value == null) return false;
@@ -58,6 +62,11 @@ public class ConfigAdapter {
             return "true".equals(value.toLowerCase().trim());
         }
 
+        public int getContentView() {
+            if (getProperty("games_screen") == null) return R.layout.mygames_list;
+            if (getProperty("games_screen").equals("grid")) return R.layout.mygames_list_grid;
+            return R.layout.mygames_list;
+        }
     }
 
 }

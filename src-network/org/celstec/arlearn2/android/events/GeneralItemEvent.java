@@ -23,7 +23,6 @@ package org.celstec.arlearn2.android.events;
 public class GeneralItemEvent {
 
     private long generalItemId;
-    private boolean becameVisible = false;
 
     public GeneralItemEvent(long generalItemId) {
         this.generalItemId = generalItemId;
@@ -37,11 +36,4 @@ public class GeneralItemEvent {
         this.generalItemId = generalItemId;
     }
 
-    public boolean isBecameVisible() {
-        return becameVisible;
-    }
-
-    public void setBecameVisible(boolean becameVisible) {
-        this.becameVisible = becameVisible;
-    }
 }

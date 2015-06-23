@@ -14,6 +14,10 @@ import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * ****************************************************************************
  * Copyright (C) 2013 Open Universiteit Nederland
@@ -69,6 +73,18 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
 
     }
 
+    private String getDate(Long timeStampStr){
+
+        try{
+            DateFormat sdf = new SimpleDateFormat("MM/dd HH:mm:ss");
+            Date netDate = (new Date(timeStampStr));
+            return sdf.format(netDate);
+        }
+        catch(Exception ex){
+            return "xx";
+        }
+    }
+
     @Override
     public void bindView(View view, Context context, GeneralItemVisibilityLocalObject item) {
 //        TextView messageText =(TextView) view.findViewById(R.id.messageText);
@@ -95,7 +111,7 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
             TextView messageText =(TextView) view.findViewById(R.id.messageTextRead);
             ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconRead);
             if (item.getGeneralItemLocalObject()!=null) {
-                messageText.setText(item.getGeneralItemLocalObject().getTitle());
+                messageText.setText(item.getGeneralItemLocalObject().getTitle() ); //+ getDate(item.getTimeStamp())
                 messageIcon.setImageResource(
                         GeneralItemMapper.mapConstantToDrawable(
                                 GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
@@ -122,7 +138,7 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
             TextView messageText =(TextView) view.findViewById(R.id.messageTextUnRead);
             ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconUnRead);
             if (item.getGeneralItemLocalObject()!=null) {
-                messageText.setText(item.getGeneralItemLocalObject().getTitle());
+                messageText.setText(item.getGeneralItemLocalObject().getTitle()); //+ getDate(item.getTimeStamp())
                 messageIcon.setImageResource(
                         GeneralItemMapper.mapConstantToDrawable(
                                 GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())

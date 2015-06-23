@@ -55,13 +55,14 @@ public class ARlearnDaoGenerator {
     private static Entity gameCategory;
 
     private static Entity generalItemVisibility;
+    private static Entity proximityEventRegistry;
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1, "org.celstec.dao.gen");
         schema.enableKeepSectionsByDefault();
         account = createAccount(schema);
         game = createGame(schema);
-        storeGame = createStoreGame(schema);
+
         gameContributors = createGameContributor(schema);
         dependency = createDependency(schema);
         generalItem = createGeneralItem(schema);
@@ -72,6 +73,7 @@ public class ARlearnDaoGenerator {
 
         action = createAction(schema);
         response = createResponse(schema);
+        proximityEventRegistry = createProximityEventRegistry(schema);
         inquiry = createInquiryItem(schema);
         thread = createThread(schema);
         message = createMessage(schema);
@@ -81,11 +83,14 @@ public class ARlearnDaoGenerator {
         questionAnswer= createQuestionAnswer(schema);
 
         category = createCategory(schema);
+        storeGame = createStoreGame(schema);
         gameCategory = createGameCategory(schema);
         friends = createFriends(schema);
         new DaoGenerator().generateAll(schema, "src-dao-gen");
 
     }
+
+
 
     private static Entity createAccount(Schema schema) {
         Entity account = schema.addEntity("AccountLocalObject");
@@ -235,6 +240,7 @@ public class ARlearnDaoGenerator {
         Entity run = schema.addEntity("RunLocalObject");
         run.addIdProperty();
         run.addStringProperty("title").notNull();
+        run.addStringProperty("roles");
         run.addBooleanProperty("deleted");
 
         Property gameId = run.addLongProperty("gameId").notNull().getProperty();
@@ -299,6 +305,21 @@ public class ARlearnDaoGenerator {
         return response;
     }
 
+    private static Entity createProximityEventRegistry(Schema schema) {
+        Entity proximity = schema.addEntity("ProximityEventRegistryLocalObject");
+
+        proximity.addIdProperty();
+        proximity.addDoubleProperty("lat");
+        proximity.addDoubleProperty("lng");
+        proximity.addLongProperty("radius");
+        proximity.addLongProperty("expires");
+
+        Property runId = proximity.addLongProperty("runId").notNull().getProperty();
+        run.addToMany(proximity, runId, "proximityEvents");
+
+        return proximity;
+    }
+
     private static Entity createGame(Schema schema) {
         Entity game = schema.addEntity("GameLocalObject");
         game.addIdProperty();
@@ -329,6 +350,14 @@ public class ARlearnDaoGenerator {
         game.addByteArrayProperty("icon");
         game.addDoubleProperty("lat");
         game.addDoubleProperty("lng");
+
+        game.addBooleanProperty("featured");
+        game.addIntProperty("featuredRank");
+
+        Property categoryId = game.addLongProperty("categoryId").getProperty();
+        game.addToOne(category, categoryId);
+
+
         return game;
     }
 

@@ -6,15 +6,20 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.android.views.MyVideoView;
+import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.arlearn2.beans.generalItem.VideoObject;
+import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
@@ -52,7 +57,7 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
 
     private double startTime = 0;
     private double finalTime = 0;
-    public static int oneTimeOnly = 0;
+//    public static int oneTimeOnly = 0;
 
     private int status = PAUSE;
     private final static int PAUSE = 0;
@@ -91,17 +96,29 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
         });
 
         seekbar = (SeekBar) activity.findViewById(R.id.seekbar);
+        if (!ARL.config.getBooleanProperty("media_player_drag")) {
+            seekbar.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+        }
         seekbar.setOnSeekBarChangeListener(this);
+
+
         GameFileLocalObject gameFile = GameFileLocalObject.getGameFileLocalObject(generalItemLocalObject.getGameId(), "/generalItems/" + generalItemLocalObject.getId() + "/video");
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         if (gameFile != null) {
             retriever.setDataSource(activity, gameFile.getLocalUri());
             videoView.setVideoURI(gameFile.getLocalUri());
             Bitmap frameAtTime = retriever.getFrameAtTime();
-            videoView.setVideoSize(frameAtTime.getWidth(), frameAtTime.getHeight());
+            if (frameAtTime!=null) videoView.setVideoSize(frameAtTime.getWidth(), frameAtTime.getHeight());
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
+//                    GeneralItem bean = generalItemLocalObject.getGeneralItemBean();
+//                    System.out.println(bean.toString());
                     if (((VideoObject) generalItemLocalObject.getGeneralItemBean()).getAutoLaunch()) playPause();
 
                 }
@@ -112,21 +129,32 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
     public void onPauseActivity(){
         super.onPauseActivity();
         videoView.stopPlayback();
+        status = PAUSE;
     }
 
     public void playPause(){
+
         if (status == PAUSE) {
             status = PLAYING;
             playPauseButton.setImageDrawable(pauseDrawable);
             videoView.start();
             finalTime = videoView.getDuration();
             startTime = videoView.getCurrentPosition();
-            if(oneTimeOnly == 0){
-                seekbar.setMax((int) finalTime);
-                oneTimeOnly = 1;
-            }
+            seekbar.setMax((int) finalTime);
+//            if(oneTimeOnly == 0){
+//
+//                oneTimeOnly = 1;
+//            }
             seekbar.setProgress((int)startTime);
-            myHandler.postDelayed(UpdateSongTime,100);
+            myHandler.postDelayed(UpdateSongTime, 100);
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    status = PAUSE;
+                    playbackCompleted();
+                    playPauseButton.setImageDrawable(playDrawable);
+                }
+            });
         } else {
             status = PAUSE;
             playPauseButton.setImageDrawable(playDrawable);
@@ -137,9 +165,9 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
     private Runnable UpdateSongTime = new Runnable() {
         public void run() {
             startTime = videoView.getCurrentPosition();
-
-            seekbar.setProgress((int)startTime);
-            myHandler.postDelayed(this, 100);
+            if (!touching)  seekbar.setProgress((int) startTime);
+            if (status == PLAYING)
+                myHandler.postDelayed(this, 100);
         }
     };
 
@@ -150,11 +178,15 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        touching = true;
 
     }
 
+    private boolean touching = false;
+
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        touching = false;
         if (seekBar.getProgress() == finalTime){
             status = PAUSE;
             videoView.pause();
@@ -168,4 +200,16 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
             videoView.start();
         }
     }
+
+    protected void playbackCompleted() {
+        Action action = new Action();
+        action.setAction("complete");
+        action.setRunId(activity.getGameActivityFeatures().getRunId());
+        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+        action.setGeneralItemId(generalItemLocalObject.getId());
+
+        ActionsDelegator.getInstance().createAction(action);
+    }
+
+
 }

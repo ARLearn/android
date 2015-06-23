@@ -8,6 +8,7 @@ import org.celstec.arlearn2.android.events.SearchResultList;
 import org.celstec.arlearn2.android.store.NearMeActivity;
 import org.celstec.arlearn2.android.store.NearMeFragment;
 import org.celstec.arlearn2.beans.game.Game;
+import org.celstec.dao.gen.StoreGameLocalObject;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 
 import java.util.ArrayList;
@@ -57,17 +58,17 @@ public class GameOverlay extends ItemizedIconOverlay<GameOverlayItem> {
 
 
     public void resume(){
-        ARL.eventBus.register(this);
+//        ARL.eventBus.register(this);
     }
 
     public void close() {
-        ARL.eventBus.unregister(this);
+//        ARL.eventBus.unregister(this);
     }
 
     public void onEventMainThread(SearchResultList event) {
-        for (Game game: event.getGamesList().getGames()){
-            GameOverlayItem overlayItem = new GameOverlayItem(DaoConfiguration.getInstance().getStoreGameLocalObjectDao().load(game.getGameId()),ctx);
-            games.put(game.getGameId(), overlayItem);
+        for (StoreGameLocalObject game: event.getStoreGameList()){
+            GameOverlayItem overlayItem = new GameOverlayItem(game,ctx);
+            games.put(game.getId(), overlayItem);
         }
         setGameList();
         ((NearMeActivity)ctx).invalidateMap();
@@ -88,7 +89,7 @@ public class GameOverlay extends ItemizedIconOverlay<GameOverlayItem> {
             nearMeFragment.openGame(getItem(index).getGame().getGameBean());
 
         } else {
-            ((NearMeActivity) ctx).openGame(getItem(index).getGame().getGameBean());
+            ((NearMeActivity) ctx).openGame(getItem(index).getGame());
         }
         return true;
     }

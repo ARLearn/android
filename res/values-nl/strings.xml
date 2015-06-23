@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ARLearn</string>
 
     <string name="login_facebook">Login met Facebook</string>
     <string name="login_google">Login met Google</string>
@@ -89,4 +88,11 @@
     <string name="continueMessage" >Doorgaan</string>
     <string name="provideInput" >Voer in</string>
     <string name="logout" >Afmelden</string>
+    <string name="scanCode">Scan Code</string>
+    <string name="nearMe">In de buurt</string>
+    <string name="gameDetails">Spel Details</string>
+    <string name="gamePlay">Spel</string>
+    <string name="youMustLogOut">Je moet eerst uitloggen.</string>
+    <string name="leaveMeLogedIn">Blijf ingelogd</string>
+    <string name="logMeOut">Uitloggen</string>
 </resources>

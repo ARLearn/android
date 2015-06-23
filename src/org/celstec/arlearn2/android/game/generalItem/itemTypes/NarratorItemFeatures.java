@@ -4,9 +4,11 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.arlearn2.beans.generalItem.OpenQuestion;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -66,8 +68,13 @@ public class NarratorItemFeatures extends GeneralItemActivityFeatures{
         super.setMetadata();
         WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
         webView.setBackgroundColor(0x00000000);
-        webView.loadDataWithBaseURL("file:///android_res/raw/", ((NarratorItem) generalItemBean).getRichText(), "text/html", "UTF-8", null);
-
+        String baseUrl = "";
+        if (ARL.config.getBooleanProperty("white_label") && !ARL.config.getBooleanProperty("white_label_online_sync")) {
+            baseUrl = "file:///android_res/raw/";
+        } else {
+            baseUrl = "file://"+MediaFolders.getIncommingFilesDir().getParent().toString()+"/";
+        }
+        webView.loadDataWithBaseURL(baseUrl, ((NarratorItem) generalItemBean).getRichText(), "text/html", "UTF-8", null);
 
     }
 }

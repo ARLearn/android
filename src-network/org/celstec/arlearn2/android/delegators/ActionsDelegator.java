@@ -203,6 +203,10 @@ public class ActionsDelegator extends AbstractDelegator {
 //        actionLocalObject.setId(resultBean.get);
     }
 
+    public void deleteActions(Long runId) {
+        DaoConfiguration.getInstance().getActionLocalObjectDao().queryBuilder().where(ActionLocalObjectDao.Properties.RunId.eq(runId)).buildDelete().executeDeleteWithoutDetachingEntities();
+    }
+
 
     private class UploadActions {
         private long runId;

@@ -66,7 +66,7 @@ public class LoginFragment  extends SherlockFragment {
         return v;
     }
 
-    private class ButtonClickListener implements View.OnClickListener {
+    public class ButtonClickListener implements View.OnClickListener {
 
         private int providerId;
 

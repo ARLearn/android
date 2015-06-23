@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:background="?attr/backgroundColor"
+
+              android:id="@+id/storeLinearLayout">
+
+    <org.celstec.arlearn2.android.views.AspectRatioView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:id="@+id/gameHeader"
+            android:adjustViewBounds="true"
+            android:src="@drawable/game_header"
+            />
+
+    <TextView
+            android:id="@+id/titleId"
+            style="@style/ARLearn.Game.GeneralItemActivity.TitleTextView"
+            />
+
+        <ImageView
+                android:id="@+id/generalItemIcon"
+                android:layout_marginTop="20dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="100dip"
+                style="@style/ARLearn.Game.GeneralItemActivity.TopIcon"
+                />
+
+
+
+        <WebView
+                android:id="@+id/descriptionId"
+                android:background="@android:color/transparent"
+                style="@style/ARLearn.Game.GeneralItemActivity.RichTextView">
+        </WebView>
+
+
+    <TextView
+            android:id="@+id/button"
+            style="@style/ARLearn.Game.Button"
+            android:text="Kies deze gids"
+            android:layout_weight="0"
+            android:layout_marginTop="10dip"
+            android:layout_marginBottom="10dip"
+            />
+
+
+</LinearLayout>

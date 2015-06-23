@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
@@ -50,14 +51,22 @@ public class GameSplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
         if (!ARL.isInit()) ARL.init(this);
-        downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)) {
-            @Override
-            public void onDismiss() {
-                super.onDismiss();
+
+
+        Boolean sync = getIntent().getBooleanExtra("syncContent", true);
+        if (sync) {
+            downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)) {
+                @Override
+                public void onDismiss() {
+                    super.onDismiss();
 //                startGeneralItemListActivity();
-                dataSynced = true;
-            }
-        };
+                    dataSynced = true;
+                }
+            };
+        } else {
+            findViewById(R.id.downloadStatus).setVisibility(View.GONE);
+            dataSynced = true;
+        }
 
 
         delayedGameLauncher = new DelayedGameLauncher(System.currentTimeMillis() + 3000) {
@@ -177,9 +186,14 @@ public class GameSplashScreen extends Activity {
 
 
     public static void startActivity(Context ctx, long gameId, long runId) {
+        startActivity(ctx,gameId,runId,true);
+    }
+
+    public static void startActivity(Context ctx, long gameId, long runId, boolean sync) {
         Intent gameIntent = new Intent(ctx, GameSplashScreen.class);
         gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
         gameIntent.putExtra(RunLocalObject.class.getName(), runId);
+        gameIntent.putExtra("syncContent", sync);
         ctx.startActivity(gameIntent);
     }
 

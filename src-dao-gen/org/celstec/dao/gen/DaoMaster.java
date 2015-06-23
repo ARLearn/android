@@ -10,7 +10,6 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import org.celstec.dao.gen.AccountLocalObjectDao;
 import org.celstec.dao.gen.GameLocalObjectDao;
-import org.celstec.dao.gen.StoreGameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
@@ -19,6 +18,7 @@ import org.celstec.dao.gen.GeneralItemMediaLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObjectDao;
 import org.celstec.dao.gen.ActionLocalObjectDao;
 import org.celstec.dao.gen.ResponseLocalObjectDao;
+import org.celstec.dao.gen.ProximityEventRegistryLocalObjectDao;
 import org.celstec.dao.gen.InquiryLocalObjectDao;
 import org.celstec.dao.gen.ThreadLocalObjectDao;
 import org.celstec.dao.gen.MessageLocalObjectDao;
@@ -27,6 +27,7 @@ import org.celstec.dao.gen.BadgeLocalObjectDao;
 import org.celstec.dao.gen.InquiryQuestionLocalObjectDao;
 import org.celstec.dao.gen.InquiryQuestionAnswerLocalObjectDao;
 import org.celstec.dao.gen.CategoryLocalObjectDao;
+import org.celstec.dao.gen.StoreGameLocalObjectDao;
 import org.celstec.dao.gen.GameCategoryLocalObjectDao;
 import org.celstec.dao.gen.FriendsLocalObjectDao;
 
@@ -35,13 +36,12 @@ import org.celstec.dao.gen.FriendsLocalObjectDao;
  * Master of DAO (schema version 1): knows all DAOs.
 */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 48;
+    public static final int SCHEMA_VERSION = 53;
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         AccountLocalObjectDao.createTable(db, ifNotExists);
         GameLocalObjectDao.createTable(db, ifNotExists);
-        StoreGameLocalObjectDao.createTable(db, ifNotExists);
         GameContributorLocalObjectDao.createTable(db, ifNotExists);
         DependencyLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemLocalObjectDao.createTable(db, ifNotExists);
@@ -50,6 +50,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RunLocalObjectDao.createTable(db, ifNotExists);
         ActionLocalObjectDao.createTable(db, ifNotExists);
         ResponseLocalObjectDao.createTable(db, ifNotExists);
+        ProximityEventRegistryLocalObjectDao.createTable(db, ifNotExists);
         InquiryLocalObjectDao.createTable(db, ifNotExists);
         ThreadLocalObjectDao.createTable(db, ifNotExists);
         MessageLocalObjectDao.createTable(db, ifNotExists);
@@ -58,6 +59,7 @@ public class DaoMaster extends AbstractDaoMaster {
         InquiryQuestionLocalObjectDao.createTable(db, ifNotExists);
         InquiryQuestionAnswerLocalObjectDao.createTable(db, ifNotExists);
         CategoryLocalObjectDao.createTable(db, ifNotExists);
+        StoreGameLocalObjectDao.createTable(db, ifNotExists);
         GameCategoryLocalObjectDao.createTable(db, ifNotExists);
         FriendsLocalObjectDao.createTable(db, ifNotExists);
     }
@@ -66,7 +68,6 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         AccountLocalObjectDao.dropTable(db, ifExists);
         GameLocalObjectDao.dropTable(db, ifExists);
-        StoreGameLocalObjectDao.dropTable(db, ifExists);
         GameContributorLocalObjectDao.dropTable(db, ifExists);
         DependencyLocalObjectDao.dropTable(db, ifExists);
         GeneralItemLocalObjectDao.dropTable(db, ifExists);
@@ -75,6 +76,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RunLocalObjectDao.dropTable(db, ifExists);
         ActionLocalObjectDao.dropTable(db, ifExists);
         ResponseLocalObjectDao.dropTable(db, ifExists);
+        ProximityEventRegistryLocalObjectDao.dropTable(db, ifExists);
         InquiryLocalObjectDao.dropTable(db, ifExists);
         ThreadLocalObjectDao.dropTable(db, ifExists);
         MessageLocalObjectDao.dropTable(db, ifExists);
@@ -83,6 +85,7 @@ public class DaoMaster extends AbstractDaoMaster {
         InquiryQuestionLocalObjectDao.dropTable(db, ifExists);
         InquiryQuestionAnswerLocalObjectDao.dropTable(db, ifExists);
         CategoryLocalObjectDao.dropTable(db, ifExists);
+        StoreGameLocalObjectDao.dropTable(db, ifExists);
         GameCategoryLocalObjectDao.dropTable(db, ifExists);
         FriendsLocalObjectDao.dropTable(db, ifExists);
     }
@@ -118,7 +121,6 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(AccountLocalObjectDao.class);
         registerDaoClass(GameLocalObjectDao.class);
-        registerDaoClass(StoreGameLocalObjectDao.class);
         registerDaoClass(GameContributorLocalObjectDao.class);
         registerDaoClass(DependencyLocalObjectDao.class);
         registerDaoClass(GeneralItemLocalObjectDao.class);
@@ -127,6 +129,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(RunLocalObjectDao.class);
         registerDaoClass(ActionLocalObjectDao.class);
         registerDaoClass(ResponseLocalObjectDao.class);
+        registerDaoClass(ProximityEventRegistryLocalObjectDao.class);
         registerDaoClass(InquiryLocalObjectDao.class);
         registerDaoClass(ThreadLocalObjectDao.class);
         registerDaoClass(MessageLocalObjectDao.class);
@@ -135,6 +138,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(InquiryQuestionLocalObjectDao.class);
         registerDaoClass(InquiryQuestionAnswerLocalObjectDao.class);
         registerDaoClass(CategoryLocalObjectDao.class);
+        registerDaoClass(StoreGameLocalObjectDao.class);
         registerDaoClass(GameCategoryLocalObjectDao.class);
         registerDaoClass(FriendsLocalObjectDao.class);
     }

@@ -19,6 +19,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * ****************************************************************************
@@ -60,7 +61,16 @@ public class InitWhiteLabelDatabase {
     }
 
     public static List<Long> getGameIds(){
-        String gameIds = ARL.config.getProperty("white_label_gameId");
+        String localizedGames = "white_label_gameId_"+Locale.getDefault().getLanguage();
+        System.out.println("localised string "+localizedGames);
+        String gameIds =  null;
+        if (ARL.config.getProperty(localizedGames) != null) {
+
+            gameIds = ARL.config.getProperty(localizedGames);
+        } else {
+            System.out.println("not localised");
+            gameIds = ARL.config.getProperty("white_label_gameId");
+        }
         List<String> list = new ArrayList<String>(Arrays.asList(gameIds.split(",")));
         List<Long> gameIdsLong= new ArrayList<Long>(list.size());
         for (String gameId: list){
@@ -76,12 +86,7 @@ public class InitWhiteLabelDatabase {
 
     public void onEventAsync(AsyncStartInitDB event) {
         try {
-            String gameIds = ARL.config.getProperty("white_label_gameId");
-            List<String> list = new ArrayList<String>(Arrays.asList(gameIds.split(",")));
-            gameIdsLong = new ArrayList<Long>(list.size());
-            for (String gameId : list) {
-                gameIdsLong.add(Long.parseLong(gameId));
-            }
+            gameIdsLong = getGameIds();
             if (ARL.config.getProperty("white_label_runId") != null) {
                 runId = Long.parseLong(ARL.config.getProperty("white_label_runId"));
             } else {
@@ -108,10 +113,13 @@ public class InitWhiteLabelDatabase {
 
     private void createMaps() {
         if (ARL.config.getProperty("white_label_map_file")!= null) {
-            AssetManager assetManager = context.getAssets();
             String filename = ARL.config.getProperty("white_label_map_file");
+            AssetManager assetManager = context.getAssets();
             try {
                 InputStream in = assetManager.open(filename);
+                if (!new File("/mnt/sdcard/osmdroid/").exists()) {
+                    new File("/mnt/sdcard/osmdroid/").mkdir();
+                }
                 File outFile = new File("/mnt/sdcard/osmdroid/", filename);
                 OutputStream out = new FileOutputStream(outFile);
                 copyFile(in, out);
@@ -124,7 +132,26 @@ public class InitWhiteLabelDatabase {
         }
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
+    public static void writeFileToOSM(Context context, String filename){
+        AssetManager assetManager = context.getAssets();
+        try {
+            File file = new File(filename);
+            FileInputStream in = new FileInputStream(file);
+            if (!new File("/mnt/sdcard/osmdroid/").exists()) {
+                new File("/mnt/sdcard/osmdroid/").mkdir();
+            }
+            File outFile = new File("/mnt/sdcard/osmdroid/", file.getName());
+            OutputStream out = new FileOutputStream(outFile);
+            copyFile(in, out);
+            in.close();
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
         while((read = in.read(buffer)) != -1){
@@ -150,30 +177,34 @@ public class InitWhiteLabelDatabase {
     }
 
     private void loadRunScript() {
-        for (GameLocalObject gameLocalObject:DaoConfiguration.getInstance().getGameLocalObjectDao().loadAll()){
-            RunLocalObject runLocalObject = new RunLocalObject();
-            runLocalObject.setGameId(gameLocalObject.getId());
-            runLocalObject.setTitle("Default");
-            runLocalObject.setDeleted(false);
-            DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
-        }
+        if (!ARL.config.getBooleanProperty("white_label_login")) {
 
+            for (GameLocalObject gameLocalObject : DaoConfiguration.getInstance().getGameLocalObjectDao().loadAll()) {
+                RunLocalObject runLocalObject = new RunLocalObject();
+                runLocalObject.setGameId(gameLocalObject.getId());
+                runLocalObject.setTitle("Default");
+                runLocalObject.setDeleted(false);
+                DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
+            }
+        }
     }
 
     private void createDefaultAccount() {
-        AccountLocalObject defaultAccount = new AccountLocalObject();
-        defaultAccount.setAccountLevel(0);
-        defaultAccount.setEmail("default@mail.com");
-        defaultAccount.setName("Anonymous");
-        defaultAccount.setFamilyName("Anonymous");
-        defaultAccount.setGivenName("Anonymous");
-        defaultAccount.setFullId("0:0");
-        defaultAccount.setAccountType(0);
-        defaultAccount.setLocalId("0");
-        defaultAccount.setId(1l);
-        DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(defaultAccount);
-        AccountDelegator.getInstance().setAccount(defaultAccount);
-        ARL.properties.setAccount(defaultAccount.getId());
+        if (!ARL.config.getBooleanProperty("white_label_login")) {
+            AccountLocalObject defaultAccount = new AccountLocalObject();
+            defaultAccount.setAccountLevel(0);
+            defaultAccount.setEmail("default@mail.com");
+            defaultAccount.setName("Anonymous");
+            defaultAccount.setFamilyName("Anonymous");
+            defaultAccount.setGivenName("Anonymous");
+            defaultAccount.setFullId("0:0");
+            defaultAccount.setAccountType(0);
+            defaultAccount.setLocalId("0");
+            defaultAccount.setId(1l);
+            DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(defaultAccount);
+            AccountDelegator.getInstance().setAccount(defaultAccount);
+            ARL.properties.setAccount(defaultAccount.getId());
+        }
     }
 
     public class AsyncStartInitDB{

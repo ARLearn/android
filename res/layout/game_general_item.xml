@@ -9,14 +9,16 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:background="?attr/backgroundColorLight"
+              android:paddingTop="60dip"
               android:layout_height="match_parent">
 
-    <include layout="@layout/game_general_item_navigation_header"/>
+    <!--<include layout="@layout/game_general_item_navigation_header"/>-->
 
 
 
     <ImageView
             android:id="@+id/generalItemIcon"
+
             android:layout_gravity="center_horizontal"
             android:layout_width="fill_parent"
             android:layout_height="50dip"
@@ -85,8 +87,8 @@
 
         <ImageView
                 android:id="@+id/playPauseButton"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
                 android:layout_alignTop="@+id/imageButton3"
 
                 android:layout_toRightOf="@+id/imageButton3"

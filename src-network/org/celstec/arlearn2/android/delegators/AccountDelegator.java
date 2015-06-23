@@ -10,6 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.celstec.arlearn2.android.db.Constants;
 import org.celstec.arlearn2.android.events.MyAccount;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
+import org.celstec.arlearn2.beans.AuthResponse;
 import org.celstec.arlearn2.beans.account.Account;
 import org.celstec.arlearn2.client.AccountClient;
 import org.celstec.arlearn2.client.CollaborationClient;
@@ -99,7 +100,15 @@ public class AccountDelegator extends AbstractDelegator{
         ARL.properties.setAuthToken(null);
         ARL.properties.setAccount(0l);
         ARL.games.deleteGames();
+        ARL.runs.deleteRuns();
+        ARL.accounts.deleteAccounts();
+//        ARL.actions.deleteActions();
+//        ARL.responses.deleteResponses();
         loggedInAccount = null;
+    }
+
+    private void deleteAccounts() {
+        DaoConfiguration.getInstance().getAccountLocalObjectDao().deleteAll();
     }
 
     public boolean isAuthenticated(){
@@ -173,6 +182,13 @@ public class AccountDelegator extends AbstractDelegator{
         }catch (Exception e) {
             return null;
         }
+    }
+
+    public AuthResponse checkAnonymousLogin(String token) {
+        if (ARL.isOnline()) {
+            return AccountClient.getAccountClient().anonymousLogin(token);
+        }
+        return null;
     }
 
 

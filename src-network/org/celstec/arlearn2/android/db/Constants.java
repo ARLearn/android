@@ -33,7 +33,7 @@ public class Constants {
     public static String SCORING_ENABLED = "scoringEnabled";
     public static String MAP_ENABLED = "scoringEnabled";
     public static final String CACHE_DIR = "arlearn2";
-    public static final String INCOMMING = "incomming";
+    public static final String INCOMMING = "game";
     public static final String OUTGOING = "outgoing";
     public static final String RUN = "run_";
     public static final String PARTICIPATE_GAME_LAST_SYNC_DATE = "participateGameLastSyncDate";

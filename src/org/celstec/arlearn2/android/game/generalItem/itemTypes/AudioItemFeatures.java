@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -97,6 +98,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
         playPauseButton  = (ImageView) activity.findViewById(R.id.playPauseButton);
 
+
         pauseDrawable = activity.getResources().getDrawable(R.drawable.btn_pause_black);
         playDrawable = activity.getResources().getDrawable(R.drawable.btn_play_black);
         ColorMatrixColorFilter filter = DrawableUtil.getBlackWhiteFilter(DrawableUtil.styleUtil.getPrimaryColor());
@@ -112,6 +114,16 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         });
 
         seekbar = (SeekBar) activity.findViewById(R.id.seekbar);
+
+        if (!ARL.config.getBooleanProperty("media_player_drag")) {
+            seekbar.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+        }
+
         seekbar.setOnSeekBarChangeListener(this);
     }
 

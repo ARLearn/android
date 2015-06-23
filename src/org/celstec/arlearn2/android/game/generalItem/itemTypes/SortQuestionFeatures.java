@@ -1,13 +1,16 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +20,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
+import org.celstec.arlearn2.android.game.generalItem.FeedbackView;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
@@ -66,7 +70,17 @@ public class SortQuestionFeatures extends SingleChoiceFeatures { //GeneralItemAc
     public void setMetadata(){
         WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
         webView.setBackgroundColor(0x00000000);
+        webView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if (event.getAction() == DragEvent.ACTION_DROP) {
+                    resetView((View) event.getLocalState());
+                }
+                return true;
+            }
+        });
         setRichText(webView);
+
         Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
         TypedArray ta =  activity.obtainStyledAttributes(activity.getGameActivityFeatures().getTheme(), new int[]{R.attr.primaryColor});
         ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
@@ -128,21 +142,35 @@ public class SortQuestionFeatures extends SingleChoiceFeatures { //GeneralItemAc
         });
     }
 
+    public void resetView(View dragView) {
+        dragView.setVisibility(View.VISIBLE);
+        dragView.setBackgroundDrawable(ARL.drawableUtil.getGameMessageEntry());
+        ((View)dragView.getParent()).setBackgroundDrawable(ARL.drawableUtil.getGameMessageEntry());
+//        for (String key: rowMap.keySet()) {
+//            if (rowMap.get(key) == dragView) {
+//                for (int i =0; i< dropViews.length; i++) {
+//                    View drop = dropViews[i];
+//                    if (drop == dragView.getParent()) {
+//
+//                        dropViews[i].setBackgroundDrawable(ARL.drawableUtil.getGameMessageEntry());
+//                    }
+//                }
+//            }
+//        }
+    }
+
     public void viewDropped(View dragView, View targetView) {
         int droppedAtIndex = 0;
         int droppedFromIndex = 0;
         for (int i =0; i< dropViews.length; i++) {
             View drop = dropViews[i];
             if (drop == targetView) {
-//                System.out.println("found " +i);
                 droppedAtIndex = i;
             }
-//            System.out.println(sortQuestionItems[i].getText()+ " "+sortQuestionItems[i].getId());
         }
         String selectedKey = null;
         for (String key: rowMap.keySet()) {
             if (rowMap.get(key) == dragView) {
-//                System.out.println("key "+key + "found");
                 selectedKey = key;
                 for (int i =0; i< dropViews.length; i++) {
                     View drop = dropViews[i];
@@ -151,13 +179,7 @@ public class SortQuestionFeatures extends SingleChoiceFeatures { //GeneralItemAc
                     }
                 }
             }
-//            else {
-//                System.out.println("key "+key + "not found");
-//            }
         }
-
-//        System.out.println("Id "+selectedKey+" was dropped from index "+droppedFromIndex+ " at index "+droppedAtIndex);
-//        View dragViewToMove = rowMap.get(selectedKey);
         SortQuestionItem draggedQuestionItem = sortQuestionItems[droppedFromIndex];
         if (droppedFromIndex == droppedAtIndex) {
 //            System.out.println("do nothing");
@@ -216,12 +238,29 @@ public class SortQuestionFeatures extends SingleChoiceFeatures { //GeneralItemAc
             System.out.println(sortQuestionItems[i].getCorrectPosition());
 
         }
+
 //        System.out.println(order +" "+correct);
         createAnswerIdAction(order);
         ResponseDelegator.getInstance().createSortQuestionResponse(generalItemLocalObject, activity.getGameActivityFeatures().getRunId(), ids, correct);
         createAnswerResultAction(correct);
         createAnswerGivenAction();
-        activity.finish();
+        if (((SortQuestion)generalItemBean).getShowFeedback() != null && ((SortQuestion)generalItemBean).getShowFeedback()){
+            Intent feedback = new Intent(activity, FeedbackView.class);
+            feedback.putExtra("correct", correct);
+            if (correct) {
+                feedback.putExtra("feedback", ((SortQuestion)generalItemBean).getFeedbackCorrect());
+            } else {
+                feedback.putExtra("feedback", ((SortQuestion)generalItemBean).getFeedbackWrong());
+            }
+
+            activity.startActivity(feedback);
+            if (correct) {
+                activity.finish();
+            }
+        } else {
+            activity.finish();
+        }
+
 
     }
 

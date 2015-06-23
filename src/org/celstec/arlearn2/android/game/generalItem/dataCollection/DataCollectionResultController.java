@@ -193,6 +193,10 @@ public class DataCollectionResultController {
                         String message = author+ dateFormat.format(new Date(responseLocalObject.getTimeStamp()));
                         result.setDataAsString(message);
                     }
+                    if (responseLocalObject.getType() == ResponseLocalObject.PICTURE_TYPE) {
+                        String message = author+ dateFormat.format(new Date(responseLocalObject.getTimeStamp()));
+                        result.setDataAsString(message);
+                    }
                     addResult(result, responseLocalObject);
                 }
 //                displayedIds.add(responseLocalObject.getId());

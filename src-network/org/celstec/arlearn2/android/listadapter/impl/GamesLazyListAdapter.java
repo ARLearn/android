@@ -1,9 +1,12 @@
 package org.celstec.arlearn2.android.listadapter.impl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import daoBase.DaoConfiguration;
@@ -79,6 +82,15 @@ public class GamesLazyListAdapter extends LazyListAdapter<GameLocalObject> {
     public void bindView(View view, Context context,  GameLocalObject item) {
         TextView firstLineView =(TextView) view.findViewById(R.id.gameTitleId);
         firstLineView.setText(item.getTitle());
+        if (item != null) {
+            byte[] data = item.getIcon();
+            if (data != null && data.length!=0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bitmap);
+            }else {
+                ((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_default_game);
+            }
+        }
 //        TextView secondLineView =(TextView) view.findViewById(R.id.gameDescriptionId);
 //        String description = item.getDescription()==null?"":item.getDescription();
 //        for (RunLocalObject run: item.getRuns()) {

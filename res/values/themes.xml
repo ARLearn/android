@@ -22,7 +22,7 @@
         <item name="buttonAlternativeColor">#14ddb3</item>
         <item name="backgroundColor">#dcd5cb</item>
         <item name="backgroundColorLight">#f5ede2</item>
-        <item name="backgroundColorDark">#b2aca3</item>
+        <item name="backgroundColorDark">#948c7f</item>
         <item name="text">#95a5a6</item>
         <item name="textLight">#ffffff</item>
         <item name="textDark">#33485f</item>
@@ -74,7 +74,7 @@
 
     <style name="ARLearn.Theme3" parent="Theme.Sherlock">
         <item name="primaryColor">#37a16b</item>
-        <item name="primaryColorLight">#b6ddc8</item>
+        <item name="primaryColorLight">#89c8a8</item>
         <item name="primaryColorDark">#017b4a</item>
         <item name="primaryColorHighlight">#ffffff</item>
         <item name="highlightColor">#ffffff</item>
@@ -106,4 +106,22 @@
         <item name="textInactive">#ffb795</item>
         <item name="transparency">#99000000</item>
     </style>
+
+    <style name="ARLearn.Theme5" parent="Theme.Sherlock">
+        <item name="primaryColor">#faa61e</item>
+        <item name="primaryColorLight">#feb032</item>
+        <item name="primaryColorDark">#dd9115</item>
+        <item name="primaryColorHighlight">#ffffff</item>
+        <item name="highlightColor">#ffffff</item>
+        <item name="buttonColor">#e30762</item>
+        <item name="buttonAlternativeColor">#90bc11</item>
+        <item name="backgroundColor">#0f90c9</item>
+        <item name="backgroundColorLight">#1aa0db</item>
+        <item name="backgroundColorDark">#00557b</item>
+        <item name="text">#ffffff</item>
+        <item name="textLight">#ffffff</item>
+        <item name="textDark">#001549</item>
+        <item name="textInactive">#b8b8b8</item>
+        <item name="transparency">#99000000</item>
+        </style>
 </resources>

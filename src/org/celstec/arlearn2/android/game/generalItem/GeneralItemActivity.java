@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
+import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.events.ResponseEvent;
+import org.celstec.arlearn2.android.events.RunEvent;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.util.DrawableUtil;
@@ -40,8 +43,9 @@ public class GeneralItemActivity extends Activity {
 
     private GameActivityFeatures gameActivityFeatures;
     GeneralItemActivityFeatures generalItemActivityFeatures;
-    InBetweenGeneralItemNavigation inBetweenGeneralItemNavigation;
+//    InBetweenGeneralItemNavigation inBetweenGeneralItemNavigation;
 
+    ActionBarMenuController actionBarMenuController;
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -53,7 +57,6 @@ public class GeneralItemActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARL.init(this);
-        System.out.println("in oncreaate");
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY); //TODO make conditional
         gameActivityFeatures = new GameActivityFeatures(this);
 
@@ -69,29 +72,45 @@ public class GeneralItemActivity extends Activity {
         }
 
         generalItemActivityFeatures = GeneralItemActivityFeatures.getGeneralItemActivityFeatures(this);
+        actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures, generalItemActivityFeatures);
+
         ARL.actions.issueAction(ActionsDelegator.READ,
                 gameActivityFeatures.getRunId(),
                 generalItemActivityFeatures.generalItemLocalObject.getId(),
                 generalItemActivityFeatures.generalItemLocalObject.getGeneralItemBean().getType());
-//        if (generalItemActivityFeatures.showNavigationBar())
-            inBetweenGeneralItemNavigation = new InBetweenGeneralItemNavigation(this, gameActivityFeatures, generalItemActivityFeatures);
+//            inBetweenGeneralItemNavigation = new InBetweenGeneralItemNavigation(this, gameActivityFeatures, generalItemActivityFeatures);
+    }
+
+
+    public void onEventMainThread(final GeneralItemBecameVisibleEvent event) {
+//        ARL.eventBus.removeStickyEvent(event);
+//        System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
+
+//        if (inBetweenGeneralItemNavigation!=null) inBetweenGeneralItemNavigation.updateMessagesHeader();
+        actionBarMenuController.updateNavigationButtons();
+        event.processEvent(gameActivityFeatures, this, this);
+
+//        if (event.isShowStroken()) gameActivityFeatures.showStrokenNotification(new NotificationAction() {
+//            @Override
+//            public void onOpen() {
+//
+//                Intent intent = new Intent(GeneralItemActivity.this, GeneralItemActivity.class);
+//                gameActivityFeatures.addMetadataToIntent(intent);
+//                intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
+
+    }
+    public void onEventMainThread(RunEvent runEvent) {
+        if (runEvent.getRunId() == gameActivityFeatures.getRunId() && runEvent.isDeleted()){
+            this.finish();
+        }
     }
 
     public void onEventMainThread(final GeneralItemEvent event) {
-        System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
         generalItemActivityFeatures.updateGeneralItem();
-        if (inBetweenGeneralItemNavigation!=null) inBetweenGeneralItemNavigation.updateMessagesHeader();
-        if (event.isBecameVisible()) gameActivityFeatures.showStrokenNotification(new NotificationAction() {
-            @Override
-            public void onOpen() {
-
-                Intent intent = new Intent(GeneralItemActivity.this, GeneralItemActivity.class);
-                gameActivityFeatures.addMetadataToIntent(intent);
-                intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
-                startActivity(intent);
-                finish();
-            }
-        });
         if (event.getGeneralItemId() == generalItemActivityFeatures.generalItemLocalObject.getId()){
             Boolean deleted = generalItemActivityFeatures.generalItemLocalObject.getDeleted();
             if (deleted!= null && deleted){
@@ -101,11 +120,23 @@ public class GeneralItemActivity extends Activity {
         }
     }
 
-
     public void onEventMainThread(ResponseEvent event) {
         generalItemActivityFeatures.updateResponses();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        actionBarMenuController.inflateMenu(menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return actionBarMenuController.onOptionsItemSelected(item);
+
+    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -118,6 +149,7 @@ public class GeneralItemActivity extends Activity {
         super.onResume();
         ARL.eventBus.register(this);
         generalItemActivityFeatures.onResumeActivity();
+        gameActivityFeatures.checkRunDeleted(this);
         System.out.println("LOG onResume "+System.currentTimeMillis());
         GeneralItemEvent event = (GeneralItemEvent) ARL.eventBus.removeStickyEvent(GeneralItemEvent.class);
         if (event !=null) onEventMainThread(event);
@@ -132,13 +164,6 @@ public class GeneralItemActivity extends Activity {
         generalItemActivityFeatures.updateResponses();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        this.finish();
-        return true;
-
-    }
-
     public GameActivityFeatures getGameActivityFeatures() {
         return gameActivityFeatures;
     }
@@ -147,7 +172,15 @@ public class GeneralItemActivity extends Activity {
         this.gameActivityFeatures = gameActivityFeatures;
     }
 
-    public InBetweenGeneralItemNavigation getInBetweenGeneralItemNavigation() {
-        return inBetweenGeneralItemNavigation;
+//    public InBetweenGeneralItemNavigation getInBetweenGeneralItemNavigation() {
+//        return inBetweenGeneralItemNavigation;
+//    }
+
+    public void navigateNext(){
+        actionBarMenuController.navigateNext();
+    }
+
+    public boolean hasNext() {
+        return actionBarMenuController.hasNext();
     }
 }

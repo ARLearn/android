@@ -101,7 +101,7 @@
 
             <TextView
                     style="@style/ARLearn.HomePane.Text"
-                    android:text="@string/settings"
+                    android:text="@string/nearMe"
                     />
 
 

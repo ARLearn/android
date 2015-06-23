@@ -1,9 +1,14 @@
 package org.celstec.arlearn2.android.viewWrappers;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.dao.gen.StoreGameLocalObject;
 
 /**
  * ****************************************************************************
@@ -34,13 +39,31 @@ public class GameRowSmall {
     }
 
     public GameRowSmall(LayoutInflater inflater, LinearLayout rootLayout) {
-        gameRow = (LinearLayout) inflater.inflate(R.layout.store_game_list_entry_big, rootLayout, false);
+        gameRow = (LinearLayout) inflater.inflate(R.layout.store_game_list_entry_small, rootLayout, false);
         rootLayout.addView(gameRow);
+    }
+
+    public GameRowSmall(LayoutInflater layoutInflater, LinearLayout layout, StoreGameLocalObject storeGameLocalObject) {
+        gameRow = (LinearLayout) layoutInflater.inflate(R.layout.store_game_list_entry_small, layout, false);
+        setGameTitle(storeGameLocalObject.getTitle());
+        byte[] data = storeGameLocalObject.getIcon();
+        if (data != null && data.length != 0) {
+            setIcon(BitmapFactory.decodeByteArray(data, 0, data.length));
+        }
     }
 
     public void setGameTitle(String title) {
         TextView view = (TextView) gameRow.findViewById(R.id.gameTitleId);
         view.setText(title);
+    }
+
+    public void setIcon(Bitmap icon) {
+        ((ImageView) gameRow.findViewById(R.id.icon)).setImageBitmap(icon);
+
+    }
+
+    public View getView(){
+        return gameRow;
     }
 
 }

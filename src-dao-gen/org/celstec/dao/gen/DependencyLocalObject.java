@@ -218,11 +218,11 @@ public class DependencyLocalObject {
     }
 
     // KEEP METHODS - put your custom methods here
-    private static final int ACTION_DEPENDENCY = 1;
-    private static final int AND_DEPENDENCY = 2;
-    private static final int OR_DEPENDENCY = 3;
-    private static final int TIME_DEPENDENCY = 4;
-    private static final int PROXIMITY_DEPENDENCY = 5;
+    public static final int ACTION_DEPENDENCY = 1;
+    public static final int AND_DEPENDENCY = 2;
+    public static final int OR_DEPENDENCY = 3;
+    public static final int TIME_DEPENDENCY = 4;
+    public static final int PROXIMITY_DEPENDENCY = 5;
     private static final long NOT_SATISFIED= -1;
 
 
@@ -438,7 +438,7 @@ public class DependencyLocalObject {
                     System.out.println(action);
                 } else
                 if (action.getRunId() == run.getId()) {
-                    long newValue =                                   actionSatisfiedAt(action);
+                    long newValue = actionSatisfiedAt(action);
                     minSatisfiedAt = Math.min(minSatisfiedAt,newValue);
                 }
             }
@@ -460,9 +460,9 @@ public class DependencyLocalObject {
 
     private long proximitySatisfiedAt(RunLocalObject run) {
         long minSatisfiedAt = Long.MAX_VALUE;
-        String latString = ""+((double)(long)(getLat()*1000000)/1000000);
-        String lngString = ""+((double)(long)(getLng()*1000000)/1000000);
-        String compString ="geo:"+latString+":"+lngString+":"+radius;
+//        String latString = ""+((double)(long)(getLat()*1000000)/1000000);
+//        String lngString = ""+((double)(long)(getLng()*1000000)/1000000);
+        String compString =createProximityActionString(getLat(),getLng(),radius);
         for (ActionLocalObject action :run.getActions()){
             if ((compString).equals(action.getAction())){
                 minSatisfiedAt = Math.min(minSatisfiedAt, (action.getTime()==null)?0:action.getTime());
@@ -470,6 +470,12 @@ public class DependencyLocalObject {
         }
         if (minSatisfiedAt == Long.MAX_VALUE) minSatisfiedAt = -1;
         return minSatisfiedAt;
+    }
+
+    public static String createProximityActionString(double lat, double lng, long radius) {
+        String latString = ""+((double)(long)(lat*1000000)/1000000);
+        String lngString = ""+((double)(long)(lat*1000000)/1000000);
+        return "geo:"+latString+":"+lngString+":"+radius;
     }
 
     private long actionSatisfiedAt(ActionLocalObject action) {

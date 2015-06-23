@@ -7,7 +7,9 @@ import org.celstec.arlearn2.android.events.RunEvent;
 import org.celstec.arlearn2.beans.run.Run;
 import org.celstec.arlearn2.beans.run.RunList;
 
+import org.celstec.arlearn2.beans.run.User;
 import org.celstec.arlearn2.client.RunClient;
+import org.celstec.arlearn2.client.UserClient;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.GameLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObject;
@@ -58,6 +60,10 @@ public class RunDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncRunsEventParticipate());
     }
 
+    public void asyncRunsParticipate() {
+        onEventAsync(new SyncRunsEventParticipate());
+    }
+
     public void syncRun(long runId) {
         ARL.eventBus.post(new SyncRun(runId));
     }
@@ -88,6 +94,12 @@ public class RunDelegator extends AbstractDelegator{
                 }
 
         }
+    }
+
+    public static void deleteRuns() {
+        lastSyncDateParticipate = 0l;
+        lastSyncDate = 0l;
+        DaoConfiguration.getInstance().getRunLocalObjectDao().deleteAll();
     }
 
     public void onEventAsync(SyncRun syncRun) {
@@ -124,25 +136,38 @@ public class RunDelegator extends AbstractDelegator{
         return null;
     }
 
-//    private void asyncGame(long gameId) {
-//        String token = returnTokenIfOnline();
-//        if (token != null) {
-//
-//            Run run =RunClient.getRunClient().getRun(runId, token);
-//            if (run.getError() == null) {
-//                RunList rl = new RunList();
-//                rl.addRun(run);
-//                process(rl);
-//            }
-//        }
-//    }
-
     private void process(RunList rl) {
         for (Run rBean: rl.getRuns()) {
             RunLocalObject newRun = toDaoLocalObject(rBean);
+            String token = returnTokenIfOnline();
+            if (token != null){
+                User user = UserClient.getUserClient().getUser(token, rBean.getRunId(), ARL.accounts.getLoggedInAccount().getFullId());
+//                if (rBean.getRunId() == 6699635959660544l) {
+//                    System.out.println("test");
+                    if (user.getRoles() != null && !user.getRoles().isEmpty()){
+                        String userRoles = user.getRoles().get(0);
+                        for (int i= 1; i< user.getRoles().size();i++) {
+                            userRoles += ";"+user.getRoles().get(i);
+                        }
+                        newRun.setRoles(userRoles);
+                    }
+
+
+//                }
+            }
             DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(newRun);
             if (newRun.getGameLocalObject()!=null) newRun.getGameLocalObject().resetRuns();
-            ARL.eventBus.post(new RunEvent(newRun.getId()));
+            if (newRun.getDeleted()) {
+                ResponseDelegator.getInstance().deleteResponses(newRun.getId());
+                GeneralItemVisibilityDelegator.getInstance().deleteVisibilities(newRun.getId());
+                ActionsDelegator.getInstance().deleteActions(newRun.getId());
+                ARL.proximityEvents.deleteEvents(newRun);
+            } else {
+                ARL.proximityEvents.createEvents(newRun);
+            }
+
+
+            ARL.eventBus.post(new RunEvent(newRun.getId(), newRun.getDeleted()));
         }
     }
 

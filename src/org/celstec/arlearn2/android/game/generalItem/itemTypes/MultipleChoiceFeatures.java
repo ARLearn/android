@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.webkit.WebView;
@@ -8,12 +9,14 @@ import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
+import org.celstec.arlearn2.android.game.generalItem.FeedbackView;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceTest;
+import org.celstec.arlearn2.beans.generalItem.SingleChoiceTest;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 import java.util.Vector;
@@ -111,24 +114,53 @@ public class MultipleChoiceFeatures extends SingleChoiceFeatures {
 
     protected void submitButtonClick() {
         if (!selectedRows.isEmpty()) {
+            Intent feedback = new Intent(activity, FeedbackView.class);
+            int i = 0;
             for (String rowId : selectedRows) {
-                MultipleChoiceAnswerItem selected =  multipleChoiceAnswerItemHashMap.get(rowId);
-                ResponseDelegator.getInstance().createMultipleChoiceResponse(generalItemLocalObject, activity.getGameActivityFeatures().getRunId(), selected);
 
+                MultipleChoiceAnswerItem selected =  multipleChoiceAnswerItemHashMap.get(rowId);
+                feedback.putExtra("feedbacka"+i, selected.getAnswer());
+                feedback.putExtra("feedback"+i, selected.getFeedback());
+                i++;
+                ResponseDelegator.getInstance().createMultipleChoiceResponse(generalItemLocalObject, activity.getGameActivityFeatures().getRunId(), selected);
+                createAnswerIdAction(rowId);
             }
             boolean correct = true;
+            boolean missing = false;
+            boolean atleastOneIncorrect = false;
             for (MultipleChoiceAnswerItem answer: ((MultipleChoiceTest) generalItemBean).getAnswers()){
 //                MultipleChoiceAnswerItem answer =  multipleChoiceAnswerItemHashMap.get(rowId);
 //            for (MultipleChoiceAnswerItem answer : mct.getAnswers()){
                 if (answer.getIsCorrect()) {
-                    if (!selectedRows.contains(answer.getId())) correct = false;
+                    if (!selectedRows.contains(answer.getId())) {
+                        correct = false;
+                        missing = true;
+                    }
                 } else {
-                    if (selectedRows.contains(answer.getId())) correct = false;
+                    if (selectedRows.contains(answer.getId())) {
+                        correct = false;
+                        atleastOneIncorrect = true;
+                    }
                 }
+
+            }
+            if (!atleastOneIncorrect) {
+                feedback.putExtra("missing", missing);
             }
             createAnswerResultAction(correct);
             createAnswerGivenAction();
-            activity.finish();
+            if (((MultipleChoiceTest) generalItemBean).getShowFeedback()!= null && ((MultipleChoiceTest) generalItemBean).getShowFeedback()) {
+
+                feedback.putExtra("correct", correct);
+                activity.startActivity(feedback);
+                if (correct) {
+                    activity.finish();
+                }
+            } else {
+                activity.finish();
+            }
+
+
 
         }
 

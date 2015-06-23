@@ -2,6 +2,7 @@ package org.celstec.arlearn2.android.game;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,12 +14,17 @@ import android.widget.Toast;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
+import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.GameLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObject;
+
+import java.util.Locale;
 
 /**
  * ****************************************************************************
@@ -44,26 +50,54 @@ public class MyGamesActivity extends ListActivity implements ListItemClickInterf
 
     private GamesLazyListAdapter adapter;
 
+
+    public static Class getMyGamesActivityClass(){
+        if (ARL.config.getContentView() == R.layout.mygames_list_grid) return MyGamesGridActivity.class;
+        return MyGamesActivity.class;
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mygames_list);
-        if (ARL.config.containsKey("white_label_title") && ARL.config.getBooleanProperty("white_label")){
-            ((TextView)findViewById(R.id.myGamesText)).setText(ARL.config.getProperty("white_label_title"));
-        }
+        setContentView(ARL.config.getContentView());
+        ARL.init(this);
+        init();
         if (ARL.config.containsKey("gameIdToUseForMainSplashScreen")) {
-            Long gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
+            Long gameIdToUseForMainSplashScreen = null;
+            try{
+                gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen_"+ Locale.getDefault().getLanguage()));
+            } catch (NumberFormatException e ) {}
+
+            if (gameIdToUseForMainSplashScreen == null) gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
 
                 Drawable background = GameFileLocalObject.getDrawable(this, gameIdToUseForMainSplashScreen, "/background");
                 if (background != null)
                     ((LinearLayout) findViewById(R.id.storeLinearLayout)).setBackground(background);
+            if (android.os.Build.VERSION.SDK_INT >= 11) {
+                getActionBar().setHomeButtonEnabled(true);
+                GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameIdToUseForMainSplashScreen);
+                int theme = GameActivityFeatures.getTheme(gameLocalObject.getGameBean());
 
+                ARL.getDrawableUtil(theme, this);
+                getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+            }
+        }
+
+
+    }
+
+    public void init(){
+        if (ARL.config.containsKey("white_label_title") && ARL.config.getBooleanProperty("white_label")){
+            ((TextView)findViewById(R.id.myGamesText)).setText(ARL.config.getProperty("white_label_title"));
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        ARL.eventBus.register(this);
+        resume();
+    }
+
+    public void resume(){
         adapter = new GamesLazyListAdapter(this);
         setListAdapter(adapter);
         adapter.setOnListItemClickCallback(this);
@@ -74,7 +108,15 @@ public class MyGamesActivity extends ListActivity implements ListItemClickInterf
         if (ARL.config.getBooleanProperty("gameSplashScreen")) {
             GameSplashScreen.startActivity(this, game.getId(), game.getRuns().get(0).getId());
         } else {
-            int amountOfRuns = game.getRuns().size();
+
+            int amountOfRuns = 0;
+            RunLocalObject lastRun = null;
+            for (RunLocalObject run: game.getRuns()) {
+                if (run.getDeleted() == null || !run.getDeleted()) {
+                    amountOfRuns++;
+                    lastRun = run;
+                }
+            }
             if (amountOfRuns ==0) {
                 //TODO enable user to create a run
                 runOnUiThread(new Runnable() {
@@ -83,14 +125,7 @@ public class MyGamesActivity extends ListActivity implements ListItemClickInterf
                     }
                 });
             } else if (amountOfRuns == 1) {
-//                RunLocalObject runLocalObject = new RunLocalObject();
-//                runLocalObject.setGameId(game.getId());
-//                runLocalObject.setTitle("Default2");
-//                runLocalObject.setId(2l);
-//                runLocalObject.setDeleted(false);
-//                DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
-
-                GameMessages.startActivity(this, game.getId(),  game.getRuns().get(0).getId());
+                GameMessages.startActivity(this, game.getId(),  lastRun.getId());
             } else {
                 MyRunsActivity.startActivity(this, game.getId());
             }

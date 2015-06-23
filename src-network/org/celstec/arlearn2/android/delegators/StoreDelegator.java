@@ -43,6 +43,8 @@ public class StoreDelegator extends AbstractDelegator{
 
     private static StoreDelegator instance;
 
+    private static long lastDownloadFeaturedGamesSync = 0;
+    private static long lastCategoriesSync = 0;
 
     private StoreDelegator() {
         ARL.eventBus.register(this);
@@ -59,8 +61,10 @@ public class StoreDelegator extends AbstractDelegator{
    Public API
     */
 
-    public void synCategories() {
-        ARL.eventBus.post(new SyncCategories());
+    public void syncCategories() {
+        if (lastCategoriesSync == 0 || lastCategoriesSync < System.currentTimeMillis()- 600000) {
+            ARL.eventBus.post(new SyncCategories());
+        }
     }
 
     public void syncGamesForCategory(Long categoryId) {
@@ -76,7 +80,10 @@ public class StoreDelegator extends AbstractDelegator{
     }
 
     public void downloadFeaturedGames() {
-        ARL.eventBus.post(new DownloadFeaturedGames());
+        if (lastDownloadFeaturedGamesSync == 0 || lastDownloadFeaturedGamesSync < System.currentTimeMillis()- 600000){
+            ARL.eventBus.post(new DownloadFeaturedGames());
+        }
+
     }
 
     public void search(Double lat, Double lng, Long distance) {
@@ -86,50 +93,6 @@ public class StoreDelegator extends AbstractDelegator{
     /*
    Implementation
     */
-
-    public void onEventAsync(DownloadFeaturedGames downloadFeaturedGames) {
-        if (ARL.isOnline()) {
-            GamesList gl =StoreClient.getStoreClient().getFeaturedGames(Locale.getDefault().getDisplayLanguage());
-            for  (Game game: gl.getGames()) {
-                FeaturedGameEvent event = new FeaturedGameEvent(game.getGameId(), game.getRank());
-//                event.setIcon(new FileByteDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+game.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
-//                GameClient.getGameClient().getGame(null, event.getGameId());
-                GameLocalObject gameLocalObject = ARL.games.asyncGame(event.getGameId(), false);
-                event.setGameObject(gameLocalObject);
-
-                ARL.eventBus.post(event);
-            }
-        }
-    }
-
-    public void onEventAsync(SyncTopGames syncTopGames) {
-        if (ARL.isOnline()) {
-            GamesList result = StoreClient.getStoreClient().getTopGames(syncTopGames.getLang());
-            ARL.eventBus.post(new SearchResultList(result));
-        }
-    }
-    public void onEventAsync(SyncCategories syncResponses) {
-//        String token = returnTokenIfOnline();
-        if (ARL.isOnline()) {
-            CategoryList list = StoreClient.getStoreClient().getCategoriesByLang(null, ARL.getContext().getResources().getConfiguration().locale.getLanguage());
-            for (Category category:list.getCategoryList()) {
-                CategoryLocalObject categoryLocalObject = DaoConfiguration.getInstance().getCategoryLocalObjectDao().load(category.getCategoryId());
-                CategoryEvent event = null;
-                if (categoryLocalObject == null) {
-                    categoryLocalObject = new CategoryLocalObject();
-                    event = new CategoryEvent(category.getCategoryId());
-                }
-                categoryLocalObject.setId(category.getCategoryId());
-                categoryLocalObject.setLang(category.getLang());
-                categoryLocalObject.setCategory(category.getTitle());
-                categoryLocalObject.setDeleted(category.getDeleted());
-                DaoConfiguration.getInstance().getCategoryLocalObjectDao().insertOrReplace(categoryLocalObject);
-                if (event != null) {
-                    ARL.eventBus.post(event);
-                }
-            }
-        }
-    }
 
     public void onEventAsync(SyncGames syncGames) {
 //        String token = returnTokenIfOnline();
@@ -150,8 +113,9 @@ public class StoreDelegator extends AbstractDelegator{
                 gameCategoryLocalObject.setCategoryId(gameCategory.getCategoryId());
                 DaoConfiguration.getInstance().getGameCategoryDao().insertOrReplace(gameCategoryLocalObject);
                 if (ARL.dao.getGameCategoryDao().load(gameCategory.getGameId())==null) {
-//                    ARL.games.syncGameWithoutToken(gameCategory.getGameId());
-                    asyncStoreGame(gameCategory.getGameId());
+                    StoreGameLocalObject storeGameLocalObject = asyncStoreGame(gameCategory.getGameId());
+                    storeGameLocalObject.setCategoryId(gameCategory.getCategoryId());
+                    DaoConfiguration.getInstance().getStoreGameLocalObjectDao().insertOrReplace(storeGameLocalObject);
                 }
                 if (event != null) {
                     ARL.eventBus.post(event);
@@ -159,6 +123,70 @@ public class StoreDelegator extends AbstractDelegator{
             }
         }
     }
+
+
+    public void onEventAsync(DownloadFeaturedGames downloadFeaturedGames) {
+        if (ARL.isOnline()) {
+            lastDownloadFeaturedGamesSync = System.currentTimeMillis();
+            GamesList gl =StoreClient.getStoreClient().getFeaturedGames(Locale.getDefault().getDisplayLanguage());
+            for  (Game game: gl.getGames()) {
+
+                StoreGameLocalObject storeGameLocalObject = asyncStoreGame(game.getGameId());
+
+
+                FeaturedGameEvent event = new FeaturedGameEvent(game.getGameId(), game.getRank());
+                CategoryList list = StoreClient.getStoreClient().getCategoriesByLangGame(ARL.getContext().getResources().getConfiguration().locale.getLanguage(), game.getGameId());
+                storeGameLocalObject.setFeatured(true);
+                storeGameLocalObject.setFeaturedRank(game.getRank());
+                for (Category category:list.getCategoryList()) {
+                    storeGameLocalObject.setCategoryId(category.getCategoryId());
+                }
+                DaoConfiguration.getInstance().getStoreGameLocalObjectDao().insertOrReplace(storeGameLocalObject);
+
+
+//                event.setIcon(new FileByteDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+game.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
+//                GameClient.getGameClient().getGame(null, event.getGameId());
+//                GameLocalObject gameLocalObject = ARL.games.asyncGame(event.getGameId(), false);
+                event.setGameObject(storeGameLocalObject);
+
+                ARL.eventBus.post(event);
+            }
+
+        }
+    }
+
+    public void onEventAsync(SyncTopGames syncTopGames) {
+        if (ARL.isOnline()) {
+            GamesList result = StoreClient.getStoreClient().getTopGames(syncTopGames.getLang());
+            ARL.eventBus.post(new SearchResultList(result));
+        }
+    }
+    public void onEventAsync(SyncCategories syncResponses) {
+        if (ARL.isOnline()) {
+            lastCategoriesSync = System.currentTimeMillis();
+            CategoryList list = StoreClient.getStoreClient().getCategoriesByLang(null, ARL.getContext().getResources().getConfiguration().locale.getLanguage());
+            CategoryEvent event = null;
+            for (Category category:list.getCategoryList()) {
+                CategoryLocalObject categoryLocalObject = DaoConfiguration.getInstance().getCategoryLocalObjectDao().load(category.getCategoryId());
+
+                if (categoryLocalObject == null) {
+                    categoryLocalObject = new CategoryLocalObject();
+                    event = new CategoryEvent(category.getCategoryId());
+                }
+                categoryLocalObject.setId(category.getCategoryId());
+                categoryLocalObject.setLang(category.getLang());
+                categoryLocalObject.setCategory(category.getTitle());
+                categoryLocalObject.setDeleted(category.getDeleted());
+                categoryLocalObject.resetGames();
+                DaoConfiguration.getInstance().getCategoryLocalObjectDao().insertOrReplace(categoryLocalObject);
+
+            }
+            if (event != null) {
+                ARL.eventBus.post(event);
+            }
+        }
+    }
+
 
 
     public void onEventAsync(SyncStoreGame g) {
@@ -169,10 +197,11 @@ public class StoreDelegator extends AbstractDelegator{
 
         if (ARL.isOnline()) {
             GamesList result = GameClient.getGameClient().search(null, sg.getLat(), sg.getLng(), sg.getDistance());
+            SearchResultList searchResultList = new SearchResultList();
             for (Game gameResult: result.getGames()) {
-                process(gameResult);
+                searchResultList.addStoreGame(asyncStoreGame(gameResult.getGameId()));
             }
-            ARL.eventBus.post(new SearchResultList(result));
+            ARL.eventBus.post(searchResultList);
         }
     }
 
@@ -246,7 +275,7 @@ public class StoreDelegator extends AbstractDelegator{
         return DaoConfiguration.getInstance().getCategoryLocalObjectDao().loadAll();
     }
 
-    private class SyncStoreGame {
+    public class SyncStoreGame {
         private long gameId;
 
         private SyncStoreGame(long gameId) {

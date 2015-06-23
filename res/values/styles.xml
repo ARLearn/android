@@ -18,6 +18,9 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
+    <style name="ARLearn.schema5" parent="ARLearn.Theme5">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
 
     <style name="ARLearn" parent="Theme.Sherlock">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
@@ -107,6 +110,7 @@
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingLeft">20dp</item>
+        <item name="android:layout_margin">1dp</item>
 
 
     </style>

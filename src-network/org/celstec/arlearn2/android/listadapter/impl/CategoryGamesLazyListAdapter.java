@@ -13,9 +13,14 @@ import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.StoreDelegator;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.listadapter.LazyListAdapter;
 import org.celstec.dao.gen.*;
+
+import java.util.HashMap;
+
+import static org.celstec.arlearn2.android.delegators.StoreDelegator.*;
 
 /**
  * ****************************************************************************
@@ -39,7 +44,6 @@ import org.celstec.dao.gen.*;
  */
 public class CategoryGamesLazyListAdapter extends LazyListAdapter<StoreGameLocalObject> {
 
-//    private QueryBuilder qb;
     private Query query;
 
     public CategoryGamesLazyListAdapter(Context context, long category) {
@@ -81,6 +85,11 @@ public class CategoryGamesLazyListAdapter extends LazyListAdapter<StoreGameLocal
             if (data != null && data.length!=0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bitmap);
+            } else {
+                ((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_default_game);
+            }
+            if (data == null){
+                ARL.store.syncStoreGame(item.getId());
             }
         }
     }
@@ -99,6 +108,8 @@ public class CategoryGamesLazyListAdapter extends LazyListAdapter<StoreGameLocal
             return 0;
         }
     }
+
+
 
 }
 

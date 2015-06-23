@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.dao.gen.StoreGameLocalObject;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -44,11 +45,39 @@ public class GameOverlayItem extends OverlayItem {
 
     @Override
     public Drawable getDrawable() {
-        Bitmap originalBitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_mygames);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, 100, 100, false);
-        Drawable icon =new BitmapDrawable(ctx.getResources(),resizedBitmap);
+        Bitmap originalBitmap = null;
+        byte[] data = game.getIcon();
+        if (data != null && data.length!=0) {
+            originalBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        } else {
+             originalBitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_mygames);
+        }
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, 75, 75, false);
+        Drawable icon =new BitmapDrawable(ctx.getResources(),getRoundedCornerBitmap(resizedBitmap,7));
         icon.setBounds(0, 0, 100, 100);
         return icon;
+    }
+
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+                .getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = pixels;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
 //    @Override

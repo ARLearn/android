@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
@@ -46,6 +48,8 @@ public class MyRunsActivity extends ListActivity implements ListItemClickInterfa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.run_list);
         gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
+        String title = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getTitle();
+        ((TextView) findViewById(R.id.gameTitleId)).setText(title);
     }
 
     @Override

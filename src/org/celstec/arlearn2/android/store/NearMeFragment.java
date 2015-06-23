@@ -60,6 +60,7 @@ public class NearMeFragment extends SherlockListFragment implements ListItemClic
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         gameOverlay =new GameOverlay(this);
+
 //        ARL.eventBus.register(this);
     }
 

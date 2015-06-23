@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
+import org.celstec.arlearn2.android.events.RunEvent;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
@@ -53,6 +55,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         ARL.init(this);
         ARL.accounts.syncMyAccountDetails();
         gameActivityFeatures = new GameActivityFeatures(this);
+        ARL.proximityEvents.createEvents(gameActivityFeatures.getRunLocalObject());
         setTheme(gameActivityFeatures.getTheme());
         ARL.getDrawableUtil(gameActivityFeatures.getTheme(), this);
         setContentView(R.layout.game_list_messages);
@@ -66,27 +69,6 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         if (messagesHeader != null) {
             ((ImageView)findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
         }
-
-//        createVisibilityStatement(885015l);
-//        createVisibilityStatement(20196003l);
-//        createVisibilityStatement(1059001l);
-//        createVisibilityStatement(881016l);
-//        createVisibilityStatement(881017l);
-//        createVisibilityStatement(835208l);
-//        createVisibilityStatement(20166030l);
-//        createVisibilityStatement(865017l);
-//        createVisibilityStatement(1071003l);
-//        createVisibilityStatement(1299059l);
-//        createVisibilityStatement(866026l);
-//        createVisibilityStatement(1105009l);
-//        createVisibilityStatement(883021l);
-//        createVisibilityStatement(884022l);
-//        createVisibilityStatement(870030l);
-//        createVisibilityStatement(1313001l);
-//        createVisibilityStatement(884021l);
-//        createVisibilityStatement(865018l);
-//        createVisibilityStatement(886019l);
-//        createVisibilityStatement(1279031l);
 
 
     }
@@ -108,26 +90,43 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         super.onResume();
         ARL.eventBus.register(this);
         adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+        gameActivityFeatures.checkRunDeleted(this);
         setListAdapter(adapter);
         adapter.setOnListItemClickCallback(this);
         ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
         ARL.generalItemVisibility.calculateVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
-        GeneralItemEvent event = (GeneralItemEvent) ARL.eventBus.removeStickyEvent(GeneralItemEvent.class);
+        GeneralItemBecameVisibleEvent event = (GeneralItemBecameVisibleEvent) ARL.eventBus.removeStickyEvent(GeneralItemBecameVisibleEvent.class);
         if (event !=null) onEventMainThread(event);
     }
 
-    public void onEventMainThread(final GeneralItemEvent event) {
-        System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
-        if (event.isBecameVisible()) gameActivityFeatures.showStrokenNotification(new NotificationAction() {
-            @Override
-            public void onOpen() {
+    public void onEventMainThread(final GeneralItemBecameVisibleEvent event) {
+//        ARL.eventBus.removeStickyEvent(event);
+//        System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
+//        if (event.isAutoLaunch()) {
+//            Intent intent = new Intent(this, GeneralItemActivity.class);
+//            gameActivityFeatures.addMetadataToIntent(intent);
+//            intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
+//            startActivity(intent);
+//        } else
+//        if (event.isShowStroken()) {
+//            gameActivityFeatures.showStrokenNotification(new NotificationAction() {
+//                @Override
+//                public void onOpen() {
+//
+//                    Intent intent = new Intent(GameMessages.this, GeneralItemActivity.class);
+//                    gameActivityFeatures.addMetadataToIntent(intent);
+//                    intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
+//                    startActivity(intent);
+//                }
+//            });
+//        }
+        event.processEvent(gameActivityFeatures, this, null);
+    }
 
-                Intent intent = new Intent(GameMessages.this, GeneralItemActivity.class);
-                gameActivityFeatures.addMetadataToIntent(intent);
-                intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
-                startActivity(intent);
-            }
-        });
+    public void onEventMainThread(RunEvent runEvent) {
+        if (runEvent.getRunId() == gameActivityFeatures.getRunId() && runEvent.isDeleted()){
+            this.finish();
+        }
     }
 
     @Override

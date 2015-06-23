@@ -1,6 +1,9 @@
 package org.celstec.arlearn2.android.events;
 
 import org.celstec.arlearn2.beans.game.GamesList;
+import org.celstec.dao.gen.StoreGameLocalObject;
+
+import java.util.ArrayList;
 
 /**
  * ****************************************************************************
@@ -26,6 +29,10 @@ public class SearchResultList {
 
     private GamesList gamesList;
 
+    private ArrayList<StoreGameLocalObject> storeGameList = new ArrayList<>();
+
+    public SearchResultList(){}
+
     public SearchResultList(GamesList gamesList) {
         this.gamesList = gamesList;
     }
@@ -36,5 +43,17 @@ public class SearchResultList {
 
     public void setGamesList(GamesList gamesList) {
         this.gamesList = gamesList;
+    }
+
+    public ArrayList<StoreGameLocalObject> getStoreGameList() {
+        return storeGameList;
+    }
+
+    public void setStoreGameList(ArrayList<StoreGameLocalObject> storeGameList) {
+        this.storeGameList = storeGameList;
+    }
+
+    public void addStoreGame(StoreGameLocalObject storeGameLocalObject) {
+        storeGameList.add(storeGameLocalObject);
     }
 }

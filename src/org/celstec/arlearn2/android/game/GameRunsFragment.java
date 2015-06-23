@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
+import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.GameSplashScreen;
@@ -43,11 +45,6 @@ public class GameRunsFragment extends SherlockListFragment implements ListItemCl
     public GameRunsFragment() {
     }
 
-//    public GameRunsFragment(GameLocalObject gameLocalObject) {
-//        this.game = gameLocalObject;
-//    }
-
-
     public void setGame(GameLocalObject game) {
         this.game = game;
     }
@@ -57,13 +54,14 @@ public class GameRunsFragment extends SherlockListFragment implements ListItemCl
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         getActivity().setTheme(R.style.ARLearn_schema1);
-//        ARL.runs.syncRun(game);
+
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        ARL.runs.syncRunsParticipate();
         if (android.os.Build.VERSION.SDK_INT >= 11) {
             getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);
         }
@@ -78,6 +76,7 @@ public class GameRunsFragment extends SherlockListFragment implements ListItemCl
             adapter.setOnListItemClickCallback(this);
         }
 
+        ((TextView) v.findViewById(R.id.gameTitleId)).setText(game.getTitle());
         setListAdapter(adapter);
         return v;
     }

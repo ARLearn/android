@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -11,6 +12,7 @@ import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
+import org.celstec.arlearn2.android.game.generalItem.FeedbackView;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
@@ -202,7 +204,18 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
             createAnswerGivenAction();
             createAnswerIdAction(selectedRowId);
             createAnswerResultAction(selected.getIsCorrect());
-            activity.finish();
+//            activity.finish();
+            if (((SingleChoiceTest) generalItemBean).getShowFeedback()!= null && ((SingleChoiceTest) generalItemBean).getShowFeedback()){
+                Intent feedback = new Intent(activity, FeedbackView.class);
+                feedback.putExtra("correct", selected.getIsCorrect());
+                feedback.putExtra("feedback", selected.getFeedback());
+                activity.startActivity(feedback);
+                if (selected.getIsCorrect()) {
+                    activity.finish();
+                }
+            } else {
+                activity.finish();
+            }
 
         }
     }

@@ -257,13 +257,15 @@ public abstract class GeneralItemActivityFeatures {
                 valueInputManager.onActivityResult(requestCode, resultCode, data);
                 break;
         }
-        Action action = new Action();
-        action.setAction("answer_given");
-        action.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
-        action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
-        action.setGeneralItemId(generalItemLocalObject.getId());
-        ARL.actions.createAction(action);
-        ARL.responses.syncResponses(this.activity.getGameActivityFeatures().getRunId());
+        if (resultCode == activity.RESULT_OK) {
+            Action action = new Action();
+            action.setAction("answer_given");
+            action.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
+            action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
+            action.setGeneralItemId(generalItemLocalObject.getId());
+            ARL.actions.createAction(action);
+            ARL.responses.syncResponses(this.activity.getGameActivityFeatures().getRunId());
+        }
     }
 
 

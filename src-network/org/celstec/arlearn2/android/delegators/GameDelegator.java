@@ -105,12 +105,17 @@ public final class GameDelegator extends AbstractDelegator{
     public GameLocalObject asyncGame(long gameId, boolean withToken) {
         String token = returnTokenIfOnline();
         if (token != null || !withToken) {
-            Game game = GameClient.getGameClient().getGame(token, gameId);
-            if (game.getError() == null) {
-                return process(game);
-            } else {
-                ARL.eventBus.post(GameEvent.syncError());
-            }
+//            try {
+                Game game = GameClient.getGameClient().getGame(token, gameId);
+                if (game.getError() == null) {
+                    return process(game);
+                } else {
+                    ARL.eventBus.post(GameEvent.syncError());
+                }
+//            } catch (Exception e) {
+//                System.out.println("problem with "+gameId);
+//                e.printStackTrace();
+//            }
         }
         return null;
     }
@@ -161,6 +166,9 @@ public final class GameDelegator extends AbstractDelegator{
     public void onEventAsync(SearchGames sg) {
         if (ARL.isOnline()) {
             GamesList result = GameClient.getGameClient().search(null, sg.query);
+            for (Game game : result.getGames()){
+                    ARL.store.syncStoreGame(game.getGameId());
+            }
             ARL.eventBus.post(new SearchResultList(result));
         }
     }

@@ -159,6 +159,14 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
             }
             ((TextView) v.findViewById(R.id.gameTitleId)).setText(localObject.getTitle());
 
+             TextView category = ((TextView) v.findViewById(R.id.gameCategoryId));
+            if (localObject.getCategoryLocalObject() == null) {
+                category.setVisibility(View.INVISIBLE);
+            } else {
+                category.setVisibility(View.VISIBLE);
+                category.setText(localObject.getCategoryLocalObject().getCategory());
+            }
+
             if (localObject.getDescription() != null){
                 WebView mWebView = ((WebView) v.findViewById(R.id.gameStoreDescriptionId));
                 mWebView.loadDataWithBaseURL(null, localObject.getDescription(), "text/html", "utf-8", null);
@@ -240,7 +248,7 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
                 if (ARL.accounts.isAuthenticated()) {
                     GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
                     if (!gameLocalObject.getRuns().isEmpty())
-                        GameSplashScreen.startActivity(getActivity(), gameLocalObject.getId(), gameLocalObject.getRuns().get(0).getId());
+                        GameSplashScreen.startActivity(getActivity(), gameLocalObject.getId(), gameLocalObject.getRuns().get(0).getId(), false);
                 } else {
                     startLoginActivity();
                 }

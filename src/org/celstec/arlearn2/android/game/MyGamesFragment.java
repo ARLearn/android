@@ -12,6 +12,7 @@ import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GamesLazyListAdapter;
 import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.RunLocalObject;
 
 /**
  * ****************************************************************************
@@ -76,8 +77,16 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
         FragmentManager fm = getActivity().getSupportFragmentManager();
         Bundle args = new Bundle();
         Fragment frag = null;
-        if (game.getRuns().size() ==1) {
-            GameSplashScreen.startActivity(getActivity(), game.getId(), game.getRuns().get(0).getId());
+        int amountOfRuns = 0;
+        RunLocalObject lastRun = null;
+        for (RunLocalObject run: game.getRuns()) {
+            if (run.getDeleted() == null || !run.getDeleted()) {
+                amountOfRuns++;
+                lastRun = run;
+            }
+        }
+        if (amountOfRuns ==1) {
+            GameSplashScreen.startActivity(getActivity(), game.getId(), lastRun.getId());
             return;
         } else {
             frag = new GameRunsFragment();

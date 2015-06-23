@@ -12,11 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import daoBase.DaoConfiguration;
+import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.FeaturedGameEvent;
+import org.celstec.arlearn2.android.listadapter.impl.CategoryGamesLazyListAdapter;
 import org.celstec.arlearn2.android.viewWrappers.GameRowBig;
+import org.celstec.dao.gen.StoreGameLocalObject;
+import org.celstec.dao.gen.StoreGameLocalObjectDao;
+
+import java.util.HashMap;
 
 /**
  * ****************************************************************************
@@ -49,11 +57,12 @@ public class StoreFragment extends SherlockFragment {
 
     private LayoutInflater inflater;
     private View v;
+    private HashMap<Long,GameRowBig> featuredGames = new HashMap<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        ARL.store.syncCategories();
 
     }
 
@@ -89,40 +98,59 @@ public class StoreFragment extends SherlockFragment {
         topGamesButton = v.findViewById(R.id.topGames);
         topGamesButton.setOnClickListener(new TopGamesButton());
 
-        LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
         ARL.store.downloadFeaturedGames();
+        featuredGames = new HashMap<>();
+        StoreGameLocalObjectDao dao = DaoConfiguration.getInstance().getStoreGameLocalObjectDao();
+        QueryBuilder qb = dao.queryBuilder().where(StoreGameLocalObjectDao.Properties.Featured.eq(true)).orderAsc(StoreGameLocalObjectDao.Properties.FeaturedRank);
+        for (Object o: qb.list()) {
+            StoreGameLocalObject storeGameLocalObject = (StoreGameLocalObject) o;
+            drawFeaturedGameDescription(storeGameLocalObject);
 
-//        GameRowBig big3 = new GameRowBig(inflater, layout);
-//        big3.setGameTitle("Record game");
-//        big3.setGameCategory("Music");
-//        big3.setGameDescription("A location based game where the goal is to take as many pictures of music as possible.");
-//
-//        GameRowBig big1 = new GameRowBig(inflater, layout);
-//        big1.setGameTitle("Get The picture");
-//        big1.setGameCategory("Photography");
-//        big1.setGameDescription("A location based game where the goal is to take as many pictures  as possible.");
-//
-//        GameRowBig big2 = new GameRowBig(inflater, layout);
-//        big2.setGameTitle("Shop-a-holic");
-//        big2.setGameCategory("Shopping");
-//        big2.setGameDescription("A game that woman can play while their husbands are attending a football game");
-
+        }
         return v;
     }
 
-    public void onEventMainThread(FeaturedGameEvent featuredGameEvent) {
+    public void onEventMainThread(final FeaturedGameEvent featuredGameEvent) {
+
+        drawFeaturedGameDescription(featuredGameEvent.getGameObject());
 
 
+    }
 
-        LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
-        GameRowBig big2 = new GameRowBig(inflater, layout);
-        big2.setGameTitle(featuredGameEvent.getGameObject().getTitle());
-        big2.setGameCategory("Shopping");
-        big2.setGameDescription(featuredGameEvent.getGameObject().getDescription());
-        byte[] data = featuredGameEvent.getGameObject().getIcon();
-        if (data != null && data.length!=0) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            big2.setIcon(bitmap);
+    private void drawFeaturedGameDescription(final StoreGameLocalObject storeGameLocalObject) {
+        synchronized (featuredGames) {
+            LinearLayout layout = (LinearLayout) v.findViewById(R.id.storeLinearLayout);
+            GameRowBig big2 = null;
+            if (featuredGames.containsKey(storeGameLocalObject.getId())) {
+                big2 = featuredGames.get(storeGameLocalObject.getId());
+            } else {
+                big2 = new GameRowBig(inflater, layout) {
+                    @Override
+                    public void onGameClick() {
+//                if (featuredGameEvent.getGameObject() != null) {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        Bundle args = new Bundle();
+
+                        GameFragment frag = new GameFragment();
+                        args.putLong("gameId", storeGameLocalObject.getId());
+                        frag.setArguments(args);
+                        FragmentTransaction ft = fm.beginTransaction();
+
+                        ft.replace(R.id.right_pane, frag).addToBackStack(null).commit();
+//                }
+                    }
+                };
+                featuredGames.put(storeGameLocalObject.getId(), big2);
+            }
+
+            big2.setGameTitle(storeGameLocalObject.getTitle());
+            big2.setGameCategory(storeGameLocalObject.getCategoryLocalObject());
+            big2.setGameDescription(storeGameLocalObject.getDescription());
+            byte[] data = storeGameLocalObject.getIcon();
+            if (data != null && data.length != 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                big2.setIcon(bitmap);
+            }
         }
     }
 

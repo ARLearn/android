@@ -29,7 +29,7 @@ import org.celstec.arlearn2.beans.generalItem.SortQuestion;
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * <p/>
  * Contributors: Stefaan Ternier
- * ****************************************************************************
+ * ************************************ ****************************************
  */
 public class DragListener implements View.OnDragListener {
 //    Drawable enterShape; //= getResources().getDrawable(R.drawable.shap_droptarget);
@@ -44,43 +44,25 @@ public class DragListener implements View.OnDragListener {
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        int action = event.getAction();
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
-                // do nothing
 
-
-                break;
+                return true;
             case DragEvent.ACTION_DRAG_ENTERED:
-//                v.setBackgroundDrawable(enterShape);
-                //((View) event.getLocalState()).setBackgroundDrawable(ARL.drawableUtil.getButtonAlternativeColorDrawable());
-                //v.setBackgroundDrawable(ARL.drawableUtil.getButtonAlternativeColorDrawable());
-
-                break;
+                return false;
             case DragEvent.ACTION_DRAG_EXITED:
-//                v.setBackgroundDrawable(normalShape);
-                break;
+            return true;
             case DragEvent.ACTION_DROP:
-                // Dropped, reassign View to ViewGroup
-
-//                View view = (View) event.getLocalState();
-//                ViewGroup owner = (ViewGroup) view.getParent();
-//                owner.removeView(view);
-
                 LinearLayout targetContainer = (LinearLayout) v;
-//                RelativeLayout existingView =  (RelativeLayout) targetContainer.getChildAt(0);
-//                targetContainer.removeView(existingView);
-//
-//                targetContainer.addView(view);
-//                view.setVisibility(View.VISIBLE);
-//                view.setBackgroundDrawable(null);
-//
-//                owner.addView(existingView);
                 sortQuestionFeatures.viewDropped((View) event.getLocalState(), targetContainer);
-                break;
+                return true;
             case DragEvent.ACTION_DRAG_ENDED:
+                sortQuestionFeatures.resetView((View) event.getLocalState());
+                return true;
+//                break;
 //                v.setBackgroundDrawable(normalShape);
             default:
+                System.out.println(event.getAction());
                 break;
         }
         return true;

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_gravity="center_vertical"
+              android:gravity="center_vertical"
+              android:background="#99000000"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" >
+
+    <LinearLayout android:id="@+id/content"
+                  style="@style/ARLearn.Game.DataCollection"
+            >
+
+        <TextView android:id="@+id/feedbackTitle"
+                  android:paddingTop="20dip"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:text="@string/recordAudio"
+                  android:textSize="30dp"/>
+
+
+        <TextView android:id="@+id/feedbackText"
+                  android:paddingTop="20dip"
+                  android:paddingBottom="20dip"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:text="here comes feedback"
+                  />
+
+
+        <WebView
+                android:id="@+id/feedbackTextWeb"
+                android:background="@android:color/transparent"
+                android:paddingTop="20dip"
+                android:paddingBottom="20dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                >
+        </WebView>
+
+
+
+
+        <TextView
+                android:id="@+id/continue_button"
+                style="@style/ARLearn.Game.Button"
+                android:text="@string/continueMessage"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

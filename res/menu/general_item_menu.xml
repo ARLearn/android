@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_gi_up"
+          android:icon="@drawable/ic_next_message_upstate"
+          android:title="next"
+          android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_gi_down"
+          android:icon="@drawable/ic_previous_message_upstate"
+          android:title="previous"
+          android:showAsAction="ifRoom" />
+
+</menu>

@@ -92,6 +92,7 @@ public class GameDownloadManager {
         gameDownloadEventListener.setAmountOfContentDownloadedInBytes(getAmountOfDownloadedFileBytes());
 
         ARL.games.asyncDownloadGameContent(gameId);
+        ARL.runs.asyncRunsParticipate();
         ARL.eventBus.post(new Dismiss());
 
     }

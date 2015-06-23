@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import authentication.LoginActivity;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn.delegators.QuestionDelegator;
 import org.celstec.arlearn2.android.R;
@@ -24,6 +25,7 @@ import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * ****************************************************************************
@@ -57,13 +59,27 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
         ARL.init(this);
-        gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
+//        long time = System.currentTimeMillis();
+//        while(time + 3000> System.currentTimeMillis()) {
+//
+//        };
+        try {
+            gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen_" + Locale.getDefault().getLanguage()));
+        } catch (NumberFormatException e ) {}
+
+        if (gameIdToUseForMainSplashScreen == null) gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
+
         delayedGameLauncher = new DelayedGameLauncher(System.currentTimeMillis() + 3000) {
 
             @Override
             public void runNextActivity() {
-                if (isGroupOfGames()) {
-                    Intent gameIntent = new Intent(SplashScreen.this, MyGamesActivity.class);
+                if (ARL.config.getBooleanProperty("white_label_login") && !ARL.accounts.isAuthenticated()) {
+                    System.out.println("time to log in");
+                    Intent loginIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                } else
+                    if (isGroupOfGames()) {
+                    Intent gameIntent = new Intent(SplashScreen.this, MyGamesActivity.getMyGamesActivityClass());
                     startActivity(gameIntent);
                 } else {
 
@@ -121,6 +137,7 @@ public class SplashScreen extends Activity {
     private void initDatabase() {
         if (DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().loadAll().isEmpty()) {
             System.out.println("db was empty ");
+
             ARL.eventBus.register(this);
             InitWhiteLabelDatabase initWhiteLabelDatabase = InitWhiteLabelDatabase.getWhiteLabelDatabaseIniter(this);
             initWhiteLabelDatabase.init();
@@ -136,7 +153,11 @@ public class SplashScreen extends Activity {
     public void onEventMainThread(InitWhiteLabelDatabase.SyncReady ready) {
         System.out.println("splashcreen ready "+ready.isSuccess());
         if (ready.isSuccess()) {
-            databaseInitReady = true;
+            databaseInitReady = true; GameFileLocalObject gameFileLocalObject = GameFileLocalObject.getGameFileLocalObject(gameIdToUseForMainSplashScreen, "/map.zip");
+            if (gameFileLocalObject!= null) {
+                System.out.println("map exists");
+                InitWhiteLabelDatabase.writeFileToOSM(this, gameFileLocalObject.getLocalFile().toString());
+            }
             ARL.eventBus.unregister(this);
         } else {
             this.finish();

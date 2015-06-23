@@ -13,6 +13,7 @@ import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.LazyList;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.events.SearchResultList;
 import org.celstec.arlearn2.android.listadapter.ListAdapter;
 import org.celstec.arlearn2.android.viewWrappers.GameRowBig;
@@ -61,6 +62,10 @@ public class SearchResultsLazyListAdapter extends ListAdapter<Game> {
         notifyDataSetChanged();
     }
 
+    public void onEventMainThread(GameEvent event) {
+        notifyDataSetChanged();
+    }
+
     public void close() {
         ARL.eventBus.unregister(this);
     }
@@ -82,6 +87,8 @@ public class SearchResultsLazyListAdapter extends ListAdapter<Game> {
             if (data != null && data.length!=0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bitmap);
+            } else {
+                ((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_default_game);
             }
         }
     }

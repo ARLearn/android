@@ -48,7 +48,7 @@ public class CategoryFragment extends SherlockFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
-        ARL.store.synCategories();
+        ARL.store.syncCategories();
         ARL.eventBus.register(this);
 //        ARL.store.syncGamesForCategory(2l);
     }
@@ -64,7 +64,11 @@ public class CategoryFragment extends SherlockFragment{
 
         final View v = inflater.inflate(R.layout.store_category, container, false);
          tableLayout = (TableLayout) v.findViewById(R.id.categoryTableLayout);
-//        TableRow row = null;
+       drawCategories(inflater);
+        return v;
+    }
+
+    private void drawCategories(LayoutInflater inflater){
         int i = 0;
 
         for (CategoryLocalObject categoryLocalObject: ARL.store.getCategories()){
@@ -87,7 +91,6 @@ public class CategoryFragment extends SherlockFragment{
             ((TextView)item1.findViewById(R.id.categoryItemText)).setText("omit");
             item1.setVisibility(View.INVISIBLE);
         }
-        return v;
     }
 
     private class ClickCategory implements View.OnClickListener {
@@ -111,22 +114,8 @@ public class CategoryFragment extends SherlockFragment{
     }
 
     public void onEventMainThread(CategoryEvent event) {
-//        LayoutInflater inflater = getLayoutInflater(null);
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
-
-        if (!categoryMap.containsKey(event.getCategoryId())) {
-            CategoryLocalObject categoryLocalObject = DaoConfiguration.getInstance().getCategoryLocalObjectDao().load(event.getCategoryId());
-             if (categoryMap.size() %2 ==0) {
-
-                 row = (TableRow) inflater.inflate(R.layout.store_category_row, tableLayout, false);
-                 tableLayout.addView(row);
-             }
-            RelativeLayout item1 = (RelativeLayout) inflater.inflate(R.layout.store_category_item, row, false);
-            row.addView(item1);
-            categoryMap.put(categoryLocalObject.getId(), item1);
-            ((TextView)item1.findViewById(R.id.categoryItemText)).setText(categoryLocalObject.getCategory());
-        }
-
+        drawCategories(inflater);
     }
 
 

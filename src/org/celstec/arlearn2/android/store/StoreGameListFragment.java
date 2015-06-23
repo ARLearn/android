@@ -42,12 +42,11 @@ public class StoreGameListFragment extends SherlockListFragment implements ListI
     private long categoryId;
 
     public StoreGameListFragment() {
-        this.categoryId = categoryId;
-        ARL.store.syncGamesForCategory(categoryId);
     }
 
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
+        ARL.store.syncGamesForCategory(categoryId);
     }
 
     @Override

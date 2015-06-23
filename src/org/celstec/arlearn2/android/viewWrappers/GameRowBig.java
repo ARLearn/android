@@ -2,10 +2,12 @@ package org.celstec.arlearn2.android.viewWrappers;
 
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.dao.gen.CategoryLocalObject;
 
 /**
  * ****************************************************************************
@@ -27,16 +29,23 @@ import org.celstec.arlearn2.android.R;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GameRowBig {
+public abstract class GameRowBig {
 
     private LinearLayout gameRow;
 
     public GameRowBig(LinearLayout layout) {
+
         gameRow = (LinearLayout) layout;
     }
 
     public GameRowBig(LayoutInflater inflater, LinearLayout rootLayout) {
         gameRow = (LinearLayout) inflater.inflate(R.layout.store_game_list_entry_big, rootLayout, false);
+        gameRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onGameClick();
+            }
+        });
         rootLayout.addView(gameRow);
     }
 
@@ -45,9 +54,16 @@ public class GameRowBig {
         view.setText(title);
     }
 
-    public void setGameCategory(String category) {
+    public void setGameCategory(CategoryLocalObject category) {
         TextView view = (TextView) gameRow.findViewById(R.id.gameCategoryId);
-        view.setText(category);
+        if (category == null){
+            view.setVisibility(View.GONE);
+        } else {
+            view.setVisibility(View.VISIBLE);
+            view.setText(category.getCategory());
+        }
+
+
     }
 
     public void setGameDescription(String description) {
@@ -60,5 +76,6 @@ public class GameRowBig {
 
     }
 
+    public abstract void onGameClick();
 
 }

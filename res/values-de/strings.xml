@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ARLearn</string>
 
     <string name="login_facebook">Login with Facebook</string>
     <string name="login_google">Login with Google</string>
@@ -87,5 +86,9 @@
     <string name="continueMessage" >Continue</string>
     <string name="provideInput" >Provide input</string>
     <string name="logout">Log out</string>
+    <string name="scanCode">Scan Code</string>
+    <string name="nearMe">In meiner Nähe</string>
+    <string name="gameDetails">Spiel Details</string>
+    <string name="gamePlay">Spiel</string>
 
 </resources>

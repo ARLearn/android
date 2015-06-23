@@ -51,8 +51,6 @@ public class PureAudioActivityFeatures extends AudioItemFeatures {
     public PureAudioActivityFeatures(GeneralItemActivity activity, GeneralItemLocalObject generalItemLocalObject) {
         super(activity, generalItemLocalObject);
 //        activity.setContentView(R.layout.game_general_item_pure_audio);
-
-
     }
 
     @Override
@@ -76,11 +74,12 @@ public class PureAudioActivityFeatures extends AudioItemFeatures {
             @Override
             public void onClick(View v) {
                 if (activity == null) System.out.println("activity is null ");
-                if (activity.getInBetweenGeneralItemNavigation() == null) System.out.println("activitygetInBetweenGeneralItemNavigation() is null ");
-                activity.getInBetweenGeneralItemNavigation().navigateNext();
+//                if (activity.getInBetweenGeneralItemNavigation() == null) System.out.println("activitygetInBetweenGeneralItemNavigation() is null ");
+//                activity.getInBetweenGeneralItemNavigation().navigateNext();
+                activity.navigateNext();
             }
         });
-        ColorMatrixColorFilter filter = DrawableUtil.getBlackWhiteFilter(DrawableUtil.styleUtil.getButtonAlternativeColor());
+        ColorMatrixColorFilter filter = DrawableUtil.getBlackWhiteFilter(DrawableUtil.styleUtil.getPrimaryColor());
         Drawable btnNextLarge = activity.getResources().getDrawable(R.drawable.btn_next_large);
         btnNextLarge.setColorFilter(filter);
         (continueButton).setImageDrawable(btnNextLarge);

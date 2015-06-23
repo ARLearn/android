@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -56,7 +57,7 @@ public class GameActivity extends Activity implements GameDownloadProgressView.D
         super.onCreate(savedInstanceState);
         setTheme(R.style.ARLearn_schema2);
         if (android.os.Build.VERSION.SDK_INT >= 11) {
-            getActionBar().setIcon(R.drawable.ic_ab_back);
+            getActionBar().setHomeButtonEnabled(true);
         }
 
         setContentView(R.layout.store_game_overview);
@@ -123,6 +124,16 @@ public class GameActivity extends Activity implements GameDownloadProgressView.D
             int rating = ((Integer)data.getExtras().get("rating"));
             GameDelegator.getInstance().rating.submitRating(rating, gameId);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return false;
+
     }
 
     private void drawGameContent() {

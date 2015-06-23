@@ -11,7 +11,6 @@ import de.greenrobot.dao.internal.DaoConfig;
 
 import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.StoreGameLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
 import org.celstec.dao.gen.DependencyLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
@@ -20,6 +19,7 @@ import org.celstec.dao.gen.GeneralItemMediaLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 import org.celstec.dao.gen.ActionLocalObject;
 import org.celstec.dao.gen.ResponseLocalObject;
+import org.celstec.dao.gen.ProximityEventRegistryLocalObject;
 import org.celstec.dao.gen.InquiryLocalObject;
 import org.celstec.dao.gen.ThreadLocalObject;
 import org.celstec.dao.gen.MessageLocalObject;
@@ -28,12 +28,12 @@ import org.celstec.dao.gen.BadgeLocalObject;
 import org.celstec.dao.gen.InquiryQuestionLocalObject;
 import org.celstec.dao.gen.InquiryQuestionAnswerLocalObject;
 import org.celstec.dao.gen.CategoryLocalObject;
+import org.celstec.dao.gen.StoreGameLocalObject;
 import org.celstec.dao.gen.GameCategoryLocalObject;
 import org.celstec.dao.gen.FriendsLocalObject;
 
 import org.celstec.dao.gen.AccountLocalObjectDao;
 import org.celstec.dao.gen.GameLocalObjectDao;
-import org.celstec.dao.gen.StoreGameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
@@ -42,6 +42,7 @@ import org.celstec.dao.gen.GeneralItemMediaLocalObjectDao;
 import org.celstec.dao.gen.RunLocalObjectDao;
 import org.celstec.dao.gen.ActionLocalObjectDao;
 import org.celstec.dao.gen.ResponseLocalObjectDao;
+import org.celstec.dao.gen.ProximityEventRegistryLocalObjectDao;
 import org.celstec.dao.gen.InquiryLocalObjectDao;
 import org.celstec.dao.gen.ThreadLocalObjectDao;
 import org.celstec.dao.gen.MessageLocalObjectDao;
@@ -50,6 +51,7 @@ import org.celstec.dao.gen.BadgeLocalObjectDao;
 import org.celstec.dao.gen.InquiryQuestionLocalObjectDao;
 import org.celstec.dao.gen.InquiryQuestionAnswerLocalObjectDao;
 import org.celstec.dao.gen.CategoryLocalObjectDao;
+import org.celstec.dao.gen.StoreGameLocalObjectDao;
 import org.celstec.dao.gen.GameCategoryLocalObjectDao;
 import org.celstec.dao.gen.FriendsLocalObjectDao;
 
@@ -64,7 +66,6 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig accountLocalObjectDaoConfig;
     private final DaoConfig gameLocalObjectDaoConfig;
-    private final DaoConfig storeGameLocalObjectDaoConfig;
     private final DaoConfig gameContributorLocalObjectDaoConfig;
     private final DaoConfig dependencyLocalObjectDaoConfig;
     private final DaoConfig generalItemLocalObjectDaoConfig;
@@ -73,6 +74,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig runLocalObjectDaoConfig;
     private final DaoConfig actionLocalObjectDaoConfig;
     private final DaoConfig responseLocalObjectDaoConfig;
+    private final DaoConfig proximityEventRegistryLocalObjectDaoConfig;
     private final DaoConfig inquiryLocalObjectDaoConfig;
     private final DaoConfig threadLocalObjectDaoConfig;
     private final DaoConfig messageLocalObjectDaoConfig;
@@ -81,12 +83,12 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig inquiryQuestionLocalObjectDaoConfig;
     private final DaoConfig inquiryQuestionAnswerLocalObjectDaoConfig;
     private final DaoConfig categoryLocalObjectDaoConfig;
+    private final DaoConfig storeGameLocalObjectDaoConfig;
     private final DaoConfig gameCategoryLocalObjectDaoConfig;
     private final DaoConfig friendsLocalObjectDaoConfig;
 
     private final AccountLocalObjectDao accountLocalObjectDao;
     private final GameLocalObjectDao gameLocalObjectDao;
-    private final StoreGameLocalObjectDao storeGameLocalObjectDao;
     private final GameContributorLocalObjectDao gameContributorLocalObjectDao;
     private final DependencyLocalObjectDao dependencyLocalObjectDao;
     private final GeneralItemLocalObjectDao generalItemLocalObjectDao;
@@ -95,6 +97,7 @@ public class DaoSession extends AbstractDaoSession {
     private final RunLocalObjectDao runLocalObjectDao;
     private final ActionLocalObjectDao actionLocalObjectDao;
     private final ResponseLocalObjectDao responseLocalObjectDao;
+    private final ProximityEventRegistryLocalObjectDao proximityEventRegistryLocalObjectDao;
     private final InquiryLocalObjectDao inquiryLocalObjectDao;
     private final ThreadLocalObjectDao threadLocalObjectDao;
     private final MessageLocalObjectDao messageLocalObjectDao;
@@ -103,6 +106,7 @@ public class DaoSession extends AbstractDaoSession {
     private final InquiryQuestionLocalObjectDao inquiryQuestionLocalObjectDao;
     private final InquiryQuestionAnswerLocalObjectDao inquiryQuestionAnswerLocalObjectDao;
     private final CategoryLocalObjectDao categoryLocalObjectDao;
+    private final StoreGameLocalObjectDao storeGameLocalObjectDao;
     private final GameCategoryLocalObjectDao gameCategoryLocalObjectDao;
     private final FriendsLocalObjectDao friendsLocalObjectDao;
 
@@ -115,9 +119,6 @@ public class DaoSession extends AbstractDaoSession {
 
         gameLocalObjectDaoConfig = daoConfigMap.get(GameLocalObjectDao.class).clone();
         gameLocalObjectDaoConfig.initIdentityScope(type);
-
-        storeGameLocalObjectDaoConfig = daoConfigMap.get(StoreGameLocalObjectDao.class).clone();
-        storeGameLocalObjectDaoConfig.initIdentityScope(type);
 
         gameContributorLocalObjectDaoConfig = daoConfigMap.get(GameContributorLocalObjectDao.class).clone();
         gameContributorLocalObjectDaoConfig.initIdentityScope(type);
@@ -143,6 +144,9 @@ public class DaoSession extends AbstractDaoSession {
         responseLocalObjectDaoConfig = daoConfigMap.get(ResponseLocalObjectDao.class).clone();
         responseLocalObjectDaoConfig.initIdentityScope(type);
 
+        proximityEventRegistryLocalObjectDaoConfig = daoConfigMap.get(ProximityEventRegistryLocalObjectDao.class).clone();
+        proximityEventRegistryLocalObjectDaoConfig.initIdentityScope(type);
+
         inquiryLocalObjectDaoConfig = daoConfigMap.get(InquiryLocalObjectDao.class).clone();
         inquiryLocalObjectDaoConfig.initIdentityScope(type);
 
@@ -167,6 +171,9 @@ public class DaoSession extends AbstractDaoSession {
         categoryLocalObjectDaoConfig = daoConfigMap.get(CategoryLocalObjectDao.class).clone();
         categoryLocalObjectDaoConfig.initIdentityScope(type);
 
+        storeGameLocalObjectDaoConfig = daoConfigMap.get(StoreGameLocalObjectDao.class).clone();
+        storeGameLocalObjectDaoConfig.initIdentityScope(type);
+
         gameCategoryLocalObjectDaoConfig = daoConfigMap.get(GameCategoryLocalObjectDao.class).clone();
         gameCategoryLocalObjectDaoConfig.initIdentityScope(type);
 
@@ -175,7 +182,6 @@ public class DaoSession extends AbstractDaoSession {
 
         accountLocalObjectDao = new AccountLocalObjectDao(accountLocalObjectDaoConfig, this);
         gameLocalObjectDao = new GameLocalObjectDao(gameLocalObjectDaoConfig, this);
-        storeGameLocalObjectDao = new StoreGameLocalObjectDao(storeGameLocalObjectDaoConfig, this);
         gameContributorLocalObjectDao = new GameContributorLocalObjectDao(gameContributorLocalObjectDaoConfig, this);
         dependencyLocalObjectDao = new DependencyLocalObjectDao(dependencyLocalObjectDaoConfig, this);
         generalItemLocalObjectDao = new GeneralItemLocalObjectDao(generalItemLocalObjectDaoConfig, this);
@@ -184,6 +190,7 @@ public class DaoSession extends AbstractDaoSession {
         runLocalObjectDao = new RunLocalObjectDao(runLocalObjectDaoConfig, this);
         actionLocalObjectDao = new ActionLocalObjectDao(actionLocalObjectDaoConfig, this);
         responseLocalObjectDao = new ResponseLocalObjectDao(responseLocalObjectDaoConfig, this);
+        proximityEventRegistryLocalObjectDao = new ProximityEventRegistryLocalObjectDao(proximityEventRegistryLocalObjectDaoConfig, this);
         inquiryLocalObjectDao = new InquiryLocalObjectDao(inquiryLocalObjectDaoConfig, this);
         threadLocalObjectDao = new ThreadLocalObjectDao(threadLocalObjectDaoConfig, this);
         messageLocalObjectDao = new MessageLocalObjectDao(messageLocalObjectDaoConfig, this);
@@ -192,12 +199,12 @@ public class DaoSession extends AbstractDaoSession {
         inquiryQuestionLocalObjectDao = new InquiryQuestionLocalObjectDao(inquiryQuestionLocalObjectDaoConfig, this);
         inquiryQuestionAnswerLocalObjectDao = new InquiryQuestionAnswerLocalObjectDao(inquiryQuestionAnswerLocalObjectDaoConfig, this);
         categoryLocalObjectDao = new CategoryLocalObjectDao(categoryLocalObjectDaoConfig, this);
+        storeGameLocalObjectDao = new StoreGameLocalObjectDao(storeGameLocalObjectDaoConfig, this);
         gameCategoryLocalObjectDao = new GameCategoryLocalObjectDao(gameCategoryLocalObjectDaoConfig, this);
         friendsLocalObjectDao = new FriendsLocalObjectDao(friendsLocalObjectDaoConfig, this);
 
         registerDao(AccountLocalObject.class, accountLocalObjectDao);
         registerDao(GameLocalObject.class, gameLocalObjectDao);
-        registerDao(StoreGameLocalObject.class, storeGameLocalObjectDao);
         registerDao(GameContributorLocalObject.class, gameContributorLocalObjectDao);
         registerDao(DependencyLocalObject.class, dependencyLocalObjectDao);
         registerDao(GeneralItemLocalObject.class, generalItemLocalObjectDao);
@@ -206,6 +213,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(RunLocalObject.class, runLocalObjectDao);
         registerDao(ActionLocalObject.class, actionLocalObjectDao);
         registerDao(ResponseLocalObject.class, responseLocalObjectDao);
+        registerDao(ProximityEventRegistryLocalObject.class, proximityEventRegistryLocalObjectDao);
         registerDao(InquiryLocalObject.class, inquiryLocalObjectDao);
         registerDao(ThreadLocalObject.class, threadLocalObjectDao);
         registerDao(MessageLocalObject.class, messageLocalObjectDao);
@@ -214,6 +222,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(InquiryQuestionLocalObject.class, inquiryQuestionLocalObjectDao);
         registerDao(InquiryQuestionAnswerLocalObject.class, inquiryQuestionAnswerLocalObjectDao);
         registerDao(CategoryLocalObject.class, categoryLocalObjectDao);
+        registerDao(StoreGameLocalObject.class, storeGameLocalObjectDao);
         registerDao(GameCategoryLocalObject.class, gameCategoryLocalObjectDao);
         registerDao(FriendsLocalObject.class, friendsLocalObjectDao);
     }
@@ -221,7 +230,6 @@ public class DaoSession extends AbstractDaoSession {
     public void clear() {
         accountLocalObjectDaoConfig.getIdentityScope().clear();
         gameLocalObjectDaoConfig.getIdentityScope().clear();
-        storeGameLocalObjectDaoConfig.getIdentityScope().clear();
         gameContributorLocalObjectDaoConfig.getIdentityScope().clear();
         dependencyLocalObjectDaoConfig.getIdentityScope().clear();
         generalItemLocalObjectDaoConfig.getIdentityScope().clear();
@@ -230,6 +238,7 @@ public class DaoSession extends AbstractDaoSession {
         runLocalObjectDaoConfig.getIdentityScope().clear();
         actionLocalObjectDaoConfig.getIdentityScope().clear();
         responseLocalObjectDaoConfig.getIdentityScope().clear();
+        proximityEventRegistryLocalObjectDaoConfig.getIdentityScope().clear();
         inquiryLocalObjectDaoConfig.getIdentityScope().clear();
         threadLocalObjectDaoConfig.getIdentityScope().clear();
         messageLocalObjectDaoConfig.getIdentityScope().clear();
@@ -238,6 +247,7 @@ public class DaoSession extends AbstractDaoSession {
         inquiryQuestionLocalObjectDaoConfig.getIdentityScope().clear();
         inquiryQuestionAnswerLocalObjectDaoConfig.getIdentityScope().clear();
         categoryLocalObjectDaoConfig.getIdentityScope().clear();
+        storeGameLocalObjectDaoConfig.getIdentityScope().clear();
         gameCategoryLocalObjectDaoConfig.getIdentityScope().clear();
         friendsLocalObjectDaoConfig.getIdentityScope().clear();
     }
@@ -248,10 +258,6 @@ public class DaoSession extends AbstractDaoSession {
 
     public GameLocalObjectDao getGameLocalObjectDao() {
         return gameLocalObjectDao;
-    }
-
-    public StoreGameLocalObjectDao getStoreGameLocalObjectDao() {
-        return storeGameLocalObjectDao;
     }
 
     public GameContributorLocalObjectDao getGameContributorLocalObjectDao() {
@@ -286,6 +292,10 @@ public class DaoSession extends AbstractDaoSession {
         return responseLocalObjectDao;
     }
 
+    public ProximityEventRegistryLocalObjectDao getProximityEventRegistryLocalObjectDao() {
+        return proximityEventRegistryLocalObjectDao;
+    }
+
     public InquiryLocalObjectDao getInquiryLocalObjectDao() {
         return inquiryLocalObjectDao;
     }
@@ -316,6 +326,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public CategoryLocalObjectDao getCategoryLocalObjectDao() {
         return categoryLocalObjectDao;
+    }
+
+    public StoreGameLocalObjectDao getStoreGameLocalObjectDao() {
+        return storeGameLocalObjectDao;
     }
 
     public GameCategoryLocalObjectDao getGameCategoryLocalObjectDao() {

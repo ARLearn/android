@@ -51,6 +51,7 @@ public class MainMenu extends SherlockFragment {
         setHasOptionsMenu(false);
         INQ.init(getActivity());
         ARL.accounts.syncMyAccountDetails();
+        ARL.store.syncCategories();
     }
 
     @Override

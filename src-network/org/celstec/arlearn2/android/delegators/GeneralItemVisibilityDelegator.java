@@ -1,18 +1,17 @@
 package org.celstec.arlearn2.android.delegators;
 
 import daoBase.DaoConfiguration;
+import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibility;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibilityList;
 import org.celstec.arlearn2.client.GeneralItemVisibilityClient;
-import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.GeneralItemLocalObject;
-import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
-import org.celstec.dao.gen.RunLocalObject;
+import org.celstec.dao.gen.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ****************************************************************************
@@ -64,15 +63,30 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
         RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
         GameLocalObject game = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         if (run == null || game == null) return;
+        GeneralItemEvent newVisibilityStatementDetected = null;
         for (GeneralItemLocalObject generalItemLocalObject: game.getGeneralItems()) {
             long satisfiedAt = 0l;
-            if (generalItemLocalObject.getDependencyLocalObject() != null) {
+            Set<String> userRoles = run.getUserRoles();
+            if (generalItemLocalObject.getGeneralItemBean().getRoles()!=null) {
+                boolean containsRole = false;
+                for (String targetRole:generalItemLocalObject.getGeneralItemBean().getRoles()) {
+                    if (userRoles.contains(targetRole)) containsRole = true;
+                }
+                if (!containsRole) {
+                    satisfiedAt = -1l;
+                    String id = GeneralItemVisibilityLocalObject.generateId(runId, generalItemLocalObject.getId());
+                    DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().deleteByKey(id);
+                }
+            }
+            if (satisfiedAt !=-1 && generalItemLocalObject.getDependencyLocalObject() != null) {
                 satisfiedAt = generalItemLocalObject.getDependencyLocalObject().satisfiedAt(run);
             }
-            if (satisfiedAt < System.currentTimeMillis()&& satisfiedAt!=-1) {
+            if (satisfiedAt != -1)
+            if (satisfiedAt < System.currentTimeMillis()) {
                 String id = GeneralItemVisibilityLocalObject.generateId(runId, generalItemLocalObject.getId());
                 GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
                 if (generalItemVisibilityLocalObject == null) {
+
                     generalItemVisibilityLocalObject = new GeneralItemVisibilityLocalObject();
                     generalItemVisibilityLocalObject.setId(id);
                     generalItemVisibilityLocalObject.setGeneralItemLocalObject(generalItemLocalObject);
@@ -82,10 +96,17 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
                     generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
                     generalItemVisibilityLocalObject.setTimeStamp(satisfiedAt);
                     DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
-                    GeneralItemEvent event = new GeneralItemEvent(generalItemLocalObject.getId());
-                            event.setBecameVisible(true);
-                    ARL.eventBus.postSticky(event);
-                    System.out.println("LOG postSticky "+System.currentTimeMillis());
+                    if (satisfiedAt != 0) {
+                        GeneralItemBecameVisibleEvent event = new GeneralItemBecameVisibleEvent(generalItemLocalObject.getId());
+                        if (generalItemVisibilityLocalObject.getGeneralItemLocalObject().getAutoLaunch() != null && generalItemVisibilityLocalObject.getGeneralItemLocalObject().getAutoLaunch()) {
+                            event.setAutoLaunch(true);
+                        }
+                        event.setShowStroken(true);
+                        ARL.eventBus.postSticky(event);
+                    } else {
+                        newVisibilityStatementDetected = new GeneralItemEvent(generalItemLocalObject.getId());
+                    }
+//                    System.out.println("LOG postSticky "+System.currentTimeMillis());
                 } else {
                     if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.INVISIBLE) {
                         if (generalItemVisibilityLocalObject.getTimeStamp() > satisfiedAt) {
@@ -94,8 +115,18 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
                         }
                     }
                 }
+            } else {
+
+                ARL.visibilityHandler.scheduleVisibilityEvent(satisfiedAt, run, game);
+                System.out.println("we are in the not condition");
             }
-            System.out.println(generalItemLocalObject.getTitle()+" "+ satisfiedAt);
+            if (newVisibilityStatementDetected!= null) {
+                ARL.eventBus.post(newVisibilityStatementDetected);
+            }
+//            else {
+//                ARL.visibilityHandler
+//            }
+//            System.out.println(generalItemLocalObject.getTitle()+" "+ satisfiedAt);
         }
     }
 
@@ -140,6 +171,9 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
 
     }
 
+    public void deleteVisibilities(Long runId) {
+        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().queryBuilder().where(GeneralItemVisibilityLocalObjectDao.Properties.RunId.eq(runId)).buildDelete().executeDeleteWithoutDetachingEntities();
+    }
 
 
     private class SyncGeneralItemVisibilities {

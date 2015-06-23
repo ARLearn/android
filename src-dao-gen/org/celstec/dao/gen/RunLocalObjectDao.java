@@ -30,8 +30,9 @@ public class RunLocalObjectDao extends AbstractDao<RunLocalObject, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
-        public final static Property Deleted = new Property(2, Boolean.class, "deleted", false, "DELETED");
-        public final static Property GameId = new Property(3, long.class, "gameId", false, "GAME_ID");
+        public final static Property Roles = new Property(2, String.class, "roles", false, "ROLES");
+        public final static Property Deleted = new Property(3, Boolean.class, "deleted", false, "DELETED");
+        public final static Property GameId = new Property(4, long.class, "gameId", false, "GAME_ID");
     };
 
     private DaoSession daoSession;
@@ -53,8 +54,9 @@ public class RunLocalObjectDao extends AbstractDao<RunLocalObject, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'RUN_LOCAL_OBJECT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'TITLE' TEXT NOT NULL ," + // 1: title
-                "'DELETED' INTEGER," + // 2: deleted
-                "'GAME_ID' INTEGER NOT NULL );"); // 3: gameId
+                "'ROLES' TEXT," + // 2: roles
+                "'DELETED' INTEGER," + // 3: deleted
+                "'GAME_ID' INTEGER NOT NULL );"); // 4: gameId
     }
 
     /** Drops the underlying database table. */
@@ -74,11 +76,16 @@ public class RunLocalObjectDao extends AbstractDao<RunLocalObject, Long> {
         }
         stmt.bindString(2, entity.getTitle());
  
+        String roles = entity.getRoles();
+        if (roles != null) {
+            stmt.bindString(3, roles);
+        }
+ 
         Boolean deleted = entity.getDeleted();
         if (deleted != null) {
-            stmt.bindLong(3, deleted ? 1l: 0l);
+            stmt.bindLong(4, deleted ? 1l: 0l);
         }
-        stmt.bindLong(4, entity.getGameId());
+        stmt.bindLong(5, entity.getGameId());
     }
 
     @Override
@@ -99,8 +106,9 @@ public class RunLocalObjectDao extends AbstractDao<RunLocalObject, Long> {
         RunLocalObject entity = new RunLocalObject( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // title
-            cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // deleted
-            cursor.getLong(offset + 3) // gameId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // roles
+            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // deleted
+            cursor.getLong(offset + 4) // gameId
         );
         return entity;
     }
@@ -110,8 +118,9 @@ public class RunLocalObjectDao extends AbstractDao<RunLocalObject, Long> {
     public void readEntity(Cursor cursor, RunLocalObject entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.getString(offset + 1));
-        entity.setDeleted(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
-        entity.setGameId(cursor.getLong(offset + 3));
+        entity.setRoles(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setDeleted(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
+        entity.setGameId(cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */

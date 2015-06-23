@@ -1,5 +1,7 @@
 package org.celstec.arlearn2.android.qrCodeScanning;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +30,9 @@ import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import net.sourceforge.zbar.Config;
 import org.celstec.arlearn2.android.UserGameIntentAnalyser;
+import org.celstec.arlearn2.android.db.PropertiesAdapter;
+import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.delegators.AccountDelegator;
 import org.celstec.arlearn2.android.store.GameFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.beans.game.Game;
@@ -86,7 +91,26 @@ public class ScannerFragment  extends SherlockFragment implements QRScanner.Scan
 
         @Override
         public void scannedLoginToken(String loginToken) {
+            if (AccountDelegator.getInstance().isAuthenticated()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScannerFragment.this.getActivity());
+                builder.setMessage(R.string.youMustLogOut)
+                        .setPositiveButton(R.string.logMeOut, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ARL.accounts.disAuthenticate();
+                            }
+                        })
+                        .setNegativeButton(R.string.leaveMeLogedIn, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                builder.create().show();
+            } else {
+                PropertiesAdapter.getInstance().setAuthToken(loginToken);
+                AccountDelegator.getInstance().syncMyAccountDetails();
 
+            }
+            ScannerFragment.this.getActivity().getSupportFragmentManager().popBackStack();
         }
     };
 
@@ -123,7 +147,7 @@ public class ScannerFragment  extends SherlockFragment implements QRScanner.Scan
 //        FrameLayout preview = (FrameLayout)v.findViewById(R.id.cameraPreview);
 //        preview.addView(mPreview);
 //
-//        scanText = (TextView)v.findViewById(R.id.scanText);
+        scanText = (TextView)v.findViewById(R.id.scanText);
 //
 ////        scanButton = (Button)v.findViewById(R.id.ScanButton);
 //

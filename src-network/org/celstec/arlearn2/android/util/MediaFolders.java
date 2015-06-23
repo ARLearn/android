@@ -80,6 +80,16 @@ public class MediaFolders {
         }
     }
 
+    public static File createOutgoingMpegAacFile(){
+        File outFolder = getOutgoingFilesDir();
+        try {
+            return File.createTempFile("recording", ".aac", outFolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void createFileFoldersRecursively(File file) {
         if (file.isDirectory()) {
             if (!file.getParentFile().exists()) createFileFoldersRecursively(file.getParentFile());

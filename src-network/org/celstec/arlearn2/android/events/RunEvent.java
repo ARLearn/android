@@ -22,9 +22,15 @@ package org.celstec.arlearn2.android.events;
  */
 public class RunEvent {
     private long runId;
+    private boolean deleted = false;
 
     public RunEvent(long runId) {
         this.runId = runId;
+    }
+
+    public RunEvent(long runId, boolean deleted) {
+        this.runId = runId;
+        this.deleted = deleted;
     }
 
     public long getRunId() {
@@ -33,5 +39,13 @@ public class RunEvent {
 
     public void setRunId(long runId) {
         this.runId = runId;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

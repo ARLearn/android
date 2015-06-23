@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ARLearn</string>
+    <string name="app_name" translatable="false">ARLearn</string>
 
     <string name="login_facebook">Login with Facebook</string>
     <string name="login_google">Login with Google</string>
@@ -12,9 +12,11 @@
     <string name="login_from_my_games_text">To access My Games you have to first login. \nPlease choose one of the login types.</string>
 
     <string name="myGames">My Games</string>
+    <string name="gamePlay">Game plays</string>
     <string name="library">Library</string>
     <string name="scan">Scan</string>
     <string name="settings">Settings</string>
+    <string name="nearMe">Near Me</string>
 
     <string name="searchText">Search</string>
     <string name="searchFullTextHint">Name, topic, location ...</string>
@@ -85,7 +87,13 @@
     <string name="messages" >Messages</string>
     <string name="message" >Message xxx of yyy</string>
     <string name="continueMessage" >Continue</string>
+    <string name="scanCode" >Scan Code</string>
     <string name="provideInput" >Provide input</string>
     <string name="logout">Log out</string>
+    <string name="gameDetails">Game Details</string>
+
+    <string name="youMustLogOut">You must log out first</string>
+    <string name="leaveMeLogedIn">Don\'t logout</string>
+    <string name="logMeOut">Logout</string>
 
 </resources>
