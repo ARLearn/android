@@ -44,11 +44,36 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
         setLazyList(qb.listLazy());
     }
 
+    public AbstractGeneralItemsVisibilityAdapter(Context context, long runId, long gameId, boolean messagsOnly){
+        super(context);
+        this.runId = runId;
+        qb = getQueryBuilder(runId, gameId, messagsOnly);
+        ARL.eventBus.register(this);
+        setLazyList(qb.listLazy());
+    }
+
+    public static QueryBuilder<GeneralItemVisibilityLocalObject> getQueryBuilder(long runId, long gameId, boolean messagsOnly){
+        GeneralItemVisibilityLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao();
+        QueryBuilder<GeneralItemVisibilityLocalObject> qb =dao.queryBuilder();
+        String condition = "";
+        if (messagsOnly){
+            condition = "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0 and lat is null)";
+       } else {
+            condition = "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)";
+        }
+
+        qb.where(new WhereCondition.StringCondition(
+                condition
+        )).orderDesc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
+        return qb;
+    }
+
     public static QueryBuilder<GeneralItemVisibilityLocalObject> getQueryBuilder(long runId, long gameId){
         GeneralItemVisibilityLocalObjectDao dao = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao();
         QueryBuilder<GeneralItemVisibilityLocalObject> qb =dao.queryBuilder();
+        String condition = "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)";
         qb.where(new WhereCondition.StringCondition(
-                "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"
+                condition
         )).orderDesc(GeneralItemVisibilityLocalObjectDao.Properties.TimeStamp);
         return qb;
     }
@@ -68,9 +93,16 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
 
 
     public void onEventMainThread(GeneralItemEvent event) {
+//        if (lazyList != null) lazyList.close();
+//        setLazyList(qb.listLazy());
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
         if (lazyList != null) lazyList.close();
         setLazyList(qb.listLazy());
-        notifyDataSetChanged();
+        super.notifyDataSetChanged();
     }
 
     public void close() {

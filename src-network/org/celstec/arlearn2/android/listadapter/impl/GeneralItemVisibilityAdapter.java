@@ -1,6 +1,8 @@
 package org.celstec.arlearn2.android.listadapter.impl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAdapter;
 import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 
@@ -43,6 +46,10 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
 
     public GeneralItemVisibilityAdapter(Context context, long runId, long gameId) {
         super(context, runId, gameId);
+    }
+
+    public GeneralItemVisibilityAdapter(Context context, long runId, long gameId,  boolean messagesOnly) {
+        super(context, runId, gameId, messagesOnly);
     }
 
     @Override
@@ -110,23 +117,7 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
 
             TextView messageText =(TextView) view.findViewById(R.id.messageTextRead);
             ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconRead);
-            if (item.getGeneralItemLocalObject()!=null) {
-                messageText.setText(item.getGeneralItemLocalObject().getTitle() ); //+ getDate(item.getTimeStamp())
-                messageIcon.setImageResource(
-                        GeneralItemMapper.mapConstantToDrawable(
-                                GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
-                        )
-                );
-
-            } else {
-                messageText.setText("message not loaded");
-            }
-
-//            View returnView = inflater.inflate(R.layout.game_message_entry_read, parent, false);
-//            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntryRead());
-//            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageTextRead());
-//            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundRead());
-//            return returnView;
+            setIconAndMessageText(item, messageText, messageIcon);
         } else {
             view.findViewById(R.id.messageEntryLinearLayoutUnRead).setVisibility(View.VISIBLE);
             view.findViewById(R.id.messageEntryLinearLayoutRead).setVisibility(View.GONE);
@@ -137,23 +128,27 @@ public class GeneralItemVisibilityAdapter extends AbstractGeneralItemsVisibility
             (view.findViewById(R.id.messageIconUnRead)).setPadding(dip, dip, dip, dip);
             TextView messageText =(TextView) view.findViewById(R.id.messageTextUnRead);
             ImageView messageIcon =  (ImageView) view.findViewById(R.id.messageIconUnRead);
-            if (item.getGeneralItemLocalObject()!=null) {
-                messageText.setText(item.getGeneralItemLocalObject().getTitle()); //+ getDate(item.getTimeStamp())
+            setIconAndMessageText(item, messageText, messageIcon);
+        }
+    }
+
+    private void setIconAndMessageText(GeneralItemVisibilityLocalObject item, TextView messageText, ImageView messageIcon) {
+        if (item.getGeneralItemLocalObject()!=null) {
+            GeneralItemLocalObject gi = item.getGeneralItemLocalObject();
+            messageText.setText(item.getGeneralItemLocalObject().getTitle());
+            Drawable icon = GameFileLocalObject.getDrawable(ARL.ctx, gi.getGameId(), "/generalItems/" + gi.getId() + "/icon");
+            if (icon == null) {
                 messageIcon.setImageResource(
                         GeneralItemMapper.mapConstantToDrawable(
                                 GeneralItemMapper.mapBeanToConstant(item.getGeneralItemLocalObject().getGeneralItemBean())
                         )
                 );
-
             } else {
-                messageText.setText("message not loaded");
+                messageIcon.setImageDrawable(icon);
             }
 
-//            View returnView = inflater.inflate(R.layout.game_message_entry, parent, false);
-//            returnView.setBackgroundDrawable(DrawableUtil.getGameMessageEntry());
-//            ((TextView) returnView.findViewById(R.id.messageText)).setTextColor(DrawableUtil.getGameMessageText());
-//            (returnView.findViewById(R.id.messageIcon)).setBackgroundDrawable(DrawableUtil.getGameMessageIconBackgroundUnRead());
-//            return returnView;
+        } else {
+            messageText.setText("message not loaded");
         }
     }
 

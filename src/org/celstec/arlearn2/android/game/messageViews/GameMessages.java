@@ -4,9 +4,11 @@ import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.view.WindowCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,22 +49,40 @@ import org.celstec.dao.gen.*;
 public class GameMessages extends ListActivity implements ListItemClickInterface<GeneralItemVisibilityLocalObject> {
     GameActivityFeatures gameActivityFeatures;
     ActionBarMenuController actionBarMenuController;
+    private Menu menu;
 
     private GeneralItemVisibilityAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         ARL.init(this);
+        if (ARL.config.isGameMapActionBarTransparent()){
+            getWindow().requestFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
+        }
+
+        super.onCreate(savedInstanceState);
         ARL.accounts.syncMyAccountDetails();
         gameActivityFeatures = new GameActivityFeatures(this);
         ARL.proximityEvents.createEvents(gameActivityFeatures.getRunLocalObject());
         setTheme(gameActivityFeatures.getTheme());
-        ARL.getDrawableUtil(gameActivityFeatures.getTheme(), this);
+        DrawableUtil drawableUtil = ARL.getDrawableUtil(gameActivityFeatures.getTheme(), this);
+
         setContentView(R.layout.game_list_messages);
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-            getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
-            getActionBar().setHomeButtonEnabled(true);
-        }
+
+        boolean enabled =ARL.config.getBooleanProperty("game_messages_show_home");
+        if (android.os.Build.VERSION.SDK_INT >= 11)  getActionBar().setHomeButtonEnabled(enabled);
+                getActionBar().setDisplayShowHomeEnabled(enabled);
+                getActionBar().setDisplayShowTitleEnabled(enabled);
+                if (ARL.config.isGameMessagesActionBarTransparent()){
+                    if (ARL.config.getGameMessagesActionBarTransparency()==ARL.config.TRANSPARENT){
+                        getActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    }
+                    if (ARL.config.getGameMessagesActionBarTransparency()==ARL.config.HALF){
+                        getActionBar().setBackgroundDrawable(drawableUtil.getBackgroundDarkGradientTransparancy());
+                    }
+                } else {
+                    getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+                }
+
 
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
         Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
@@ -72,6 +92,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 
 
     }
+
 
     private void createVisibilityStatement (long visibility) {
         GeneralItemVisibilityLocalObject visibilityLocalObject = new GeneralItemVisibilityLocalObject();
@@ -89,38 +110,23 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     protected void onResume() {
         super.onResume();
         ARL.eventBus.register(this);
-        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+        if (menu!=null) actionBarMenuController.updateScore(menu);
+        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId(),  ARL.config.getProperty("message_view_messages").equals("messages_only"));
         gameActivityFeatures.checkRunDeleted(this);
         setListAdapter(adapter);
         adapter.setOnListItemClickCallback(this);
         ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
         ARL.generalItemVisibility.calculateVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+        ARL.generalItemVisibility.calculateInVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+        ARL.generalItemVisibility.syncGeneralItemVisibilities(gameActivityFeatures.getRunLocalObject());
+
         GeneralItemBecameVisibleEvent event = (GeneralItemBecameVisibleEvent) ARL.eventBus.removeStickyEvent(GeneralItemBecameVisibleEvent.class);
         if (event !=null) onEventMainThread(event);
     }
 
     public void onEventMainThread(final GeneralItemBecameVisibleEvent event) {
-//        ARL.eventBus.removeStickyEvent(event);
-//        System.out.println("LOG onEventMainThread "+System.currentTimeMillis());
-//        if (event.isAutoLaunch()) {
-//            Intent intent = new Intent(this, GeneralItemActivity.class);
-//            gameActivityFeatures.addMetadataToIntent(intent);
-//            intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
-//            startActivity(intent);
-//        } else
-//        if (event.isShowStroken()) {
-//            gameActivityFeatures.showStrokenNotification(new NotificationAction() {
-//                @Override
-//                public void onOpen() {
-//
-//                    Intent intent = new Intent(GameMessages.this, GeneralItemActivity.class);
-//                    gameActivityFeatures.addMetadataToIntent(intent);
-//                    intent.putExtra(GeneralItemLocalObject.class.getName(), event.getGeneralItemId());
-//                    startActivity(intent);
-//                }
-//            });
-//        }
         event.processEvent(gameActivityFeatures, this, null);
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 
     public void onEventMainThread(RunEvent runEvent) {
@@ -132,7 +138,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         actionBarMenuController.inflateMenu(menu);
-
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -161,13 +167,6 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         return false;
     }
 
-
-    class AnimationRunnable implements Runnable {
-        public void run() {
-//            gameActivityFeatures.showStrokenNotification();
-            gameActivityFeatures.showAlertViewNotification();
-        }
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

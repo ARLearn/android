@@ -124,4 +124,23 @@
         <item name="textInactive">#b8b8b8</item>
         <item name="transparency">#99000000</item>
         </style>
+
+    <style name="ARLearn.Theme6" parent="Theme.Sherlock">
+        <item name="primaryColor">#faaf1e</item>
+        <item name="primaryColorLight">#f9c45d</item>
+        <item name="primaryColorDark">#d2931a</item>
+        <item name="primaryColorHighlight">#ffffff</item>
+        <item name="highlightColor">#ffffff</item>
+        <item name="buttonColor">#fa1e75</item>
+        <item name="buttonAlternativeColor">#fa1e75</item>
+        <item name="backgroundColor">#4580b1</item>
+        <item name="backgroundColorLight">#5f97c9</item>
+        <item name="backgroundColorDark">#3c6fa3</item>
+        <item name="text">#ffffff</item>
+        <item name="textLight">#ffffff</item>
+        <item name="textDark">#faaf1e</item>
+        <item name="textInactive">#3c6fa3</item>
+        <item name="transparency">#99000000</item>
+    </style>
+
 </resources>

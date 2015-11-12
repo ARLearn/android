@@ -65,6 +65,7 @@ public class ProximityEventDelegator {
 
     public synchronized void onEventAsync(CreateProximityEvents createProximityEvents) {
         ProximityFilter filter = new ProximityFilter();
+        if (createProximityEvents != null && createProximityEvents.getRunLocalObject()!= null && createProximityEvents.getRunLocalObject().getGameLocalObject()!= null)
         for (GeneralItemLocalObject generalItemLocalObject: createProximityEvents.getRunLocalObject().getGameLocalObject().getGeneralItems()) {
             if (generalItemLocalObject.getDependencyLocalObject() != null) {
                 if (!generalItemLocalObject.getDeleted())

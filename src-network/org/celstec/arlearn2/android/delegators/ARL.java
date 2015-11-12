@@ -9,11 +9,14 @@ import de.greenrobot.event.EventBus;
 import org.celstec.arlearn2.android.broadcast.ProximityIntentReceiver;
 import org.celstec.arlearn2.android.db.ConfigAdapter;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
+import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
 //import org.celstec.arlearn2.android.views.StyleUtil;
 import org.celstec.arlearn2.android.gcm.NotificationListenerInterface;
 import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.arlearn2.android.whitelabel.SplashScreen;
 import org.celstec.arlearn2.client.GenericClient;
+import org.celstec.dao.gen.GameLocalObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -108,6 +111,13 @@ public class ARL {
         }
         return drawableUtil;
     }
+
+    public static DrawableUtil getDrawableUtil(long gameId, Context context) {
+        GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        int theme = GameActivityFeatures.getTheme(gameLocalObject.getGameBean());
+        return getDrawableUtil(theme, context);
+    }
+
 
     public static boolean isInit() {
         return !(ARL.ctx == null);

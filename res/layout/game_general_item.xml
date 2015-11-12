@@ -7,7 +7,7 @@
 <LinearLayout
 
               android:orientation="vertical"
-              android:layout_width="match_parent"
+              android:layout_width="fill_parent"
               android:background="?attr/backgroundColorLight"
               android:paddingTop="60dip"
               android:layout_height="match_parent">
@@ -30,6 +30,41 @@
             style="@style/ARLearn.Game.GeneralItemActivity.TitleTextView"
             />
 
+    <org.celstec.arlearn2.android.views.MyVideoView
+            android:id="@+id/videoView"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+
+    <LinearLayout
+            android:id="@+id/mediaBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
+
+
+        <ImageView
+                android:id="@+id/playPauseButton"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_alignTop="@+id/imageButton3"
+
+                android:layout_toRightOf="@+id/imageButton3"
+
+                android:layout_margin="10dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_play_black" />
+        <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:progressDrawable="@drawable/game_general_item_seekbar_progress_theme1"
+                android:thumb="@drawable/game_general_item_seekbar_thumb_theme1"
+                />
+    </LinearLayout>
     <WebView
             android:id="@+id/descriptionId"
             android:background="@android:color/transparent"
@@ -71,40 +106,7 @@
             />
 
 
-        <org.celstec.arlearn2.android.views.MyVideoView android:id="@+id/videoView"
-                                                        android:layout_gravity="center_horizontal"
-                   android:layout_width="fill_parent"
-                   android:layout_height="wrap_content"/>
 
-
-    <LinearLayout
-            android:id="@+id/mediaBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
-
-
-        <ImageView
-                android:id="@+id/playPauseButton"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_alignTop="@+id/imageButton3"
-
-                android:layout_toRightOf="@+id/imageButton3"
-
-                android:layout_margin="10dip"
-                android:scaleType="fitXY"
-                android:src="@drawable/btn_play_black" />
-        <SeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="center_vertical"
-                 android:progressDrawable="@drawable/game_general_item_seekbar_progress_theme1"
-                 android:thumb="@drawable/game_general_item_seekbar_thumb_theme1"
-                />
-    </LinearLayout>
 
 
 

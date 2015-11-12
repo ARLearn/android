@@ -26,8 +26,11 @@ public class GeneralItemLocalObject {
     private String bean;
     private Boolean autoLaunch;
     private Long lastModificationDate;
+    private Double lat;
+    private Double lng;
     private long gameId;
     private Long dependsOn;
+    private Long disappearAt;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -40,6 +43,9 @@ public class GeneralItemLocalObject {
 
     private DependencyLocalObject dependencyLocalObject;
     private Long dependencyLocalObject__resolvedKey;
+
+    private DependencyDisappearLocalObject dependencyDisappearLocalObject;
+    private Long dependencyDisappearLocalObject__resolvedKey;
 
     private List<GameFileLocalObject> generalItemFiles;
     private List<GeneralItemMediaLocalObject> generalItemMedia;
@@ -59,7 +65,7 @@ public class GeneralItemLocalObject {
         this.id = id;
     }
 
-    public GeneralItemLocalObject(Long id, String type, Boolean deleted, String title, String description, String bean, Boolean autoLaunch, Long lastModificationDate, long gameId, Long dependsOn) {
+    public GeneralItemLocalObject(Long id, String type, Boolean deleted, String title, String description, String bean, Boolean autoLaunch, Long lastModificationDate, Double lat, Double lng, long gameId, Long dependsOn, Long disappearAt) {
         this.id = id;
         this.type = type;
         this.deleted = deleted;
@@ -68,8 +74,11 @@ public class GeneralItemLocalObject {
         this.bean = bean;
         this.autoLaunch = autoLaunch;
         this.lastModificationDate = lastModificationDate;
+        this.lat = lat;
+        this.lng = lng;
         this.gameId = gameId;
         this.dependsOn = dependsOn;
+        this.disappearAt = disappearAt;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -142,6 +151,22 @@ public class GeneralItemLocalObject {
         this.lastModificationDate = lastModificationDate;
     }
 
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
     public long getGameId() {
         return gameId;
     }
@@ -156,6 +181,14 @@ public class GeneralItemLocalObject {
 
     public void setDependsOn(Long dependsOn) {
         this.dependsOn = dependsOn;
+    }
+
+    public Long getDisappearAt() {
+        return disappearAt;
+    }
+
+    public void setDisappearAt(Long disappearAt) {
+        this.disappearAt = disappearAt;
     }
 
     /** To-one relationship, resolved on first access. */
@@ -208,6 +241,31 @@ public class GeneralItemLocalObject {
             this.dependencyLocalObject = dependencyLocalObject;
             dependsOn = dependencyLocalObject == null ? null : dependencyLocalObject.getId();
             dependencyLocalObject__resolvedKey = dependsOn;
+        }
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public DependencyDisappearLocalObject getDependencyDisappearLocalObject() {
+        Long __key = this.disappearAt;
+        if (dependencyDisappearLocalObject__resolvedKey == null || !dependencyDisappearLocalObject__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DependencyDisappearLocalObjectDao targetDao = daoSession.getDependencyDisappearLocalObjectDao();
+            DependencyDisappearLocalObject dependencyDisappearLocalObjectNew = targetDao.load(__key);
+            synchronized (this) {
+                dependencyDisappearLocalObject = dependencyDisappearLocalObjectNew;
+            	dependencyDisappearLocalObject__resolvedKey = __key;
+            }
+        }
+        return dependencyDisappearLocalObject;
+    }
+
+    public void setDependencyDisappearLocalObject(DependencyDisappearLocalObject dependencyDisappearLocalObject) {
+        synchronized (this) {
+            this.dependencyDisappearLocalObject = dependencyDisappearLocalObject;
+            disappearAt = dependencyDisappearLocalObject == null ? null : dependencyDisappearLocalObject.getId();
+            dependencyDisappearLocalObject__resolvedKey = disappearAt;
         }
     }
 

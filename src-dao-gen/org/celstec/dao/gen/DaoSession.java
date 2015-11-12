@@ -13,6 +13,7 @@ import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.GameContributorLocalObject;
 import org.celstec.dao.gen.DependencyLocalObject;
+import org.celstec.dao.gen.DependencyDisappearLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemMediaLocalObject;
@@ -36,6 +37,7 @@ import org.celstec.dao.gen.AccountLocalObjectDao;
 import org.celstec.dao.gen.GameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
+import org.celstec.dao.gen.DependencyDisappearLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
 import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemMediaLocalObjectDao;
@@ -68,6 +70,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig gameLocalObjectDaoConfig;
     private final DaoConfig gameContributorLocalObjectDaoConfig;
     private final DaoConfig dependencyLocalObjectDaoConfig;
+    private final DaoConfig dependencyDisappearLocalObjectDaoConfig;
     private final DaoConfig generalItemLocalObjectDaoConfig;
     private final DaoConfig gameFileLocalObjectDaoConfig;
     private final DaoConfig generalItemMediaLocalObjectDaoConfig;
@@ -91,6 +94,7 @@ public class DaoSession extends AbstractDaoSession {
     private final GameLocalObjectDao gameLocalObjectDao;
     private final GameContributorLocalObjectDao gameContributorLocalObjectDao;
     private final DependencyLocalObjectDao dependencyLocalObjectDao;
+    private final DependencyDisappearLocalObjectDao dependencyDisappearLocalObjectDao;
     private final GeneralItemLocalObjectDao generalItemLocalObjectDao;
     private final GameFileLocalObjectDao gameFileLocalObjectDao;
     private final GeneralItemMediaLocalObjectDao generalItemMediaLocalObjectDao;
@@ -125,6 +129,9 @@ public class DaoSession extends AbstractDaoSession {
 
         dependencyLocalObjectDaoConfig = daoConfigMap.get(DependencyLocalObjectDao.class).clone();
         dependencyLocalObjectDaoConfig.initIdentityScope(type);
+
+        dependencyDisappearLocalObjectDaoConfig = daoConfigMap.get(DependencyDisappearLocalObjectDao.class).clone();
+        dependencyDisappearLocalObjectDaoConfig.initIdentityScope(type);
 
         generalItemLocalObjectDaoConfig = daoConfigMap.get(GeneralItemLocalObjectDao.class).clone();
         generalItemLocalObjectDaoConfig.initIdentityScope(type);
@@ -184,6 +191,7 @@ public class DaoSession extends AbstractDaoSession {
         gameLocalObjectDao = new GameLocalObjectDao(gameLocalObjectDaoConfig, this);
         gameContributorLocalObjectDao = new GameContributorLocalObjectDao(gameContributorLocalObjectDaoConfig, this);
         dependencyLocalObjectDao = new DependencyLocalObjectDao(dependencyLocalObjectDaoConfig, this);
+        dependencyDisappearLocalObjectDao = new DependencyDisappearLocalObjectDao(dependencyDisappearLocalObjectDaoConfig, this);
         generalItemLocalObjectDao = new GeneralItemLocalObjectDao(generalItemLocalObjectDaoConfig, this);
         gameFileLocalObjectDao = new GameFileLocalObjectDao(gameFileLocalObjectDaoConfig, this);
         generalItemMediaLocalObjectDao = new GeneralItemMediaLocalObjectDao(generalItemMediaLocalObjectDaoConfig, this);
@@ -207,6 +215,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(GameLocalObject.class, gameLocalObjectDao);
         registerDao(GameContributorLocalObject.class, gameContributorLocalObjectDao);
         registerDao(DependencyLocalObject.class, dependencyLocalObjectDao);
+        registerDao(DependencyDisappearLocalObject.class, dependencyDisappearLocalObjectDao);
         registerDao(GeneralItemLocalObject.class, generalItemLocalObjectDao);
         registerDao(GameFileLocalObject.class, gameFileLocalObjectDao);
         registerDao(GeneralItemMediaLocalObject.class, generalItemMediaLocalObjectDao);
@@ -232,6 +241,7 @@ public class DaoSession extends AbstractDaoSession {
         gameLocalObjectDaoConfig.getIdentityScope().clear();
         gameContributorLocalObjectDaoConfig.getIdentityScope().clear();
         dependencyLocalObjectDaoConfig.getIdentityScope().clear();
+        dependencyDisappearLocalObjectDaoConfig.getIdentityScope().clear();
         generalItemLocalObjectDaoConfig.getIdentityScope().clear();
         gameFileLocalObjectDaoConfig.getIdentityScope().clear();
         generalItemMediaLocalObjectDaoConfig.getIdentityScope().clear();
@@ -266,6 +276,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public DependencyLocalObjectDao getDependencyLocalObjectDao() {
         return dependencyLocalObjectDao;
+    }
+
+    public DependencyDisappearLocalObjectDao getDependencyDisappearLocalObjectDao() {
+        return dependencyDisappearLocalObjectDao;
     }
 
     public GeneralItemLocalObjectDao getGeneralItemLocalObjectDao() {

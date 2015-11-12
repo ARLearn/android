@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.db.ConfigAdapter;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
 import org.celstec.arlearn2.android.delegators.ResponseDelegator;
@@ -17,6 +18,7 @@ import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.util.DrawableUtil;
+import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.arlearn2.beans.generalItem.SingleChoiceTest;
@@ -69,6 +71,8 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
 
     public void setMetadata(){
         super.setMetadata();
+
+
         WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
         webView.setBackgroundColor(0x00000000);
         setRichText(webView);
@@ -83,7 +87,21 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
     }
 
     protected void setRichText(WebView webView, String richText, List<MultipleChoiceAnswerItem> answers){
-        webView.loadDataWithBaseURL("file:///android_res/raw/", richText, "text/html", "UTF-8", null);
+        String baseUrl = "";
+        if (ARL.config.getBooleanProperty("white_label") && !ARL.config.getBooleanProperty("white_label_online_sync")) {
+            baseUrl = "file:///android_res/raw/";
+        } else {
+            baseUrl = "file://"+ MediaFolders.getIncommingFilesDir().getParent().toString()+"/";
+        }
+        String prefix = ARL.config.getProperty("message_html_prefix");
+        String postfix = ARL.config.getProperty("message_html_postfix");
+        if (prefix == null){
+            prefix = "";
+        }
+        if (postfix == null){
+            postfix = "";
+        }
+        webView.loadDataWithBaseURL(baseUrl, prefix+richText+postfix, "text/html", "UTF-8", null);
         LinearLayout linearLayout = (LinearLayout) this.activity.findViewById(R.id.multipleChoice);
         linearLayout.setVisibility(View.VISIBLE);
         boolean first = true;
@@ -191,9 +209,19 @@ public class SingleChoiceFeatures extends GeneralItemActivityFeatures{
     protected void createAnswerResultAction(boolean correct){
         Action action = new Action();
         action.setAction("answer_" + (correct ? "correct" : "wrong"));
+        long runId = activity.getGameActivityFeatures().getRunId();
         action.setRunId(activity.getGameActivityFeatures().getRunId());
         action.setGeneralItemType(generalItemLocalObject.getGeneralItemBean().getType());
         action.setGeneralItemId(generalItemLocalObject.getId());
+        if (ARL.config.getBooleanProperty("show_score")){
+            if (!correct) {
+                ARL.properties.setScore(runId, ARL.properties.getScore(runId) - 1);
+            }else {
+                if (ActionsDelegator.getInstance().actionDoesNotExist(runId, generalItemLocalObject.getId(), action.getAction(), ARL.accounts.getLoggedInAccount())){
+                    ARL.properties.setScore(runId, ARL.properties.getScore(runId) + 2);
+                }
+            }
+        }
         ActionsDelegator.getInstance().createAction(action);
     }
 

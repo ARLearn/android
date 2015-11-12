@@ -65,7 +65,7 @@ public class GameActivityFeatures {
         alertView = new AlertView(activity) {
             @Override
             public void onClickOpen() {
-
+                onClickAlert();
             }
 
 
@@ -85,13 +85,13 @@ public class GameActivityFeatures {
         return runLocalObject.getId();
     }
 
-    public void showStrokenNotification() {
-        strokenView.slideIn();
-    }
+//    public void showStrokenNotification() {
+//        strokenView.slideIn();
+//    }
 
-    public void showStrokenNotification(NotificationAction action) {
+    public void showStrokenNotification(NotificationAction action, String message, String readMessage){
         this.action = action;
-        strokenView.slideIn();
+        strokenView.slideIn(message, readMessage);
     }
 
     NotificationAction action;
@@ -104,8 +104,17 @@ public class GameActivityFeatures {
         strokenView.slideOut();
     }
 
-    public void showAlertViewNotification(){
-        alertView.show("Hier komt de bericht tekst...");
+    private void onClickAlert() {
+        if (action != null) {
+            action.onOpen();
+
+        }
+        alertView.dismiss();
+    }
+
+    public void showAlertViewNotification(NotificationAction action, String message, String readMessage){
+        this.action = action;
+        alertView.show(message, readMessage);
     }
 
 
@@ -141,6 +150,8 @@ public class GameActivityFeatures {
                 return R.style.ARLearn_schema4;
             case 5:
                 return R.style.ARLearn_schema5;
+            case 6:
+                return R.style.ARLearn_schema6;
         }
         return R.style.ARLearn_schema1;
     }
@@ -152,4 +163,5 @@ public class GameActivityFeatures {
         }
 
     }
+
 }

@@ -55,15 +55,30 @@ public class ActionsDelegator extends AbstractDelegator {
     */
 
     public void issueAction(int action, Long runId, Long generalItemId, String generalItemType) {
-        Action actionBean = new Action();
+//        Action actionBean = new Action();
         switch (action) {
             case READ:
-                actionBean.setAction("read");
+                issueAction("read", runId, generalItemId,generalItemType);
+//                actionBean.setAction("read");
                 break;
             default:
                 break;
         }
-        System.out.println("test account "+ARL.accounts.getLoggedInAccount());
+//        System.out.println("test account "+ARL.accounts.getLoggedInAccount());
+//        if (actionDoesNotExist(runId, actionBean.getAction(), generalItemId, generalItemType, ARL.accounts.getLoggedInAccount())) {
+//            actionBean.setGeneralItemType(generalItemType);
+//            actionBean.setGeneralItemId(generalItemId);
+//            actionBean.setRunId(runId);
+//            actionBean.setTime(ARL.time.getServerTime());
+//            actionBean.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
+//            ARL.actions.createAction(actionBean);
+//        }
+
+    }
+
+    public void issueAction(String action, Long runId, Long generalItemId, String generalItemType) {
+        Action actionBean = new Action();
+        actionBean.setAction(action);
         if (actionDoesNotExist(runId, actionBean.getAction(), generalItemId, generalItemType, ARL.accounts.getLoggedInAccount())) {
             actionBean.setGeneralItemType(generalItemType);
             actionBean.setGeneralItemId(generalItemId);
@@ -74,7 +89,6 @@ public class ActionsDelegator extends AbstractDelegator {
         }
 
     }
-
 
 
     public void createAction(long runId, String action) {
@@ -98,7 +112,7 @@ public class ActionsDelegator extends AbstractDelegator {
         return queryBuilder.count() == 0;
     }
 
-    private boolean actionDoesNotExist(long runId, String action, AccountLocalObject account) {
+    public boolean actionDoesNotExist(long runId, String action, AccountLocalObject account) {
         ActionLocalObjectDao dao = DaoConfiguration.getInstance().getActionLocalObjectDao();
         QueryBuilder<ActionLocalObject> queryBuilder = dao.queryBuilder();
         queryBuilder.where(
@@ -107,6 +121,21 @@ public class ActionsDelegator extends AbstractDelegator {
                                 ActionLocalObjectDao.Properties.Action.eq(action)),
                         ActionLocalObjectDao.Properties.Account.eq(account.getId())
                 )
+        );
+        return queryBuilder.count() == 0;
+    }
+
+    public boolean actionDoesNotExist(long runId, long generalItemId, String action, AccountLocalObject account) {
+        ActionLocalObjectDao dao = DaoConfiguration.getInstance().getActionLocalObjectDao();
+        QueryBuilder<ActionLocalObject> queryBuilder = dao.queryBuilder();
+        queryBuilder.where(
+                queryBuilder.and(
+                        queryBuilder.and(
+                                queryBuilder.and(ActionLocalObjectDao.Properties.RunId.eq(runId),
+                                        ActionLocalObjectDao.Properties.Action.eq(action)),
+                                        ActionLocalObjectDao.Properties.GeneralItem.eq(generalItemId)),
+                                ActionLocalObjectDao.Properties.Account.eq(account.getId())
+                        )
         );
         return queryBuilder.count() == 0;
     }
@@ -168,12 +197,14 @@ public class ActionsDelegator extends AbstractDelegator {
     }
 
     public void onEventAsync(DownloadActions downloadActions) {
+        if (!ARL.config.getBooleanProperty("white_label_online")) return;
         String token = returnTokenIfOnline();
-        if (token != null) {
-            ActionList list = ActionClient.getActionClient().getRunActions(token, downloadActions.getRunId(), 0l, null);
+        String user = ARL.accounts.getLoggedInAccount().getFullId();
+        if (token != null && user != null) {
+            ActionList list = ActionClient.getActionClient().getRunActions(token, user, downloadActions.getRunId(), 0l, null);
             storeActionsInLocalDatabase(list);
             while (list.getResumptionToken()!= null) {
-                list = ActionClient.getActionClient().getRunActions(token, downloadActions.getRunId(), 0l, list.getResumptionToken());
+                list = ActionClient.getActionClient().getRunActions(token, user, downloadActions.getRunId(), 0l, list.getResumptionToken());
                 storeActionsInLocalDatabase(list);
             }
         }

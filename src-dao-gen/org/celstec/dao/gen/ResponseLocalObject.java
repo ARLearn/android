@@ -31,6 +31,7 @@ public class ResponseLocalObject {
     private Long nextSynchronisationTime;
     private Integer amountOfSynchronisationAttempts;
     private Long timeStamp;
+    private Long lastModificationDate;
     private Integer width;
     private Integer height;
     private Double lat;
@@ -62,7 +63,7 @@ public class ResponseLocalObject {
         this.id = id;
     }
 
-    public ResponseLocalObject(Long id, Integer type, String contentType, String UriAsString, String ThumbnailUriAsString, String value, Boolean isSynchronized, Boolean revoked, Long nextSynchronisationTime, Integer amountOfSynchronisationAttempts, Long timeStamp, Integer width, Integer height, Double lat, Double lng, long runId, long generalItem, Long account) {
+    public ResponseLocalObject(Long id, Integer type, String contentType, String UriAsString, String ThumbnailUriAsString, String value, Boolean isSynchronized, Boolean revoked, Long nextSynchronisationTime, Integer amountOfSynchronisationAttempts, Long timeStamp, Long lastModificationDate, Integer width, Integer height, Double lat, Double lng, long runId, long generalItem, Long account) {
         this.id = id;
         this.type = type;
         this.contentType = contentType;
@@ -74,6 +75,7 @@ public class ResponseLocalObject {
         this.nextSynchronisationTime = nextSynchronisationTime;
         this.amountOfSynchronisationAttempts = amountOfSynchronisationAttempts;
         this.timeStamp = timeStamp;
+        this.lastModificationDate = lastModificationDate;
         this.width = width;
         this.height = height;
         this.lat = lat;
@@ -175,6 +177,14 @@ public class ResponseLocalObject {
 
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public Long getLastModificationDate() {
+        return lastModificationDate;
+    }
+
+    public void setLastModificationDate(Long lastModificationDate) {
+        this.lastModificationDate = lastModificationDate;
     }
 
     public Integer getWidth() {

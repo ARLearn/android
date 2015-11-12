@@ -3,6 +3,7 @@ package org.celstec.arlearn2.android.game;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Environment;
 import android.view.View;
 import daoBase.DaoConfiguration;
 import de.greenrobot.dao.internal.DaoConfig;
@@ -13,13 +14,15 @@ import org.celstec.arlearn2.android.delegators.GameDelegator;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager2;
 import org.celstec.arlearn2.android.views.DownloadViewManager;
+import org.celstec.arlearn2.beans.game.Config;
 import org.celstec.dao.gen.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
  * ****************************************************************************
@@ -98,8 +101,9 @@ public class InitWhiteLabelDatabase {
                 loadGameScript();
                 loadGameFiles();
                 loadRunScript();
-                createDefaultAccount();
+                if (!ARL.config.getBooleanProperty("show_anonymous_registration")) createDefaultAccount();
                 createMaps();
+                unpackTileSources();
                 ARL.eventBus.post(new SyncReady(true));
             }
 
@@ -111,7 +115,111 @@ public class InitWhiteLabelDatabase {
         ARL.eventBus.unregister(this);
     }
 
-    private void createMaps() {
+    private void unpackTileSources() {
+        if (gameId != null) {
+            unpackTileSources(gameId);
+        } else {
+            for (Long gameIdLong:gameIdsLong) {
+                unpackTileSources(gameIdLong);
+            }
+        }
+    }
+
+    private static final int BUFFER_SIZE = 4096;
+
+    private void unpackTileSources(long gameId) {
+        Config config = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getGameBean().getConfig();
+        if (config.getTileSource()!= null) {
+            System.out.println("unpacking tiles");
+            File zipFilePath = GameFileLocalObject.getGameFileLocalObject(gameId, "/"+config.getTileSource()).getLocalFile();
+            String destDirectory = Environment.getExternalStorageDirectory()+"/osmdroid";
+            if (!new File(destDirectory).exists()) {
+                new File(destDirectory).mkdir();
+            }
+            destDirectory += "/tiles";
+            if (!new File(destDirectory).exists()) {
+                new File(destDirectory).mkdir();
+            }
+            try {
+                extractFolder(zipFilePath.getAbsolutePath(), destDirectory);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            File destDir = new File(Environment.getExternalStorageDirectory()+"/osmdroid");
+//            if (!destDir.exists()) {
+//                destDir.mkdir();
+//            }
+//            ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+//            ZipEntry entry = zipIn.getNextEntry();
+//            // iterates over entries in the zip file
+//            while (entry != null) {
+//                String filePath = destDirectory + File.separator + entry.getName();
+//                if (!entry.isDirectory()) {
+//                    // if the entry is a file, extracts it
+//                    extractFile(zipIn, filePath);
+//                } else {
+//                    // if the entry is a directory, make the directory
+//                    File dir = new File(filePath);
+//                    dir.mkdir();
+//                }
+//                zipIn.closeEntry();
+//                entry = zipIn.getNextEntry();
+//            }
+//            zipIn.close();
+        }
+    }
+
+
+    static public void extractFolder(String zipFile, String newPath) throws ZipException, IOException
+    {
+        System.out.println(zipFile);
+        int BUFFER = 2048;
+        File file = new File(zipFile);
+
+        ZipFile zip = new ZipFile(file);
+
+        new File(newPath).mkdir();
+        Enumeration zipFileEntries = zip.entries();
+
+        // Process each entry
+        while (zipFileEntries.hasMoreElements())
+        {
+            // grab a zip file entry
+            ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
+            String currentEntry = entry.getName();
+            File destFile = new File(newPath, currentEntry);
+            //destFile = new File(newPath, destFile.getName());
+            File destinationParent = destFile.getParentFile();
+
+            // create the parent directory structure if needed
+            destinationParent.mkdirs();
+
+            if (!entry.isDirectory())
+            {
+                BufferedInputStream is = new BufferedInputStream(zip
+                        .getInputStream(entry));
+                int currentByte;
+                // establish buffer for writing file
+                byte data[] = new byte[BUFFER];
+
+                // write the current file to disk
+                FileOutputStream fos = new FileOutputStream(destFile);
+                BufferedOutputStream dest = new BufferedOutputStream(fos,
+                        BUFFER);
+
+                // read and write until last byte is encountered
+                while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+                    dest.write(data, 0, currentByte);
+                }
+                dest.flush();
+                dest.close();
+                is.close();
+            }
+        }
+    }
+
+
+        private void createMaps() {
         if (ARL.config.getProperty("white_label_map_file")!= null) {
             String filename = ARL.config.getProperty("white_label_map_file");
             AssetManager assetManager = context.getAssets();
@@ -178,7 +286,7 @@ public class InitWhiteLabelDatabase {
 
     private void loadRunScript() {
         if (!ARL.config.getBooleanProperty("white_label_login")) {
-
+            if (!ARL.config.getBooleanProperty("show_anonymous_registration"))
             for (GameLocalObject gameLocalObject : DaoConfiguration.getInstance().getGameLocalObjectDao().loadAll()) {
                 RunLocalObject runLocalObject = new RunLocalObject();
                 runLocalObject.setGameId(gameLocalObject.getId());

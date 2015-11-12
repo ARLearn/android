@@ -1,10 +1,10 @@
 package org.celstec.arlearn2.android.game.generalItem;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -24,6 +24,7 @@ import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.beans.generalItem.*;
 import org.celstec.arlearn2.beans.run.Action;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
 
 /**
@@ -97,6 +98,7 @@ public abstract class GeneralItemActivityFeatures {
                 result =new PureAudioActivityFeatures(activity, generalItemLocalObject);
                 break;
             case GeneralItemMapper.VIDEO_OBJECT:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 result =new VideoObjectFeatures(activity, generalItemLocalObject);
                 break;
         }
@@ -234,7 +236,12 @@ public abstract class GeneralItemActivityFeatures {
     protected void initiateIcon(){
         TypedArray ta =  activity.obtainStyledAttributes(activity.getGameActivityFeatures().getTheme(), new int[]{R.attr.primaryColor});
         ColorFilter filter = new LightingColorFilter( Color.BLACK, ta.getColor(0, Color.BLACK));
+        Bitmap icon = GameFileLocalObject.getBitmap(ARL.ctx, generalItemBean.getGameId(), "/generalItems/" + generalItemBean.getId() + "/icon");
         Drawable iconDrawable = activity.getResources().getDrawable(getImageResource()).mutate();
+        if (icon != null) {
+            iconDrawable = new BitmapDrawable(icon);
+        }
+
         iconDrawable.setColorFilter(filter);
         ((ImageView)this.activity.findViewById(R.id.generalItemIcon)).setImageDrawable(iconDrawable);
     }
@@ -284,5 +291,11 @@ public abstract class GeneralItemActivityFeatures {
         return true;
     }
 
+
+    public void setLandscape() {
+    }
+
+    public void setPortrait() {
+    }
 
 }

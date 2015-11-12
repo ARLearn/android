@@ -120,6 +120,10 @@ public class DaoConfiguration {
         return session.getDependencyLocalObjectDao();
     }
 
+    public DependencyDisappearLocalObjectDao getDependencyDisappearLocalObjectDao() {
+        return session.getDependencyDisappearLocalObjectDao();
+    }
+
     public CategoryLocalObjectDao getCategoryLocalObjectDao() {
         return session.getCategoryLocalObjectDao();
     }

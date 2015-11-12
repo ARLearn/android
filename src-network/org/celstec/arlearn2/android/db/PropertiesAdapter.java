@@ -128,7 +128,7 @@ public class PropertiesAdapter {
     }
 
     public Long getRunStart(long id) {
-        return getDefaultPrefs().getLong(Constants.RUN+id, 0);
+        return getDefaultPrefs().getLong(Constants.RUN + id, 0);
     }
 
     public void setRunStart(long id, long time) {
@@ -208,7 +208,7 @@ public class PropertiesAdapter {
 
     public void setGeneralItemsLastSynchronizationDate(long time, long gameId) {
         SharedPreferences.Editor editor = getDefaultPrefs().edit();
-        editor.putLong(Constants.GI_LAST_SYNC_DATE+gameId, time);
+        editor.putLong(Constants.GI_LAST_SYNC_DATE + gameId, time);
         editor.commit();
     }
 
@@ -301,5 +301,20 @@ public class PropertiesAdapter {
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
+    }
+
+    public void setScore(long runId, int score) {
+        SharedPreferences.Editor editor = getDefaultPrefs().edit();
+        editor.putInt("score_"+runId, score);
+        editor.commit();
+    }
+
+    public int getScore(long runId) {
+        return getDefaultPrefs().getInt("score_"+runId, 0);
+
+    }
+
+    public boolean hasScore(long runId) {
+        return getDefaultPrefs().contains("score_"+runId);
     }
 }

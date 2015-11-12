@@ -1,24 +1,33 @@
 package org.celstec.arlearn2.android.delegators;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import org.celstec.arlearn2.android.util.GPSUtils;
+import org.celstec.arlearn2.android.util.MediaFolders;
+import org.celstec.arlearn2.beans.game.Config;
+import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.IRegisterReceiver;
+import org.osmdroid.tileprovider.MapTileProviderArray;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.modules.*;
-import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
+import org.osmdroid.tileprovider.tilesource.*;
+import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * ****************************************************************************
@@ -68,17 +77,41 @@ public class MapContext implements LocationListener {
 //        mapView.getController().animateTo(ARL.mapContext.getLocation());
         mapView.getController().setCenter(ARL.mapContext.getLocation());
         mapView.getController().setZoom(zoom);
-        mapView.setMaxZoomLevel(19);
 
-// Create an archive file modular tile provider
-//        GEMFFileArchive gemfFileArchive = GEMFFileArchive.getGEMFFileArchive(new File("")); // Requires try/catch
-//        MapTileFileArchiveProvider fileArchiveProvider = new MapTileFileArchiveProvider(registerReceiver, tileSource, new IArchiveFile[] { gemfFileArchive });
-
-//        MapTileProviderBasic myTileProviderBasic = new MapTileProviderBasic(ARL.getContext());
-//        mapView.setTileSource(myTileProviderBasic);
+//        mapView.getTileProvider().rescaleCache(zoom, zoom, mapView.getScreenRect(null));
 
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
+
+//        mapView.setTileSource(TileSourceFactory.MAPNIK);
+
+    }
+
+    public void applyContext(MapView mapView, Config config) {
+        applyContext(mapView);
+        if (config.getTileSource() != null) {
+            final Context applicationContext = ARL.ctx.getApplicationContext();
+            final IRegisterReceiver registerReceiver = new SimpleRegisterReceiver(applicationContext);
+
+            final ITileSource tileSource = new XYTileSource(config.getTileSource(), ResourceProxy.string.mapnik, config.getMinZoomLevel(), config.getMaxZoomLevel(), 512, ".png", new String[]{});
+
+
+
+            final MapTileProviderArray tileProviderArray = new MapTileProviderArray(tileSource, registerReceiver, new MapTileModuleProviderBase[]{});
+            tileProviderArray.setUseDataConnection(false);
+
+            mapView.setTileSource(tileSource);
+            mapView.setUseDataConnection(false);
+            if (config.getBoundingBoxWest()!=null && config.getBoundingBoxSouth()!=null && config.getBoundingBoxEast()!=null&&config.getBoundingBoxNorth()!=null) {
+                BoundingBoxE6 boundingBoxE6 = new BoundingBoxE6((int)(config.getBoundingBoxNorth() * 1E6),(int)(config.getBoundingBoxEast() * 1E6),(int)(config.getBoundingBoxSouth() * 1E6),(int)(config.getBoundingBoxWest() * 1E6));
+                mapView.setScrollableAreaLimit(boundingBoxE6);
+            }
+
+        }
+
+        mapView.setMaxZoomLevel(config.getMaxZoomLevel());
+        mapView.setMinZoomLevel(config.getMinZoomLevel());
+
     }
 
     public void saveContext(MapView mapView) {

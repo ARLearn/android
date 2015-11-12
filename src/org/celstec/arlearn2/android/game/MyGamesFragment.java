@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockListFragment;
+import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
@@ -49,6 +50,8 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
 
     @Override
     public void onResume() {
+//        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().deleteAll();
+//        DaoConfiguration.getInstance().getActionLocalObjectDao().deleteAll();
         super.onResume();
         if (android.os.Build.VERSION.SDK_INT >= 11) {
             getActivity().getActionBar().setIcon(R.drawable.ic_ab_back);

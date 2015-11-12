@@ -58,7 +58,7 @@
 
     <!--Notifications-->
     <string name="readMessage">Read Message</string>
-    <string name="closeMessage">Close Message</string>
+    <string name="closeMessage">Close window</string>
 
     <!--Network-->
     <string name="noInternet">No connection to the internet.</string>
@@ -80,7 +80,7 @@
     <string name="provideValue" >Provide a value</string>
 
     <!--Game Stroken-->
-    <string name="newMessage" >New message!</string>
+    <string name="newMessage" >New question!</string>
     <string name="Watch" >Watch</string>
 
     <!--General Item-->

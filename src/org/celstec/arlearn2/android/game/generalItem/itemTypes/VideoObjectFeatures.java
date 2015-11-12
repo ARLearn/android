@@ -119,6 +119,7 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
                 public void onPrepared(MediaPlayer mediaPlayer) {
 //                    GeneralItem bean = generalItemLocalObject.getGeneralItemBean();
 //                    System.out.println(bean.toString());
+
                     if (((VideoObject) generalItemLocalObject.getGeneralItemBean()).getAutoLaunch()) playPause();
 
                 }
@@ -211,5 +212,18 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
         ActionsDelegator.getInstance().createAction(action);
     }
 
+    public void setLandscape() {
+        activity.findViewById(R.id.titleId).setVisibility(View.GONE);
+        activity.findViewById(R.id.generalItemIcon).setVisibility(View.GONE);
+        activity.findViewById(R.id.descriptionId).setVisibility(View.GONE);
+        activity.getActionBar().hide();
+    }
+
+    public void setPortrait() {
+        activity.findViewById(R.id.titleId).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.generalItemIcon).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.descriptionId).setVisibility(View.VISIBLE);
+        activity.getActionBar().show();
+    }
 
 }

@@ -93,7 +93,7 @@ public class GeneralItemDelegator extends AbstractDelegator{
             if (list.getError()== null) {
                 process(list, DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId), true);
             } else {
-                Log.e("ARLearn", "error returning list of gis"+list.getError());
+                Log.e("ARLearn", "error returning list of gis" + list.getError());
             }
     }
 
@@ -145,6 +145,22 @@ public class GeneralItemDelegator extends AbstractDelegator{
                     }
                 }
 
+                if (giBean.getDisappearOn() != null) {
+                    if  (giDao.getDisappearAt() != null && !giDao.getDependencyDisappearLocalObject().recursiveEquals(giBean.getDisappearOn())) {
+                        giDao.getDependencyDisappearLocalObject().recursiveDelete();
+                        giDao.setDependencyDisappearLocalObject(null);
+                    }
+                    if (giDao.getDisappearAt() == null) {
+                        DependencyDisappearLocalObject disappearOn = DependencyDisappearLocalObject.createDependencyDisappearLocalObject(giBean.getDisappearOn());
+                        giDao.setDependencyDisappearLocalObject(disappearOn);
+                    }
+                } else {
+                    if (giDao.getDisappearAt()!=null){
+                        giDao.getDependencyDisappearLocalObject().recursiveDelete();
+                        giDao.setDependencyDisappearLocalObject(null);
+                    }
+                }
+
                 DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().insertOrReplace(giDao);
 
                 GiFileReferenceDelegator.getInstance().createReference(giBean, giDao);
@@ -177,6 +193,8 @@ public class GeneralItemDelegator extends AbstractDelegator{
         giDao.setBean(giBean.toString());
         giDao.setDeleted(giBean.getDeleted());
         giDao.setType(giBean.getType());
+        giDao.setLat(giBean.getLat());
+        giDao.setLng(giBean.getLng());
         return giDao;
     }
 

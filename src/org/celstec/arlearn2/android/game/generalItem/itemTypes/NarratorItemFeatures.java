@@ -1,5 +1,6 @@
 package org.celstec.arlearn2.android.game.generalItem.itemTypes;
 
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
@@ -8,6 +9,7 @@ import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivityFeatures;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
+import org.celstec.arlearn2.android.game.generalItem.NarratorItemJavascriptInterface;
 import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.generalItem.NarratorItem;
 import org.celstec.arlearn2.beans.generalItem.OpenQuestion;
@@ -74,7 +76,18 @@ public class NarratorItemFeatures extends GeneralItemActivityFeatures{
         } else {
             baseUrl = "file://"+MediaFolders.getIncommingFilesDir().getParent().toString()+"/";
         }
-        webView.loadDataWithBaseURL(baseUrl, ((NarratorItem) generalItemBean).getRichText(), "text/html", "UTF-8", null);
+        String prefix = ARL.config.getProperty("message_html_prefix");
+        String postfix = ARL.config.getProperty("message_html_postfix");
+        if (prefix == null){
+            prefix = "";
+        }
+        if (postfix == null){
+            postfix = "";
+        }
+        WebSettings ws = webView.getSettings();
+        ws.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new NarratorItemJavascriptInterface(((NarratorItem) generalItemBean), activity.getGameActivityFeatures().getRunId()), "arlearn");
+        webView.loadDataWithBaseURL(baseUrl, prefix+((NarratorItem) generalItemBean).getRichText()+postfix, "text/html", "UTF-8", null);
 
     }
 }

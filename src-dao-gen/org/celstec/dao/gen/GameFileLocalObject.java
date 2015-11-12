@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import daoBase.DaoConfiguration;
 
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.game.GameFile;
@@ -271,6 +273,25 @@ public class GameFileLocalObject {
             InputStream inputStream = ctx.getContentResolver().openInputStream(localObject.getLocalUri());
             return Drawable.createFromStream(inputStream, localObject.getLocalUri().toString());
         } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+
+    public static Bitmap getBitmap(Context ctx, Long gameId, String path){
+        try {
+            GameFileLocalObject localObject = GameFileLocalObject.getGameFileLocalObject(gameId, path);
+            if (localObject == null) return null;
+            return MediaStore.Images.Media.getBitmap(ctx.getContentResolver(), localObject.getLocalUri());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Bitmap getBitmap(Context ctx,GameFileLocalObject localObject){
+        try {
+            if (localObject == null) return null;
+            return MediaStore.Images.Media.getBitmap(ctx.getContentResolver(), localObject.getLocalUri());
+        } catch (Exception e) {
             return null;
         }
     }

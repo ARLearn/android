@@ -20,7 +20,7 @@
             android:src="@drawable/ic_stroken_alert_normal" />
 
     <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/strokenIcon"

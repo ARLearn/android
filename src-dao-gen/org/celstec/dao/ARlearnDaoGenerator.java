@@ -34,6 +34,7 @@ public class ARlearnDaoGenerator {
     private static Entity generalItem;
     private static Entity generalItemMediaObjects;
     private static Entity dependency;
+    private static Entity dependencyDis;
     private static Entity actionDependency;
     private static Entity andDependency;
     private static Entity orDependency;
@@ -65,6 +66,7 @@ public class ARlearnDaoGenerator {
 
         gameContributors = createGameContributor(schema);
         dependency = createDependency(schema);
+        dependencyDis = createDependencyDis(schema);
         generalItem = createGeneralItem(schema);
         gameFiles = createGameFiles(schema);
 
@@ -287,6 +289,7 @@ public class ARlearnDaoGenerator {
         response.addLongProperty("nextSynchronisationTime");
         response.addIntProperty("amountOfSynchronisationAttempts");
         response.addLongProperty("timeStamp");
+        response.addLongProperty("lastModificationDate");
         response.addIntProperty("width");
         response.addIntProperty("height");
         response.addDoubleProperty("lat");
@@ -415,6 +418,8 @@ public class ARlearnDaoGenerator {
         generalItem.addStringProperty("bean");
         generalItem.addBooleanProperty("autoLaunch");
         generalItem.addLongProperty("lastModificationDate");
+        generalItem.addDoubleProperty("lat");
+        generalItem.addDoubleProperty("lng");
 
         Property gameId = generalItem.addLongProperty("gameId").notNull().getProperty();
         generalItem.addToOne(game, gameId);
@@ -428,6 +433,13 @@ public class ARlearnDaoGenerator {
         Property generalItemId = dependency.addLongProperty("generalItemId").getProperty();
         dependency.addToOne(generalItem, generalItemId);
 
+
+        Property disappearAtDependencyId = generalItem.addLongProperty("disappearAt").getProperty();
+        generalItem.addToOne(dependencyDis, disappearAtDependencyId);
+
+        Property generalItemIdDis = dependencyDis.addLongProperty("generalItemId").getProperty();
+        dependencyDis.addToOne(generalItem, generalItemIdDis);
+
         return generalItem;
     }
 
@@ -435,6 +447,29 @@ public class ARlearnDaoGenerator {
 
     private static Entity createDependency(Schema schema) {
         Entity dependency = schema.addEntity("DependencyLocalObject");
+        dependency.addIdProperty();
+        dependency.addIntProperty("type");
+
+        dependency.addStringProperty("action");
+        dependency.addIntProperty("scope");
+
+        dependency.addLongProperty("timeDelta");
+
+        dependency.addLongProperty("radius");
+        dependency.addDoubleProperty("lat");
+        dependency.addDoubleProperty("lng");
+
+        depPkProperty = dependency.addLongProperty("parentDependency").getProperty();
+        ToMany parentDepToChildDep = dependency.addToMany(dependency, depPkProperty);
+        parentDepToChildDep.setName("childDeps");
+
+
+
+        return dependency;
+    }
+
+    private static Entity createDependencyDis(Schema schema) {
+        Entity dependency = schema.addEntity("DependencyDisappearLocalObject");
         dependency.addIdProperty();
         dependency.addIntProperty("type");
 

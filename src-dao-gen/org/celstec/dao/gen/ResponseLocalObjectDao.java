@@ -39,13 +39,14 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
         public final static Property NextSynchronisationTime = new Property(8, Long.class, "nextSynchronisationTime", false, "NEXT_SYNCHRONISATION_TIME");
         public final static Property AmountOfSynchronisationAttempts = new Property(9, Integer.class, "amountOfSynchronisationAttempts", false, "AMOUNT_OF_SYNCHRONISATION_ATTEMPTS");
         public final static Property TimeStamp = new Property(10, Long.class, "timeStamp", false, "TIME_STAMP");
-        public final static Property Width = new Property(11, Integer.class, "width", false, "WIDTH");
-        public final static Property Height = new Property(12, Integer.class, "height", false, "HEIGHT");
-        public final static Property Lat = new Property(13, Double.class, "lat", false, "LAT");
-        public final static Property Lng = new Property(14, Double.class, "lng", false, "LNG");
-        public final static Property RunId = new Property(15, long.class, "runId", false, "RUN_ID");
-        public final static Property GeneralItem = new Property(16, long.class, "generalItem", false, "GENERAL_ITEM");
-        public final static Property Account = new Property(17, Long.class, "account", false, "ACCOUNT");
+        public final static Property LastModificationDate = new Property(11, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
+        public final static Property Width = new Property(12, Integer.class, "width", false, "WIDTH");
+        public final static Property Height = new Property(13, Integer.class, "height", false, "HEIGHT");
+        public final static Property Lat = new Property(14, Double.class, "lat", false, "LAT");
+        public final static Property Lng = new Property(15, Double.class, "lng", false, "LNG");
+        public final static Property RunId = new Property(16, long.class, "runId", false, "RUN_ID");
+        public final static Property GeneralItem = new Property(17, long.class, "generalItem", false, "GENERAL_ITEM");
+        public final static Property Account = new Property(18, Long.class, "account", false, "ACCOUNT");
     };
 
     private DaoSession daoSession;
@@ -77,13 +78,14 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
                 "'NEXT_SYNCHRONISATION_TIME' INTEGER," + // 8: nextSynchronisationTime
                 "'AMOUNT_OF_SYNCHRONISATION_ATTEMPTS' INTEGER," + // 9: amountOfSynchronisationAttempts
                 "'TIME_STAMP' INTEGER," + // 10: timeStamp
-                "'WIDTH' INTEGER," + // 11: width
-                "'HEIGHT' INTEGER," + // 12: height
-                "'LAT' REAL," + // 13: lat
-                "'LNG' REAL," + // 14: lng
-                "'RUN_ID' INTEGER NOT NULL ," + // 15: runId
-                "'GENERAL_ITEM' INTEGER NOT NULL ," + // 16: generalItem
-                "'ACCOUNT' INTEGER);"); // 17: account
+                "'LAST_MODIFICATION_DATE' INTEGER," + // 11: lastModificationDate
+                "'WIDTH' INTEGER," + // 12: width
+                "'HEIGHT' INTEGER," + // 13: height
+                "'LAT' REAL," + // 14: lat
+                "'LNG' REAL," + // 15: lng
+                "'RUN_ID' INTEGER NOT NULL ," + // 16: runId
+                "'GENERAL_ITEM' INTEGER NOT NULL ," + // 17: generalItem
+                "'ACCOUNT' INTEGER);"); // 18: account
     }
 
     /** Drops the underlying database table. */
@@ -152,31 +154,36 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
             stmt.bindLong(11, timeStamp);
         }
  
+        Long lastModificationDate = entity.getLastModificationDate();
+        if (lastModificationDate != null) {
+            stmt.bindLong(12, lastModificationDate);
+        }
+ 
         Integer width = entity.getWidth();
         if (width != null) {
-            stmt.bindLong(12, width);
+            stmt.bindLong(13, width);
         }
  
         Integer height = entity.getHeight();
         if (height != null) {
-            stmt.bindLong(13, height);
+            stmt.bindLong(14, height);
         }
  
         Double lat = entity.getLat();
         if (lat != null) {
-            stmt.bindDouble(14, lat);
+            stmt.bindDouble(15, lat);
         }
  
         Double lng = entity.getLng();
         if (lng != null) {
-            stmt.bindDouble(15, lng);
+            stmt.bindDouble(16, lng);
         }
-        stmt.bindLong(16, entity.getRunId());
-        stmt.bindLong(17, entity.getGeneralItem());
+        stmt.bindLong(17, entity.getRunId());
+        stmt.bindLong(18, entity.getGeneralItem());
  
         Long account = entity.getAccount();
         if (account != null) {
-            stmt.bindLong(18, account);
+            stmt.bindLong(19, account);
         }
     }
 
@@ -207,13 +214,14 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // nextSynchronisationTime
             cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // amountOfSynchronisationAttempts
             cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // timeStamp
-            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11), // width
-            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // height
-            cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13), // lat
-            cursor.isNull(offset + 14) ? null : cursor.getDouble(offset + 14), // lng
-            cursor.getLong(offset + 15), // runId
-            cursor.getLong(offset + 16), // generalItem
-            cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17) // account
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // lastModificationDate
+            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // width
+            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13), // height
+            cursor.isNull(offset + 14) ? null : cursor.getDouble(offset + 14), // lat
+            cursor.isNull(offset + 15) ? null : cursor.getDouble(offset + 15), // lng
+            cursor.getLong(offset + 16), // runId
+            cursor.getLong(offset + 17), // generalItem
+            cursor.isNull(offset + 18) ? null : cursor.getLong(offset + 18) // account
         );
         return entity;
     }
@@ -232,13 +240,14 @@ public class ResponseLocalObjectDao extends AbstractDao<ResponseLocalObject, Lon
         entity.setNextSynchronisationTime(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setAmountOfSynchronisationAttempts(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
         entity.setTimeStamp(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
-        entity.setWidth(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
-        entity.setHeight(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
-        entity.setLat(cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13));
-        entity.setLng(cursor.isNull(offset + 14) ? null : cursor.getDouble(offset + 14));
-        entity.setRunId(cursor.getLong(offset + 15));
-        entity.setGeneralItem(cursor.getLong(offset + 16));
-        entity.setAccount(cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17));
+        entity.setLastModificationDate(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setWidth(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
+        entity.setHeight(cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13));
+        entity.setLat(cursor.isNull(offset + 14) ? null : cursor.getDouble(offset + 14));
+        entity.setLng(cursor.isNull(offset + 15) ? null : cursor.getDouble(offset + 15));
+        entity.setRunId(cursor.getLong(offset + 16));
+        entity.setGeneralItem(cursor.getLong(offset + 17));
+        entity.setAccount(cursor.isNull(offset + 18) ? null : cursor.getLong(offset + 18));
      }
     
     /** @inheritdoc */

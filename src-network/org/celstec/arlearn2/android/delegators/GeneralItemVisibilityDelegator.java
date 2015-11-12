@@ -57,9 +57,61 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncGeneralItemVisibilities(run));
     }
 
+    public void calculateInVisibility(Long runId, Long gameId) {
+        if (runId == null || gameId == null) return;
+        RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        GameLocalObject game = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
+        if (run == null || game == null) return;
+        GeneralItemEvent newInVisibilityStatementDetected = null;
+        for (GeneralItemLocalObject generalItemLocalObject: game.getGeneralItems()) {
+//            generalItemLocalObject.getDependencyDisappearLocalObject()
+            long disappearAt = Long.MAX_VALUE;
+            if (generalItemLocalObject.getDependencyDisappearLocalObject() != null) {
+                disappearAt = generalItemLocalObject.getDependencyDisappearLocalObject().disappearAt(run);
+            }
+            if (disappearAt != Long.MAX_VALUE) {
+                if (disappearAt < ARL.time.getServerTime()) {
+                    String id = GeneralItemVisibilityLocalObject.generateId(runId, generalItemLocalObject.getId());
+                    GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
+
+                    if (generalItemVisibilityLocalObject == null) {
+                        generalItemVisibilityLocalObject = new GeneralItemVisibilityLocalObject();
+                        generalItemVisibilityLocalObject.setId(id);
+                        generalItemVisibilityLocalObject.setGeneralItemLocalObject(generalItemLocalObject);
+                        generalItemLocalObject.resetVisibilities();
+                        generalItemVisibilityLocalObject.setStatus(GeneralItemVisibilityLocalObject.INVISIBLE);
+                        generalItemVisibilityLocalObject.setRunId(runId);
+                        generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
+                        generalItemVisibilityLocalObject.setTimeStamp(disappearAt);
+                        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+
+                        newInVisibilityStatementDetected = new GeneralItemEvent(generalItemLocalObject.getId());
+
+                        ARL.eventBus.postSticky(newInVisibilityStatementDetected);
+
+
+                    }else {
+                        if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.VISIBLE) {
+                            if (generalItemVisibilityLocalObject.getTimeStamp() > disappearAt) {
+                                generalItemVisibilityLocalObject.setTimeStamp(disappearAt);
+                                DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+                            }
+                        }
+                    }
+                }else {
+
+                    ARL.visibilityHandler.scheduleInVisibilityEvent(disappearAt, run, game);
+                    System.out.println("we are in the not condition");
+                }
+                //todo
+            }
+        }
+
+    }
+
 
     public void calculateVisibility(Long runId, Long gameId) {
-        if (runId == null || gameId == null) return;
+            if (runId == null || gameId == null) return;
         RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
         GameLocalObject game = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         if (run == null || game == null) return;
@@ -67,7 +119,7 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
         for (GeneralItemLocalObject generalItemLocalObject: game.getGeneralItems()) {
             long satisfiedAt = 0l;
             Set<String> userRoles = run.getUserRoles();
-            if (generalItemLocalObject.getGeneralItemBean().getRoles()!=null) {
+            if (generalItemLocalObject.getGeneralItemBean().getRoles()!=null && !generalItemLocalObject.getGeneralItemBean().getRoles().isEmpty()) {
                 boolean containsRole = false;
                 for (String targetRole:generalItemLocalObject.getGeneralItemBean().getRoles()) {
                     if (userRoles.contains(targetRole)) containsRole = true;
@@ -135,6 +187,7 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
      */
 
     public void onEventAsync(SyncGeneralItemVisibilities syncGeneralItemVisibilities) {
+        if (!ARL.config.getBooleanProperty("white_label_online")) return;
         String token = returnTokenIfOnline();
         if (token != null) {
             long lastSyncDate = 0l;

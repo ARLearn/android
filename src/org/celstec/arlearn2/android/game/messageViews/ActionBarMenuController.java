@@ -5,9 +5,15 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.google.android.gms.maps.MapView;
+import daoBase.DaoConfiguration;
+import de.greenrobot.dao.internal.DaoConfig;
 import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
+import org.celstec.dao.gen.ActionLocalObject;
+import org.celstec.dao.gen.ResponseLocalObject;
 
 /**
  * ****************************************************************************
@@ -53,6 +59,14 @@ public class ActionBarMenuController {
                                 inflater.inflate(R.menu.game_map_actions, menu);
             }
 
+            if (menu.findItem(R.id.score) != null) {
+                menu.findItem(R.id.score).setVisible(true);
+                menu.findItem(R.id.score).setTitle(""+ARL.properties.getScore(this.gameActivityFeatures.getRunId()));
+
+//                menu.findItem(R.id.score).setVisible(ARL.properties.hasScore(this.gameActivityFeatures.getRunId()));
+//                menu.findItem(R.id.score).setTitle(""+ARL.properties.getScore(this.gameActivityFeatures.getRunId()));
+            }
+
         }
 
 
@@ -79,6 +93,27 @@ public class ActionBarMenuController {
             case android.R.id.home:
                 activity.finish();
                 return true;
+            case R.id.score:
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+                long firstDate = Long.MAX_VALUE;
+                long lastDate = Long.MIN_VALUE;
+
+                for (ResponseLocalObject action: DaoConfiguration.getInstance().getResponseLocalObjectDao().loadAll()){
+                    if (action.getTimeStamp()<firstDate) firstDate = action.getTimeStamp();
+                    if (action.getTimeStamp()>lastDate) lastDate = action.getTimeStamp();
+                }
+                if (DaoConfiguration.getInstance().getActionLocalObjectDao().loadAll().isEmpty()){
+                    Toast.makeText(activity, "no responses given", Toast.LENGTH_SHORT).show();
+                } else {
+                    long time = lastDate - firstDate;
+                    time = time / 1000 / 60;
+                    Toast.makeText(activity, "you worked for "+time + " minutes", Toast.LENGTH_SHORT).show();
+                }
+
+//                    }
+//                });
+                return true;
             default:
                 return false;
         }
@@ -90,5 +125,11 @@ public class ActionBarMenuController {
 
     public boolean isMessages(){
         return activity instanceof GameMessages;
+    }
+
+    public void updateScore(Menu menu) {
+        if (ARL.config.getBooleanProperty("show_score")){
+            menu.findItem(R.id.score).setTitle(""+ARL.properties.getScore(this.gameActivityFeatures.getRunId()));
+        }
     }
 }

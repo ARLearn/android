@@ -113,6 +113,7 @@ public class DataCollectionResultController {
                                     responseLocalObject.setRevoked(true);
                                     responseLocalObject.setNextSynchronisationTime(0l);
                                     responseLocalObject.setIsSynchronized(false);
+                                    responseLocalObject.setLastModificationDate(ARL.time.getServerTime());
                                     DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
                                     row.setVisibility(View.GONE);
                                     ResponseDelegator.getInstance().syncResponses(responseLocalObject.getRunId());

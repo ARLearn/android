@@ -78,7 +78,7 @@ public class OsmGeneralItemizedIconOverlay extends ItemizedIconOverlay<OverlayIt
         for (GeneralItemVisibilityLocalObject object: lazyList) {
             GeneralItem generalItem = object.getGeneralItemLocalObject().getGeneralItemBean();
             if (generalItem.getLat()!= null) {
-                OverlayItem overlayItem = new OSMOverlayItem(generalItem, ctx);
+                OverlayItem overlayItem = new OSMOverlayItem(generalItem, runId, ctx);
                 addItem(overlayItem);
             }
         }

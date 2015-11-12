@@ -86,6 +86,10 @@ android {
         florence  {
             applicationId "org.celstec.arlearn2.android.florence"
         }
+
+        mijnstad  {
+            applicationId "org.celstec.arlearn2.android.mijnstad"
+        }
     }
 
 }

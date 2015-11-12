@@ -39,4 +39,15 @@ public class VisibilityHandler {
     public void scheduleInvisibilityEvent(){
 
     }
+
+    public void scheduleInVisibilityEvent(long disappearAt, final RunLocalObject run, final GameLocalObject game) {
+        System.out.println("disappearAt "+disappearAt + " - " + (ARL.time.getServerTime()-disappearAt));
+        long delay = disappearAt -ARL.time.getServerTime();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ARL.generalItemVisibility.calculateInVisibility(run.getId(), game.getId());
+            }
+        }, delay);
+    }
 }

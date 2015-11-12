@@ -20,7 +20,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:background="?attr/backgroundColorLight"
-                android:layout_height="wrap_content">
+                android:layout_height="fill_parent">
 
     <ImageView
             android:id="@+id/generalItemIcon"
@@ -38,13 +38,17 @@
         <WebView
                 android:id="@+id/descriptionId"
                 android:background="@android:color/transparent"
-                style="@style/ARLearn.Game.GeneralItemActivity.RichTextView">
-        </WebView>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/ARLearn.Game.GeneralItemActivity.RichTextView"/>
+
 
         <TextView
                 android:id="@+id/button"
                 style="@style/ARLearn.Game.Button"
                 android:text="@string/continueMessage"
+                android:layout_weight="0"
                 android:layout_marginTop="10dip"
                 android:layout_marginBottom="10dip"
                 />

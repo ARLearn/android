@@ -56,7 +56,7 @@
 
     <!--Notifications-->
     <string name="readMessage">Lees Boodschap</string>
-    <string name="closeMessage">Sluit Boodschap</string>
+    <string name="closeMessage">Sluit</string>
 
     <!--Network-->
     <string name="noInternet">Geen internet connectie</string>
@@ -79,7 +79,7 @@
     <string name="provideValue" >Voer een waarde in</string>
 
     <!--Game Stroken-->
-    <string name="newMessage" >Nieuw bericht!</string>
+    <string name="newMessage" >Nieuwe vraag!</string>
     <string name="Watch" >Bekijk</string>
 
     <!--General Item-->

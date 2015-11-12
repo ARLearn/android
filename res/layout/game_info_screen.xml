@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/splashScreen"
+        >
+
+    <ImageView
+            android:id="@+id/main_backgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_splash_screen" />
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:paddingTop="20dip"
+              android:paddingLeft="20dip"
+              android:paddingRight="20dip"
+              android:paddingBottom="20dip"
+              android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/infoScreen"
+        >
+    <TextView
+            android:id="@+id/title"
+            android:text="@string/continueMessage"
+            android:layout_weight="0"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="25dp"
+            android:textColor="?attr/primaryColor"
+            android:layout_marginBottom="10dip"
+
+            />
+    <WebView
+            android:id="@+id/infoScreenWebView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbars="none"
+
+            >
+
+    </WebView>
+
+
+    <TextView
+            android:id="@+id/button"
+            style="@style/ARLearn.Game.Button"
+            android:text="@string/continueMessage"
+            android:layout_weight="0"
+            android:layout_marginTop="10dip"
+            android:layout_marginBottom="10dip"
+
+            />
+
+</LinearLayout>
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package org.celstec.arlearn2.android.whitelabel;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -18,11 +19,10 @@ import org.celstec.arlearn2.android.game.DelayedGameLauncher;
 import org.celstec.arlearn2.android.game.InitWhiteLabelDatabase;
 import org.celstec.arlearn2.android.game.MyGamesActivity;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
+import org.celstec.arlearn2.android.game.messageViews.MessageViewLauncher;
 import org.celstec.arlearn2.android.util.MediaFolders;
-import org.celstec.dao.gen.DaoMaster;
-import org.celstec.dao.gen.GameFileLocalObject;
-import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.RunLocalObject;
+import org.celstec.arlearn2.beans.run.GeneralItemVisibility;
+import org.celstec.dao.gen.*;
 
 import java.io.File;
 import java.util.Locale;
@@ -59,22 +59,22 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
         ARL.init(this);
+//        DaoConfiguration.getInstance().getActionLocalObjectDao().deleteAll();
+//        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().deleteByKey("5832556599574528:5816404838187008");
+
 //        long time = System.currentTimeMillis();
 //        while(time + 3000> System.currentTimeMillis()) {
 //
 //        };
-        try {
-            gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen_" + Locale.getDefault().getLanguage()));
-        } catch (NumberFormatException e ) {}
-
-        if (gameIdToUseForMainSplashScreen == null) gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
-
+      gameIdToUseForMainSplashScreen = getGameIdToUseForMainSplashScreen();
         delayedGameLauncher = new DelayedGameLauncher(System.currentTimeMillis() + 3000) {
 
             @Override
             public void runNextActivity() {
-                if (ARL.config.getBooleanProperty("white_label_login") && !ARL.accounts.isAuthenticated()) {
-                    System.out.println("time to log in");
+                if (ARL.config.getBooleanProperty("show_info_screen")){
+                    Intent infoscreenIntent = new Intent(SplashScreen.this, InfoScreen.class);
+                    startActivity(infoscreenIntent);
+                } else if (ARL.config.getBooleanProperty("white_label_login") && !ARL.accounts.isAuthenticated()) {
                     Intent loginIntent = new Intent(SplashScreen.this, LoginActivity.class);
                     startActivity(loginIntent);
                 } else
@@ -84,12 +84,9 @@ public class SplashScreen extends Activity {
                 } else {
 
                     long gameId = InitWhiteLabelDatabase.getGameIds().get(0);
-                    GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
-                    Intent gameIntent = new Intent(SplashScreen.this, GameMessages.class);
-                    gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
-                    gameIntent.putExtra(RunLocalObject.class.getName(), gameLocalObject.getRuns().get(0).getId());
-                    startActivity(gameIntent);
-                }
+                        new MessageViewLauncher(gameId).launchMessageView(SplashScreen.this);
+
+                    }
                 SplashScreen.this.finish();
             }
 
@@ -102,6 +99,17 @@ public class SplashScreen extends Activity {
         ARL.accounts.syncMyAccountDetails();
 
         setSplashScreen(this, gameIdToUseForMainSplashScreen);
+    }
+
+    static long getGameIdToUseForMainSplashScreen() {
+        if (!ARL.config.containsKey("gameIdToUseForMainSplashScreen")) return 0l;
+            Long gameIdToUseForMainSplashScreen = null;
+        try {
+            gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen_" + Locale.getDefault().getLanguage()));
+        } catch (NumberFormatException e ) {}
+
+        if (gameIdToUseForMainSplashScreen == null) gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
+        return  gameIdToUseForMainSplashScreen;
     }
 
     public static void setSplashScreen(Activity activity, long gameIdToUseForMainSplashScreen) {
@@ -119,14 +127,21 @@ public class SplashScreen extends Activity {
         } else {
             webView.setVisibility(View.GONE);
             activity.findViewById(R.id.main_backgroundImage).setVisibility(View.VISIBLE);
-            Drawable splashDrawable = GameFileLocalObject.getDrawable(activity, gameIdToUseForMainSplashScreen, "/gameSplashScreen");
-            if (splashDrawable != null) {
-                Uri uri =GameFileLocalObject.getGameFileLocalObject(gameIdToUseForMainSplashScreen,"/gameSplashScreen").getLocalUri();
-                ((ImageView) activity.findViewById(R.id.main_backgroundImage)).setImageURI(uri);
-
+            if (setBackgroundImage(activity, "/gameSplashScreen")) {
                 activity.findViewById(R.id.downloadStatus).setVisibility(View.GONE);
             }
         }
+    }
+
+    static boolean setBackgroundImage(Activity ctx, String imageId) {
+        long gameIdToUseForMainSplashScreen = getGameIdToUseForMainSplashScreen();
+        Drawable background = GameFileLocalObject.getDrawable(ctx, gameIdToUseForMainSplashScreen, imageId);
+        if (android.os.Build.VERSION.SDK_INT >= 11)
+            if (background != null) {
+                ((ImageView) ctx.findViewById(R.id.main_backgroundImage)).setImageDrawable(background);
+                return true;
+            }
+        return false;
     }
 
 
@@ -164,7 +179,7 @@ public class SplashScreen extends Activity {
         }
     }
 
-    private boolean isGroupOfGames() {
+    static boolean isGroupOfGames() {
         return InitWhiteLabelDatabase.getGameIds().size() > 1;
     }
 

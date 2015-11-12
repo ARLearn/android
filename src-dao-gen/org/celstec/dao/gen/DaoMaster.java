@@ -12,6 +12,7 @@ import org.celstec.dao.gen.AccountLocalObjectDao;
 import org.celstec.dao.gen.GameLocalObjectDao;
 import org.celstec.dao.gen.GameContributorLocalObjectDao;
 import org.celstec.dao.gen.DependencyLocalObjectDao;
+import org.celstec.dao.gen.DependencyDisappearLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemLocalObjectDao;
 import org.celstec.dao.gen.GameFileLocalObjectDao;
 import org.celstec.dao.gen.GeneralItemMediaLocalObjectDao;
@@ -36,7 +37,7 @@ import org.celstec.dao.gen.FriendsLocalObjectDao;
  * Master of DAO (schema version 1): knows all DAOs.
 */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 53;
+    public static final int SCHEMA_VERSION = 1;
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
@@ -44,6 +45,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GameLocalObjectDao.createTable(db, ifNotExists);
         GameContributorLocalObjectDao.createTable(db, ifNotExists);
         DependencyLocalObjectDao.createTable(db, ifNotExists);
+        DependencyDisappearLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemLocalObjectDao.createTable(db, ifNotExists);
         GameFileLocalObjectDao.createTable(db, ifNotExists);
         GeneralItemMediaLocalObjectDao.createTable(db, ifNotExists);
@@ -70,6 +72,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GameLocalObjectDao.dropTable(db, ifExists);
         GameContributorLocalObjectDao.dropTable(db, ifExists);
         DependencyLocalObjectDao.dropTable(db, ifExists);
+        DependencyDisappearLocalObjectDao.dropTable(db, ifExists);
         GeneralItemLocalObjectDao.dropTable(db, ifExists);
         GameFileLocalObjectDao.dropTable(db, ifExists);
         GeneralItemMediaLocalObjectDao.dropTable(db, ifExists);
@@ -123,6 +126,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(GameLocalObjectDao.class);
         registerDaoClass(GameContributorLocalObjectDao.class);
         registerDaoClass(DependencyLocalObjectDao.class);
+        registerDaoClass(DependencyDisappearLocalObjectDao.class);
         registerDaoClass(GeneralItemLocalObjectDao.class);
         registerDaoClass(GameFileLocalObjectDao.class);
         registerDaoClass(GeneralItemMediaLocalObjectDao.class);

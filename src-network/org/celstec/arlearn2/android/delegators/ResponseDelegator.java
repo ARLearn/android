@@ -88,7 +88,9 @@ public class ResponseDelegator extends AbstractDelegator{
 
     public void createResponse(GeneralItemLocalObject generalItemLocalObject, long runId, String responseValue) {
         ResponseLocalObject response = new ResponseLocalObject();
-        response.setTimeStamp(ARL.time.getServerTime());
+        long time = ARL.time.getServerTime();
+        response.setTimeStamp(time);
+        response.setLastModificationDate(time);
         response.setAccountLocalObject(ARL.accounts.getLoggedInAccount());
         response.setIsSynchronized(false);
         response.setNextSynchronisationTime(0l);
@@ -275,7 +277,7 @@ public class ResponseDelegator extends AbstractDelegator{
                         }
 
                     } else {
-                        if (response.getTimestamp() > responseLocalObject.getTimeStamp()) {
+                        if (response.getLastModificationDate() > responseLocalObject.getLastModificationDate()) {
                             responseLocalObject.setValuesFromBean(response);
                             if (responseLocalObject.getType() != null)
                                 DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);

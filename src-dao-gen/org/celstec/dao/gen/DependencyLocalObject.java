@@ -462,10 +462,12 @@ public class DependencyLocalObject {
         long minSatisfiedAt = Long.MAX_VALUE;
 //        String latString = ""+((double)(long)(getLat()*1000000)/1000000);
 //        String lngString = ""+((double)(long)(getLng()*1000000)/1000000);
-        String compString =createProximityActionString(getLat(),getLng(),radius);
-        for (ActionLocalObject action :run.getActions()){
-            if ((compString).equals(action.getAction())){
-                minSatisfiedAt = Math.min(minSatisfiedAt, (action.getTime()==null)?0:action.getTime());
+        if (getLat() != null && getLng() != null) {
+            String compString = createProximityActionString(getLat(), getLng(), radius);
+            for (ActionLocalObject action : run.getActions()) {
+                if ((compString).equals(action.getAction())) {
+                    minSatisfiedAt = Math.min(minSatisfiedAt, (action.getTime() == null) ? 0 : action.getTime());
+                }
             }
         }
         if (minSatisfiedAt == Long.MAX_VALUE) minSatisfiedAt = -1;

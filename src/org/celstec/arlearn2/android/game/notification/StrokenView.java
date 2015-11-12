@@ -2,6 +2,9 @@ package org.celstec.arlearn2.android.game.notification;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 
@@ -63,7 +67,7 @@ public abstract class StrokenView {
         strokenView.findViewById(R.id.animStrokenView).setBackgroundColor(ARL.drawableUtil.getStyleUtil().getPrimaryColor());
     }
 
-    public void slideIn() {
+    public void slideIn(String message, String readMessage) {
         strokenView.setVisibility(View.VISIBLE);
         strokenView.startAnimation(animIn);
         open = true;
@@ -74,6 +78,21 @@ public abstract class StrokenView {
                 if (open) slideOut();
             }
         }, 5000);
+        if (readMessage !=null){
+            ((TextView)strokenView.findViewById(R.id.viewMessageButton)).setText(readMessage);
+        }
+        if (message != null) {
+            ((TextView)strokenView.findViewById(R.id.message)).setText(message);
+
+        }
+
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(ctx, notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -2,23 +2,17 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/animStrokenView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:orientation="vertical"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-
-        >
+                android:gravity="center_vertical"
+                android:background="#99000000"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dip"
-            android:orientation="vertical"
-            android:layout_marginRight="20dip"
-            android:layout_marginLeft="20dip"
-            android:gravity="center_horizontal"
+            android:id="@+id/content"
+            style="@style/ARLearn.Game.DataCollection"
 
-            android:background="@drawable/gradient_alert_window"
 
             >
         <TextView
@@ -26,7 +20,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="20dip"
+                android:layout_marginTop="12dip"
 
                 android:text="Nieuw bericht!"
                 android:textColor="@color/white"
@@ -34,28 +28,23 @@
 
         <TextView
                 android:id="@+id/openMessage"
+                style="@style/ARLearn.Game.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:background="#ff2b84d2"
-                android:layout_marginTop="20dip"
-                android:text="@string/readMessage"
-                android:textColor="@color/white"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
 
+                android:text="@string/readMessage"
+                android:layout_marginTop="10dip"
+                android:layout_marginBottom="10dip"
+                />
         <TextView
                 android:id="@+id/closeWindow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginTop="20dip"
-                android:layout_marginBottom="20dip"
+                style="@style/ARLearn.Game.CancelButton"
+
                 android:text="@string/closeMessage"
 
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                 />
 
     </LinearLayout>
 

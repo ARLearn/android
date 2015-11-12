@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_gravity="center_vertical"
+              android:gravity="center_vertical"
+              android:background="#99000000"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" >
+
+    <!--android:paddingTop="100dip"-->
+
+    <LinearLayout android:id="@+id/content"
+
+                  style="@style/ARLearn.Game.DataCollection"
+            >
+
+
+        <TextView android:id="@+id/title"
+                  android:text="Title"
+                  android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                  android:textSize="20dp"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:id="@+id/contentText"
+                  android:text="content"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_width="wrap_content"
+                  android:textSize="14dp"
+                  android:layout_height="wrap_content"/>
+
+
+
+
+        <TextView
+                android:id="@+id/button"
+                style="@style/ARLearn.Game.Button"
+                android:text="@string/continueMessage"
+                android:layout_marginTop="10dip"
+                android:layout_marginBottom="10dip"
+                />
+    </LinearLayout>
+
+
+
+</LinearLayout>

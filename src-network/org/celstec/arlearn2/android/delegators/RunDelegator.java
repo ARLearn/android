@@ -111,6 +111,19 @@ public class RunDelegator extends AbstractDelegator{
 
     }
 
+    public void onEventAsync(CreateRun syncRun) {
+        String token = returnTokenIfOnline();
+        if (token != null) {
+            Run run = new Run();
+            run.setGameId(syncRun.getGameId());
+            run.setTitle("Default Run");
+            Run newRun = RunClient.getRunClient().createRun(token, run);
+            selfRegisterForRun(newRun.getRunId());
+            ARL.eventBus.post(new RunEvent(newRun.getRunId()));
+//            asyncRun(newRun);
+        }
+    }
+
     public void asyncRun(long runId) {
         String token = returnTokenIfOnline();
         if (token != null) {
@@ -167,7 +180,8 @@ public class RunDelegator extends AbstractDelegator{
             }
 
 
-            ARL.eventBus.post(new RunEvent(newRun.getId(), newRun.getDeleted()));
+            //ARL.eventBus.post(new RunEvent(newRun.getId(), newRun.getDeleted()));
+            //todo generates to many events
         }
     }
 
@@ -211,12 +225,33 @@ public class RunDelegator extends AbstractDelegator{
         }
     }
 
+    public void createRun(long gameId) {
+        ARL.eventBus.post(new CreateRun(gameId));
+    }
+
 
     private class SyncRunsEventParticipate {
 
     }
 
     private class SyncRunsEvent {
+    }
+
+    private class CreateRun{
+
+        private  long gameId;
+
+        public CreateRun(long gameId) {
+            this.gameId = gameId;
+        }
+
+        public long getGameId() {
+            return gameId;
+        }
+
+        public void setGameId(long gameId) {
+            this.gameId = gameId;
+        }
     }
 
     private class SyncRun {

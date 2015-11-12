@@ -74,7 +74,9 @@ public  abstract class DataCollectionManager {
     }
 
     protected void saveResponseForSyncing() {
-        response.setTimeStamp(ARL.time.getServerTime());
+        long time = ARL.time.getServerTime();
+        response.setLastModificationDate(time); // todo merge this code with ResponsDelegator:createResponse
+        response.setTimeStamp(time);
         response.setAccountLocalObject(ARL.accounts.getLoggedInAccount());
         response.setIsSynchronized(false);
         response.setNextSynchronisationTime(0l);

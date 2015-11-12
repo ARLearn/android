@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.celstec.arlearn2.android.db.Constants;
+import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.events.MyAccount;
 import org.celstec.arlearn2.android.gcm.GCMRegisterTask;
 import org.celstec.arlearn2.beans.AuthResponse;
@@ -232,5 +233,56 @@ public class AccountDelegator extends AbstractDelegator{
 
 //        DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(account);
         return account;
+    }
+
+    public void createAnonymousAccount(String name, String email) {
+        if (ARL.isOnline()) {
+            ARL.eventBus.post(new CreateAnonymousAccount(email, name));
+
+        } else {
+            ARL.eventBus.post(new MyAccount(null));
+        }
+    }
+
+    public void onEventAsync(CreateAnonymousAccount createAnonymousAccount) {
+        Account account=  AccountClient.getAccountClient().createAnonymousAccount(createAnonymousAccount.getName(), createAnonymousAccount.getEmail());
+        if (account.getError()!= null) {
+            ARL.eventBus.post(new MyAccount(null));
+        } else {
+            loggedInAccount = toDaoLocalObject(account, null);
+            String authenicationToken = checkAnonymousLogin(account.getLocalId()).getAuth();
+            DaoConfiguration.getInstance().getAccountLocalObjectDao().insertOrReplace(loggedInAccount);
+            ARL.properties.setAccount(loggedInAccount.getId());
+            ARL.properties.setFullId(loggedInAccount.getFullId());
+            ARL.properties.setAuthToken(authenicationToken);
+            ARL.eventBus.post(new MyAccount(loggedInAccount));
+        }
+    }
+
+
+    private class CreateAnonymousAccount{
+        String email;
+        String name;
+
+        public CreateAnonymousAccount(String email, String name) {
+            this.email = email;
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
     }
 }

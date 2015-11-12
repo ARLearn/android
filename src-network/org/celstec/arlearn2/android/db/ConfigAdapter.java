@@ -53,6 +53,9 @@ public class ConfigAdapter {
 
     public class PropertiesExt extends Properties {
 
+        public static final int NONE = 0;
+        public static final int TRANSPARENT = 1;
+        public static final int HALF = 2;
 
 
         public boolean getBooleanProperty(String key) {
@@ -66,6 +69,28 @@ public class ConfigAdapter {
             if (getProperty("games_screen") == null) return R.layout.mygames_list;
             if (getProperty("games_screen").equals("grid")) return R.layout.mygames_list_grid;
             return R.layout.mygames_list;
+        }
+
+        public int getGameMapActionBarTransparency(){
+            if (getProperty("game_map_action_bar_transparency").equalsIgnoreCase("transparent")) return 1;
+            if (getProperty("game_map_action_bar_transparency").equalsIgnoreCase("half")) return 2;
+            return 0;
+        }
+
+        public boolean isGameMapActionBarTransparent(){
+            if (getGameMapActionBarTransparency()==0) return false;
+            return true;
+        }
+
+        public int getGameMessagesActionBarTransparency(){
+            if (getProperty("game_messages_action_bar_transparency").equalsIgnoreCase("transparent")) return 1;
+            if (getProperty("game_messages_action_bar_transparency").equalsIgnoreCase("half")) return 2;
+            return 0;
+        }
+
+        public boolean isGameMessagesActionBarTransparent(){
+            if (getGameMapActionBarTransparency()==0) return false;
+            return true;
         }
     }
 

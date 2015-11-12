@@ -142,4 +142,5 @@ public class ActionBarMenuController {
     public boolean hasNext() {
         return previousGeneralItemLocalObject != null;
     }
+
 }

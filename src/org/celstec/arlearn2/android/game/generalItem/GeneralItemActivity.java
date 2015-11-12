@@ -1,19 +1,17 @@
 package org.celstec.arlearn2.android.game.generalItem;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
+import android.view.*;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.ActionsDelegator;
-import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
-import org.celstec.arlearn2.android.events.GeneralItemEvent;
-import org.celstec.arlearn2.android.events.ResponseEvent;
-import org.celstec.arlearn2.android.events.RunEvent;
+import org.celstec.arlearn2.android.events.*;
 import org.celstec.arlearn2.android.game.messageViews.GameActivityFeatures;
 import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.util.DrawableUtil;
@@ -56,6 +54,7 @@ public class GeneralItemActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ARL.init(this);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY); //TODO make conditional
         gameActivityFeatures = new GameActivityFeatures(this);
@@ -79,7 +78,34 @@ public class GeneralItemActivity extends Activity {
                 generalItemActivityFeatures.generalItemLocalObject.getId(),
                 generalItemActivityFeatures.generalItemLocalObject.getGeneralItemBean().getType());
 //            inBetweenGeneralItemNavigation = new InBetweenGeneralItemNavigation(this, gameActivityFeatures, generalItemActivityFeatures);
+
+        Display display = ((WindowManager)
+                getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+        if (rotation == Surface.ROTATION_180) { // reverse portrait
+            System.out.println("portrait");
+        } else {  // for all other orientations
+            System.out.println("portrait");
+        }
     }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            generalItemActivityFeatures.setLandscape();
+            System.out.println("ORIENTATION_LANDSCAPE");
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            generalItemActivityFeatures.setPortrait();
+            System.out.println("ORIENTATION_PORTRAIT");
+
+        }
+    }
+
+
 
 
     public void onEventMainThread(final GeneralItemBecameVisibleEvent event) {
@@ -150,7 +176,6 @@ public class GeneralItemActivity extends Activity {
         ARL.eventBus.register(this);
         generalItemActivityFeatures.onResumeActivity();
         gameActivityFeatures.checkRunDeleted(this);
-        System.out.println("LOG onResume "+System.currentTimeMillis());
         GeneralItemEvent event = (GeneralItemEvent) ARL.eventBus.removeStickyEvent(GeneralItemEvent.class);
         if (event !=null) onEventMainThread(event);
 //        inBetweenGeneralItemNavigation.updateMessagesHeader();

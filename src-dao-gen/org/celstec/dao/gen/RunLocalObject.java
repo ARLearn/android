@@ -1,7 +1,6 @@
 package org.celstec.dao.gen;
 
 import java.util.List;
-
 import org.celstec.dao.gen.DaoSession;
 import de.greenrobot.dao.DaoException;
 

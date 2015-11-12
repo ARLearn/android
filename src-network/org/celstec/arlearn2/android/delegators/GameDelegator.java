@@ -308,9 +308,7 @@ public final class GameDelegator extends AbstractDelegator{
 
     public void asyncDownloadGameContent(long gameId) {
         List<GameFileLocalObject> gameFiles = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getGameFiles();
-        System.out.println("gameFiles "+gameFiles);
         for (GameFileLocalObject gameFileLocalObject : gameFiles) {
-            System.out.println("dealing with gameFile"+gameFileLocalObject);
             if (gameFileLocalObject.getSyncStatus() == GameFileLocalObject.FILE_TO_DOWNLOAD){
                 try {
                     File targetFile = new File(MediaFolders.getIncommingFilesDir(), gameId+gameFileLocalObject.getPath());

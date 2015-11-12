@@ -57,6 +57,7 @@ public class MyGamesActivity extends ListActivity implements ListItemClickInterf
     }
 
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(ARL.config.getContentView());
         ARL.init(this);
@@ -74,10 +75,10 @@ public class MyGamesActivity extends ListActivity implements ListItemClickInterf
                     ((LinearLayout) findViewById(R.id.storeLinearLayout)).setBackground(background);
             if (android.os.Build.VERSION.SDK_INT >= 11) {
                 getActionBar().setHomeButtonEnabled(true);
-                GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameIdToUseForMainSplashScreen);
-                int theme = GameActivityFeatures.getTheme(gameLocalObject.getGameBean());
+//                GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameIdToUseForMainSplashScreen);
+//                int theme = GameActivityFeatures.getTheme(gameLocalObject.getGameBean());
 
-                ARL.getDrawableUtil(theme, this);
+                ARL.getDrawableUtil(gameIdToUseForMainSplashScreen, this);
                 getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
             }
         }

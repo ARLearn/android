@@ -36,8 +36,11 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
         public final static Property Bean = new Property(5, String.class, "bean", false, "BEAN");
         public final static Property AutoLaunch = new Property(6, Boolean.class, "autoLaunch", false, "AUTO_LAUNCH");
         public final static Property LastModificationDate = new Property(7, Long.class, "lastModificationDate", false, "LAST_MODIFICATION_DATE");
-        public final static Property GameId = new Property(8, long.class, "gameId", false, "GAME_ID");
-        public final static Property DependsOn = new Property(9, Long.class, "dependsOn", false, "DEPENDS_ON");
+        public final static Property Lat = new Property(8, Double.class, "lat", false, "LAT");
+        public final static Property Lng = new Property(9, Double.class, "lng", false, "LNG");
+        public final static Property GameId = new Property(10, long.class, "gameId", false, "GAME_ID");
+        public final static Property DependsOn = new Property(11, Long.class, "dependsOn", false, "DEPENDS_ON");
+        public final static Property DisappearAt = new Property(12, Long.class, "disappearAt", false, "DISAPPEAR_AT");
     };
 
     private DaoSession daoSession;
@@ -65,8 +68,11 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
                 "'BEAN' TEXT," + // 5: bean
                 "'AUTO_LAUNCH' INTEGER," + // 6: autoLaunch
                 "'LAST_MODIFICATION_DATE' INTEGER," + // 7: lastModificationDate
-                "'GAME_ID' INTEGER NOT NULL ," + // 8: gameId
-                "'DEPENDS_ON' INTEGER);"); // 9: dependsOn
+                "'LAT' REAL," + // 8: lat
+                "'LNG' REAL," + // 9: lng
+                "'GAME_ID' INTEGER NOT NULL ," + // 10: gameId
+                "'DEPENDS_ON' INTEGER," + // 11: dependsOn
+                "'DISAPPEAR_AT' INTEGER);"); // 12: disappearAt
     }
 
     /** Drops the underlying database table. */
@@ -119,11 +125,26 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
         if (lastModificationDate != null) {
             stmt.bindLong(8, lastModificationDate);
         }
-        stmt.bindLong(9, entity.getGameId());
+ 
+        Double lat = entity.getLat();
+        if (lat != null) {
+            stmt.bindDouble(9, lat);
+        }
+ 
+        Double lng = entity.getLng();
+        if (lng != null) {
+            stmt.bindDouble(10, lng);
+        }
+        stmt.bindLong(11, entity.getGameId());
  
         Long dependsOn = entity.getDependsOn();
         if (dependsOn != null) {
-            stmt.bindLong(10, dependsOn);
+            stmt.bindLong(12, dependsOn);
+        }
+ 
+        Long disappearAt = entity.getDisappearAt();
+        if (disappearAt != null) {
+            stmt.bindLong(13, disappearAt);
         }
     }
 
@@ -151,8 +172,11 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // bean
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // autoLaunch
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // lastModificationDate
-            cursor.getLong(offset + 8), // gameId
-            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // dependsOn
+            cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8), // lat
+            cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9), // lng
+            cursor.getLong(offset + 10), // gameId
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // dependsOn
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // disappearAt
         );
         return entity;
     }
@@ -168,8 +192,11 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
         entity.setBean(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setAutoLaunch(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setLastModificationDate(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setGameId(cursor.getLong(offset + 8));
-        entity.setDependsOn(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setLat(cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8));
+        entity.setLng(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
+        entity.setGameId(cursor.getLong(offset + 10));
+        entity.setDependsOn(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setDisappearAt(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
      }
     
     /** @inheritdoc */
@@ -219,9 +246,12 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
             SqlUtils.appendColumns(builder, "T0", daoSession.getGameLocalObjectDao().getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T1", daoSession.getDependencyLocalObjectDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T2", daoSession.getDependencyDisappearLocalObjectDao().getAllColumns());
             builder.append(" FROM GENERAL_ITEM_LOCAL_OBJECT T");
             builder.append(" LEFT JOIN GAME_LOCAL_OBJECT T0 ON T.'GAME_ID'=T0.'_id'");
             builder.append(" LEFT JOIN DEPENDENCY_LOCAL_OBJECT T1 ON T.'DEPENDS_ON'=T1.'_id'");
+            builder.append(" LEFT JOIN DEPENDENCY_DISAPPEAR_LOCAL_OBJECT T2 ON T.'DISAPPEAR_AT'=T2.'_id'");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -240,6 +270,10 @@ public class GeneralItemLocalObjectDao extends AbstractDao<GeneralItemLocalObjec
 
         DependencyLocalObject dependencyLocalObject = loadCurrentOther(daoSession.getDependencyLocalObjectDao(), cursor, offset);
         entity.setDependencyLocalObject(dependencyLocalObject);
+        offset += daoSession.getDependencyLocalObjectDao().getAllColumns().length;
+
+        DependencyDisappearLocalObject dependencyDisappearLocalObject = loadCurrentOther(daoSession.getDependencyDisappearLocalObjectDao(), cursor, offset);
+        entity.setDependencyDisappearLocalObject(dependencyDisappearLocalObject);
 
         return entity;    
     }

@@ -17,6 +17,8 @@ import org.celstec.arlearn2.android.whitelabel.SplashScreen;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
+import java.util.HashMap;
+
 /**
  * ****************************************************************************
  * Copyright (C) 2013 Open Universiteit Nederland
@@ -45,27 +47,27 @@ public class GameSplashScreen extends Activity {
     private DownloadViewManager downloadViewManager;
 
     DelayedGameLauncher delayedGameLauncher;
-    private boolean dataSynced = false;
+
+    private static HashMap<Long, Boolean> dataSynced = new HashMap<Long, Boolean>();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_splash_screen);
-        if (!ARL.isInit()) ARL.init(this);
+        ARL.init(this);
 
-
+        final Long gameId = getIntent().getLongExtra(GameLocalObject.class.getName(), 0l);
         Boolean sync = getIntent().getBooleanExtra("syncContent", true);
-        if (sync) {
+        if (sync && (!dataSynced.containsKey(gameId))) {
             downloadViewManager = new DownloadViewManager(findViewById(R.id.downloadStatus)) {
                 @Override
                 public void onDismiss() {
                     super.onDismiss();
-//                startGeneralItemListActivity();
-                    dataSynced = true;
+                    dataSynced.put(gameId, true);
                 }
             };
         } else {
             findViewById(R.id.downloadStatus).setVisibility(View.GONE);
-            dataSynced = true;
+            dataSynced.put(gameId, true);
         }
 
 
@@ -73,21 +75,25 @@ public class GameSplashScreen extends Activity {
 
             @Override
             public void runNextActivity() {
-                Intent gameIntent = new Intent(GameSplashScreen.this, GameMessages.class);
-                gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
-                gameIntent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
-                ARL.actions.createAction(runLocalObject.getId(), "startRun");
-                ARL.actions.syncActions(runLocalObject.getId());
-                ARL.responses.syncResponses(runLocalObject.getId());
-                GameSplashScreen.this.startActivity(gameIntent);
-                GameSplashScreen.this.finish();
+                launchGame();
             }
 
             @Override
             public boolean additionalCondition() {
-                return dataSynced;
+                return dataSynced.containsKey(gameId) && dataSynced.get(gameId);
             }
         };
+    }
+
+    private void launchGame() {
+        Intent gameIntent = new Intent(GameSplashScreen.this, GameMessages.class);
+        gameIntent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
+        gameIntent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
+        ARL.actions.createAction(runLocalObject.getId(), "startRun");
+        ARL.actions.syncActions(runLocalObject.getId());
+        ARL.responses.syncResponses(runLocalObject.getId());
+        GameSplashScreen.this.startActivity(gameIntent);
+        GameSplashScreen.this.finish();
     }
 
     @Override
@@ -101,8 +107,11 @@ public class GameSplashScreen extends Activity {
         SplashScreen.setSplashScreen(this, gameId);
         ARL.generalItemVisibility.calculateVisibility(runId, gameId);
         onlineTest();
-        gameDownloadManager.register();
-        ARL.eventBus.post(gameDownloadManager);
+        if (downloadViewManager!= null) {
+            gameDownloadManager.register();
+            ARL.eventBus.post(gameDownloadManager);
+        }
+
     }
 
     @Override
@@ -134,7 +143,7 @@ public class GameSplashScreen extends Activity {
 
     public void onEventMainThread(NetworkTest.NetworkResult result) {
         if (result.isResult()) {
-            syncGameContent();
+            if (downloadViewManager!= null) syncGameContent();
         } else {
             notOnline();
         }
@@ -174,9 +183,10 @@ public class GameSplashScreen extends Activity {
                 .setNegativeButton(cancelMessage, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        GameSplashScreen.this.finish();
+                        launchGame();
+//                        GameSplashScreen.this.finish();
 //                        startGeneralItemListActivity();
-                        dataSynced = true;
+//                        dataSynced.put(gameId, true);
                     }
                 });
         builder.create();
