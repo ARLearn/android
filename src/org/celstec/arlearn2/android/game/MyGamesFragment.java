@@ -44,6 +44,7 @@ public class MyGamesFragment extends SherlockListFragment implements ListItemCli
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ARL.games.syncMyGames();
+        ARL.games.syncGamesParticipate();
         ARL.runs.syncRunsParticipate();
 
     }

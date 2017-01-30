@@ -11,9 +11,12 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
+import org.celstec.arlearn2.android.events.SplashScreenLoaded;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
+import org.celstec.arlearn2.android.util.ImageUtil;
 import org.celstec.arlearn2.android.views.DownloadViewManager;
 import org.celstec.arlearn2.android.whitelabel.SplashScreen;
+import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
@@ -47,6 +50,7 @@ public class GameSplashScreen extends Activity {
     private DownloadViewManager downloadViewManager;
 
     DelayedGameLauncher delayedGameLauncher;
+    boolean offline = false;
 
     private static HashMap<Long, Boolean> dataSynced = new HashMap<Long, Boolean>();
 
@@ -70,6 +74,16 @@ public class GameSplashScreen extends Activity {
             dataSynced.put(gameId, true);
         }
 
+        GameFileLocalObject background = GameFileLocalObject.getGameFileLocalObject(gameId, "/gameSplashScreen");
+        if (background != null) {
+            ImageUtil.setBackgroundImage(this, background.getPath(), gameId, R.id.main_backgroundImage);
+        } else {
+            int gameSplashScreenDrawable = R.drawable.game_splash_screen;
+            ImageUtil.setBackgroundImage(this, gameSplashScreenDrawable ,gameId,R.id.main_backgroundImage);
+        }
+
+
+
 
         delayedGameLauncher = new DelayedGameLauncher(System.currentTimeMillis() + 3000) {
 
@@ -80,7 +94,7 @@ public class GameSplashScreen extends Activity {
 
             @Override
             public boolean additionalCondition() {
-                return dataSynced.containsKey(gameId) && dataSynced.get(gameId);
+                return offline || (dataSynced.containsKey(gameId) && dataSynced.get(gameId));
             }
         };
     }
@@ -121,17 +135,24 @@ public class GameSplashScreen extends Activity {
         ARL.eventBus.unregister(this);
     }
 
+    public void onEventAsync(SplashScreenLoaded event) {
+        ImageUtil.setBackgroundImage(this, "/gameSplashScreen",gameLocalObject.getId(),R.id.main_backgroundImage);
+    }
+
 
 //    private void startGeneralItemListActivity() {
 //
 //    }
 
     private void onlineTest() {
+
         gameDownloadManager = new GameDownloadManager(gameLocalObject.getId());
         gameDownloadManager.setDownloadEventListener(downloadViewManager);
         if (ARL.isOnline()) {
+            offline = false;
             ARL.eventBus.post(new NetworkTest());
         } else {
+
             notOnline();
         }
 
@@ -143,6 +164,7 @@ public class GameSplashScreen extends Activity {
 
     public void onEventMainThread(NetworkTest.NetworkResult result) {
         if (result.isResult()) {
+            offline = false;
             if (downloadViewManager!= null) syncGameContent();
         } else {
             notOnline();
@@ -156,6 +178,7 @@ public class GameSplashScreen extends Activity {
     }
 
     private void notOnline() {
+        offline = true;
         if (DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameLocalObject.getId()).getLastSyncGeneralItemsDate() == null) {
             displayAlert(R.string.noInternet, R.string.operatingOffline);
             return;

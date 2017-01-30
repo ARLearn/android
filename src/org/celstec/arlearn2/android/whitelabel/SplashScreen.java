@@ -3,10 +3,13 @@ package org.celstec.arlearn2.android.whitelabel;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Display;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -15,11 +18,14 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn.delegators.QuestionDelegator;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
+import org.celstec.arlearn2.android.events.SplashScreenLoaded;
 import org.celstec.arlearn2.android.game.DelayedGameLauncher;
 import org.celstec.arlearn2.android.game.InitWhiteLabelDatabase;
 import org.celstec.arlearn2.android.game.MyGamesActivity;
 import org.celstec.arlearn2.android.game.messageViews.GameMessages;
 import org.celstec.arlearn2.android.game.messageViews.MessageViewLauncher;
+import org.celstec.arlearn2.android.util.BitmapWorkerTask;
+import org.celstec.arlearn2.android.util.ImageUtil;
 import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibility;
 import org.celstec.dao.gen.*;
@@ -101,6 +107,18 @@ public class SplashScreen extends Activity {
         setSplashScreen(this, gameIdToUseForMainSplashScreen);
     }
 
+    public void onEventAsync(SplashScreenLoaded event) {
+        final String splashScreenPath = "/gameSplashScreen";
+        if (event.getPath().equals(splashScreenPath)){
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    SplashScreen.setBackgroundImage(SplashScreen.this, splashScreenPath);
+                }
+            });
+        }
+
+    }
+
     static long getGameIdToUseForMainSplashScreen() {
         if (!ARL.config.containsKey("gameIdToUseForMainSplashScreen")) return 0l;
             Long gameIdToUseForMainSplashScreen = null;
@@ -133,14 +151,36 @@ public class SplashScreen extends Activity {
         }
     }
 
-    static boolean setBackgroundImage(Activity ctx, String imageId) {
+    public static boolean setBackgroundImage(Activity ctx, String path) {
+//        long gameIdToUseForMainSplashScreen = getGameIdToUseForMainSplashScreen();
+//        Bitmap background = GameFileLocalObject.getBitmapFullScreen(ctx, gameIdToUseForMainSplashScreen, imageId);
+//        if (android.os.Build.VERSION.SDK_INT >= 11)
+//            if (background != null) {
+//                ((ImageView) ctx.findViewById(R.id.main_backgroundImage)).setImageBitmap(background);
+//
+//                return true;
+//            }
+//        return false;
         long gameIdToUseForMainSplashScreen = getGameIdToUseForMainSplashScreen();
-        Drawable background = GameFileLocalObject.getDrawable(ctx, gameIdToUseForMainSplashScreen, imageId);
-        if (android.os.Build.VERSION.SDK_INT >= 11)
-            if (background != null) {
-                ((ImageView) ctx.findViewById(R.id.main_backgroundImage)).setImageDrawable(background);
-                return true;
+        String key = gameIdToUseForMainSplashScreen+path;
+        final Bitmap bitmap = ARL.imageCache.getBitmapFromMemCache(key);
+        ImageView imageView = ((ImageView) ctx.findViewById(R.id.main_backgroundImage));
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        } else {
+            Display display = ctx.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            GameFileLocalObject gameFileLocalObject =GameFileLocalObject.getGameFileLocalObject(gameIdToUseForMainSplashScreen, path);
+            if (gameFileLocalObject != null){
+                BitmapWorkerTask task = new BitmapWorkerTask(imageView, key, size.x, size.y);
+                task.execute(gameFileLocalObject);
             }
+
+        }
+
+//        ImageUtil.setBackgroundImage(ctx, key, getGameIdToUseForMainSplashScreen(), R.id.main_backgroundImage);
+
         return false;
     }
 
@@ -150,27 +190,24 @@ public class SplashScreen extends Activity {
     }
 
     private void initDatabase() {
-        if (DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().loadAll().isEmpty()) {
-            System.out.println("db was empty ");
-
+        if (DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().loadAll().isEmpty()
+                ||
+                DaoConfiguration.getInstance().getGameLocalObjectDao().load(InitWhiteLabelDatabase.getGameIds().get(0))== null) {
             ARL.eventBus.register(this);
             InitWhiteLabelDatabase initWhiteLabelDatabase = InitWhiteLabelDatabase.getWhiteLabelDatabaseIniter(this);
             initWhiteLabelDatabase.init();
-            new HtmlSplashScreenInitiationScript(this);
+//            new HtmlSplashScreenInitiationScript(this);
 
         } else {
-            System.out.println("db was not empty ");
             findViewById(R.id.downloadStatus).setVisibility(View.GONE);
          databaseInitReady = true;
         }
     }
 
     public void onEventMainThread(InitWhiteLabelDatabase.SyncReady ready) {
-        System.out.println("splashcreen ready "+ready.isSuccess());
         if (ready.isSuccess()) {
             databaseInitReady = true; GameFileLocalObject gameFileLocalObject = GameFileLocalObject.getGameFileLocalObject(gameIdToUseForMainSplashScreen, "/map.zip");
             if (gameFileLocalObject!= null) {
-                System.out.println("map exists");
                 InitWhiteLabelDatabase.writeFileToOSM(this, gameFileLocalObject.getLocalFile().toString());
             }
             ARL.eventBus.unregister(this);

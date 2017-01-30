@@ -1,6 +1,5 @@
 package org.celstec.arlearn2.android.game.messageViews;
 
-import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,14 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
-import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.arlearn2.android.events.RunEvent;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
-import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.listadapter.ListItemClickInterface;
 import org.celstec.arlearn2.android.listadapter.impl.GeneralItemVisibilityAdapter;
 import org.celstec.arlearn2.android.util.DrawableUtil;
@@ -55,7 +51,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 
     public void onCreate(Bundle savedInstanceState) {
         ARL.init(this);
-        if (ARL.config.isGameMapActionBarTransparent()){
+        if (ARL.config.isGameMapActionBarTransparent()) {
             getWindow().requestFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
         }
 
@@ -68,60 +64,70 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
 
         setContentView(R.layout.game_list_messages);
 
-        boolean enabled =ARL.config.getBooleanProperty("game_messages_show_home");
-        if (android.os.Build.VERSION.SDK_INT >= 11)  getActionBar().setHomeButtonEnabled(enabled);
-                getActionBar().setDisplayShowHomeEnabled(enabled);
-                getActionBar().setDisplayShowTitleEnabled(enabled);
-                if (ARL.config.isGameMessagesActionBarTransparent()){
-                    if (ARL.config.getGameMessagesActionBarTransparency()==ARL.config.TRANSPARENT){
-                        getActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    }
-                    if (ARL.config.getGameMessagesActionBarTransparency()==ARL.config.HALF){
-                        getActionBar().setBackgroundDrawable(drawableUtil.getBackgroundDarkGradientTransparancy());
-                    }
-                } else {
-                    getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
-                }
+        boolean enabled = ARL.config.getBooleanProperty("game_messages_show_home");
+        if (android.os.Build.VERSION.SDK_INT >= 11) getActionBar().setHomeButtonEnabled(enabled);
+        getActionBar().setDisplayShowHomeEnabled(enabled);
+        getActionBar().setDisplayShowTitleEnabled(enabled);
+        if (ARL.config.isGameMessagesActionBarTransparent()) {
+            if (ARL.config.getGameMessagesActionBarTransparency() == ARL.config.TRANSPARENT) {
+                getActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+            if (ARL.config.getGameMessagesActionBarTransparency() == ARL.config.HALF) {
+                getActionBar().setBackgroundDrawable(drawableUtil.getBackgroundDarkGradientTransparancy());
+            }
+        } else {
+            getActionBar().setBackgroundDrawable(new ColorDrawable(DrawableUtil.styleUtil.getBackgroundDark()));
+        }
 
 
         actionBarMenuController = new ActionBarMenuController(this, gameActivityFeatures);
         Drawable messagesHeader = GameFileLocalObject.getDrawable(this, gameActivityFeatures.gameLocalObject.getId(), "/gameMessagesHeader");
         if (messagesHeader != null) {
-            ((ImageView)findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
+            ((ImageView) findViewById(R.id.gameHeader)).setImageDrawable(messagesHeader);
         }
 
 
     }
 
 
-    private void createVisibilityStatement (long visibility) {
-        GeneralItemVisibilityLocalObject visibilityLocalObject = new GeneralItemVisibilityLocalObject();
-        visibilityLocalObject.setGeneralItemId(visibility);
-        visibilityLocalObject.setTimeStamp(System.currentTimeMillis());
-        visibilityLocalObject.setStatus(1);
-        visibilityLocalObject.setRunId(gameActivityFeatures.getRunId());
-        visibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
-        String id = GeneralItemVisibilityLocalObject.generateId(gameActivityFeatures.getRunId(), visibilityLocalObject.getGeneralItemId());
-        visibilityLocalObject.setId(id);
-        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(visibilityLocalObject);
-    }
+//    private void createVisibilityStatement (long visibility) {
+//        GeneralItemVisibilityLocalObject visibilityLocalObject = new GeneralItemVisibilityLocalObject();
+//        visibilityLocalObject.setGeneralItemId(visibility);
+//        visibilityLocalObject.setTimeStamp(System.currentTimeMillis());
+//        visibilityLocalObject.setStatus(1);
+//        visibilityLocalObject.setRunId(gameActivityFeatures.getRunId());
+//        visibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
+//        String id = GeneralItemVisibilityLocalObject.generateId(gameActivityFeatures.getRunId(), visibilityLocalObject.getGeneralItemId());
+//        visibilityLocalObject.setId(id);
+//        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(visibilityLocalObject);
+//    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ARL.eventBus.register(this);
-        if (menu!=null) actionBarMenuController.updateScore(menu);
-        adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId(),  ARL.config.getProperty("message_view_messages").equals("messages_only"));
-        gameActivityFeatures.checkRunDeleted(this);
-        setListAdapter(adapter);
-        adapter.setOnListItemClickCallback(this);
-        ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
-        ARL.generalItemVisibility.calculateVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
-        ARL.generalItemVisibility.calculateInVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
-        ARL.generalItemVisibility.syncGeneralItemVisibilities(gameActivityFeatures.getRunLocalObject());
+        try {
+            if (ARL.properties.getAccount() == 0 || gameActivityFeatures.getRunLocalObject() == null) this.finish();
+            ARL.eventBus.register(this);
+            if (menu != null) actionBarMenuController.updateScore(menu);
+            if (gameActivityFeatures.getRunLocalObject() == null) this.finish();
+            if (adapter == null)
+                adapter = new GeneralItemVisibilityAdapter(this, gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId(), ARL.config.getProperty("message_view_messages").equals("messages_only"));
+            adapter.register();
+            gameActivityFeatures.checkRunDeleted(this);
+            setListAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            adapter.setOnListItemClickCallback(this);
+            ARL.generalItems.syncGeneralItems(gameActivityFeatures.getGameLocalObject());
+            ARL.responses.syncResponses(gameActivityFeatures.getRunId());
+            ARL.generalItemVisibility.calculateVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+            ARL.generalItemVisibility.calculateInVisibility(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
+            ARL.generalItemVisibility.syncGeneralItemVisibilities(gameActivityFeatures.getRunLocalObject());
 
-        GeneralItemBecameVisibleEvent event = (GeneralItemBecameVisibleEvent) ARL.eventBus.removeStickyEvent(GeneralItemBecameVisibleEvent.class);
-        if (event !=null) onEventMainThread(event);
+            GeneralItemBecameVisibleEvent event = (GeneralItemBecameVisibleEvent) ARL.eventBus.removeStickyEvent(GeneralItemBecameVisibleEvent.class);
+            if (event != null) onEventMainThread(event);
+        } catch (Exception e) {
+            this.finish();
+        }
     }
 
     public void onEventMainThread(final GeneralItemBecameVisibleEvent event) {
@@ -130,7 +136,7 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     }
 
     public void onEventMainThread(RunEvent runEvent) {
-        if (runEvent.getRunId() == gameActivityFeatures.getRunId() && runEvent.isDeleted()){
+        if (runEvent.getRunId() == gameActivityFeatures.getRunId() && runEvent.isDeleted()) {
             this.finish();
         }
     }
@@ -152,12 +158,13 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
     protected void onPause() {
         super.onPause();
         ARL.eventBus.unregister(this);
+        if (adapter != null) adapter.unregister();
     }
 
     @Override
     public void onListItemClick(View v, int position, GeneralItemVisibilityLocalObject object) {
         Intent intent = new Intent(this, GeneralItemActivity.class);
-        gameActivityFeatures.addMetadataToIntent(intent);
+        gameActivityFeatures.addMetadataToIntent(intent, true);
         intent.putExtra(GeneralItemLocalObject.class.getName(), object.getGeneralItemLocalObject().getId());
         startActivity(intent);
     }
@@ -174,10 +181,10 @@ public class GameMessages extends ListActivity implements ListItemClickInterface
         gameActivityFeatures.saveState(outState);
     }
 
-    public static void startActivity(Context ctx, long gameId, long runId){
-            Intent gameIntent = new Intent(ctx, GameMessages.class);
-            gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
-            gameIntent.putExtra(RunLocalObject.class.getName(), runId);
-            ctx.startActivity(gameIntent);
+    public static void startActivity(Context ctx, long gameId, long runId) {
+        Intent gameIntent = new Intent(ctx, GameMessages.class);
+        gameIntent.putExtra(GameLocalObject.class.getName(), gameId);
+        gameIntent.putExtra(RunLocalObject.class.getName(), runId);
+        ctx.startActivity(gameIntent);
     }
 }

@@ -22,7 +22,7 @@ import org.celstec.arlearn2.android.delegators.ARL;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class WebViewGoogle extends WebViewFragment{
+public class    WebViewGoogle extends WebViewFragment{
     @Override
     protected String getUrl() {
         return "https://accounts.google.com/o/oauth2/auth?redirect_uri="

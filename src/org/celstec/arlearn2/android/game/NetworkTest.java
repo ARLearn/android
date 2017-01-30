@@ -61,16 +61,19 @@ public class NetworkTest {
             private boolean responded = false;
             @Override
             public void run() {
+                System.out.println("running thread");
                 // set 'responded' to TRUE if is able to connect with google mobile (responds fast)
                 new Thread() {
                     @Override
                     public void run() {
-                        HttpGet requestForTest = new HttpGet("http://m.google.com");
+                        HttpGet requestForTest = new HttpGet("https://streetlearn.appspot.com/js/routes.js");
                         try {
                             new DefaultHttpClient().execute(requestForTest); // can last...
                             responded = true;
+                            System.out.println("esponded");
                         }
                         catch (Exception e) {
+                            System.out.println("exception");
                         }
                     }
                 }.start();
@@ -78,6 +81,8 @@ public class NetworkTest {
                 try {
                     int waited = 0;
                     while(!responded && (waited < timeout)) {
+                        System.out.println("while " + (!responded) + waited+" "+timeout);
+
                         sleep(100);
                         if(!responded ) {
                             waited += 100;
@@ -89,6 +94,8 @@ public class NetworkTest {
                     if (!responded) { handler.sendEmptyMessage(0); }
                     else { handler.sendEmptyMessage(1); }
                 }
+                System.out.println("out of loop");
+
             }
         }.start();
     }
@@ -98,9 +105,11 @@ public class NetworkTest {
         public void handleMessage(Message msg) {
 
             if (msg.what != 1) { // code if not connected
+                System.out.println("no network");
                 ARL.eventBus.post(new NetworkResult(false));
 
             } else { // code if connected
+                System.out.println("online");
                 ARL.eventBus.post(new NetworkResult(true));
 
             }

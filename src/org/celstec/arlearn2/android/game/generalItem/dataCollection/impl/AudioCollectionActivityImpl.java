@@ -4,6 +4,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.webkit.WebView;
 import android.widget.*;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.dataCollection.activities.AudioCollectionActivity;
@@ -108,6 +109,11 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     }
 
     @Override
+    public int getTextView() {
+        return R.id.audioWebView;
+    }
+
+    @Override
     public int getStartRecordingButton() {
         return R.id.startRecording;
     }
@@ -146,6 +152,8 @@ public class AudioCollectionActivityImpl extends AudioCollectionActivity{
     public int getSeekBar() {
         return R.id.seekbar;
     }
+
+
 
 
 }

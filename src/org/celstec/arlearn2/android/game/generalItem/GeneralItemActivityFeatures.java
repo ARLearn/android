@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.TextView;
 import daoBase.DaoConfiguration;
@@ -21,11 +22,13 @@ import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.AudioCo
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.TextInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.dataCollection.impl.ValueInputCollectionActivityImpl;
 import org.celstec.arlearn2.android.game.generalItem.itemTypes.*;
+import org.celstec.arlearn2.android.game.messageViews.*;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.beans.generalItem.*;
 import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GameFileLocalObject;
 import org.celstec.dao.gen.GeneralItemLocalObject;
+import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 
 /**
  * ****************************************************************************
@@ -63,10 +66,13 @@ public abstract class GeneralItemActivityFeatures {
     private AudioInputManager audioInputManager;
     private VideoManager videoInputManager;
 
+    private boolean showNavigationBar = true;
+
 
     public static GeneralItemActivityFeatures getGeneralItemActivityFeatures(final GeneralItemActivity activity){
 
         Long generalItemId = activity.getIntent().getLongExtra(GeneralItemLocalObject.class.getName(), 0l);
+        boolean showNavigationbar = activity.getIntent().getBooleanExtra("showNavigationbar", true);
         GeneralItemLocalObject generalItemLocalObject = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(generalItemId);
         GeneralItemActivityFeatures result = null;
         switch (GeneralItemMapper.mapBeanToConstant(generalItemLocalObject.getGeneralItemBean())){
@@ -101,10 +107,23 @@ public abstract class GeneralItemActivityFeatures {
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 result =new VideoObjectFeatures(activity, generalItemLocalObject);
                 break;
+            case GeneralItemMapper.END_MESSAGE:
+                result = new EndMessageFeatures(activity, generalItemLocalObject);
+                break;
         }
         result.setMetadata();
+        result.setShowNavigationBar(showNavigationbar);
         return result;
     }
+
+    public boolean isShowNavigationBar() {
+        return showNavigationBar;
+    }
+
+    public void setShowNavigationBar(boolean showNavigationBar) {
+        this.showNavigationBar = showNavigationBar;
+    }
+
     public static int getContentView(GeneralItemActivity activity) {
         Long generalItemId = activity.getIntent().getLongExtra(GeneralItemLocalObject.class.getName(), 0l);
         GeneralItemLocalObject generalItemLocalObject = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(generalItemId);
@@ -116,6 +135,9 @@ public abstract class GeneralItemActivityFeatures {
                 break;
             case GeneralItemMapper.SCAN_TAG:
                 result = R.layout.game_general_item_scan;
+                break;
+            case GeneralItemMapper.END_MESSAGE:
+                result = R.layout.game_general_item_end_message;
                 break;
             default:
                 result = R.layout.game_general_item;
@@ -149,7 +171,8 @@ public abstract class GeneralItemActivityFeatures {
                 audioInputManager.setGeneralItem(GeneralItemActivityFeatures.this.generalItemLocalObject);
                 audioInputManager.setRunId(GeneralItemActivityFeatures.this.activity.getGameActivityFeatures().getRunId());
                 audioInputManager.setTheme(activity.getGameActivityFeatures().getTheme());
-                audioInputManager.takeDataSample(AudioCollectionActivityImpl.class);
+                String message = ((NarratorItem)generalItemLocalObject.getGeneralItemBean()).getOpenQuestion().getAudioDescription();
+                audioInputManager.takeDataSample(AudioCollectionActivityImpl.class, message);
             }
 
             @Override
@@ -203,7 +226,11 @@ public abstract class GeneralItemActivityFeatures {
 
     public void onResumeActivity(){
         if (dataCollectionViewController !=null) dataCollectionViewController.showChecks(lazyListAdapter);
+        checkInvisibility();
+
     }
+
+
 
     public void setMetadata(){
 //        if (DrawableUtil.isInit()) new DrawableUtil(activity.getGameActivityFeatures().getTheme(), activity);
@@ -276,10 +303,13 @@ public abstract class GeneralItemActivityFeatures {
     }
 
 
-    public void onPauseActivity(){}
+    public void onPauseActivity(){
+        mHandler.removeCallbacks(periodicTimeCheck);
+    }
 
     public void updateResponses() {
-        dataCollectionResultController.notifyDataSetChanged();
+        if (dataCollectionResultController != null)
+            dataCollectionResultController.notifyDataSetChanged();
     }
 
     public void updateGeneralItem(){
@@ -297,5 +327,40 @@ public abstract class GeneralItemActivityFeatures {
 
     public void setPortrait() {
     }
+
+    private void checkInvisibility() {
+
+        String id = GeneralItemVisibilityLocalObject.generateId(generalItemLocalObject.getId(),activity.getGameActivityFeatures().getRunId(),GeneralItemVisibilityLocalObject.INVISIBLE);
+        GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
+        if (generalItemVisibilityLocalObject != null && generalItemVisibilityLocalObject.getStatus()==GeneralItemVisibilityLocalObject.INVISIBLE) {
+            long delta =  generalItemVisibilityLocalObject.getTimeStamp() -ARL.time.getServerTime();
+            ARL.time.printTime();
+            ARL.time.printTime("will become invisible at ", generalItemVisibilityLocalObject.getTimeStamp());
+            long seconds = delta /1000;
+            long minutes = seconds /60;
+            seconds = seconds %60;
+            long hours = minutes /60;
+            minutes = minutes %60;
+            String countdown = hours+":"+minutes+":"+seconds;
+            ARL.time.printTime("will become invisible at "+countdown, generalItemVisibilityLocalObject.getTimeStamp());
+//            if (generalItemVisibilityLocalObject.getTimeStamp() < ARL.time.getServerTime()) {
+//
+//                System.out.println("will become invisible in "+(delta/1000) + " seconds");
+
+//            }
+        }
+        mHandler.postDelayed(periodicTimeCheck, 1000);
+    }
+
+    private Runnable periodicTimeCheck = new Runnable() {
+        @Override
+        public void run() {
+
+            checkInvisibility();
+        }
+    };
+    private Handler mHandler = new Handler();
+
+
 
 }

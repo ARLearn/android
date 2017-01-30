@@ -12,6 +12,8 @@ import org.celstec.arlearn2.android.listadapter.AbstractGeneralItemsVisibilityAd
 import org.celstec.dao.gen.GeneralItemLocalObject;
 import org.celstec.dao.gen.GeneralItemVisibilityLocalObject;
 
+import java.util.ArrayList;
+
 /**
  * ****************************************************************************
  * Copyright (C) 2013 Open Universiteit Nederland
@@ -52,12 +54,17 @@ public class ActionBarMenuController {
     }
     private void setVisibilityQuery() {
         QueryBuilder<GeneralItemVisibilityLocalObject> qb = AbstractGeneralItemsVisibilityAdapter.getQueryBuilder(gameActivityFeatures.getRunId(), gameActivityFeatures.getGameId());
-
+        ArrayList<GeneralItemVisibilityLocalObject> list = new ArrayList<>();
+        for (GeneralItemVisibilityLocalObject vi : qb.listLazy()) {
+            if (vi.getGeneralItemLocalObject().getLng() == null){
+                list.add(vi);
+            }
+        }
         boolean found = false;
         boolean setNext = false;
         int counter = 0;
         int total = qb.listLazy().size();
-        for (GeneralItemVisibilityLocalObject vi : qb.listLazy()) {
+        for (GeneralItemVisibilityLocalObject vi : list) {
             if (setNext) {
                 nextGeneralItemLocalObject = vi.getGeneralItemLocalObject();
                 setNext = false;
@@ -82,6 +89,9 @@ public class ActionBarMenuController {
         } else {
             downItem.setIcon(R.drawable.ic_previous_message_upstate);
         }
+        if (!generalItemActivityFeatures.isShowNavigationBar()){
+            hideButtons();
+        }
     }
     public void inflateMenu(Menu menu) {
         MenuInflater inflater = activity.getMenuInflater();
@@ -89,6 +99,9 @@ public class ActionBarMenuController {
         upItem = menu.findItem(R.id.action_gi_up);
         downItem = menu.findItem(R.id.action_gi_down);
         setVisibilityQuery();
+        if (!generalItemActivityFeatures.isShowNavigationBar()){
+            hideButtons();
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -126,7 +139,7 @@ public class ActionBarMenuController {
 
     private void launchGeneralItemActivity(GeneralItemLocalObject localObject) {
         Intent intent = new Intent(activity, GeneralItemActivity.class);
-        gameActivityFeatures.addMetadataToIntent(intent);
+        gameActivityFeatures.addMetadataToIntent(intent, true);
         intent.putExtra(GeneralItemLocalObject.class.getName(), localObject.getId());
         activity.startActivity(intent);
     }
@@ -143,4 +156,9 @@ public class ActionBarMenuController {
         return previousGeneralItemLocalObject != null;
     }
 
+    public void hideButtons() {
+        upItem.setVisible(false);
+        downItem.setVisible(false);
+
+    }
 }

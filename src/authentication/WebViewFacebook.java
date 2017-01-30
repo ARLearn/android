@@ -29,6 +29,6 @@ public class WebViewFacebook extends WebViewFragment{
                 + ARL.config.getProperty("facebook_clientId")
                 +"&display=page&redirect_uri="
                 + ARL.config.getProperty("facebook_redirecturi")
-                + "&scope=publish_stream,email";
+                + "&scope=email";
     }
 }

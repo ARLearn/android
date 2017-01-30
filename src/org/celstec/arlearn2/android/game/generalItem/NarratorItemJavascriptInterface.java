@@ -58,11 +58,21 @@ public class NarratorItemJavascriptInterface {
 
     @JavascriptInterface
     public void hint(String title, String text, String button){
-        System.out.println("about to display text");
         Intent audioRecording = new Intent(ARL.ctx, HintActivity.class);
         audioRecording.putExtra("title", title);
         audioRecording.putExtra("text", text);
         audioRecording.putExtra("button", button);
         ARL.ctx.startActivity(audioRecording);
     }
+
+    @JavascriptInterface
+    public void startChat(String title){
+        Intent chatIntent = new Intent(ARL.ctx, ChatActivity.class);
+        chatIntent.putExtra("threadName", title);
+        chatIntent.putExtra("runId", runId);
+        ARL.ctx.startActivity(chatIntent);
+
+
+    }
+
 }

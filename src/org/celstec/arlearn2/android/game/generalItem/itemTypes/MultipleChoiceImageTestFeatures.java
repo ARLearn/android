@@ -90,7 +90,7 @@ public class MultipleChoiceImageTestFeatures extends SingleChoiceImageTestFeatur
 //
 //                }
                 if (!selected.contains(selectedItem)) {
-                    Uri audioUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + ":a").getLocalUri();
+                    Uri audioUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + "_a").getLocalUri();
                     playUri(audioUri);
                 }
                 toggleSelectedAnswer(selectedItem);

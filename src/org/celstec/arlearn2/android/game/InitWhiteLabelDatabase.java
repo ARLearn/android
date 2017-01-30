@@ -1,28 +1,23 @@
 package org.celstec.arlearn2.android.game;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
-import android.view.View;
 import daoBase.DaoConfiguration;
-import de.greenrobot.dao.internal.DaoConfig;
-import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AccountDelegator;
 import org.celstec.arlearn2.android.delegators.GameDelegator;
-import org.celstec.arlearn2.android.delegators.game.GameDownloadManager;
-import org.celstec.arlearn2.android.delegators.game.GameDownloadManager2;
-import org.celstec.arlearn2.android.views.DownloadViewManager;
 import org.celstec.arlearn2.beans.game.Config;
-import org.celstec.dao.gen.*;
+import org.celstec.dao.gen.AccountLocalObject;
+import org.celstec.dao.gen.GameFileLocalObject;
+import org.celstec.dao.gen.GameLocalObject;
+import org.celstec.dao.gen.RunLocalObject;
 
 import java.io.*;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 /**
  * ****************************************************************************
@@ -63,10 +58,10 @@ public class InitWhiteLabelDatabase {
         this.context = context;
     }
 
-    public static List<Long> getGameIds(){
-        String localizedGames = "white_label_gameId_"+Locale.getDefault().getLanguage();
-        System.out.println("localised string "+localizedGames);
-        String gameIds =  null;
+    public static List<Long> getGameIds() {
+        String localizedGames = "white_label_gameId_" + Locale.getDefault().getLanguage();
+        System.out.println("localised string " + localizedGames);
+        String gameIds = null;
         if (ARL.config.getProperty(localizedGames) != null) {
 
             gameIds = ARL.config.getProperty(localizedGames);
@@ -75,8 +70,8 @@ public class InitWhiteLabelDatabase {
             gameIds = ARL.config.getProperty("white_label_gameId");
         }
         List<String> list = new ArrayList<String>(Arrays.asList(gameIds.split(",")));
-        List<Long> gameIdsLong= new ArrayList<Long>(list.size());
-        for (String gameId: list){
+        List<Long> gameIdsLong = new ArrayList<Long>(list.size());
+        for (String gameId : list) {
             gameIdsLong.add(Long.parseLong(gameId));
         }
         return gameIdsLong;
@@ -99,6 +94,7 @@ public class InitWhiteLabelDatabase {
 
             } else {
                 loadGameScript();
+                loadBackground();
                 loadGameFiles();
                 loadRunScript();
                 if (!ARL.config.getBooleanProperty("show_anonymous_registration")) createDefaultAccount();
@@ -115,11 +111,15 @@ public class InitWhiteLabelDatabase {
         ARL.eventBus.unregister(this);
     }
 
+    private void loadBackground() {
+
+    }
+
     private void unpackTileSources() {
         if (gameId != null) {
             unpackTileSources(gameId);
         } else {
-            for (Long gameIdLong:gameIdsLong) {
+            for (Long gameIdLong : gameIdsLong) {
                 unpackTileSources(gameIdLong);
             }
         }
@@ -129,10 +129,10 @@ public class InitWhiteLabelDatabase {
 
     private void unpackTileSources(long gameId) {
         Config config = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getGameBean().getConfig();
-        if (config.getTileSource()!= null) {
+        if (config.getTileSource() != null) {
             System.out.println("unpacking tiles");
-            File zipFilePath = GameFileLocalObject.getGameFileLocalObject(gameId, "/"+config.getTileSource()).getLocalFile();
-            String destDirectory = Environment.getExternalStorageDirectory()+"/osmdroid";
+            File zipFilePath = GameFileLocalObject.getGameFileLocalObject(gameId, "/" + config.getTileSource()).getLocalFile();
+            String destDirectory = Environment.getExternalStorageDirectory() + "/osmdroid";
             if (!new File(destDirectory).exists()) {
                 new File(destDirectory).mkdir();
             }
@@ -170,8 +170,7 @@ public class InitWhiteLabelDatabase {
     }
 
 
-    static public void extractFolder(String zipFile, String newPath) throws ZipException, IOException
-    {
+    static public void extractFolder(String zipFile, String newPath) throws ZipException, IOException {
         System.out.println(zipFile);
         int BUFFER = 2048;
         File file = new File(zipFile);
@@ -182,8 +181,7 @@ public class InitWhiteLabelDatabase {
         Enumeration zipFileEntries = zip.entries();
 
         // Process each entry
-        while (zipFileEntries.hasMoreElements())
-        {
+        while (zipFileEntries.hasMoreElements()) {
             // grab a zip file entry
             ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
             String currentEntry = entry.getName();
@@ -194,8 +192,7 @@ public class InitWhiteLabelDatabase {
             // create the parent directory structure if needed
             destinationParent.mkdirs();
 
-            if (!entry.isDirectory())
-            {
+            if (!entry.isDirectory()) {
                 BufferedInputStream is = new BufferedInputStream(zip
                         .getInputStream(entry));
                 int currentByte;
@@ -219,8 +216,8 @@ public class InitWhiteLabelDatabase {
     }
 
 
-        private void createMaps() {
-        if (ARL.config.getProperty("white_label_map_file")!= null) {
+    private void createMaps() {
+        if (ARL.config.getProperty("white_label_map_file") != null) {
             String filename = ARL.config.getProperty("white_label_map_file");
             AssetManager assetManager = context.getAssets();
             try {
@@ -240,7 +237,7 @@ public class InitWhiteLabelDatabase {
         }
     }
 
-    public static void writeFileToOSM(Context context, String filename){
+    public static void writeFileToOSM(Context context, String filename) {
         AssetManager assetManager = context.getAssets();
         try {
             File file = new File(filename);
@@ -262,7 +259,7 @@ public class InitWhiteLabelDatabase {
     private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
-        while((read = in.read(buffer)) != -1){
+        while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
         }
     }
@@ -271,29 +268,28 @@ public class InitWhiteLabelDatabase {
         if (gameId != null) {
             GameDelegator.getInstance().loadGameFromFile(context, gameId);
         } else {
-            for (Long gameIdLong:gameIdsLong) {
+            for (Long gameIdLong : gameIdsLong) {
                 GameDelegator.getInstance().loadGameFromFile(context, gameIdLong);
             }
         }
     }
 
-    protected void loadGameFiles(){
-        System.out.println("load game files in superclass");
-            for (long gameId: gameIdsLong) {
-                GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
-            }
+    protected void loadGameFiles() {
+        for (long gameId : gameIdsLong) {
+            GameDelegator.getInstance().retrieveGameFilesFromFile(context, gameId);
+        }
     }
 
     private void loadRunScript() {
         if (!ARL.config.getBooleanProperty("white_label_login")) {
             if (!ARL.config.getBooleanProperty("show_anonymous_registration"))
-            for (GameLocalObject gameLocalObject : DaoConfiguration.getInstance().getGameLocalObjectDao().loadAll()) {
-                RunLocalObject runLocalObject = new RunLocalObject();
-                runLocalObject.setGameId(gameLocalObject.getId());
-                runLocalObject.setTitle("Default");
-                runLocalObject.setDeleted(false);
-                DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
-            }
+                for (GameLocalObject gameLocalObject : DaoConfiguration.getInstance().getGameLocalObjectDao().loadAll()) {
+                    RunLocalObject runLocalObject = new RunLocalObject();
+                    runLocalObject.setGameId(gameLocalObject.getId());
+                    runLocalObject.setTitle("Default");
+                    runLocalObject.setDeleted(false);
+                    DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(runLocalObject);
+                }
         }
     }
 
@@ -315,11 +311,11 @@ public class InitWhiteLabelDatabase {
         }
     }
 
-    public class AsyncStartInitDB{
+    public class AsyncStartInitDB {
 
     }
 
-    public class SyncReady{
+    public class SyncReady {
         private boolean success;
 
         public SyncReady(boolean success) {

@@ -62,6 +62,8 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
     private final static int PAUSE = 0;
     private final static int PLAYING = 1;
 
+    private boolean updateProgressBar = true;
+
 //    private boolean isTracking = true;
 
 
@@ -115,7 +117,11 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
         seekbar = (SeekBar) activity.findViewById(R.id.seekbar);
 
-        if (!ARL.config.getBooleanProperty("media_player_drag")) {
+        long runId = activity.getGameActivityFeatures().getRunId();
+
+        if (!ARL.config.getBooleanProperty("media_player_drag")
+                && ActionsDelegator.getInstance().actionDoesNotExist(runId,generalItemLocalObject.getId(), "complete",ARL.accounts.getLoggedInAccount())) {
+//        if (!ARL.config.getBooleanProperty("media_player_drag")) {
             seekbar.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -128,6 +134,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
     }
 
     public void onResumeActivity(){
+
         onResumeActivity(true);
     }
 
@@ -143,6 +150,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
         mediaPlayer.reset();
         oneTimeOnly = 0;
         status = PAUSE;
+        updateProgressBar = true;
         try {
             if (audioFile != null) {
                 Uri uri = audioFile.getLocalUri();
@@ -156,6 +164,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
 
     public void onPauseActivity(){
         super.onPauseActivity();
+        updateProgressBar = false;
         mediaPlayer.stop();
     }
 
@@ -193,7 +202,7 @@ public class AudioItemFeatures extends NarratorItemFeatures implements SeekBar.O
             startTime = mediaPlayer.getCurrentPosition();
 
             if (!touching)  seekbar.setProgress((int)startTime);
-            myHandler.postDelayed(this, 100);
+            if (updateProgressBar) myHandler.postDelayed(this, 100);
         }
     };
 

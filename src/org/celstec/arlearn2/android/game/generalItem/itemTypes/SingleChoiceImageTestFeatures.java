@@ -152,7 +152,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
             TableRow.LayoutParams layoutParams = new TableRow.LayoutParams();
             layoutParams.weight = 1;
             child.setLayoutParams(layoutParams);
-            Uri imageUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + ":i").getLocalUri();
+            Uri imageUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + "_i").getLocalUri();
             if (imageUri != null) {
                 ((ImageView) child.findViewById(R.id.tileImage)).setImageURI(imageUri);
             }
@@ -188,7 +188,7 @@ public class SingleChoiceImageTestFeatures extends SingleChoiceFeatures {
                 if (audioItemFeatures.isPlaying()) audioItemFeatures.playPause();
 //                audioItemFeatures.onResumeActivity(false);
 
-                Uri audioUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + ":a").getLocalUri();
+                Uri audioUri = gameFiles.get("/generalItems/" + generalItemLocalObject.getId() + "/" + answerId + "_a").getLocalUri();
                 playUri(audioUri);
 
                 submitVoteButton.setVisibility(View.VISIBLE);

@@ -91,3 +91,5 @@ public class NarratorItemFeatures extends GeneralItemActivityFeatures{
 
     }
 }
+// <div onclick="arlearn.startChat('Taak');" style="width: 300px;">klik hier om de chat te starten</div> <div onclick="arlearn.hint('test','test','test');" style="width: 300px;">hint</div>
+// <div onclick="arlearn.startChat('Taak');">klik test hier om de chat te starten</div>

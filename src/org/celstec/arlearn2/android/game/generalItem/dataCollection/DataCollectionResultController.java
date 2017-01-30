@@ -75,6 +75,9 @@ public class DataCollectionResultController {
             case ResponseLocalObject.VALUE_TYPE:
                 ((ImageView) row.findViewById(R.id.dcTypeIcon)).setImageResource(R.drawable.game_data_collection_number);
                 break;
+            case ResponseLocalObject.ANSWER_TYPE:
+                ((ImageView) row.findViewById(R.id.dcTypeIcon)).setImageResource(R.drawable.game_general_item_type_mc);
+                break;
         }
         if (result.getDataAsString() != null) {
 //            WebView webView = (WebView) this.activity.findViewById(R.id.descriptionId);
@@ -84,10 +87,15 @@ public class DataCollectionResultController {
 
             ((TextView) row.findViewById(R.id.messageText)).setText(result.getDataAsString());
         } else {
-            ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
+            if (result.getType() == ResponseLocalObject.ANSWER_TYPE) {
+                ((TextView) row.findViewById(R.id.messageText)).setText(responseLocalObject.getValue());
+
+            } else {
+                ((TextView) row.findViewById(R.id.messageText)).setText(result.getTitle());
+            }
         }
         (row.findViewById(R.id.messageText)).setOnClickListener(createRowClickerListener(result, responseLocalObject));
-        if (responseLocalObject.getAccountLocalObject() != ARL.accounts.getLoggedInAccount()){
+        if (responseLocalObject.getAccountLocalObject() != ARL.accounts.getLoggedInAccount() || result.getType() ==ResponseLocalObject.ANSWER_TYPE){
             row.findViewById(R.id.trashIcon).setVisibility(View.GONE);
         } else {
             (row.findViewById(R.id.trashIcon)).setOnClickListener(createDeleteRowClickListener(responseLocalObject, row));

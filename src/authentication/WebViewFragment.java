@@ -66,13 +66,22 @@ public abstract class WebViewFragment extends SherlockFragment {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            if (url.contains("oauth.html?accessToken=")) {
-                String token = url.substring(url.indexOf("?")+1);
-                token = token.substring(token.indexOf("=")+1, token.indexOf("&"));
+            System.out.println("URL "+url);
+            if (url.contains("#/oauth/")) {
+                String token = url.substring(url.indexOf("oauth/")+6);
+                token = token.substring(0, token.indexOf("/"));
                 ARL.properties.setAuthToken(token);
                 ARL.accounts.syncMyAccountDetails();
                 getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().popBackStack();
+//            } else
+//            if (url.contains("oauth.html?accessToken=")) {
+//                String token = url.substring(url.indexOf("?")+1);
+//                token = token.substring(token.indexOf("=")+1, token.indexOf("&"));
+//                ARL.properties.setAuthToken(token);
+//                ARL.accounts.syncMyAccountDetails();
+//                getActivity().getSupportFragmentManager().popBackStack();
+//                getActivity().getSupportFragmentManager().popBackStack();
             } else  if (url.endsWith("oauth.html") || url.contains("twitter?denied")) {
                 getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().popBackStack();

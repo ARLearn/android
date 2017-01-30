@@ -26,11 +26,12 @@ public class MyGamesGridActivity  extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ARL.init(this);
         GameLocalObject game = null;
         Long gameIdToUseForMainSplashScreen = 0l;
-        if (ARL.config.getBooleanProperty("white_label_login")) {
-            ARL.runs.syncRunsParticipate();
-        }
+//        if (ARL.config.getBooleanProperty("white_label_login")) {
+//            //ARL.runs.syncRunsParticipate();
+//        }
         if (ARL.config.containsKey("gameIdToUseForMainSplashScreen")) {
             gameIdToUseForMainSplashScreen = Long.parseLong((String) ARL.config.get("gameIdToUseForMainSplashScreen"));
             game = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameIdToUseForMainSplashScreen);
@@ -54,6 +55,13 @@ public class MyGamesGridActivity  extends Activity {
         myGamesGridImageAdapter = new MyGamesGridImageAdapter(this);
         gridview.setAdapter(myGamesGridImageAdapter);
 
+        if (ARL.config.getBooleanProperty("white_label_login")) {
+            //ARL.runs.syncRunsParticipate();
+            for (GameLocalObject gameLocalObject: myGamesGridImageAdapter.gameLocalObjects){
+                ARL.runs.syncRunsParticipate(gameLocalObject.getId());
+            }
+        }
+
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -66,6 +74,9 @@ public class MyGamesGridActivity  extends Activity {
 
     public void openGame(long itemId) {
         GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(itemId);
+        if (ARL.config.getBooleanProperty("white_label_login")) {
+            ARL.runs.syncRunsParticipate(gameLocalObject.getId());
+        }
         boolean found = false;
         RunLocalObject runLocalObject = null;
         int amount = 0;

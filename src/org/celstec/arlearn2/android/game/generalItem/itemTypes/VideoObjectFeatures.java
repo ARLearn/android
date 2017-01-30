@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +18,6 @@ import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
 import org.celstec.arlearn2.android.game.generalItem.GeneralItemMapper;
 import org.celstec.arlearn2.android.util.DrawableUtil;
 import org.celstec.arlearn2.android.views.MyVideoView;
-import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.arlearn2.beans.generalItem.VideoObject;
 import org.celstec.arlearn2.beans.run.Action;
 import org.celstec.dao.gen.GameFileLocalObject;
@@ -72,6 +72,8 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
         super(activity, generalItemLocalObject);
         videoView = (MyVideoView) activity.findViewById(R.id.videoView);
         videoView.setVisibility(View.VISIBLE);
+//        videoView.setBackgroundColor(DrawableUtil.styleUtil.getBackgroundColor());
+        videoView.setZOrderOnTop(true);
 
         activity.findViewById(R.id.mediaBar).setVisibility(View.VISIBLE);
         ((SeekBar)activity.findViewById(R.id.seekbar)).setThumb(DrawableUtil.getPrimaryColorOvalSeekbar());
@@ -96,7 +98,10 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
         });
 
         seekbar = (SeekBar) activity.findViewById(R.id.seekbar);
-        if (!ARL.config.getBooleanProperty("media_player_drag")) {
+        long runId = activity.getGameActivityFeatures().getRunId();
+
+        if (!ARL.config.getBooleanProperty("media_player_drag")
+                && ActionsDelegator.getInstance().actionDoesNotExist(runId,generalItemLocalObject.getId(), "complete",ARL.accounts.getLoggedInAccount())) {
             seekbar.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -113,7 +118,13 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
             retriever.setDataSource(activity, gameFile.getLocalUri());
             videoView.setVideoURI(gameFile.getLocalUri());
             Bitmap frameAtTime = retriever.getFrameAtTime();
-            if (frameAtTime!=null) videoView.setVideoSize(frameAtTime.getWidth(), frameAtTime.getHeight());
+            if (frameAtTime!=null) {
+                videoView.setVideoSize(frameAtTime.getWidth(), frameAtTime.getHeight());
+                videoView.seekTo(10);
+
+//                videoView.setBackgroundColor(Color.TRANSPARENT);
+            }
+//            videoView.setBackgroundColor(DrawableUtil.styleUtil.getBackgroundColor());
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
@@ -124,6 +135,7 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
 
                 }
             });
+
         }
     }
 
@@ -131,6 +143,10 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
         super.onPauseActivity();
         videoView.stopPlayback();
         status = PAUSE;
+
+
+
+
     }
 
     public void playPause(){
@@ -156,7 +172,17 @@ public class VideoObjectFeatures extends NarratorItemFeatures implements SeekBar
                     playPauseButton.setImageDrawable(playDrawable);
                 }
             });
+            DisplayMetrics metrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) videoView.getLayoutParams();
+
+            params.width = metrics.widthPixels;
+            params.height = metrics.heightPixels;
+            videoView.setLayoutParams(params);
         } else {
+
+
+
             status = PAUSE;
             playPauseButton.setImageDrawable(playDrawable);
             videoView.pause();

@@ -102,6 +102,7 @@ public class InfoScreen extends Activity {
         webView.loadData(prefix+gameLocalObject.getDescription()+postfix, "text/html", "utf8");
 
         ((TextView)findViewById(R.id.title)).setText(gameLocalObject.getTitle());
+
         SplashScreen.setBackgroundImage(this, "/background");
 
 //        switch (getResources().getDisplayMetrics().densityDpi) {

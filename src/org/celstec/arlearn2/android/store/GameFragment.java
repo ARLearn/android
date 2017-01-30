@@ -95,8 +95,11 @@ public class GameFragment extends SherlockFragment implements GameDownloadProgre
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
-        this.gameId = args.getLong("gameId");
-        ARL.store.syncStoreGame(gameId);
+        if (args.get("gameId")!= null) {
+            this.gameId = args.getLong("gameId");
+            ARL.store.syncStoreGame(gameId);
+            ARL.runs.syncRunsParticipate(gameId);
+        }
     }
 
     @Override

@@ -37,6 +37,7 @@ public class GeneralItemMapper {
     public final static int YOUTUBE = 8;
     public final static int PURE_AUDIO = 9;
     public final static int SORT_QUESTION = 10;
+    public final static int END_MESSAGE = 11;
 
     public static int mapBeanToConstant (GeneralItem giBean) {
         if (giBean instanceof SortQuestion) {
@@ -59,6 +60,8 @@ public class GeneralItemMapper {
             return VIDEO_OBJECT;
         } else  if (giBean instanceof NarratorItem) {
             return NARRATOR_ITEM;
+        } else  if (giBean instanceof EndMessage) {
+            return END_MESSAGE;
         }
         return 0;
     }
@@ -99,6 +102,9 @@ public class GeneralItemMapper {
             case GeneralItemMapper.YOUTUBE:
                 result =R.drawable.game_general_item_type_youtube;
                 break;
+            case GeneralItemMapper.END_MESSAGE:
+                result =R.drawable.game_general_item_type_end;
+                break;
         }
         return result;
     }
@@ -138,6 +144,9 @@ public class GeneralItemMapper {
                 break;
             case GeneralItemMapper.YOUTUBE:
                 result =R.drawable.game_general_item_type_youtube;
+                break;
+            case GeneralItemMapper.END_MESSAGE:
+                result =R.drawable.game_general_item_type_end;
                 break;
         }
         return result;

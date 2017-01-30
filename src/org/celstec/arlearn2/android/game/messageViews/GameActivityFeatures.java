@@ -7,7 +7,7 @@ import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
-import org.celstec.arlearn2.android.game.generalItem.GeneralItemActivity;
+import org.celstec.arlearn2.android.game.generalItem.*;
 import org.celstec.arlearn2.android.game.notification.AlertView;
 import org.celstec.arlearn2.android.game.notification.NotificationAction;
 import org.celstec.arlearn2.android.game.notification.StrokenView;
@@ -73,8 +73,11 @@ public class GameActivityFeatures {
     }
 
     public void saveState(Bundle savedInstanceState) {
-        savedInstanceState.putLong(GameLocalObject.class.getName(), getGameId());
-        savedInstanceState.putLong(RunLocalObject.class.getName(), getRunId());
+        if (runLocalObject !=null) {
+            savedInstanceState.putLong(GameLocalObject.class.getName(), getGameId());
+            savedInstanceState.putLong(RunLocalObject.class.getName(), getRunId());
+        }
+
     }
 
     public long getGameId(){
@@ -126,9 +129,10 @@ public class GameActivityFeatures {
         return runLocalObject;
     }
 
-    public void addMetadataToIntent(Intent intent) {
+    public void addMetadataToIntent(Intent intent, Boolean showNavigation) {
         intent.putExtra(GameLocalObject.class.getName(), gameLocalObject.getId());
         intent.putExtra(RunLocalObject.class.getName(), runLocalObject.getId());
+        intent.putExtra("showNavigationbar", showNavigation);
     }
 
     public int getTheme() {
@@ -152,13 +156,19 @@ public class GameActivityFeatures {
                 return R.style.ARLearn_schema5;
             case 6:
                 return R.style.ARLearn_schema6;
+            case 7:
+                return R.style.ARLearn_schema7;
         }
         return R.style.ARLearn_schema1;
     }
 
     public void checkRunDeleted(Activity activity) {
-        runLocalObject.refresh();
-        if (getRunLocalObject().getDeleted()!= null &&getRunLocalObject().getDeleted()){
+        try {
+            runLocalObject.refresh();
+            if (getRunLocalObject().getDeleted() != null && getRunLocalObject().getDeleted()) {
+                activity.finish();
+            }
+        } catch (de.greenrobot.dao.DaoException e){
             activity.finish();
         }
 

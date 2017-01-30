@@ -2,6 +2,7 @@ package org.celstec.arlearn2.android.game.messageViews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.dao.gen.GameLocalObject;

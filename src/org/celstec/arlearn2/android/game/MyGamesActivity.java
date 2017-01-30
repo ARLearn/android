@@ -75,6 +75,7 @@ public class MyGamesActivity extends ListActivity implements ListItemClickInterf
                     ((LinearLayout) findViewById(R.id.storeLinearLayout)).setBackground(background);
             if (android.os.Build.VERSION.SDK_INT >= 11) {
                 getActionBar().setHomeButtonEnabled(true);
+                getActionBar().hide();
 //                GameLocalObject gameLocalObject = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameIdToUseForMainSplashScreen);
 //                int theme = GameActivityFeatures.getTheme(gameLocalObject.getGameBean());
 

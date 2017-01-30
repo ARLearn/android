@@ -33,6 +33,7 @@ import org.celstec.arlearn2.android.UserGameIntentAnalyser;
 import org.celstec.arlearn2.android.db.PropertiesAdapter;
 import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.delegators.AccountDelegator;
+import org.celstec.arlearn2.android.game.GameSplashScreen;
 import org.celstec.arlearn2.android.store.GameFragment;
 import org.celstec.arlearn2.android.R;
 import org.celstec.arlearn2.beans.game.Game;
@@ -79,14 +80,17 @@ public class ScannerFragment  extends SherlockFragment implements QRScanner.Scan
 
         @Override
         public void scannedRun(Run run) {
-            GameFragment frag = new GameFragment();
-            Bundle bundle = new Bundle();
-            bundle.putLong("gameId", run.getGame().getGameId());
-            frag.setArguments(bundle);
+//            GameFragment frag = new GameFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putLong("gameId", run.getGame().getGameId());
+//            frag.setArguments(bundle);
+//
+//            frag.setRun(run);
+//            launchFragment(frag);
+//            System.out.println(run);
+            ARL.runs.selfRegisterForRun(run.getRunId());
+            GameSplashScreen.startActivity(getActivity(), run.getGame().getGameId(), run.getRunId(), false);
 
-            frag.setRun(run);
-            launchFragment(frag);
-            System.out.println(run);
         }
 
         @Override

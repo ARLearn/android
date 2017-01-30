@@ -77,7 +77,7 @@ public class ActionBarMenuController {
             case R.id.action_map_view:
                 if (isMessages()) {
                     Intent intent = new Intent(activity, GameMap.class);
-                    gameActivityFeatures.addMetadataToIntent(intent);
+                    gameActivityFeatures.addMetadataToIntent(intent, true);
                     activity.startActivity(intent);
                     activity.finish();
                 }
@@ -85,7 +85,7 @@ public class ActionBarMenuController {
             case R.id.action_message_view:
                 if (isMap()) {
                     Intent intent = new Intent(activity, GameMessages.class);
-                    gameActivityFeatures.addMetadataToIntent(intent);
+                    gameActivityFeatures.addMetadataToIntent(intent, true);
                     activity.startActivity(intent);
                     activity.finish();
                 }
@@ -129,7 +129,8 @@ public class ActionBarMenuController {
 
     public void updateScore(Menu menu) {
         if (ARL.config.getBooleanProperty("show_score")){
-            menu.findItem(R.id.score).setTitle(""+ARL.properties.getScore(this.gameActivityFeatures.getRunId()));
+            if (menu.findItem(R.id.score) != null)
+                menu.findItem(R.id.score).setTitle(""+ARL.properties.getScore(this.gameActivityFeatures.getRunId()));
         }
     }
 }
