@@ -48,6 +48,8 @@ public class Constants {
     public static String TOTAL_SCORE = "TotalScore";
     public static String STATUS = "status";
 
+    public static String VERSION_CODE = "versionCode";
+
 //	public static String ITEM_ID = "id";
 
     public static long TIME_BETWEEN_GPS_UPDATES_UNSENSITIVE = 20000; //time in milliseconds

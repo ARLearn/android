@@ -10,9 +10,7 @@ import org.celstec.arlearn2.beans.run.RunList;
 import org.celstec.arlearn2.beans.run.User;
 import org.celstec.arlearn2.client.RunClient;
 import org.celstec.arlearn2.client.UserClient;
-import org.celstec.dao.gen.GameLocalObject;
-import org.celstec.dao.gen.GameLocalObjectDao;
-import org.celstec.dao.gen.RunLocalObject;
+import org.celstec.dao.gen.*;
 
 /**
  * ****************************************************************************
@@ -40,6 +38,7 @@ public class RunDelegator extends AbstractDelegator{
 
     private static long lastSyncDateParticipate = 0l;
     private static long lastSyncDate = 0l;
+    private static long lastLocalSyncDateParticipate = 0l;
 
     private RunDelegator() {
         ARL.eventBus.register(this);
@@ -57,7 +56,16 @@ public class RunDelegator extends AbstractDelegator{
      */
 
     public void syncRunsParticipate() {
-        ARL.eventBus.post(new SyncRunsEventParticipate());
+        if ((System.currentTimeMillis() - lastLocalSyncDateParticipate ) > 240000) {
+            lastLocalSyncDateParticipate = System.currentTimeMillis();
+            ARL.eventBus.post(new SyncRunsEventParticipate());
+        }
+
+    }
+    public void syncRunsParticipate(Long gameId) {
+        SyncRunsEventParticipate sge = new SyncRunsEventParticipate();
+        sge.setGameId(gameId);
+        ARL.eventBus.post(sge);
     }
 
     public void asyncRunsParticipate() {
@@ -87,11 +95,20 @@ public class RunDelegator extends AbstractDelegator{
     public void onEventAsync(SyncRunsEventParticipate sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
-            RunList rl =RunClient.getRunClient().getRunsParticipate(token, lastSyncDateParticipate);
+            RunList rl = null;
+            if (sge.getGameId() != null) {
+                rl = RunClient.getRunClient().getRunsForGameParticipate(token, sge.gameId);
+                if (rl.getError() == null) {
+                    process(rl);
+                }
+            } else {
+                rl = RunClient.getRunClient().getRunsParticipate(token, lastSyncDateParticipate);
                 if (rl.getError() == null) {
                     process(rl);
                     lastSyncDateParticipate = rl.getServerTime();
                 }
+            }
+
 
         }
     }
@@ -150,13 +167,14 @@ public class RunDelegator extends AbstractDelegator{
     }
 
     private void process(RunList rl) {
+        RunEvent runEvent = null;
         for (Run rBean: rl.getRuns()) {
-            RunLocalObject newRun = toDaoLocalObject(rBean);
-            String token = returnTokenIfOnline();
-            if (token != null){
-                User user = UserClient.getUserClient().getUser(token, rBean.getRunId(), ARL.accounts.getLoggedInAccount().getFullId());
-//                if (rBean.getRunId() == 6699635959660544l) {
-//                    System.out.println("test");
+            RunLocalObject databaseRun = DaoConfiguration.getInstance().getRunLocalObjectDao().load(rBean.getRunId());
+            if (!(databaseRun != null && databaseRun.getDeleted() == true && rBean.getDeleted() == true)) {
+                RunLocalObject newRun = toDaoLocalObject(rBean);
+                String token = returnTokenIfOnline();
+                if (token != null){
+                    User user = UserClient.getUserClient().getUser(token, rBean.getRunId(), ARL.accounts.getLoggedInAccount().getFullId());
                     if (user.getRoles() != null && !user.getRoles().isEmpty()){
                         String userRoles = user.getRoles().get(0);
                         for (int i= 1; i< user.getRoles().size();i++) {
@@ -167,21 +185,37 @@ public class RunDelegator extends AbstractDelegator{
 
 
 //                }
+                }
+                DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(newRun);
+                if (newRun.getGameLocalObject()!=null) {
+                    newRun.getGameLocalObject().resetRuns();
+                    newRun.getGameLocalObject().resetGeneralItems();
+                    for (GeneralItemLocalObject object : newRun.getGameLocalObject().getGeneralItems()) {
+                        object.removeRun(newRun.getId());
+                        //Clear is necessary because GeneralItemLocalObject contains a cache
+                    }
+                }
+                if (newRun.getDeleted()) {
+                    ResponseDelegator.getInstance().deleteResponses(newRun.getId());
+                    GeneralItemVisibilityDelegator.getInstance().deleteVisibilities(newRun.getId());
+                    ActionsDelegator.getInstance().deleteActions(newRun.getId());
+//                DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().getSession().refresh(new GeneralItemLocalObject());
+                    DaoConfiguration.getInstance().getRunLocalObjectDao().deleteByKey(newRun.getId());
+                    ARL.eventBus.postSticky(new RunEvent(newRun.getId(), newRun.getDeleted()));
+                    ARL.proximityEvents.deleteEvents(newRun);
+                } else {
+                    ARL.proximityEvents.createEvents(newRun);
+                    runEvent = new RunEvent(newRun.getId());
+                }
             }
-            DaoConfiguration.getInstance().getRunLocalObjectDao().insertOrReplace(newRun);
-            if (newRun.getGameLocalObject()!=null) newRun.getGameLocalObject().resetRuns();
-            if (newRun.getDeleted()) {
-                ResponseDelegator.getInstance().deleteResponses(newRun.getId());
-                GeneralItemVisibilityDelegator.getInstance().deleteVisibilities(newRun.getId());
-                ActionsDelegator.getInstance().deleteActions(newRun.getId());
-                ARL.proximityEvents.deleteEvents(newRun);
-            } else {
-                ARL.proximityEvents.createEvents(newRun);
-            }
+
 
 
             //ARL.eventBus.post(new RunEvent(newRun.getId(), newRun.getDeleted()));
             //todo generates to many events
+        }
+        if (runEvent != null) {
+            ARL.eventBus.postSticky(runEvent);
         }
     }
 
@@ -218,7 +252,7 @@ public class RunDelegator extends AbstractDelegator{
 
     }
 
-    private void selfRegisterForRun(long runId) {
+    public void selfRegisterForRun(long runId) {
         String token = returnTokenIfOnline();
         if (token != null) {
             asyncRun(RunClient.getRunClient().selfRegister(token, runId));
@@ -229,10 +263,38 @@ public class RunDelegator extends AbstractDelegator{
         ARL.eventBus.post(new CreateRun(gameId));
     }
 
+//    public void resetRun(long runId) {
+//        ARL.eventBus.post(new ResetRunsEvent(runId));
+//    }
+
 
     private class SyncRunsEventParticipate {
+        private Long gameId;
 
+        public Long getGameId() {
+            return gameId;
+        }
+
+        public void setGameId(Long gameId) {
+            this.gameId = gameId;
+        }
     }
+
+//    private class ResetRunsEvent {
+//        long runId;
+//
+//        public ResetRunsEvent(long runId) {
+//            this.runId = runId;
+//        }
+//
+//        public long getRunId() {
+//            return runId;
+//        }
+//
+//        public void setRunId(long runId) {
+//            this.runId = runId;
+//        }
+//    }
 
     private class SyncRunsEvent {
     }

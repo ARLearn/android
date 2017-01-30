@@ -9,6 +9,7 @@ import daoBase.DaoConfiguration;
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import org.celstec.arlearn2.android.db.Constants;
+import org.celstec.arlearn2.android.events.EmailSent;
 import org.celstec.arlearn2.android.events.ResponseEvent;
 import org.celstec.arlearn2.android.util.AppengineFileUploader;
 import org.celstec.arlearn2.android.util.FileDownloader;
@@ -16,6 +17,7 @@ import org.celstec.arlearn2.android.util.GPSUtils;
 import org.celstec.arlearn2.beans.generalItem.MultipleChoiceAnswerItem;
 import org.celstec.arlearn2.beans.run.ResponseList;
 import org.celstec.arlearn2.client.ResponseClient;
+import org.celstec.arlearn2.client.RunClient;
 import org.celstec.dao.gen.*;
 import org.celstec.arlearn2.beans.run.Response;
 import org.codehaus.jettison.json.JSONArray;
@@ -78,7 +80,6 @@ public class ResponseDelegator extends AbstractDelegator{
             responseValueJson.put("isCorrect", correct);
             responseValueJson.put("answer", array.toString());
             createResponse(generalItemLocalObject, runId, responseValueJson.toString());
-            System.out.println("response " + responseValueJson);
         } catch (JSONException e) {
             Log.e("exception", e.getMessage(), e);
         }
@@ -101,6 +102,9 @@ public class ResponseDelegator extends AbstractDelegator{
         setLocationDetails(response);
         DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
         DaoConfiguration.getInstance().getRunLocalObjectDao().load(response.getRunId()).resetResponses();
+
+        syncResponses(response.getRunId());
+
     }
 
     public static ResponseDelegator getInstance() {
@@ -134,11 +138,29 @@ public class ResponseDelegator extends AbstractDelegator{
         ARL.eventBus.post(new SyncResponses(runId));
     }
 
+    public void sendEmail(long runId) {
+        ARL.eventBus.post(new SendMail(runId));
+    }
+
     public void deleteResponses(Long runId){
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         dao.queryBuilder().where(ResponseLocalObjectDao.Properties.RunId.eq(runId)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
+    public synchronized void onEventAsync(SendMail sendMail) {
+        try {
+            String token = returnTokenIfOnline();
+            if (token != null) {
+                RunClient.getRunClient().sendMail(token, sendMail.getRunId());
+                ARL.eventBus.post(new EmailSent(true));
+            } else {
+                ARL.eventBus.post(new EmailSent(false));
+
+            }
+        } catch (Exception e) {
+            ARL.eventBus.post(new EmailSent(false));
+        }
+    }
     public synchronized void onEventAsync(SyncResponses syncResponses) {
         ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
         long serverTime = ARL.time.getServerTime();
@@ -166,20 +188,25 @@ public class ResponseDelegator extends AbstractDelegator{
         if (token != null) {
             Response responseBean = response.getBean();
             ResponseEvent re = new ResponseEvent(response.getRunId());
-            if (response.getRevoked()) {
+            if (response.getRevoked()!=null && response.getRevoked()) {
                 Response responseResult =  ResponseClient.getResponseClient().deleteResponse(token, response.getId());
-                re.setDeletion(true);
-                if (responseResult.getRevoked() == null) {
-                    System.out.println("test");
-                }
-                if (responseResult.getRevoked()){
-                    response.setIsSynchronized(true);
+                if (responseResult.getError() == null) {
+                    re.setDeletion(true);
+                    if (responseResult.getRevoked() == null) {
+                        System.out.println("test");
+                    }
+                    if (responseResult.getRevoked()) {
+                        response.setIsSynchronized(true);
+                    }
                 }
             } else {
                 Response responseResult = ResponseClient.getResponseClient().publishAction(token, responseBean);
-                DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
-                response.setId(responseResult.getResponseId());
-                response.setIsSynchronized(true);
+                if (responseResult.getError() == null){
+                    DaoConfiguration.getInstance().getResponseLocalObjectDao().delete(response);
+                    response.setId(responseResult.getResponseId());
+                    response.setIsSynchronized(true);
+                }
+
             }
             DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(response);
 
@@ -253,7 +280,14 @@ public class ResponseDelegator extends AbstractDelegator{
             String resumptionToken = null;
             ResponseEvent responseEvent = null;
             do {
-                ResponseList rl = ResponseClient.getResponseClient().getResponses(token, runId, getLastSyncDate(runId), resumptionToken);
+                ResponseList rl;
+
+                if (DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId).getGameLocalObject().getGameBean().getConfig().getEnableExchangeResponses()){
+                    rl = ResponseClient.getResponseClient().getResponses(token, runId, getLastSyncDate(runId), resumptionToken);
+                } else {
+                    rl = ResponseClient.getResponseClient().getResponses(token, runId, ARL.accounts.getLoggedInAccount().getFullId());
+                }
+
                 resumptionToken = rl.getResumptionToken();
                 for (Response response : rl.getResponses()) {
                     ResponseLocalObject responseLocalObject = DaoConfiguration.getInstance().getResponseLocalObjectDao().loadDeep(response.getResponseId());
@@ -277,7 +311,10 @@ public class ResponseDelegator extends AbstractDelegator{
                         }
 
                     } else {
-                        if (response.getLastModificationDate() > responseLocalObject.getLastModificationDate()) {
+                        if (response.getLastModificationDate() == null) {
+                            response.setLastModificationDate(ARL.time.getServerTime());
+                        }
+                        if (responseLocalObject.getLastModificationDate()== null || response.getLastModificationDate() > responseLocalObject.getLastModificationDate()) {
                             responseLocalObject.setValuesFromBean(response);
                             if (responseLocalObject.getType() != null)
                                 DaoConfiguration.getInstance().getResponseLocalObjectDao().insertOrReplace(responseLocalObject);
@@ -285,7 +322,9 @@ public class ResponseDelegator extends AbstractDelegator{
                     }
 
                 }
+                syncDates.put(runId, rl.getServerTime());
             } while (resumptionToken!= null);
+
             if (responseEvent != null) {
                 DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId).resetResponses();
                 ARL.eventBus.post(responseEvent);
@@ -333,6 +372,24 @@ public class ResponseDelegator extends AbstractDelegator{
         return 0l;
     }
 
+
+
+    private class SendMail{
+
+        private long runId;
+        public SendMail(long runId) {
+            this.runId = runId;
+        }
+
+        public long getRunId() {
+            return runId;
+        }
+
+        public void setRunId(long runId) {
+            this.runId = runId;
+        }
+    }
+
     private class SyncResponses {
         private Long runId ;
 
@@ -370,5 +427,27 @@ public class ResponseDelegator extends AbstractDelegator{
             runDir.mkdir();
 
         return runDir;
+    }
+
+    public long getAmountOfResponses(long runId){
+        ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
+        QueryBuilder<ResponseLocalObject> qb =dao.queryBuilder();
+        qb.where(ResponseLocalObjectDao.Properties.RunId.eq(runId));
+        return qb.count();
+//        qb.where(new WhereCondition.StringCondition("status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"));
+    }
+
+    public long getAmountOfSyncedResponses(long runId){
+        ResponseLocalObjectDao dao = DaoConfiguration.getInstance().getResponseLocalObjectDao();
+        QueryBuilder<ResponseLocalObject> qb =dao.queryBuilder();
+        qb.where(
+                qb.and(
+                        ResponseLocalObjectDao.Properties.RunId.eq(runId),
+                        ResponseLocalObjectDao.Properties.IsSynchronized.eq(true)
+                )
+
+        );
+        return qb.count();
+//        qb.where(new WhereCondition.StringCondition("status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)"));
     }
 }

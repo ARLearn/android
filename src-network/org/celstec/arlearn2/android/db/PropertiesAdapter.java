@@ -21,6 +21,7 @@ package org.celstec.arlearn2.android.db;
 import android.accounts.AccountManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import org.celstec.arlearn2.android.delegators.AccountDelegator;
 import org.celstec.arlearn2.beans.account.Account;
 
@@ -315,6 +316,16 @@ public class PropertiesAdapter {
     }
 
     public boolean hasScore(long runId) {
-        return getDefaultPrefs().contains("score_"+runId);
+        return getDefaultPrefs().contains("score_" + runId);
+    }
+
+    public int getLastVersionCode() {
+        return getDefaultPrefs().getInt(Constants.VERSION_CODE, 0);
+    }
+
+    public void setLastVersionCode(int score) {
+        SharedPreferences.Editor editor = getDefaultPrefs().edit();
+        editor.putInt(Constants.VERSION_CODE, score);
+        editor.commit();
     }
 }

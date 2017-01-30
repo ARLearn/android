@@ -84,7 +84,6 @@ public class GameDownloadManager {
             ARL.generalItems.storeItemsInDatabase(list, gameId);
 
         }
-
         GameFileList filesList = ARL.games.asyncRetrieveGameFiles(gameId);
 
         gameFiles = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getGameFiles();
@@ -92,7 +91,7 @@ public class GameDownloadManager {
         gameDownloadEventListener.setAmountOfContentDownloadedInBytes(getAmountOfDownloadedFileBytes());
 
         ARL.games.asyncDownloadGameContent(gameId);
-        ARL.runs.asyncRunsParticipate();
+        ARL.runs.syncRunsParticipate(gameId);
         ARL.eventBus.post(new Dismiss());
 
     }

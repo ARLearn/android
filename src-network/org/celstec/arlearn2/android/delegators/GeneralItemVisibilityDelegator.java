@@ -3,7 +3,6 @@ package org.celstec.arlearn2.android.delegators;
 import daoBase.DaoConfiguration;
 import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
 import org.celstec.arlearn2.android.events.GeneralItemEvent;
-import org.celstec.arlearn2.beans.generalItem.GeneralItem;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibility;
 import org.celstec.arlearn2.beans.run.GeneralItemVisibilityList;
 import org.celstec.arlearn2.client.GeneralItemVisibilityClient;
@@ -33,7 +32,7 @@ import java.util.Set;
  * Contributors: Stefaan Ternier
  * ****************************************************************************
  */
-public class GeneralItemVisibilityDelegator extends AbstractDelegator{
+public class GeneralItemVisibilityDelegator extends AbstractDelegator {
 
     protected static GeneralItemVisibilityDelegator instance;
     private static HashMap<Long, Long> syncDates = new HashMap<Long, Long>();
@@ -58,50 +57,57 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
     }
 
     public void calculateInVisibility(Long runId, Long gameId) {
+        ARL.eventBus.post(new CalculateINVisibility(runId, gameId));
+    }
+
+    public void onEventAsync(CalculateINVisibility calculateVisibility) {
+        Long runId = calculateVisibility.getRunId();
+        Long gameId = calculateVisibility.getGameId();
         if (runId == null || gameId == null) return;
         RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
         GameLocalObject game = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         if (run == null || game == null) return;
         GeneralItemEvent newInVisibilityStatementDetected = null;
-        for (GeneralItemLocalObject generalItemLocalObject: game.getGeneralItems()) {
+        for (GeneralItemLocalObject generalItemLocalObject : game.getGeneralItems()) {
 //            generalItemLocalObject.getDependencyDisappearLocalObject()
             long disappearAt = Long.MAX_VALUE;
             if (generalItemLocalObject.getDependencyDisappearLocalObject() != null) {
                 disappearAt = generalItemLocalObject.getDependencyDisappearLocalObject().disappearAt(run);
             }
             if (disappearAt != Long.MAX_VALUE) {
-                if (disappearAt < ARL.time.getServerTime()) {
-                    String id = GeneralItemVisibilityLocalObject.generateId(runId, generalItemLocalObject.getId());
-                    GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
 
-                    if (generalItemVisibilityLocalObject == null) {
-                        generalItemVisibilityLocalObject = new GeneralItemVisibilityLocalObject();
-                        generalItemVisibilityLocalObject.setId(id);
-                        generalItemVisibilityLocalObject.setGeneralItemLocalObject(generalItemLocalObject);
-                        generalItemLocalObject.resetVisibilities();
-                        generalItemVisibilityLocalObject.setStatus(GeneralItemVisibilityLocalObject.INVISIBLE);
-                        generalItemVisibilityLocalObject.setRunId(runId);
-                        generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
-                        generalItemVisibilityLocalObject.setTimeStamp(disappearAt);
-                        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+                String id = GeneralItemVisibilityLocalObject.generateId(generalItemLocalObject.getId(), runId, GeneralItemVisibilityLocalObject.INVISIBLE);
+                GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
 
-                        newInVisibilityStatementDetected = new GeneralItemEvent(generalItemLocalObject.getId());
+                if (generalItemVisibilityLocalObject == null) {
+                    generalItemVisibilityLocalObject = new GeneralItemVisibilityLocalObject();
+                    generalItemVisibilityLocalObject.setId(id);
+                    generalItemVisibilityLocalObject.setGeneralItemLocalObject(generalItemLocalObject);
+                    generalItemLocalObject.resetVisibilities();
+                    generalItemVisibilityLocalObject.setStatus(GeneralItemVisibilityLocalObject.INVISIBLE);
+                    generalItemVisibilityLocalObject.setRunId(runId);
+                    generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
+                    generalItemVisibilityLocalObject.setTimeStamp(disappearAt);
+                    DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
 
-                        ARL.eventBus.postSticky(newInVisibilityStatementDetected);
+                    newInVisibilityStatementDetected = new GeneralItemEvent(generalItemLocalObject.getId());
+
+                    ARL.eventBus.postSticky(newInVisibilityStatementDetected);
 
 
-                    }else {
-                        if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.VISIBLE) {
-                            if (generalItemVisibilityLocalObject.getTimeStamp() > disappearAt) {
-                                generalItemVisibilityLocalObject.setTimeStamp(disappearAt);
-                                DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
-                            }
+                } else {
+                    if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.VISIBLE) {
+                        if (generalItemVisibilityLocalObject.getTimeStamp() > disappearAt) {
+                            generalItemVisibilityLocalObject.setTimeStamp(disappearAt);
+                            DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
                         }
                     }
-                }else {
+                }
+                if (disappearAt > ARL.time.getServerTime()) {
 
-                    ARL.visibilityHandler.scheduleInVisibilityEvent(disappearAt, run, game);
-                    System.out.println("we are in the not condition");
+//                } else {
+
+                    ARL.visibilityHandler.scheduleInVisibilityEvent(disappearAt, run, game, generalItemLocalObject.getId());
                 }
                 //todo
             }
@@ -109,70 +115,80 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
 
     }
 
+    public void calculateVisibility(Long runId) {
+        if (runId == null) return;
+        RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
+        calculateVisibility(runId, run.getGameId());
+    }
 
     public void calculateVisibility(Long runId, Long gameId) {
-            if (runId == null || gameId == null) return;
+        ARL.eventBus.post(new CalculateVisibility(runId, gameId));
+    }
+
+    public void onEventAsync(CalculateVisibility calculateVisibility) {
+        Long runId = calculateVisibility.getRunId();
+        Long gameId = calculateVisibility.getGameId();
+        if (runId == null || gameId == null) return;
         RunLocalObject run = DaoConfiguration.getInstance().getRunLocalObjectDao().load(runId);
         GameLocalObject game = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId);
         if (run == null || game == null) return;
         GeneralItemEvent newVisibilityStatementDetected = null;
-        for (GeneralItemLocalObject generalItemLocalObject: game.getGeneralItems()) {
+        for (GeneralItemLocalObject generalItemLocalObject : game.getGeneralItems()) {
             long satisfiedAt = 0l;
             Set<String> userRoles = run.getUserRoles();
-            if (generalItemLocalObject.getGeneralItemBean().getRoles()!=null && !generalItemLocalObject.getGeneralItemBean().getRoles().isEmpty()) {
+            if (generalItemLocalObject.getGeneralItemBean().getRoles() != null && !generalItemLocalObject.getGeneralItemBean().getRoles().isEmpty()) {
                 boolean containsRole = false;
-                for (String targetRole:generalItemLocalObject.getGeneralItemBean().getRoles()) {
+                for (String targetRole : generalItemLocalObject.getGeneralItemBean().getRoles()) {
                     if (userRoles.contains(targetRole)) containsRole = true;
                 }
                 if (!containsRole) {
                     satisfiedAt = -1l;
-                    String id = GeneralItemVisibilityLocalObject.generateId(runId, generalItemLocalObject.getId());
+                    String id = GeneralItemVisibilityLocalObject.generateId(generalItemLocalObject.getId(), runId, GeneralItemVisibilityLocalObject.VISIBLE);
                     DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().deleteByKey(id);
                 }
             }
-            if (satisfiedAt !=-1 && generalItemLocalObject.getDependencyLocalObject() != null) {
+            if (satisfiedAt != -1 && generalItemLocalObject.getDependencyLocalObject() != null) {
                 satisfiedAt = generalItemLocalObject.getDependencyLocalObject().satisfiedAt(run);
             }
             if (satisfiedAt != -1)
-            if (satisfiedAt < System.currentTimeMillis()) {
-                String id = GeneralItemVisibilityLocalObject.generateId(runId, generalItemLocalObject.getId());
-                GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
-                if (generalItemVisibilityLocalObject == null) {
+                if (satisfiedAt < ARL.time.getServerTime()) {
+                    String id = GeneralItemVisibilityLocalObject.generateId(generalItemLocalObject.getId(), runId, GeneralItemVisibilityLocalObject.VISIBLE);
+                    GeneralItemVisibilityLocalObject generalItemVisibilityLocalObject = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
+                    if (generalItemVisibilityLocalObject == null) {
 
-                    generalItemVisibilityLocalObject = new GeneralItemVisibilityLocalObject();
-                    generalItemVisibilityLocalObject.setId(id);
-                    generalItemVisibilityLocalObject.setGeneralItemLocalObject(generalItemLocalObject);
-                    generalItemLocalObject.resetVisibilities();
-                    generalItemVisibilityLocalObject.setStatus(GeneralItemVisibilityLocalObject.VISIBLE);
-                    generalItemVisibilityLocalObject.setRunId(runId);
-                    generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
-                    generalItemVisibilityLocalObject.setTimeStamp(satisfiedAt);
-                    DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
-                    if (satisfiedAt != 0) {
-                        GeneralItemBecameVisibleEvent event = new GeneralItemBecameVisibleEvent(generalItemLocalObject.getId());
-                        if (generalItemVisibilityLocalObject.getGeneralItemLocalObject().getAutoLaunch() != null && generalItemVisibilityLocalObject.getGeneralItemLocalObject().getAutoLaunch()) {
-                            event.setAutoLaunch(true);
+                        generalItemVisibilityLocalObject = new GeneralItemVisibilityLocalObject();
+                        generalItemVisibilityLocalObject.setId(id);
+                        generalItemVisibilityLocalObject.setGeneralItemLocalObject(generalItemLocalObject);
+                        generalItemLocalObject.resetVisibilities();
+                        generalItemVisibilityLocalObject.setStatus(GeneralItemVisibilityLocalObject.VISIBLE);
+                        generalItemVisibilityLocalObject.setRunId(runId);
+                        generalItemVisibilityLocalObject.setAccount(ARL.accounts.getLoggedInAccount().getFullId());
+                        generalItemVisibilityLocalObject.setTimeStamp(satisfiedAt);
+                        DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+                        if (satisfiedAt != 0) {
+                            GeneralItemBecameVisibleEvent event = new GeneralItemBecameVisibleEvent(generalItemLocalObject.getId());
+                            if (generalItemVisibilityLocalObject.getGeneralItemLocalObject().getAutoLaunch() != null && generalItemVisibilityLocalObject.getGeneralItemLocalObject().getAutoLaunch()) {
+                                event.setAutoLaunch(true);
+                            }
+                            event.setShowStroken(true);
+                            ARL.eventBus.postSticky(event);
+                        } else {
+                            newVisibilityStatementDetected = new GeneralItemEvent(generalItemLocalObject.getId());
                         }
-                        event.setShowStroken(true);
-                        ARL.eventBus.postSticky(event);
-                    } else {
-                        newVisibilityStatementDetected = new GeneralItemEvent(generalItemLocalObject.getId());
-                    }
 //                    System.out.println("LOG postSticky "+System.currentTimeMillis());
-                } else {
-                    if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.INVISIBLE) {
-                        if (generalItemVisibilityLocalObject.getTimeStamp() > satisfiedAt) {
-                            generalItemVisibilityLocalObject.setTimeStamp(satisfiedAt);
-                            DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+                    } else {
+                        if (generalItemVisibilityLocalObject.getStatus() != GeneralItemVisibilityLocalObject.INVISIBLE) {
+                            if (generalItemVisibilityLocalObject.getTimeStamp() > satisfiedAt) {
+                                generalItemVisibilityLocalObject.setTimeStamp(satisfiedAt);
+                                DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().insertOrReplace(generalItemVisibilityLocalObject);
+                            }
                         }
                     }
-                }
-            } else {
+                } else {
 
-                ARL.visibilityHandler.scheduleVisibilityEvent(satisfiedAt, run, game);
-                System.out.println("we are in the not condition");
-            }
-            if (newVisibilityStatementDetected!= null) {
+                    ARL.visibilityHandler.scheduleVisibilityEvent(satisfiedAt, run, game);
+                }
+            if (newVisibilityStatementDetected != null) {
                 ARL.eventBus.post(newVisibilityStatementDetected);
             }
 //            else {
@@ -191,7 +207,7 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
         String token = returnTokenIfOnline();
         if (token != null) {
             long lastSyncDate = 0l;
-            if (syncDates.containsKey(syncGeneralItemVisibilities.getRun().getId())){
+            if (syncDates.containsKey(syncGeneralItemVisibilities.getRun().getId())) {
                 lastSyncDate = syncDates.get(syncGeneralItemVisibilities.getRun().getId());
                 syncDates.put(syncGeneralItemVisibilities.getRun().getId(), 0l);
             }
@@ -206,10 +222,10 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
 
     private void process(List<GeneralItemVisibility> generalItemsVisibility) {
         Long runId = null;
-        for (GeneralItemVisibility vi: generalItemsVisibility) {
+        for (GeneralItemVisibility vi : generalItemsVisibility) {
 
-            String id = GeneralItemVisibilityLocalObject.generateId(vi);
-            GeneralItemVisibilityLocalObject object =  DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
+            String id = GeneralItemVisibilityLocalObject.generateId(vi.getGeneralItemId(), vi.getRunId(), vi.getStatus());
+            GeneralItemVisibilityLocalObject object = DaoConfiguration.getInstance().getGeneralItemVisibilityLocalObjectDao().load(id);
             if (object == null) {
                 object = new GeneralItemVisibilityLocalObject(vi);
                 runId = vi.getRunId();
@@ -242,6 +258,57 @@ public class GeneralItemVisibilityDelegator extends AbstractDelegator{
 
         public void setRun(RunLocalObject run) {
             this.run = run;
+        }
+    }
+
+    private class CalculateVisibility{
+        long runId;
+        long gameId;
+
+        public CalculateVisibility(long runId, long gameId) {
+            this.runId = runId;
+            this.gameId = gameId;
+        }
+
+        public long getRunId() {
+            return runId;
+        }
+
+        public void setRunId(long runId) {
+            this.runId = runId;
+        }
+
+        public long getGameId() {
+            return gameId;
+        }
+
+        public void setGameId(long gameId) {
+            this.gameId = gameId;
+        }
+    }
+    private class CalculateINVisibility{
+        long runId;
+        long gameId;
+
+        public CalculateINVisibility(long runId, long gameId) {
+            this.runId = runId;
+            this.gameId = gameId;
+        }
+
+        public long getRunId() {
+            return runId;
+        }
+
+        public void setRunId(long runId) {
+            this.runId = runId;
+        }
+
+        public long getGameId() {
+            return gameId;
+        }
+
+        public void setGameId(long gameId) {
+            this.gameId = gameId;
         }
     }
 }

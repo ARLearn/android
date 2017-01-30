@@ -2,8 +2,11 @@ package org.celstec.arlearn2.android.delegators;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import daoBase.DaoConfiguration;
 import de.greenrobot.event.EventBus;
 import org.celstec.arlearn2.android.broadcast.ProximityIntentReceiver;
@@ -65,6 +68,7 @@ public class ARL {
     public static Context ctx;
     public static VisibilityHandler visibilityHandler;
     public static NotificationListenerInterface[] notificationListenerInterfaces;
+    public static ImageCache imageCache;
 
 
 
@@ -74,9 +78,26 @@ public class ARL {
     public static void init(Context ctx) {
         if (!ARL.isInit()) {
             ARL.ctx = ctx;
+            properties = PropertiesAdapter.getInstance(ctx);
+            try {
+                PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+                if (properties.getLastVersionCode() == 0) {
+                    properties.setLastVersionCode(pInfo.versionCode);
+
+                } else  if (properties.getLastVersionCode() != pInfo.versionCode) {
+                    Log.e("RESET", "reset app here");
+                    ARL.properties.setAuthToken(null);
+                    ARL.properties.setAccount(0l);
+                    properties.setLastVersionCode(pInfo.versionCode);
+                }
+
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                Log.e("ERROR", e.getMessage(), e);
+            }
             dao = DaoConfiguration.getInstance(ctx);
             mapContext = new MapContext(ctx);
-            properties = PropertiesAdapter.getInstance(ctx);
+
             config = new ConfigAdapter(ctx).getProperties();
             GenericClient.urlPrefix = config.getProperty("arlearn_server");
             games = GameDelegator.getInstance();
@@ -93,8 +114,11 @@ public class ARL {
             messages = MessagesDelegator.getInstance();
             generalItemVisibility = GeneralItemVisibilityDelegator.getInstance();
             visibilityHandler = VisibilityHandler.getInstance();
+            imageCache = ImageCache.getInstance();
             initNotificationListeners();
             initProxyAlertFilter();
+
+
 
         }
 

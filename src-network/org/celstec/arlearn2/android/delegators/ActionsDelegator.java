@@ -8,6 +8,7 @@ import org.celstec.arlearn2.client.ActionClient;
 import org.celstec.dao.gen.AccountLocalObject;
 import org.celstec.dao.gen.ActionLocalObject;
 import org.celstec.dao.gen.ActionLocalObjectDao;
+import org.celstec.dao.gen.RunLocalObject;
 
 import java.util.List;
 
@@ -86,6 +87,8 @@ public class ActionsDelegator extends AbstractDelegator {
             actionBean.setTime(ARL.time.getServerTime());
             actionBean.setUserEmail(ARL.accounts.getLoggedInAccount().getFullId());
             ARL.actions.createAction(actionBean);
+            ARL.generalItemVisibility.calculateVisibility(runId);
+            ARL.time.printTime("time "+action, actionBean.getTime());
         }
 
     }
@@ -172,6 +175,9 @@ public class ActionsDelegator extends AbstractDelegator {
         actionLocalObject.setRunId(createAction.getAction().getRunId());
         actionLocalObject.setGeneralItemType(createAction.getAction().getGeneralItemType());
         actionLocalObject.setIsSynchronized(false);
+//        if (actionLocalObject.getGeneralItemLocalObject()!=null) {
+//            actionLocalObject.getGeneralItemLocalObject().resetActions();
+//        }
         DaoConfiguration.getInstance().getActionLocalObjectDao().insertOrReplace(actionLocalObject);
         if (actionLocalObject.getRunLocalObject() != null) actionLocalObject.getRunLocalObject().resetActions();
         if (actionLocalObject.getGeneralItemLocalObject() != null)
@@ -207,6 +213,7 @@ public class ActionsDelegator extends AbstractDelegator {
                 list = ActionClient.getActionClient().getRunActions(token, user, downloadActions.getRunId(), 0l, list.getResumptionToken());
                 storeActionsInLocalDatabase(list);
             }
+            System.out.println("finished syncing actions");
         }
     }
 
@@ -222,6 +229,8 @@ public class ActionsDelegator extends AbstractDelegator {
             actionLocalObject = new ActionLocalObject(action);
             actionLocalObject.setIsSynchronized(true);
             DaoConfiguration.getInstance().getActionLocalObjectDao().insertOrReplace(actionLocalObject);
+            if (actionLocalObject.getGeneralItemLocalObject()!=null) actionLocalObject.getGeneralItemLocalObject().resetActions();
+            if (actionLocalObject.getRunLocalObject()!=null) actionLocalObject.getRunLocalObject().resetActions();
         }
     }
 
@@ -237,6 +246,12 @@ public class ActionsDelegator extends AbstractDelegator {
     public void deleteActions(Long runId) {
         DaoConfiguration.getInstance().getActionLocalObjectDao().queryBuilder().where(ActionLocalObjectDao.Properties.RunId.eq(runId)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
+
+//    public void deleteActions(RunLocalObject run) {
+//        for (ActionLocalObject action : run.getActions()){
+//            action.delete();
+//        }
+//    }
 
 
     private class UploadActions {

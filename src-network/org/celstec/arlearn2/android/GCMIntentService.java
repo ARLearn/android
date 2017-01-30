@@ -49,7 +49,7 @@ public class GCMIntentService extends IntentService {
         for (String key: intent.getExtras().keySet()) {
             if (intent.getExtras().get(key) instanceof String) map.put(key, intent.getExtras().getString(key));
             if (intent.getExtras().get(key) instanceof Integer) map.put(key, ""+intent.getExtras().getInt(key));
-            if (intent.getExtras().get(key) instanceof Long) map.put(key, ""+intent.getExtras().getInt(key));
+            if (intent.getExtras().get(key) instanceof Long) map.put(key, ""+intent.getExtras().getLong(key));
         }
 
 

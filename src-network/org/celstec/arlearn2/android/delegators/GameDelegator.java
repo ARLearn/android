@@ -14,6 +14,7 @@ import org.celstec.arlearn2.android.download.FileByteDownloader;
 import org.celstec.arlearn2.android.events.FileDownloadStatus;
 import org.celstec.arlearn2.android.events.GameEvent;
 import org.celstec.arlearn2.android.events.SearchResultList;
+import org.celstec.arlearn2.android.events.SplashScreenLoaded;
 import org.celstec.arlearn2.android.util.FileDownloader;
 import org.celstec.arlearn2.android.util.MediaFolders;
 import org.celstec.arlearn2.beans.game.*;
@@ -188,7 +189,8 @@ public final class GameDelegator extends AbstractDelegator{
     public void onEventAsync(SyncGamesEvent sge) {
         String token = returnTokenIfOnline();
         if (token != null) {
-                GamesList gl = GameClient.getGameClient().getGamesParticipate(token, lastSyncDate);
+            //deprecated... use gameaccess
+                GamesList gl = GameClient.getGameClient().getGames(token, lastSyncDate);
                 if (gl.getError() == null) {
                    process(gl);
                    lastSyncDate = gl.getServerTime();
@@ -226,7 +228,7 @@ public final class GameDelegator extends AbstractDelegator{
     private GameLocalObject process(Game gBean) {
             GameLocalObject existingGame = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gBean.getGameId());
             GameLocalObject newGame = toDaoLocalObject(gBean);
-            newGame.setIcon(new FileByteDownloader(ARL.config.getProperty("arlearn_server")+"/game/"+gBean.getGameId()+"/gameThumbnail?thumbnail=200&crop=true").syncDownload());
+            newGame.setIcon(new FileByteDownloader(ARL.config.getProperty("arlearn_server") + "/game/" + gBean.getGameId() + "/gameThumbnail?thumbnail=200&crop=true").syncDownload());
             if ( (existingGame == null || newGame.getLastModificationDate() > existingGame.getLastModificationDate())) {
                 DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(newGame);
                 ARL.eventBus.post(new SyncGameContributors(existingGame, newGame));
@@ -307,33 +309,63 @@ public final class GameDelegator extends AbstractDelegator{
     }
 
     public void asyncDownloadGameContent(long gameId) {
+        System.out.println("async dl3");
+
         List<GameFileLocalObject> gameFiles = DaoConfiguration.getInstance().getGameLocalObjectDao().load(gameId).getGameFiles();
+        System.out.println("async gameFiles" +gameFiles);
+
         for (GameFileLocalObject gameFileLocalObject : gameFiles) {
-            if (gameFileLocalObject.getSyncStatus() == GameFileLocalObject.FILE_TO_DOWNLOAD){
-                try {
-                    File targetFile = new File(MediaFolders.getIncommingFilesDir(), gameId+gameFileLocalObject.getPath());
-                    MediaFolders.createFileFoldersRecursively(targetFile);
-                    FileDownloader fd = new FileDownloader(ARL.config.getProperty("arlearn_server")+"game/"+gameId+gameFileLocalObject.getPath(), targetFile);
-                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_IS_DOWNLOADING);
-                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
-                    fd.download();
-                    if (fd.getTargetLocation().exists()) {
-                        gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_DOWNLOADED);
-                        DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
-                    }
-                } catch (MalformedURLException e) {
-                    Log.e("ARLearn", e.getMessage(), e);
-                } catch (FileNotFoundException e) {
-                    Log.e("ARLearn", e.getMessage(), e);
-                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_TO_DOWNLOAD);
-                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
-                }
-            } else {
-                FileDownloadStatus statusEvent =new FileDownloadStatus(gameFileLocalObject.getSize(), 0, gameFileLocalObject.getSyncStatus(), gameFileLocalObject.getPath());
-                ARL.eventBus.postSticky(statusEvent);
+            if (gameFileLocalObject.getPath().equals("/gameSplashScreen")){
+                asyncDownloadGameContent(gameId, gameFileLocalObject);
+                ARL.eventBus.post(new SplashScreenLoaded("/gameSplashScreen"));
             }
         }
+        System.out.println("it 1" );
+
+        for (GameFileLocalObject gameFileLocalObject : gameFiles) {
+            if (gameFileLocalObject.getPath().equals("/background")){
+                asyncDownloadGameContent(gameId, gameFileLocalObject);
+                ARL.eventBus.post(new SplashScreenLoaded("/background"));
+            }
+        }
+        System.out.println("it 2" );
+        for (GameFileLocalObject gameFileLocalObject : gameFiles) {
+            System.out.println("it 3 -for" );
+                asyncDownloadGameContent(gameId, gameFileLocalObject);
+        }
+        System.out.println("async dl3 - leave");
+
     }
+
+    public void asyncDownloadGameContent(long gameId, GameFileLocalObject gameFileLocalObject) {
+        System.out.println("status is to download "+(gameFileLocalObject.getSyncStatus() == GameFileLocalObject.FILE_TO_DOWNLOAD));
+        if (gameFileLocalObject.getSyncStatus() == GameFileLocalObject.FILE_TO_DOWNLOAD){
+            System.out.println("download file");
+            try {
+                File targetFile = new File(MediaFolders.getIncommingFilesDir(), gameId+gameFileLocalObject.getPath());
+                MediaFolders.createFileFoldersRecursively(targetFile);
+                FileDownloader fd = new FileDownloader(ARL.config.getProperty("arlearn_server")+"game/"+gameId+gameFileLocalObject.getPath(), targetFile);
+                gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_IS_DOWNLOADING);
+                DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                fd.download();
+                if (fd.getTargetLocation().exists()) {
+                    gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_DOWNLOADED);
+                    DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+                }
+            } catch (MalformedURLException e) {
+                Log.e("ARLearn", e.getMessage(), e);
+            } catch (FileNotFoundException e) {
+                Log.e("ARLearn", e.getMessage(), e);
+                gameFileLocalObject.setSyncStatus(GameFileLocalObject.FILE_TO_DOWNLOAD);
+                DaoConfiguration.getInstance().getGameFileDao().insertOrReplace(gameFileLocalObject);
+            }
+        } else {
+            System.out.println("do not download file");
+            FileDownloadStatus statusEvent =new FileDownloadStatus(gameFileLocalObject.getSize(), 0, gameFileLocalObject.getSyncStatus(), gameFileLocalObject.getPath());
+            ARL.eventBus.postSticky(statusEvent);
+        }
+    }
+
 
     public ArrayList<GameFileLocalObject> getUnSyncedFiles() {
         ArrayList<GameFileLocalObject> resultList = new ArrayList<GameFileLocalObject>();
@@ -459,7 +491,6 @@ public final class GameDelegator extends AbstractDelegator{
             PropertiesAdapter pa = PropertiesAdapter.getInstance();
             GameAccessList gameAccessList =  GameClient.getGameClient().getGameAccessList(pa.getAuthToken(), newGame.getId());
             for (GameAccess gameAccess: gameAccessList.getGameAccess()) {
-                Log.e("TEST", ""+gameAccess.getAccount());
                 AccountLocalObject account = ARL.accounts.getAccount(gameAccess.getAccount());
                 if  (account == null) {
                     account = ARL.accounts.asyncAccountLocalObject(gameAccess.getAccount());
@@ -473,7 +504,6 @@ public final class GameDelegator extends AbstractDelegator{
 //                        newGame.getContributors().add(contributor);
                         DaoConfiguration.getInstance().getGameContributorLocalObjectDao().update(contributor);
                 }
-                Log.e("TEST", "" + gameAccess.getAccessRights());
             }
             DaoConfiguration.getInstance().getGameLocalObjectDao().insertOrReplace(newGame);
             ARL.eventBus.post(new GameEvent(newGame.getId()));

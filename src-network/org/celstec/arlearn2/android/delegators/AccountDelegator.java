@@ -245,7 +245,7 @@ public class AccountDelegator extends AbstractDelegator{
     }
 
     public void onEventAsync(CreateAnonymousAccount createAnonymousAccount) {
-        Account account=  AccountClient.getAccountClient().createAnonymousAccount(createAnonymousAccount.getName(), createAnonymousAccount.getEmail());
+        Account account=  AccountClient.getAccountClient().createAnonymousAccountPost(createAnonymousAccount.getName(), createAnonymousAccount.getEmail());
         if (account.getError()!= null) {
             ARL.eventBus.post(new MyAccount(null));
         } else {

@@ -11,7 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.*;
+import org.celstec.arlearn2.android.R;
+import org.celstec.arlearn2.android.delegators.ARL;
 import org.celstec.arlearn2.android.util.MediaFolders;
 
 
@@ -59,6 +62,8 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
     public  abstract int getAudioRecordingLevel4();
     public abstract Drawable getPlayBackground();
     public abstract Drawable getPauseBackground();
+
+    public abstract int getTextView();
 
     public  abstract int getStartRecordingButton();
     public  abstract int getStopRecordingButton();
@@ -108,6 +113,30 @@ public abstract class AudioCollectionActivity extends Activity implements SeekBa
                     }
                 }
         );
+        String message = getIntent().getStringExtra("message");
+        if (message != null) {
+//            ((WebView)findViewById(getTextView())).loadData(message,  "text/html", "utf-8");
+            WebView webView = ((WebView)findViewById(getTextView()));
+            webView.setBackgroundColor(0x00000000);
+            String baseUrl = "";
+            if (ARL.config.getBooleanProperty("white_label") && !ARL.config.getBooleanProperty("white_label_online_sync")) {
+                baseUrl = "file:///android_res/raw/";
+            } else {
+                baseUrl = "file://"+MediaFolders.getIncommingFilesDir().getParent().toString()+"/";
+            }
+            String prefix = ARL.config.getProperty("message_html_prefix");
+            String postfix = ARL.config.getProperty("message_html_postfix");
+            if (prefix == null){
+                prefix = "";
+            }
+            if (postfix == null){
+                postfix = "";
+            }
+            webView.loadDataWithBaseURL(baseUrl, prefix+ message+postfix, "text/html", "utf-8", null);
+        } else {
+            ((WebView)findViewById(getTextView())).setVisibility(View.GONE);
+        }
+
         playPauseButton = (ImageView)findViewById(getPlayPauseButton());
         playPauseButton.setOnClickListener(
                 new View.OnClickListener() {

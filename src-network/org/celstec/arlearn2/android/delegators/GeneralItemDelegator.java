@@ -121,51 +121,57 @@ public class GeneralItemDelegator extends AbstractDelegator{
         GeneralItemEvent iEvent = null;
         for (GeneralItem giBean: list.getGeneralItems()) {
             if (giBean != null) {
-                GeneralItemLocalObject giDao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(giBean.getId());
-
-                giDao = toDaoLocalObject(giBean, giDao);
-
-                giDao.setGameLocalObject(gameLocalObject);
-
-
-                if (giBean.getDependsOn() != null) {
-                    if (giDao.getDependsOn() != null && !giDao.getDependencyLocalObject().recursiveEquals(giBean.getDependsOn())) {
-                        giDao.getDependencyLocalObject().recursiveDelete();
-                        giDao.setDependencyLocalObject(null);
-                    }
-
-                    if (giDao.getDependsOn() == null) {
-                        DependencyLocalObject dependsOn = DependencyLocalObject.createDependencyLocalObject(giBean.getDependsOn());
-                        giDao.setDependencyLocalObject(dependsOn);
-                    }
+                if (giBean.getDeleted()!=null &&giBean.getDeleted()) {
+                    DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().deleteByKey(giBean.getId());
+                    iEvent = new GeneralItemEvent(giBean.getId());
+                    if (individualEvents) ARL.eventBus.post(iEvent);
                 } else {
-                    if (giDao.getDependsOn() != null) {
-                        giDao.getDependencyLocalObject().recursiveDelete();
-                        giDao.setDependencyLocalObject(null);
+                    GeneralItemLocalObject giDao = DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().load(giBean.getId());
+
+                    giDao = toDaoLocalObject(giBean, giDao);
+
+                    giDao.setGameLocalObject(gameLocalObject);
+
+
+                    if (giBean.getDependsOn() != null) {
+                        if (giDao.getDependsOn() != null && !giDao.getDependencyLocalObject().recursiveEquals(giBean.getDependsOn())) {
+                            giDao.getDependencyLocalObject().recursiveDelete();
+                            giDao.setDependencyLocalObject(null);
+                        }
+
+                        if (giDao.getDependsOn() == null) {
+                            DependencyLocalObject dependsOn = DependencyLocalObject.createDependencyLocalObject(giBean.getDependsOn());
+                            giDao.setDependencyLocalObject(dependsOn);
+                        }
+                    } else {
+                        if (giDao.getDependsOn() != null) {
+                            giDao.getDependencyLocalObject().recursiveDelete();
+                            giDao.setDependencyLocalObject(null);
+                        }
                     }
+
+                    if (giBean.getDisappearOn() != null) {
+                        if (giDao.getDisappearAt() != null && !giDao.getDependencyDisappearLocalObject().recursiveEquals(giBean.getDisappearOn())) {
+                            giDao.getDependencyDisappearLocalObject().recursiveDelete();
+                            giDao.setDependencyDisappearLocalObject(null);
+                        }
+                        if (giDao.getDisappearAt() == null) {
+                            DependencyDisappearLocalObject disappearOn = DependencyDisappearLocalObject.createDependencyDisappearLocalObject(giBean.getDisappearOn());
+                            giDao.setDependencyDisappearLocalObject(disappearOn);
+                        }
+                    } else {
+                        if (giDao.getDisappearAt() != null) {
+                            giDao.getDependencyDisappearLocalObject().recursiveDelete();
+                            giDao.setDependencyDisappearLocalObject(null);
+                        }
+                    }
+
+                    DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().insertOrReplace(giDao);
+
+                    GiFileReferenceDelegator.getInstance().createReference(giBean, giDao);
+                    iEvent = new GeneralItemEvent(giDao.getId());
+                    if (individualEvents) ARL.eventBus.post(iEvent);
                 }
-
-                if (giBean.getDisappearOn() != null) {
-                    if  (giDao.getDisappearAt() != null && !giDao.getDependencyDisappearLocalObject().recursiveEquals(giBean.getDisappearOn())) {
-                        giDao.getDependencyDisappearLocalObject().recursiveDelete();
-                        giDao.setDependencyDisappearLocalObject(null);
-                    }
-                    if (giDao.getDisappearAt() == null) {
-                        DependencyDisappearLocalObject disappearOn = DependencyDisappearLocalObject.createDependencyDisappearLocalObject(giBean.getDisappearOn());
-                        giDao.setDependencyDisappearLocalObject(disappearOn);
-                    }
-                } else {
-                    if (giDao.getDisappearAt()!=null){
-                        giDao.getDependencyDisappearLocalObject().recursiveDelete();
-                        giDao.setDependencyDisappearLocalObject(null);
-                    }
-                }
-
-                DaoConfiguration.getInstance().getGeneralItemLocalObjectDao().insertOrReplace(giDao);
-
-                GiFileReferenceDelegator.getInstance().createReference(giBean, giDao);
-                iEvent = new GeneralItemEvent(giDao.getId());
-                if (individualEvents) ARL.eventBus.post(iEvent);
             }
             if (iEvent != null && !individualEvents) {
                 ARL.eventBus.post(iEvent);

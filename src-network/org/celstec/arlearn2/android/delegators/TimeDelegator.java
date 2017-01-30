@@ -2,7 +2,11 @@ package org.celstec.arlearn2.android.delegators;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import org.celstec.arlearn2.client.VersionClient;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * ****************************************************************************
@@ -25,13 +29,16 @@ import org.celstec.arlearn2.client.VersionClient;
  * ****************************************************************************
  */
 public class TimeDelegator {
-
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static TimeDelegator instance;
     private long timeDifWithServer;
 
     private TimeDelegator(Context ctx) {
         timeDifWithServer = ARL.properties.getTimeDifferenceWithServer();
-        mHandler.postDelayed(timeTask, 60000);
+        ARL.eventBus.register(this);
+//        mHandler.postDelayed(timeTask, 100);
+        ARL.eventBus.post(this);
+//        new Thread(timeTask).run();
     }
 
     public static TimeDelegator getInstance(Context ctx)  {
@@ -46,24 +53,38 @@ public class TimeDelegator {
         return System.currentTimeMillis() + timeDifWithServer;
     }
 
+    public void printTime(){
+        Log.i("TIME", "Server: "+format.format(new Date(getServerTime())));
+        Log.i("TIME", "Local : "+format.format(new Date(System.currentTimeMillis())));
+    }
+
     private Handler mHandler = new Handler();
 
-    protected Runnable timeTask = new Runnable() {
-        public void run() {
+    public void onEventAsync(TimeDelegator td){
+//    protected Runnable timeTask = new Runnable() {
+//        public void run() {
+//            Log.i("TIME", "getting time from server");
+
             if (ARL.isOnline()){
+//                Log.i("TIME", "getting time from server : online");
                 try {
                     Long serverTime = VersionClient.getVersionClient().getTime();
+//                    Log.i("TIME", "getting time from server : "+serverTime);
                 if  (serverTime!= 0l)  {
                     timeDifWithServer = serverTime - System.currentTimeMillis();
                     ARL.properties.setTimeDifferenceWithServer(timeDifWithServer);
-                    mHandler.removeCallbacks(timeTask);
+//                    mHandler.removeCallbacks(timeTask);
                     return;
                 }
                 }catch (Exception e) {
-
+                    Log.e("TIME", e.getMessage(), e);
                 }
             }
-            mHandler.postDelayed(timeTask, 60000);
-        }
-    };
+//            mHandler.postDelayed(timeTask, 60000);
+//        }
+    }
+
+    public void printTime(String s, Long time) {
+        Log.i("TIME", s+ " "+format.format(new Date(getServerTime())));
+    }
 }

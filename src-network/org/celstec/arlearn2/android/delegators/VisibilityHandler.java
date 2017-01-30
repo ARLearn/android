@@ -1,6 +1,8 @@
 package org.celstec.arlearn2.android.delegators;
 
 import android.os.Handler;
+import org.celstec.arlearn2.android.events.GeneralItemBecameVisibleEvent;
+import org.celstec.arlearn2.android.events.GeneralItemEvent;
 import org.celstec.dao.gen.GameLocalObject;
 import org.celstec.dao.gen.RunLocalObject;
 
@@ -25,7 +27,8 @@ public class VisibilityHandler {
     }
 
     public void scheduleVisibilityEvent(long satisfiedAt, final RunLocalObject run, final GameLocalObject game){
-        System.out.println("satisfiedAt "+satisfiedAt + " - " + (System.currentTimeMillis()-satisfiedAt));
+        ARL.time.printTime("satisfiedAt ", satisfiedAt);
+        ARL.time.printTime();
         long delay = satisfiedAt -System.currentTimeMillis();
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -40,13 +43,20 @@ public class VisibilityHandler {
 
     }
 
-    public void scheduleInVisibilityEvent(long disappearAt, final RunLocalObject run, final GameLocalObject game) {
-        System.out.println("disappearAt "+disappearAt + " - " + (ARL.time.getServerTime()-disappearAt));
+    public void scheduleInVisibilityEvent(long disappearAt, final RunLocalObject run, final GameLocalObject game, final Long itemId) {
+        ARL.time.printTime("satisfiedAt ", disappearAt);
+        ARL.time.printTime();
         long delay = disappearAt -ARL.time.getServerTime();
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ARL.generalItemVisibility.calculateInVisibility(run.getId(), game.getId());
+                GeneralItemEvent newInVisibilityStatementDetected = new GeneralItemEvent(itemId);
+                ARL.time.printTime();
+                System.out.println("servertime as long " + ARL.time.getServerTime());
+                ARL.eventBus.postSticky(newInVisibilityStatementDetected);
+//                GeneralItemBecameVisibleEvent event = new GeneralItemBecameVisibleEvent(itemId);
+//                ARL.eventBus.postSticky(event);
+//                ARL.generalItemVisibility.calculateInVisibility(run.getId(), game.getId());
             }
         }, delay);
     }

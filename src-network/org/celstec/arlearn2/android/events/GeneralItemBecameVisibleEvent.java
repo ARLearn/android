@@ -59,7 +59,7 @@ public class GeneralItemBecameVisibleEvent {
         ARL.eventBus.removeStickyEvent(this);
         if (isAutoLaunch()) {
             Intent intent = new Intent(activity, GeneralItemActivity.class);
-            gameActivityFeatures.addMetadataToIntent(intent);
+            gameActivityFeatures.addMetadataToIntent(intent, false);
             intent.putExtra(GeneralItemLocalObject.class.getName(), getGeneralItemId());
             activity.startActivity(intent);
             if (closeActivity != null) {
@@ -84,7 +84,7 @@ public class GeneralItemBecameVisibleEvent {
                 public void onOpen() {
 
                     Intent intent = new Intent(activity, GeneralItemActivity.class);
-                    gameActivityFeatures.addMetadataToIntent(intent);
+                    gameActivityFeatures.addMetadataToIntent(intent, false);
                     intent.putExtra(GeneralItemLocalObject.class.getName(), getGeneralItemId());
                     activity.startActivity(intent);
                     if (closeActivity != null) {

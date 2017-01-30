@@ -35,21 +35,32 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
 
     private QueryBuilder qb;
     protected long runId;
+    protected long gameId;
 
     public AbstractGeneralItemsVisibilityAdapter(Context context, long runId, long gameId) {
         super(context);
         this.runId = runId;
+        this.gameId = gameId;
         qb = getQueryBuilder(runId, gameId);
-        ARL.eventBus.register(this);
+//        ARL.eventBus.register(this);
         setLazyList(qb.listLazy());
     }
 
     public AbstractGeneralItemsVisibilityAdapter(Context context, long runId, long gameId, boolean messagsOnly){
         super(context);
         this.runId = runId;
+        this.gameId = gameId;
         qb = getQueryBuilder(runId, gameId, messagsOnly);
-        ARL.eventBus.register(this);
+
         setLazyList(qb.listLazy());
+    }
+
+    public void register(){
+        ARL.eventBus.register(this);
+    }
+
+    public void unregister(){
+        ARL.eventBus.unregister(this);
     }
 
     public static QueryBuilder<GeneralItemVisibilityLocalObject> getQueryBuilder(long runId, long gameId, boolean messagsOnly){
@@ -57,9 +68,18 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
         QueryBuilder<GeneralItemVisibilityLocalObject> qb =dao.queryBuilder();
         String condition = "";
         if (messagsOnly){
-            condition = "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0 and lat is null)";
+//            condition = "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0 and lat is null)";
+            condition = "status = 1 and " +
+                    "run_id = "+runId+" and " +
+                    "NOT EXISTS (SELECT * from general_item_visibility_local_object where run_id = "+runId+" and " +
+                    "status = 2 and general_item_id = T.general_item_id  and time_stamp < "+ARL.time.getServerTime()+") and " +
+                    "general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0 and lat is null)";
        } else {
-            condition = "status = 1 and run_id = "+runId+" and general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)";
+            condition = "status = 1 and " +
+                    "run_id = "+runId+" and " +
+                    "NOT EXISTS (SELECT * from general_item_visibility_local_object where run_id = "+runId+" and status = 2 and general_item_id = T.general_item_id  and time_stamp < "+ARL.time.getServerTime()+") and " +
+                    "general_item_id in (select _id from general_item_local_object where game_id = "+gameId+" and deleted = 0)";
+
         }
 
         qb.where(new WhereCondition.StringCondition(
@@ -93,8 +113,8 @@ public abstract class AbstractGeneralItemsVisibilityAdapter extends LazyListAdap
 
 
     public void onEventMainThread(GeneralItemEvent event) {
-//        if (lazyList != null) lazyList.close();
-//        setLazyList(qb.listLazy());
+
+        qb = getQueryBuilder(runId, gameId, ARL.config.getProperty("message_view_messages").equals("messages_only"));
         notifyDataSetChanged();
     }
 
