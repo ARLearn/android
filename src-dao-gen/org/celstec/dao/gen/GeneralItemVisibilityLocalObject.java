@@ -38,16 +38,17 @@ public class GeneralItemVisibilityLocalObject {
 
     public static final int VISIBLE = 1;
     public static final int INVISIBLE = 2;
-    public static String generateId(GeneralItemVisibility vi){
-        return vi.getGeneralItemId()+":"+vi.getRunId();
-    }
+//    public static String generateId(GeneralItemVisibility vi){
+//
+//        return generateId(vi.getGeneralItemId(), vi.getRunId(), VISIBLE);
+//    }
 
-    public static String generateId(long runId, long itemId){
-        return itemId+":"+runId;
+    public static String generateId(long itemId, long runId, int status){
+        return itemId+":"+runId+":"+status;
     }
 
     public GeneralItemVisibilityLocalObject(GeneralItemVisibility vi) {
-        this.id = generateId(vi);
+        this.id = generateId(vi.getGeneralItemId(), vi.getRunId(), vi.getStatus());
         this.account = ARL.accounts.getLoggedInAccount().getFullId();
         loadBean(vi);
     }

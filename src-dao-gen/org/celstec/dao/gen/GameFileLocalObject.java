@@ -1,5 +1,6 @@
 package org.celstec.dao.gen;
 
+
 import org.celstec.dao.gen.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -10,6 +11,10 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import daoBase.DaoConfiguration;
+import android.app.Activity;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.view.Display;
 
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
@@ -285,6 +290,66 @@ public class GameFileLocalObject {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static Bitmap getBitmap2(Context ctx, Long gameId, String path){
+        try {
+            GameFileLocalObject localObject = GameFileLocalObject.getGameFileLocalObject(gameId, path);
+            if (localObject == null) return null;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(localObject.getLocalUri().getPath(), options);
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+            String imageType = options.outMimeType;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    public static Bitmap getBitmapFullScreen(Activity ctx, Long gameId, String path) {
+        Display display = ctx.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int reqWidth = size.x;
+        int reqHeight = size.y;
+        GameFileLocalObject localObject = GameFileLocalObject.getGameFileLocalObject(gameId, path);
+        if (localObject == null) return null;
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(localObject.getLocalUri().getPath(), options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(localObject.getLocalUri().getPath(), options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     public static Bitmap getBitmap(Context ctx,GameFileLocalObject localObject){

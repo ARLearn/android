@@ -472,6 +472,9 @@ public class ResponseLocalObject {
 
                 break;
         }
+        if (bean.getResponseValue() == null) {
+            bean.setResponseValue(getValue());
+        }
         return bean;
     }
 

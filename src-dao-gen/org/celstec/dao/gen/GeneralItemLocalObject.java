@@ -417,11 +417,13 @@ public class GeneralItemLocalObject {
     public boolean isRead(long runId) {
         if (!runsToRead.containsKey(runId)) {
             for (ActionLocalObject action : getActions()) {
+                System.out.println("processing action "+ action.getAction()+ " - "+ action.getRunId() + " - " +(action.getRunId() == runId));
                 if (action.getRunId() == runId && "read".equals(action.getAction())) {
                     runsToRead.put(runId, true);
                     return true;
                 }
             }
+            System.out.println("READ is false for "+getId() + " "+getTitle()+ runsToRead);
             return false;
         }
         return runsToRead.get(runId);
@@ -465,6 +467,10 @@ public class GeneralItemLocalObject {
         JSONObject jsonObject = getJSONBean();
         if (!jsonObject.has("withValue")) return false;
         return (Boolean) jsonObject.get("withValue");
+    }
+
+    public void removeRun(Long id) {
+        runsToRead.remove(id);
     }
     // KEEP METHODS END
 
